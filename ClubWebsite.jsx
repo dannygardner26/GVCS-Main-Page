@@ -14,6 +14,7 @@ import {
     increment
 } from 'firebase/firestore';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { CURRICULUM_DATA } from './CurriculumData';
 
 // --- Configuration & Mock Detection ---
 const IS_MOCK = !window.__app_id;
@@ -51,6 +52,29 @@ const mockDb = {
     problem_stats: {}
 };
 
+const DAILY_PROBLEMS_POOL = [
+    {
+        usaco: { title: "Teleportation", difficulty: "Bronze", url: "http://www.usaco.org/index.php?page=viewproblem2&cpid=807" },
+        leetcode: { title: "Two Sum", difficulty: "Easy", url: "https://leetcode.com/problems/two-sum/" }
+    },
+    {
+        usaco: { title: "Word Processor", difficulty: "Bronze", url: "http://www.usaco.org/index.php?page=viewproblem2&cpid=987" },
+        leetcode: { title: "Valid Parentheses", difficulty: "Easy", url: "https://leetcode.com/problems/valid-parentheses/" }
+    },
+    {
+        usaco: { title: "Bucket List", difficulty: "Bronze", url: "http://www.usaco.org/index.php?page=viewproblem2&cpid=855" },
+        leetcode: { title: "Merge Two Sorted Lists", difficulty: "Easy", url: "https://leetcode.com/problems/merge-two-sorted-lists/" }
+    },
+    {
+        usaco: { title: "Mixing Milk", difficulty: "Bronze", url: "http://www.usaco.org/index.php?page=viewproblem2&cpid=855" },
+        leetcode: { title: "Best Time to Buy and Sell Stock", difficulty: "Easy", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" }
+    },
+    {
+        usaco: { title: "Cow Signal", difficulty: "Bronze", url: "http://www.usaco.org/index.php?page=viewproblem2&cpid=665" },
+        leetcode: { title: "Valid Palindrome", difficulty: "Easy", url: "https://leetcode.com/problems/valid-palindrome/" }
+    }
+];
+
 const useDailyProblem = () => {
     const [problem, setProblem] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -58,62 +82,25 @@ const useDailyProblem = () => {
     const [completionCount, setCompletionCount] = useState(0);
 
     useEffect(() => {
-        if (IS_MOCK) {
-            const fetchMock = () => {
-                const sorted = [...mockDb.daily_problems].sort((a, b) => b.date - a.date);
-                const current = sorted[0] || null;
-                setProblem(current);
+        // Deterministic daily problem based on date
+        const today = new Date();
+        const index = (today.getDate() + today.getMonth() * 31) % DAILY_PROBLEMS_POOL.length;
+        const daily = DAILY_PROBLEMS_POOL[index];
 
-                if (current) {
-                    setCompletionCount(mockDb.problem_stats[current.id] || 0);
-                    const isDone = localStorage.getItem(`gvcs_completed_${current.id}`) === 'true';
-                    setCompleted(isDone);
-                }
-                setLoading(false);
-            };
-            fetchMock();
-            const interval = setInterval(fetchMock, 1000);
-            return () => clearInterval(interval);
-        }
-
-        const q = query(
-            collection(db, `${DATA_PATH}/daily_problems`),
-            orderBy('date', 'desc'),
-            limit(1)
-        );
-
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            if (!snapshot.empty) {
-                const data = snapshot.docs[0].data();
-                const id = snapshot.docs[0].id;
-                setProblem({ id, ...data });
-                setCompletionCount(data.solveCount || 0);
-                const isDone = localStorage.getItem(`gvcs_completed_${id}`) === 'true';
-                setCompleted(isDone);
-            } else {
-                setProblem(null);
-            }
+        // Simulate loading
+        setTimeout(() => {
+            setProblem({ id: `daily-${index}`, ...daily });
+            const isDone = localStorage.getItem(`gvcs_completed_daily-${index}`) === 'true';
+            setCompleted(isDone);
             setLoading(false);
-        });
+        }, 500);
 
-        return () => unsubscribe();
     }, []);
 
     const markDone = async () => {
         if (!problem) return;
         setCompleted(true);
         localStorage.setItem(`gvcs_completed_${problem.id}`, 'true');
-
-        if (IS_MOCK) {
-            mockDb.problem_stats[problem.id] = (mockDb.problem_stats[problem.id] || 0) + 1;
-            setCompletionCount(mockDb.problem_stats[problem.id]);
-            return;
-        }
-
-        const problemRef = doc(db, `${DATA_PATH}/daily_problems`, problem.id);
-        await updateDoc(problemRef, {
-            solveCount: increment(1)
-        });
     };
 
     return { problem, loading, completed, completionCount, markDone };
@@ -185,11 +172,53 @@ const useAdminProblems = () => {
 
 // --- Components ---
 
-const Header = ({ currentView, onViewChange }) => {
+const LoginModal = ({ isOpen, onClose, onLogin }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] animate-fade-in">
+            <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100">
+                <h2 className="text-2xl font-bold text-gvcs-navy mb-2">Student Login</h2>
+                <p className="text-gray-500 mb-6">Access your saved plans and track progress.</p>
+
+                <div className="space-y-4">
+                    <input type="email" placeholder="Email Address" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none" />
+                    <input type="password" placeholder="Password" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none" />
+
+                    <button className="w-full py-3 bg-gvcs-navy text-white rounded-lg font-bold hover:bg-blue-900 transition-colors">
+                        Sign In
+                    </button>
+
+                    <div className="relative my-4">
+                        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200"></div></div>
+                        <div className="relative flex justify-center text-sm"><span className="px-2 bg-white text-gray-500">Or</span></div>
+                    </div>
+
+                    <button
+                        onClick={() => {
+                            onLogin({ name: "Demo Student", email: "demo@gvcs.edu", isDemo: true });
+                            onClose();
+                        }}
+                        className="w-full py-3 bg-green-50 text-green-700 border border-green-200 rounded-lg font-bold hover:bg-green-100 transition-colors flex items-center justify-center gap-2"
+                    >
+                        <Icons.Sparkles /> Try Demo Account
+                    </button>
+                </div>
+
+                <button onClick={onClose} className="mt-6 text-sm text-gray-500 hover:text-gray-800 w-full text-center">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    );
+};
+
+const Header = ({ currentView, onViewChange, user, onLoginClick, onLogout }) => {
     const tabs = [
         { id: 'home', label: 'Home' },
         { id: 'ellis', label: 'Ellis Generator' },
         { id: 'resources', label: 'Resources' },
+        ...(user ? [{ id: 'my-plans', label: 'My Plans' }] : [])
     ];
 
     return (
@@ -200,21 +229,40 @@ const Header = ({ currentView, onViewChange }) => {
                     <span className="font-bold text-gray-800 text-lg hidden sm:block">CS Club</span>
                 </div>
 
-                <nav className="flex h-full">
-                    {tabs.map(tab => (
+                <div className="flex items-center gap-6">
+                    <nav className="flex h-full">
+                        {tabs.map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => onViewChange(tab.id)}
+                                className={`px-4 h-16 text-sm font-medium transition-colors border-b-2 
+                    ${currentView === tab.id
+                                        ? 'border-gvcs-navy text-gvcs-navy'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    }`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </nav>
+
+                    {user ? (
+                        <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
+                            <div className="text-right hidden sm:block">
+                                <div className="text-xs text-gray-500">Welcome back,</div>
+                                <div className="text-sm font-bold text-gvcs-navy">{user.name}</div>
+                            </div>
+                            <button onClick={onLogout} className="text-xs text-red-500 hover:underline">Logout</button>
+                        </div>
+                    ) : (
                         <button
-                            key={tab.id}
-                            onClick={() => onViewChange(tab.id)}
-                            className={`px-6 h-full text-sm font-medium transition-colors border-b-2 
-                ${currentView === tab.id
-                                    ? 'border-gvcs-navy text-gvcs-navy'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
+                            onClick={onLoginClick}
+                            className="px-5 py-2 bg-gvcs-navy text-white text-sm font-bold rounded-full hover:bg-blue-900 transition-colors shadow-sm"
                         >
-                            {tab.label}
+                            Login
                         </button>
-                    ))}
-                </nav>
+                    )}
+                </div>
             </div>
         </header>
     );
@@ -243,36 +291,56 @@ const DailyProblemSidebar = () => {
                     Daily Challenge
                 </h3>
             </div>
-            <div className="p-5">
-                <h4 className="font-bold text-gray-900 mb-2 line-clamp-2">{problem.title}</h4>
-                <div className="flex items-center gap-2 mb-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-600 px-2 py-1 rounded">
-                        {problem.concept || "Logic"}
-                    </span>
-                    <span className="text-xs text-gray-400">Bronze</span>
-                </div>
 
-                <div className="space-y-2">
-                    <a
-                        href={problem.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block w-full text-center py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                        Open in USACO ↗
-                    </a>
-                    <button
-                        onClick={markDone}
-                        disabled={completed}
-                        className={`block w-full py-2 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2
-              ${completed
-                                ? 'bg-green-100 text-green-700 cursor-default'
-                                : 'bg-gvcs-gold text-gvcs-navy hover:bg-yellow-400'
-                            }`}
-                    >
-                        {completed ? <><Icons.Check /> Completed</> : "I've Completed This"}
-                    </button>
+            {/* USACO Problem */}
+            <div className="p-5 border-b border-gray-100">
+                <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-bold text-gray-900 line-clamp-1">{problem.usaco.title}</h4>
+                    <span className="text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-600 px-2 py-1 rounded whitespace-nowrap">
+                        USACO {problem.usaco.difficulty}
+                    </span>
                 </div>
+                <p className="text-xs text-gray-500 mb-3">{problem.usaco.concept}</p>
+                <a
+                    href={problem.usaco.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                    Open USACO Problem ↗
+                </a>
+            </div>
+
+            {/* LeetCode Problem */}
+            <div className="p-5 bg-gray-50/50">
+                <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-bold text-gray-900 line-clamp-1">{problem.leetcode.title}</h4>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded whitespace-nowrap
+                        ${problem.leetcode.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                            problem.leetcode.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                        {problem.leetcode.difficulty}
+                    </span>
+                </div>
+                <a
+                    href={problem.leetcode.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors mb-3"
+                >
+                    Open LeetCode ↗
+                </a>
+
+                <button
+                    onClick={markDone}
+                    disabled={completed}
+                    className={`block w-full py-2 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2
+            ${completed
+                            ? 'bg-green-100 text-green-700 cursor-default'
+                            : 'bg-gvcs-gold text-gvcs-navy hover:bg-yellow-400'
+                        }`}
+                >
+                    {completed ? <><Icons.Check /> Completed Daily Set</> : "Mark Set Complete"}
+                </button>
             </div>
         </div>
     );
@@ -316,7 +384,7 @@ const EventList = () => {
     );
 };
 
-const EllisGenerator = () => {
+const EllisGenerator = ({ user, onLoginRequest }) => {
     const [mode, setMode] = useState('select'); // 'select', 'manual', 'wizard', 'ideas_selection', 'results'
     const [topic, setTopic] = useState('');
     const [level, setLevel] = useState('Beginner');
@@ -560,12 +628,35 @@ const EllisGenerator = () => {
         setSatMath('');
     };
 
+    const savePlan = () => {
+        if (!user) {
+            onLoginRequest();
+            return;
+        }
+        // Save to local storage for demo
+        const savedPlans = JSON.parse(localStorage.getItem('gvcs_saved_plans') || '[]');
+        savedPlans.push({
+            id: Date.now(),
+            topic,
+            level,
+            date: new Date().toLocaleDateString(),
+            plan
+        });
+        localStorage.setItem('gvcs_saved_plans', JSON.stringify(savedPlans));
+        alert("Plan saved successfully!");
+    };
+
     if (mode === 'results' && plan) {
         return (
             <div className="max-w-4xl mx-auto p-6 animate-fade-in-up">
-                <button onClick={reset} className="mb-4 text-sm text-gray-500 hover:text-gvcs-navy flex items-center gap-1">
-                    <Icons.ArrowRight /> Back to Generator
-                </button>
+                <div className="flex justify-between items-center mb-4">
+                    <button onClick={reset} className="text-sm text-gray-500 hover:text-gvcs-navy flex items-center gap-1">
+                        <Icons.ArrowRight /> Back to Generator
+                    </button>
+                    <button onClick={savePlan} className="px-4 py-2 bg-gvcs-navy text-white text-sm font-bold rounded-lg hover:bg-blue-900 transition-colors flex items-center gap-2">
+                        <Icons.Book /> Save Plan
+                    </button>
+                </div>
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
                         <div>
@@ -646,6 +737,64 @@ const EllisGenerator = () => {
                                 className="w-full py-2 bg-gvcs-navy text-white rounded-lg font-bold hover:bg-blue-900 transition-colors flex justify-center items-center gap-2"
                             >
                                 {isGenerating ? "Generating..." : "Select This Project"}
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    if (mode === 'browse') {
+        return (
+            <div className="max-w-6xl mx-auto p-6 animate-fade-in-up">
+                <button onClick={() => setMode('select')} className="mb-6 text-sm text-gray-500 hover:text-gvcs-navy flex items-center gap-1">
+                    <Icons.ArrowRight /> Back to Selection
+                </button>
+                <div className="text-center mb-10">
+                    <h2 className="text-3xl font-bold text-gvcs-navy mb-2">Explore Our Curriculum</h2>
+                    <p className="text-gray-600">Browse pre-designed courses with week-by-week plans.</p>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {Object.entries(CURRICULUM_DATA).map(([courseName, courseData]) => (
+                        <div key={courseName} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all flex flex-col">
+                            <div className="mb-4">
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                    {courseData.prereqs && courseData.prereqs.length > 0 ? (
+                                        courseData.prereqs.map(p => (
+                                            <span key={p} className="text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                                                Req: {p}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <span className="text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-600 px-2 py-1 rounded">
+                                            No Prerequisites
+                                        </span>
+                                    )}
+                                </div>
+                                <h4 className="text-xl font-bold text-gvcs-navy mb-2">{courseName}</h4>
+                                <p className="text-sm text-gray-600">{courseData.description}</p>
+                            </div>
+
+                            <div className="flex-grow mb-4">
+                                <p className="text-xs font-bold text-gray-500 uppercase mb-1">9-Week Plan</p>
+                                <p className="text-xs text-gray-500">{courseData.weeks.length} weeks of structured learning</p>
+                            </div>
+
+                            <button
+                                onClick={() => {
+                                    setPlan({
+                                        title: courseName,
+                                        description: courseData.description,
+                                        weeks: courseData.weeks,
+                                        ellis_activities: courseData.ellis_activities
+                                    });
+                                    setMode('results');
+                                }}
+                                className="w-full py-2 bg-white border-2 border-gvcs-navy text-gvcs-navy rounded-lg font-bold hover:bg-gvcs-navy hover:text-white transition-colors"
+                            >
+                                View Full Plan
                             </button>
                         </div>
                     ))}
@@ -801,7 +950,6 @@ const EllisGenerator = () => {
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                                 />
                             </div>
-                            {/* Skill Level Removed as requested */}
 
                             <button
                                 onClick={generateManualPlan}
@@ -829,7 +977,7 @@ const EllisGenerator = () => {
                 </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                 <button
                     onClick={() => setMode('wizard')}
                     className="bg-white p-8 rounded-2xl shadow-sm border-2 border-transparent hover:border-blue-500 hover:shadow-md transition-all group text-left"
@@ -840,6 +988,19 @@ const EllisGenerator = () => {
                     <h3 className="text-xl font-bold text-gray-800 mb-2">Help me find an idea</h3>
                     <p className="text-gray-500 text-sm">
                         Not sure what to study? Answer a few questions and we'll suggest some great projects for you.
+                    </p>
+                </button>
+
+                <button
+                    onClick={() => setMode('browse')}
+                    className="bg-white p-8 rounded-2xl shadow-sm border-2 border-transparent hover:border-blue-500 hover:shadow-md transition-all group text-left"
+                >
+                    <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <Icons.Book />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">Browse Curriculum</h3>
+                    <p className="text-gray-500 text-sm">
+                        Explore our specialized tracks and pre-designed courses for mastery.
                     </p>
                 </button>
 
@@ -1119,6 +1280,8 @@ const AdminMeetingView = ({ onExit }) => {
 
 const ClubWebsite = () => {
     const [currentView, setCurrentView] = useState('home');
+    const [user, setUser] = useState(null);
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
     const handleAdminAccess = () => {
@@ -1138,11 +1301,24 @@ const ClubWebsite = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-900">
-            <Header currentView={currentView} onViewChange={setCurrentView} />
+            <LoginModal
+                isOpen={isLoginOpen}
+                onClose={() => setIsLoginOpen(false)}
+                onLogin={(u) => setUser(u)}
+            />
+
+            <Header
+                currentView={currentView}
+                onViewChange={setCurrentView}
+                user={user}
+                onLoginClick={() => setIsLoginOpen(true)}
+                onLogout={() => { setUser(null); setCurrentView('home'); }}
+            />
 
             <div className="flex-grow">
                 {currentView === 'home' && <HomeView onViewChange={setCurrentView} />}
-                {currentView === 'ellis' && <EllisGenerator />}
+                {currentView === 'ellis' && <EllisGenerator user={user} onLoginRequest={() => setIsLoginOpen(true)} />}
+                {currentView === 'my-plans' && <MyPlans user={user} />}
                 {currentView === 'resources' && <ResourcesView />}
                 {currentView === 'admin' && isAdmin && <AdminMeetingView onExit={handleExitAdmin} />}
                 {currentView === 'admin' && !isAdmin && (
