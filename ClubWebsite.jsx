@@ -370,7 +370,7 @@ const EllisGenerator = () => {
     const generateIdeas = async () => {
         setIsGenerating(true);
         try {
-            const genAI = new GoogleGenerativeAI("AIzaSyAoDo4Ug11IR60AXGCvhsWjSXuJqe2508c");
+            const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_API_KEY);
             const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
             const selectedMath = Object.keys(mathCourses).filter(k => mathCourses[k]).join(", ");
@@ -402,7 +402,8 @@ const EllisGenerator = () => {
             "title": "Project Title",
             "description": "A 2-sentence description of what they will build.",
             "difficulty": "Beginner/Intermediate/Advanced",
-            "tags": ["Tag1", "Tag2"]
+            "tags": ["Tag1", "Tag2"],
+            "assessmentType": "project" // or "exam" if it is a theoretical course
           },
           ...
         ]
@@ -413,6 +414,22 @@ const EllisGenerator = () => {
             const text = response.text();
             const cleanJson = text.replace(/```json/g, '').replace(/```/g, '').trim();
             const ideas = JSON.parse(cleanJson);
+
+
+
+            // Logic: If Math interest is high (>= 8), inject DSA course
+            if (interestScores.math >= 8) {
+                ideas.unshift({
+                    title: "Data Structures & Algorithms",
+                    description: "Master the fundamental building blocks of computer science. Learn arrays, linked lists, trees, graphs, and sorting algorithms.",
+                    difficulty: "Advanced",
+                    tags: ["CS Theory", "Math", "Algorithms"],
+                    assessmentType: "exam"
+                });
+                // Keep only 3 ideas if we added one, or maybe 4 is fine. Let's keep it to 3 distinct ones + DSA if applicable, or just add it to the top.
+                // The user asked for 3 distinct ideas. Let's just slice to 3 if we want to be strict, or let it be 4. 
+                // Let's keep it as an extra option if they really like math.
+            }
 
             setGeneratedIdeas(ideas);
             setMode('ideas_selection');
@@ -431,7 +448,7 @@ const EllisGenerator = () => {
         setLevel(selectedIdea.difficulty);
 
         try {
-            const genAI = new GoogleGenerativeAI("AIzaSyAoDo4Ug11IR60AXGCvhsWjSXuJqe2508c");
+            const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_API_KEY);
             const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
             const prompt = `
@@ -442,6 +459,14 @@ const EllisGenerator = () => {
         - Prioritize high-quality YouTube playlists/videos.
         - Use official free documentation (MDN, Unity Docs, etc.).
         - NO paid courses (Udemy, Coursera paid tiers, etc.).
+        
+        Assessment Type: ${selectedIdea.assessmentType || 'project'}
+        If Assessment Type is "exam":
+        - The final week (Week 9) MUST be a "Final Exam" or "End of Unit Test".
+        - Deliverables for other weeks should include "Practice Problems" or "Mini-quizzes" where appropriate.
+        If Assessment Type is "project":
+        - The final week MUST be a "Final Project Submission".
+        
         
         Return ONLY a raw JSON object (no markdown) with this structure:
         {
@@ -481,7 +506,7 @@ const EllisGenerator = () => {
         setIsGenerating(true);
 
         try {
-            const genAI = new GoogleGenerativeAI("AIzaSyAoDo4Ug11IR60AXGCvhsWjSXuJqe2508c");
+            const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_API_KEY);
             const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
             const prompt = `
@@ -547,7 +572,7 @@ const EllisGenerator = () => {
                             <h3 className="font-bold text-gray-800">Marking Period Plan: {topic}</h3>
                             <span className="text-xs text-gray-500">Level: {level}</span>
                         </div>
-                        <button className="text-sm text-purple-600 font-medium hover:underline">Download PDF</button>
+                        <button className="text-sm text-blue-600 font-medium hover:underline">Download PDF</button>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
@@ -597,7 +622,7 @@ const EllisGenerator = () => {
 
                 <div className="grid md:grid-cols-3 gap-6">
                     {generatedIdeas.map((idea, i) => (
-                        <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-purple-300 transition-all flex flex-col">
+                        <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all flex flex-col">
                             <div className="mb-4">
                                 <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full 
                                     ${idea.difficulty === 'Beginner' ? 'bg-green-100 text-green-700' :
@@ -633,7 +658,7 @@ const EllisGenerator = () => {
         return (
             <div className="max-w-3xl mx-auto p-6">
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-6 text-white">
+                    <div className="bg-gvcs-navy px-8 py-6 text-white">
                         <h2 className="text-2xl font-bold flex items-center gap-2">
                             <Icons.Lightbulb /> Idea Finder
                         </h2>
@@ -655,7 +680,7 @@ const EllisGenerator = () => {
                                                     type="checkbox"
                                                     checked={mathCourses[course]}
                                                     onChange={() => handleMathChange(course)}
-                                                    className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
+                                                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
                                                 />
                                                 <span className="text-sm text-gray-700">{course}</span>
                                             </label>
@@ -672,7 +697,7 @@ const EllisGenerator = () => {
                                         value={apCsaScore}
                                         onChange={(e) => setApCsaScore(e.target.value)}
                                         placeholder="e.g. 5"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-sm"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
                                     />
                                 </div>
                                 <div>
@@ -682,7 +707,7 @@ const EllisGenerator = () => {
                                         value={satMath}
                                         onChange={(e) => setSatMath(e.target.value)}
                                         placeholder="e.g. 750"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-sm"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
                                     />
                                 </div>
                                 <div className="md:col-span-2">
@@ -691,7 +716,7 @@ const EllisGenerator = () => {
                                         value={pastStudies}
                                         onChange={(e) => setPastStudies(e.target.value)}
                                         placeholder="e.g. Built a weather app in React, Made a Pong game in Python..."
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-sm h-20 resize-none"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm h-20 resize-none"
                                     />
                                     <p className="text-xs text-gray-400 mt-1">We'll use this to suggest something new and challenging.</p>
                                 </div>
@@ -706,7 +731,7 @@ const EllisGenerator = () => {
                                     <div key={q.id}>
                                         <div className="flex justify-between mb-2">
                                             <label className="text-sm font-medium text-gray-700">{q.text}</label>
-                                            <span className="font-bold text-purple-600">{interestScores[q.id]}</span>
+                                            <span className="font-bold text-blue-600">{interestScores[q.id]}</span>
                                         </div>
                                         <input
                                             type="range"
@@ -714,7 +739,7 @@ const EllisGenerator = () => {
                                             max="10"
                                             value={interestScores[q.id]}
                                             onChange={(e) => handleScoreChange(q.id, e.target.value)}
-                                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
+                                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                                         />
                                     </div>
                                 ))}
@@ -731,7 +756,7 @@ const EllisGenerator = () => {
                             <button
                                 onClick={generateIdeas}
                                 disabled={isGenerating}
-                                className="flex-[2] py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 transition-all shadow-lg flex justify-center items-center gap-2"
+                                className="flex-[2] py-3 bg-gvcs-navy text-white rounded-lg font-bold hover:bg-blue-900 transition-all shadow-lg flex justify-center items-center gap-2"
                             >
                                 {isGenerating ? (
                                     <>
@@ -773,7 +798,7 @@ const EllisGenerator = () => {
                                     value={topic}
                                     onChange={(e) => setTopic(e.target.value)}
                                     placeholder="e.g., Game Development with Unity"
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                                 />
                             </div>
                             {/* Skill Level Removed as requested */}
@@ -782,7 +807,7 @@ const EllisGenerator = () => {
                                 onClick={generateManualPlan}
                                 disabled={!topic || isGenerating}
                                 className={`w-full py-3 rounded-lg font-bold text-white transition-all flex items-center justify-center gap-2 mt-4
-                  ${!topic || isGenerating ? 'bg-gray-300' : 'bg-purple-600 hover:bg-purple-700'}`}
+                  ${!topic || isGenerating ? 'bg-gray-300' : 'bg-gvcs-navy hover:bg-blue-900'}`}
                             >
                                 {isGenerating ? "Generating..." : "Generate Plan"}
                             </button>
@@ -807,9 +832,9 @@ const EllisGenerator = () => {
             <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
                 <button
                     onClick={() => setMode('wizard')}
-                    className="bg-white p-8 rounded-2xl shadow-sm border-2 border-transparent hover:border-purple-500 hover:shadow-md transition-all group text-left"
+                    className="bg-white p-8 rounded-2xl shadow-sm border-2 border-transparent hover:border-blue-500 hover:shadow-md transition-all group text-left"
                 >
-                    <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                         <Icons.Lightbulb />
                     </div>
                     <h3 className="text-xl font-bold text-gray-800 mb-2">Help me find an idea</h3>
@@ -907,7 +932,7 @@ const HomeView = ({ onViewChange }) => {
         <div className="animate-fade-in">
             {/* Hero Section */}
             <div className="relative h-[500px] w-full overflow-hidden mb-12">
-                <div className="absolute inset-0 bg-gradient-to-r from-gvcs-navy/90 to-purple-900/80 z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-gvcs-navy/90 to-blue-900/80 z-10"></div>
                 <img
                     src="/images/hero.jpg"
                     alt="GVCS Club"
@@ -919,7 +944,7 @@ const HomeView = ({ onViewChange }) => {
                     </span>
                     <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
                         Code. Create. <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
                             Compete.
                         </span>
                     </h1>
@@ -951,7 +976,7 @@ const HomeView = ({ onViewChange }) => {
                         <p className="text-gray-500 text-sm">Tuesdays @ 3:00 PM in Room 101. Come code with us!</p>
                     </div>
                     <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 transform hover:-translate-y-1 transition-all">
-                        <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-4">
+                        <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-4">
                             <Icons.Code />
                         </div>
                         <h3 className="text-lg font-bold text-gray-800 mb-1">Daily Challenges</h3>
