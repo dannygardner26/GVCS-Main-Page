@@ -1,10 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import ClubWebsite from './ClubWebsite'
+import { BrowserRouter } from 'react-router-dom'
+import ClubWebsite from './ClubWebsite.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <ClubWebsite />
+        <BrowserRouter>
+            <ClubWebsite />
+        </BrowserRouter>
     </React.StrictMode>,
 )
