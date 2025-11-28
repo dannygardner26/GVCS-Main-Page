@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
 import {
@@ -415,6 +415,97 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         }
     };
 
+    const handleAdminLogin = async () => {
+        setLoading(true);
+        setError('');
+
+        try {
+            const adminEmail = 'admin@gvcs.com';
+            const adminPassword = 'admin123456';
+
+            // First, try to sign in
+            let { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+                email: adminEmail,
+                password: adminPassword
+            });
+
+            // If sign in fails, try to create the account
+            if (authError) {
+                // Try to sign up
+                const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                    email: adminEmail,
+                    password: adminPassword,
+                    options: {
+                        data: {
+                            name: 'Admin',
+                            isAdmin: true,
+                            role: 'admin'
+                        },
+                        emailRedirectTo: window.location.origin
+                    }
+                });
+
+                if (signUpError && !signUpError.message.includes('already registered')) {
+                    throw signUpError;
+                }
+
+                // If email confirmation is required and we don't have a session, 
+                // we need to handle this. For admin accounts, we'll use a workaround:
+                // Try to sign in immediately after signup (some Supabase configs allow this)
+                if (signUpData.user && !signUpData.session) {
+                    // Wait a moment and try signing in
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    const { data: retryData, error: retryError } = await supabase.auth.signInWithPassword({
+                        email: adminEmail,
+                        password: adminPassword
+                    });
+
+                    if (retryError) {
+                        // If still failing due to email confirmation, show helpful message
+                        if (retryError.message.includes('Email not confirmed') || retryError.message.includes('confirm')) {
+                            setError('Email confirmation is required. Please disable "Enable email confirmations" in Supabase Dashboard → Authentication → Settings, or check your email to confirm the account.');
+                            setLoading(false);
+                            return;
+                        }
+                        throw retryError;
+                    }
+
+                    authData = retryData;
+                } else if (signUpData.session) {
+                    authData = signUpData;
+                } else {
+                    // Try one more time to sign in
+                    const { data: finalData, error: finalError } = await supabase.auth.signInWithPassword({
+                        email: adminEmail,
+                        password: adminPassword
+                    });
+
+                    if (finalError) throw finalError;
+                    authData = finalData;
+                }
+            }
+
+            // If we have a session, log in
+            if (authData?.session || authData?.user) {
+                onLogin({
+                    id: authData.user.id,
+                    name: authData.user.user_metadata?.name || "Admin",
+                    email: authData.user.email,
+                    isAdmin: true
+                });
+                onClose();
+            } else {
+                throw new Error('Failed to create session');
+            }
+        } catch (err) {
+            console.error('Admin login error:', err);
+            setError(err.message || 'Failed to login with admin account. Make sure email confirmation is disabled in Supabase settings.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleEmailLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -492,6 +583,14 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
                     <Icons.Sparkles /> Try Demo Account
                 </button>
 
+                <button
+                    onClick={handleAdminLogin}
+                    disabled={loading}
+                    className="w-full mt-3 py-3 bg-purple-50 text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-100 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                    <Icons.Sparkles /> Login as Admin
+                </button>
+
                 <button onClick={onClose} className="mt-6 text-sm text-gray-500 hover:text-gray-800 w-full text-center">
                     Cancel
                 </button>
@@ -502,14 +601,49 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
 
 const EventList = () => {
     const events = [
-        { date: "Dec 15", name: "USACO December Contest", type: "Online", tag: "Major" },
-        { date: "Jan 26", name: "USACO January Contest", type: "Online", tag: "Major" },
-        { date: "Feb 16", name: "USACO February Contest", type: "Online", tag: "Major" },
-        { date: "Mar 15", name: "Lockheed Martin CodeQuest", type: "In-Person", tag: "Trip" },
-        { date: "Mar 23", name: "USACO US Open", type: "Online", tag: "Major" },
-        { date: "Apr 12", name: "Local Hackathon", type: "Hybrid", tag: "Fun" },
-        { date: "May 05", name: "AP Computer Science A Exam", type: "Exam", tag: "School" },
-    ];
+        // --- Local / Train Distance (Philly, NYC, DC, NJ) ---
+        { date: "Dec 05", name: "ImpactX '25", type: "Virtual", tag: "Major", url: "https://code4hope.org" },
+        { date: "Dec 10", name: "AI Summit NY Hackathon", type: "In-Person", tag: "Trip", url: "https://theaisummit.com/newyork/hackathon" },
+        { date: "Dec 12", name: "Agentic AI Hackathon", type: "In-Person", tag: "Trip", url: "https://odsc.com/new-york/hackathon/" },
+        { date: "Dec 12", name: "MLH & DigitalOcean AI", type: "In-Person", tag: "Trip", url: "https://organize.mlh.io/participants/events/11388-ai-hackathon-hosted-by-mlh-digitalocean" },
+        { date: "Jan 10", name: "DeltaHacks 12", type: "In-Person", tag: "Major", url: "https://deltahacks.com/" }, // Hamilton is a bit far but popular
+        { date: "Jan 17", name: "Hack BI", type: "In-Person", tag: "Local", url: "https://hackbi.org/" }, // Alexandria VA
+        { date: "Jan 23", name: "Hoya Hacks 2026", type: "In-Person", tag: "Trip", url: "https://hoyahacks.georgetown.domains/" },
+        { date: "Jan 2026", name: "DragonHacks XII", type: "In-Person", tag: "Local", url: "https://dragonhacks.org/" }, // Philly
+        { date: "Feb 07", name: "DevFest NYC", type: "In-Person", tag: "Trip", url: "https://mlh.io/seasons/2026/events" },
+        { date: "Feb 28", name: "Code Quest NJ", type: "In-Person", tag: "Local", url: "https://www.lmcodequestacademy.com/" },
+        { date: "Mar 07", name: "HackNJIT", type: "In-Person", tag: "Local", url: "https://hacknjit.org/" },
+
+        // --- Other Major Events ---
+        { date: "Dec 06", name: "East Bay Hackers", type: "In-Person", tag: "Fun", url: "https://eastbayhackers.club/" },
+        { date: "Dec 07", name: "CrabHacks 2025", type: "In-Person", tag: "Fun", url: "https://crabhacks.org/" },
+        { date: "Dec 08", name: "CodeFest 2025", type: "Virtual", tag: "Fun", url: "https://codefesthack2025.vercel.app/" },
+        { date: "Dec 12", name: "Global Hack Week: AI/ML", type: "Virtual", tag: "Major", url: "https://hack.mlh.io/" },
+        { date: "Jan 16", name: "CruzHacks 2026", type: "In-Person", tag: "Major", url: "https://cruzhacks.com/" },
+        { date: "Jan 17", name: "nwHacks 2026", type: "In-Person", tag: "Major", url: "https://www.nwhacks.io/" },
+        { date: "Jan 17", name: "McHacks 13", type: "In-Person", tag: "Major", url: "https://mchacks.ca/" },
+        { date: "Jan 30", name: "ElleHacks 2026", type: "In-Person", tag: "Major", url: "https://ellehacks.com/" },
+
+        // --- Exams ---
+        { date: "May 05", name: "AP Computer Science A Exam", type: "Exam", tag: "School", url: "https://apstudents.collegeboard.org/courses/ap-computer-science-a/assessment" },
+    ].sort((a, b) => {
+        // Simple date sorter for "Month Day" format assuming upcoming year
+        const getMonthIdx = (m) => ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].indexOf(m);
+        const [mA, dA] = a.date.split(' ');
+        const [mB, dB] = b.date.split(' ');
+
+        // Handle "Jan 2026" vs "Jan 10"
+        const dayA = parseInt(dA) || 1;
+        const dayB = parseInt(dB) || 1;
+
+        // Adjust for year boundary (Dec is 2025, Jan+ is 2026)
+        const yearA = getMonthIdx(mA) >= 11 ? 2025 : 2026;
+        const yearB = getMonthIdx(mB) >= 11 ? 2025 : 2026;
+
+        if (yearA !== yearB) return yearA - yearB;
+        if (getMonthIdx(mA) !== getMonthIdx(mB)) return getMonthIdx(mA) - getMonthIdx(mB);
+        return dayA - dayB;
+    });
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -525,10 +659,24 @@ const EventList = () => {
                             <div className="text-lg font-bold text-gray-800">{e.date.split(' ')[1]}</div>
                         </div>
                         <div className="flex-1">
-                            <h4 className="text-sm font-bold text-gray-900">{e.name}</h4>
+                            {e.url ? (
+                                <a
+                                    href={e.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm font-bold text-gray-900 hover:text-blue-600 hover:underline flex items-center gap-1"
+                                >
+                                    {e.name}
+                                    <Icons.Link className="w-3 h-3 text-gray-400" />
+                                </a>
+                            ) : (
+                                <h4 className="text-sm font-bold text-gray-900">{e.name}</h4>
+                            )}
                             <div className="flex gap-2 mt-1">
                                 <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{e.type}</span>
                                 {e.tag === 'Major' && <span className="text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded">Critical</span>}
+                                {e.tag === 'Local' && <span className="text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded">Local</span>}
+                                {e.tag === 'Trip' && <span className="text-[10px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded">Trip</span>}
                             </div>
                         </div>
                     </div>
@@ -563,6 +711,9 @@ const CurriculumMap = ({ courses, onSelect }) => {
     const trackA = tier3Courses.filter(c => c.track === "Artificial Intelligence");
     const trackB = tier3Courses.filter(c => c.track === "Systems & Data");
     const trackC = tier3Courses.filter(c => c.track === "Languages & Theory");
+    const trackD = tier3Courses.filter(c => c.track === "Cybersecurity");
+    const trackE = tier3Courses.filter(c => c.track === "Game Design & Simulation");
+    const trackF = tier3Courses.filter(c => c.track === "Futurist Electives");
 
     const getCourse = (title) => courses.find(c => c.title === title) || { title, difficulty: "Unknown", tags: [], description: "" };
 
@@ -721,6 +872,45 @@ const CurriculumMap = ({ courses, onSelect }) => {
                             <div className="grid md:grid-cols-1 gap-6 max-w-2xl">
                                 {trackC.map((course, i) => (
                                     <CourseCard key={i} course={course} tier={3} track="Languages & Theory" />
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Track D: Cybersecurity */}
+                        <div>
+                            <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
+                                <span className="w-1 h-6 bg-emerald-500 rounded"></span>
+                                Track D: Cybersecurity
+                            </h3>
+                            <div className="grid md:grid-cols-2 gap-6">
+                                {trackD.map((course, i) => (
+                                    <CourseCard key={i} course={course} tier={3} track="Cybersecurity" />
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Track E: Game Design & Simulation */}
+                        <div>
+                            <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
+                                <span className="w-1 h-6 bg-emerald-500 rounded"></span>
+                                Track E: Game Design & Simulation
+                            </h3>
+                            <div className="grid md:grid-cols-2 gap-6">
+                                {trackE.map((course, i) => (
+                                    <CourseCard key={i} course={course} tier={3} track="Game Design & Simulation" />
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Track F: Futurist Electives */}
+                        <div>
+                            <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
+                                <span className="w-1 h-6 bg-emerald-500 rounded"></span>
+                                Track F: Futurist Electives
+                            </h3>
+                            <div className="grid md:grid-cols-2 gap-6">
+                                {trackF.map((course, i) => (
+                                    <CourseCard key={i} course={course} tier={3} track="Futurist Electives" />
                                 ))}
                             </div>
                         </div>
@@ -1170,7 +1360,6 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
                                 <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
                                     <th className="px-6 py-3 font-semibold">Week</th>
                                     <th className="px-6 py-3 font-semibold">Learning Target</th>
-                                    <th className="px-6 py-3 font-semibold">Deliverables <span className="text-red-600 font-bold">(Choose One of Three Options)</span></th>
                                     <th className="px-6 py-3 font-semibold">Resource (Free)</th>
                                 </tr>
                             </thead>
@@ -1181,49 +1370,6 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
                                         <td className="px-6 py-4 align-top">
                                             <div className="font-bold text-gray-800 mb-1">{week.topic || week.target}</div>
                                             <div className="text-xs text-gray-500">{week.description}</div>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-600 align-top">
-                                            {week.deliverables ? (
-                                                <div className="space-y-2">
-                                                    <EllisActivityCard
-                                                        type="builder"
-                                                        title={week.deliverables.builder?.title}
-                                                        description={week.deliverables.builder?.description}
-                                                        guidelines={week.deliverables.builder?.guidelines}
-                                                    />
-                                                    <EllisActivityCard
-                                                        type="academic"
-                                                        title={week.deliverables.academic?.title}
-                                                        description={week.deliverables.academic?.description}
-                                                        guidelines={week.deliverables.academic?.guidelines}
-                                                    />
-                                                    <EllisActivityCard
-                                                        type="communicator"
-                                                        title={week.deliverables.communicator?.title}
-                                                        description={week.deliverables.communicator?.description}
-                                                        guidelines={week.deliverables.communicator?.guidelines}
-                                                    />
-                                                </div>
-                                            ) : week.activities ? (
-                                                <div className="space-y-2">
-                                                    <div className="flex gap-2 items-start">
-                                                        <span className="text-[10px] font-bold bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded uppercase tracking-wider min-w-[60px] text-center mt-0.5">Project</span>
-                                                        <span className="text-xs leading-tight">{week.activities.project}</span>
-                                                    </div>
-                                                    <div className="flex gap-2 items-start">
-                                                        <span className="text-[10px] font-bold bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded uppercase tracking-wider min-w-[60px] text-center mt-0.5">Test</span>
-                                                        <span className="text-xs leading-tight">{week.activities.test}</span>
-                                                    </div>
-                                                    <div className="flex gap-2 items-start">
-                                                        <span className="text-[10px] font-bold bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded uppercase tracking-wider min-w-[60px] text-center mt-0.5">Present</span>
-                                                        <span className="text-xs leading-tight">{week.activities.presentation}</span>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <span className="inline-block px-2 py-1 bg-green-50 text-green-700 rounded text-xs font-bold border border-green-100">
-                                                    {week.deliverable}
-                                                </span>
-                                            )}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-blue-600 align-top">
                                             {week.resources ? (
@@ -1480,7 +1626,7 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
         <div className="max-w-4xl mx-auto p-6">
             <div className="text-center mb-10">
                 <h2 className="text-3xl font-bold text-gvcs-navy mb-3 flex items-center justify-center gap-3">
-                    <Icons.Brain /> Ellis Independent Study Generator
+                    <Icons.Brain /> Curriculum Generator
                 </h2>
                 <p className="text-gray-600 max-w-xl mx-auto">
                     Need a plan for your independent study? We can help you build a compliant marking period schedule.
@@ -1946,9 +2092,8 @@ const HackathonProgramWizard = ({ user, onComplete, onCancel }) => {
     const [hackathonData, setHackathonData] = useState({
         hackathon_name: '',
         hackathon_date: '',
-        tracks: [],
+        tracks: [], // Prize categories
         team_members: [],
-        discord_link: '',
         current_step: 0,
         finalized_idea: '',
         master_document: '',
@@ -1958,10 +2103,11 @@ const HackathonProgramWizard = ({ user, onComplete, onCancel }) => {
     const [teamMemberInput, setTeamMemberInput] = useState('');
     const [trackInput, setTrackInput] = useState('');
     const [hackathonInfo, setHackathonInfo] = useState({
-        duration: '',
         theme: '',
-        prizes: '',
-        constraints: ''
+        tool_specific_awards: '',
+        context: '',
+        sponsors: '',
+        judge_demographic: ''
     });
 
     const steps = [
@@ -1979,32 +2125,195 @@ const HackathonProgramWizard = ({ user, onComplete, onCancel }) => {
 
 HACKATHON DETAILS:
 - Event Name: ${hackathonData.hackathon_name || '[INSERT HACKATHON NAME]'}
-- Duration: ${hackathonInfo.duration || '[INSERT DURATION, e.g., 24 hours, 48 hours]'}
 - Theme: ${hackathonInfo.theme || '[INSERT THEME, e.g., Education, Healthcare, Sustainability, or leave blank if open]'}
-- Prize Categories: ${hackathonInfo.prizes || '[INSERT PRIZE CATEGORIES, e.g., Best Education Hack, Best Design, or leave blank]'}
-- Constraints: ${hackathonInfo.constraints || '[INSERT ANY CONSTRAINTS, e.g., Must use specific API, Must be mobile-first, or leave blank if none]'}
+- Tool-Specific Awards: ${hackathonInfo.tool_specific_awards || '[INSERT TOOL-SPECIFIC AWARDS, e.g., Best Use of Twilio API, Best Use of AWS, Best Mobile App, etc.]'}
+- Sponsors: ${hackathonInfo.sponsors || '[INSERT ALL SPONSORS FOR THE EVENT]'}
+- Judge Demographic: ${hackathonInfo.judge_demographic || '[INSERT JUDGE DEMOGRAPHIC, e.g., Industry professionals, VCs, University professors, etc.]'}
 
-TEAM INTERESTS/TRACKS:
-${hackathonData.tracks.length > 0 ? hackathonData.tracks.map(t => `- ${t}`).join('\n') : '[INSERT YOUR TEAM INTERESTS/TRACKS, e.g., Web Development, AI/ML, Mobile Apps, etc.]'}
+AVAILABLE PRIZE CATEGORIES:
+${hackathonData.tracks.length > 0 ? hackathonData.tracks.map(t => `- ${t}`).join('\n') : '[INSERT ALL PRIZE CATEGORIES, e.g., Best Overall, Best Design, Best Education Hack, Best AI/ML Hack, etc.]'}
 
 TEAM SIZE: ${hackathonData.team_members.length || '[INSERT NUMBER]'} members
 
-Please help me brainstorm creative, feasible hackathon project ideas that:
-1. Can be built within the time constraint
-2. Solve a real problem or address the theme
-3. Leverage our team's interests and skills
-4. Have clear impact and potential for a demo
+ADDITIONAL CONTEXT:
+${hackathonInfo.context || '[PASTE RELEVANT CONTEXT HERE - e.g., CTRL+A of the hackathon website, important rules, special requirements, etc.]'}
 
-Provide multiple ideas with:
+INSTRUCTIONS:
+Please help me brainstorm creative, feasible hackathon project ideas using a TWO-STEP PROCESS:
+
+STEP 1: Generate the core project idea first
+- Focus on solving a real problem or addressing the theme
+- Consider what prize categories we have a good shot at (pick ones that aren't too competitive)
+- Leverage our team's interests and skills
+- Ensure it has clear impact and potential for a demo
+
+STEP 2: Incorporate tool-specific awards
+- After generating the core idea, creatively incorporate any tool-specific award requirements
+- For example: If the core idea is an auditing tool and there's a "Best Messaging App" award, find a way to incorporate messaging features (e.g., real-time notifications, team chat, etc.)
+- The tool-specific award should enhance the project, not force a complete pivot
+
+For each idea, provide:
 - Project name
 - Brief description
 - Problem it solves
 - Key features
 - Suggested tech stack
+- Which prize categories it targets (and why we have a good shot)
+- How tool-specific awards are incorporated
 - Why it's feasible for a hackathon
 
 Let's iterate and refine these ideas together!`;
-    }, [hackathonData.hackathon_name, hackathonData.tracks, hackathonData.team_members, hackathonInfo.duration, hackathonInfo.theme, hackathonInfo.prizes, hackathonInfo.constraints]);
+    }, [hackathonData.hackathon_name, hackathonData.tracks, hackathonData.team_members, hackathonInfo.theme, hackathonInfo.tool_specific_awards, hackathonInfo.context, hackathonInfo.sponsors, hackathonInfo.judge_demographic]);
+
+    // Memoize master document prompt to avoid re-renders
+    const masterDocumentPromptPreview = useMemo(() => {
+        const ideaSummary = hackathonData.finalized_idea || '[PASTE YOUR FINALIZED IDEA HERE]';
+        return `I need you to create an EXTREMELY DETAILED and COMPREHENSIVE master execution document for our hackathon project. This document will be used by a TEAM working together, and each team member will use their own AI coding assistant (Cursor, Claude Code, etc.) to implement their tasks.
+
+CRITICAL: This is a TEAM PROJECT. The document must emphasize coordination, context sharing, and synchronization between team members and their AI assistants.
+
+FINALIZED PROJECT IDEA:
+${ideaSummary}
+
+TEAM MEMBERS:
+${hackathonData.team_members.length > 0 ? hackathonData.team_members.map(m => `- ${m}`).join('\n') : '[INSERT TEAM MEMBER NAMES]'}
+
+HACKATHON CONTEXT:
+- Theme: ${hackathonInfo.theme || 'Open'}
+- Tool-Specific Awards: ${hackathonInfo.tool_specific_awards || 'None'}
+
+Create a MASTER EXECUTION DOCUMENT with the following structure:
+
+1. PROJECT OVERVIEW (Brief - 1-2 paragraphs)
+   - Complete project description
+   - Problem statement
+   - Solution approach
+   - Target users
+   - Success metrics
+
+2. TECHNICAL ARCHITECTURE (Detailed)
+   - System architecture diagram (describe in detail)
+   - Technology stack with versions
+   - Database schema (if applicable)
+   - API endpoints (if applicable)
+   - File/folder structure
+   - Dependencies and packages needed
+   - Environment variables and configuration
+
+3. TEAM COORDINATION PROTOCOL (CRITICAL - NEW SECTION)
+   IMPORTANT: This section must be included and emphasized throughout the document.
+   
+   - TEAM AWARENESS: All AI coding assistants (Cursor, Claude Code, etc.) must understand that this is a collaborative team project. They are NOT working in isolation.
+   
+   - CONTEXT SHARING MECHANISM:
+     * Each team member's AI assistant should periodically (every 30-60 minutes or after completing a task) generate a "context update" from their current branch
+     * This context update should include:
+       - What files they've created/modified
+       - What functions/features they've implemented
+       - Current state of their branch
+       - Any API contracts, data structures, or interfaces they've defined
+       - Dependencies they've added
+       - Any blockers or questions
+     
+   - CONTEXT DISTRIBUTION:
+     * Team members should share these context updates with each other (via Discord, shared doc, etc.)
+     * Each person should paste their teammates' context updates into their own AI assistant
+     * AI assistants should use this shared context to ensure code compatibility and alignment
+   
+   - CHECK-IN SCHEDULE:
+     * Every 2-3 hours, team members should do a "sync check-in"
+     * During check-ins:
+       - Pull latest changes from main branch
+       - Review teammates' context updates
+       - Update your AI assistant with latest project state
+       - Identify and resolve any conflicts or misalignments
+       - Adjust your tasks if needed based on team progress
+   
+   - BRANCH CONTEXT GENERATION:
+     * When a team member completes a task or makes significant progress, their AI assistant should:
+       - Analyze the current branch state
+       - Generate a summary of changes
+       - Identify what other team members need to know
+       - Create a context snippet to share
+   
+   - ALIGNMENT VERIFICATION:
+     * Before implementing new features, AI assistants should:
+       - Check if any teammates have implemented related code
+       - Verify API contracts match
+       - Ensure data structures are compatible
+       - Confirm naming conventions are consistent
+
+4. STEP-BY-STEP TASKS FOR EACH TEAM MEMBER (CRITICAL - MAIN FOCUS)
+   For EACH team member, create an EXTREMELY DETAILED step-by-step task list:
+   
+   === TEAM MEMBER: [MEMBER NAME] ===
+   Role: [Frontend/Backend/Full-stack/Design/etc]
+   
+   TASKS (Numbered, in order of execution):
+   
+   Task 1: [Task Name]
+   - Description: [What exactly needs to be done]
+   - Step 1: [First specific action]
+   - Step 2: [Second specific action]
+   - Step 3: [Third specific action]
+   - ... (continue for all steps)
+   - Files to create: [Exact file paths, e.g., src/components/LoginForm.jsx]
+   - Files to modify: [Exact file paths and what to change]
+   - Functions to create: [Function names and signatures]
+   - Dependencies needed: [What they need from teammates]
+   - Git branch: [Branch name, e.g., feature/login-form]
+   - Testing: [How to test this task]
+   - Integration points: [How this connects to other tasks]
+   - Estimated time: [Time estimate]
+   
+   Task 2: [Task Name]
+   - [Same detailed structure as Task 1]
+   
+   Task 3: [Task Name]
+   - [Same detailed structure as Task 1]
+   
+   ... (Continue for all tasks for this team member)
+   
+   DEPENDENCIES:
+   - Waiting for: [What they need from other team members]
+   - Providing to: [What they're creating for others]
+   
+   CHECK-IN POINTS:
+   - After Task 1: [What to share with team]
+   - After Task 2: [What to share with team]
+   - ... (Continue for each task)
+   
+   Repeat this entire section for EACH team member.
+
+5. GIT WORKFLOW & BRANCH STRATEGY
+   - Branch naming: [Convention, e.g., feature/team-member-name/task-name]
+   - Main branch protection: [Rules]
+   - Merge process: [How to merge]
+   - Conflict resolution: [Process]
+   - Commit message format: [Format]
+
+6. DEPLOYMENT PLAN
+   - Hosting platform
+   - Environment variables needed
+   - Build commands
+   - Deployment steps
+
+7. DEMO PREPARATION
+   - Demo script
+   - Key features to showcase
+   - Potential issues and solutions
+
+CRITICAL REQUIREMENTS FOR THIS DOCUMENT:
+- Focus HEAVILY on step-by-step tasks for each person (Section 4 should be the longest section)
+- Emphasize team coordination and context sharing throughout
+- Include specific file paths, function names, API endpoints, database tables
+- Make it clear that AI assistants must be aware of team collaboration
+- Include check-in points and context sharing instructions
+- Ensure tasks are broken down into the smallest possible actionable steps
+- Every team member should be able to follow their tasks without asking questions
+
+This document will be used by each team member with their own AI coding assistant. The assistants must understand they're part of a coordinated team effort.`;
+    }, [hackathonData.finalized_idea, hackathonData.team_members, hackathonInfo.theme, hackathonInfo.tool_specific_awards]);
 
     // Generate ideation prompt template
     const generateIdeationPrompt = () => {
@@ -2012,28 +2321,41 @@ Let's iterate and refine these ideas together!`;
 
 HACKATHON DETAILS:
 - Event Name: ${hackathonData.hackathon_name || '[INSERT HACKATHON NAME]'}
-- Duration: ${hackathonInfo.duration || '[INSERT DURATION, e.g., 24 hours, 48 hours]'}
 - Theme: ${hackathonInfo.theme || '[INSERT THEME, e.g., Education, Healthcare, Sustainability, or leave blank if open]'}
-- Prize Categories: ${hackathonInfo.prizes || '[INSERT PRIZE CATEGORIES, e.g., Best Education Hack, Best Design, or leave blank]'}
-- Constraints: ${hackathonInfo.constraints || '[INSERT ANY CONSTRAINTS, e.g., Must use specific API, Must be mobile-first, or leave blank if none]'}
+- Tool-Specific Awards: ${hackathonInfo.tool_specific_awards || '[INSERT TOOL-SPECIFIC AWARDS, e.g., Best Use of Twilio API, Best Use of AWS, Best Mobile App, etc.]'}
+- Sponsors: ${hackathonInfo.sponsors || '[INSERT ALL SPONSORS FOR THE EVENT]'}
+- Judge Demographic: ${hackathonInfo.judge_demographic || '[INSERT JUDGE DEMOGRAPHIC, e.g., Industry professionals, VCs, University professors, etc.]'}
 
-TEAM INTERESTS/TRACKS:
-${hackathonData.tracks.length > 0 ? hackathonData.tracks.map(t => `- ${t}`).join('\n') : '[INSERT YOUR TEAM INTERESTS/TRACKS, e.g., Web Development, AI/ML, Mobile Apps, etc.]'}
+AVAILABLE PRIZE CATEGORIES:
+${hackathonData.tracks.length > 0 ? hackathonData.tracks.map(t => `- ${t}`).join('\n') : '[INSERT ALL PRIZE CATEGORIES, e.g., Best Overall, Best Design, Best Education Hack, Best AI/ML Hack, etc.]'}
 
 TEAM SIZE: ${hackathonData.team_members.length || '[INSERT NUMBER]'} members
 
-Please help me brainstorm creative, feasible hackathon project ideas that:
-1. Can be built within the time constraint
-2. Solve a real problem or address the theme
-3. Leverage our team's interests and skills
-4. Have clear impact and potential for a demo
+ADDITIONAL CONTEXT:
+${hackathonInfo.context || '[PASTE RELEVANT CONTEXT HERE - e.g., CTRL+A of the hackathon website, important rules, special requirements, etc.]'}
 
-Provide multiple ideas with:
+INSTRUCTIONS:
+Please help me brainstorm creative, feasible hackathon project ideas using a TWO-STEP PROCESS:
+
+STEP 1: Generate the core project idea first
+- Focus on solving a real problem or addressing the theme
+- Consider what prize categories we have a good shot at (pick ones that aren't too competitive)
+- Leverage our team's interests and skills
+- Ensure it has clear impact and potential for a demo
+
+STEP 2: Incorporate tool-specific awards
+- After generating the core idea, creatively incorporate any tool-specific award requirements
+- For example: If the core idea is an auditing tool and there's a "Best Messaging App" award, find a way to incorporate messaging features (e.g., real-time notifications, team chat, etc.)
+- The tool-specific award should enhance the project, not force a complete pivot
+
+For each idea, provide:
 - Project name
 - Brief description
 - Problem it solves
 - Key features
 - Suggested tech stack
+- Which prize categories it targets (and why we have a good shot)
+- How tool-specific awards are incorporated
 - Why it's feasible for a hackathon
 
 Let's iterate and refine these ideas together!`;
@@ -2045,7 +2367,9 @@ Let's iterate and refine these ideas together!`;
     const generateMasterDocumentPrompt = () => {
         const ideaSummary = hackathonData.finalized_idea || '[PASTE YOUR FINALIZED IDEA HERE]';
 
-        const prompt = `I need you to create an EXTREMELY DETAILED and COMPREHENSIVE master execution document for our hackathon project.
+        const prompt = `I need you to create an EXTREMELY DETAILED and COMPREHENSIVE master execution document for our hackathon project. This document will be used by a TEAM working together, and each team member will use their own AI coding assistant (Cursor, Claude Code, etc.) to implement their tasks.
+
+CRITICAL: This is a TEAM PROJECT. The document must emphasize coordination, context sharing, and synchronization between team members and their AI assistants.
 
 FINALIZED PROJECT IDEA:
 ${ideaSummary}
@@ -2053,76 +2377,141 @@ ${ideaSummary}
 TEAM MEMBERS:
 ${hackathonData.team_members.length > 0 ? hackathonData.team_members.map(m => `- ${m}`).join('\n') : '[INSERT TEAM MEMBER NAMES]'}
 
-HACKATHON CONSTRAINTS:
-- Duration: ${hackathonInfo.duration || '[INSERT DURATION]'}
+HACKATHON CONTEXT:
 - Theme: ${hackathonInfo.theme || 'Open'}
-- Constraints: ${hackathonInfo.constraints || 'None'}
+- Tool-Specific Awards: ${hackathonInfo.tool_specific_awards || 'None'}
 
-Create a MASTER EXECUTION DOCUMENT that includes:
+Create a MASTER EXECUTION DOCUMENT with the following structure:
 
-1. PROJECT OVERVIEW
+1. PROJECT OVERVIEW (Brief - 1-2 paragraphs)
    - Complete project description
    - Problem statement
    - Solution approach
    - Target users
    - Success metrics
 
-2. TECHNICAL ARCHITECTURE
+2. TECHNICAL ARCHITECTURE (Detailed)
    - System architecture diagram (describe in detail)
    - Technology stack with versions
    - Database schema (if applicable)
    - API endpoints (if applicable)
    - File/folder structure
    - Dependencies and packages needed
+   - Environment variables and configuration
 
-3. FEATURE BREAKDOWN
-   - Complete list of all features
-   - User stories for each feature
-   - Acceptance criteria
-   - Priority levels (Must-have, Should-have, Nice-to-have)
-
-4. TEAM MEMBER BATCHES (CRITICAL SECTION)
-   For EACH team member, create a detailed "batch" that includes:
+3. TEAM COORDINATION PROTOCOL (CRITICAL - NEW SECTION)
+   IMPORTANT: This section must be included and emphasized throughout the document.
    
-   BATCH [MEMBER NAME]:
-   - Role: [Frontend/Backend/Full-stack/Design/etc]
-   - Responsibilities: [Detailed list]
-   - Specific Tasks: [Numbered, extremely detailed tasks]
-   - Dependencies: [What they need from other team members]
-   - Deliverables: [What they must produce]
-   - Git branches to create: [Specific branch names]
-   - Files to create/modify: [Specific file paths]
-   - Code snippets/examples: [If applicable]
-   - Testing requirements: [How to test their work]
-   - Integration points: [How their work connects to others]
+   - TEAM AWARENESS: All AI coding assistants (Cursor, Claude Code, etc.) must understand that this is a collaborative team project. They are NOT working in isolation.
+   
+   - CONTEXT SHARING MECHANISM:
+     * Each team member's AI assistant should periodically (every 30-60 minutes or after completing a task) generate a "context update" from their current branch
+     * This context update should include:
+       - What files they've created/modified
+       - What functions/features they've implemented
+       - Current state of their branch
+       - Any API contracts, data structures, or interfaces they've defined
+       - Dependencies they've added
+       - Any blockers or questions
+     
+   - CONTEXT DISTRIBUTION:
+     * Team members should share these context updates with each other (via Discord, shared doc, etc.)
+     * Each person should paste their teammates' context updates into their own AI assistant
+     * AI assistants should use this shared context to ensure code compatibility and alignment
+   
+   - CHECK-IN SCHEDULE:
+     * Every 2-3 hours, team members should do a "sync check-in"
+     * During check-ins:
+       - Pull latest changes from main branch
+       - Review teammates' context updates
+       - Update your AI assistant with latest project state
+       - Identify and resolve any conflicts or misalignments
+       - Adjust your tasks if needed based on team progress
+   
+   - BRANCH CONTEXT GENERATION:
+     * When a team member completes a task or makes significant progress, their AI assistant should:
+       - Analyze the current branch state
+       - Generate a summary of changes
+       - Identify what other team members need to know
+       - Create a context snippet to share
+   
+   - ALIGNMENT VERIFICATION:
+     * Before implementing new features, AI assistants should:
+       - Check if any teammates have implemented related code
+       - Verify API contracts match
+       - Ensure data structures are compatible
+       - Confirm naming conventions are consistent
 
-5. TIMELINE & MILESTONES
-   - Hour-by-hour breakdown (if 24-48 hour hackathon)
-   - Checkpoint deadlines
-   - Integration points
-   - Testing windows
-   - Demo preparation time
+4. STEP-BY-STEP TASKS FOR EACH TEAM MEMBER (CRITICAL - MAIN FOCUS)
+   For EACH team member, create an EXTREMELY DETAILED step-by-step task list:
+   
+   === TEAM MEMBER: [MEMBER NAME] ===
+   Role: [Frontend/Backend/Full-stack/Design/etc]
+   
+   TASKS (Numbered, in order of execution):
+   
+   Task 1: [Task Name]
+   - Description: [What exactly needs to be done]
+   - Step 1: [First specific action]
+   - Step 2: [Second specific action]
+   - Step 3: [Third specific action]
+   - ... (continue for all steps)
+   - Files to create: [Exact file paths, e.g., src/components/LoginForm.jsx]
+   - Files to modify: [Exact file paths and what to change]
+   - Functions to create: [Function names and signatures]
+   - Dependencies needed: [What they need from teammates]
+   - Git branch: [Branch name, e.g., feature/login-form]
+   - Testing: [How to test this task]
+   - Integration points: [How this connects to other tasks]
+   - Estimated time: [Time estimate]
+   
+   Task 2: [Task Name]
+   - [Same detailed structure as Task 1]
+   
+   Task 3: [Task Name]
+   - [Same detailed structure as Task 1]
+   
+   ... (Continue for all tasks for this team member)
+   
+   DEPENDENCIES:
+   - Waiting for: [What they need from other team members]
+   - Providing to: [What they're creating for others]
+   
+   CHECK-IN POINTS:
+   - After Task 1: [What to share with team]
+   - After Task 2: [What to share with team]
+   - ... (Continue for each task)
+   
+   Repeat this entire section for EACH team member.
 
-6. GIT WORKFLOW
-   - Branch naming conventions
-   - Commit message guidelines
-   - Merge strategy
-   - Code review process (if time permits)
+5. GIT WORKFLOW & BRANCH STRATEGY
+   - Branch naming: [Convention, e.g., feature/team-member-name/task-name]
+   - Main branch protection: [Rules]
+   - Merge process: [How to merge]
+   - Conflict resolution: [Process]
+   - Commit message format: [Format]
 
-7. DEPLOYMENT PLAN
+6. DEPLOYMENT PLAN
    - Hosting platform
    - Environment variables needed
    - Build commands
    - Deployment steps
 
-8. DEMO PREPARATION
+7. DEMO PREPARATION
    - Demo script
    - Key features to showcase
    - Potential issues and solutions
 
-This document MUST be extremely long, detailed, and clear. Every team member should be able to read their batch and know EXACTLY what to do without asking questions. Include specific file paths, function names, API endpoints, database tables, etc.
+CRITICAL REQUIREMENTS FOR THIS DOCUMENT:
+- Focus HEAVILY on step-by-step tasks for each person (Section 4 should be the longest section)
+- Emphasize team coordination and context sharing throughout
+- Include specific file paths, function names, API endpoints, database tables
+- Make it clear that AI assistants must be aware of team collaboration
+- Include check-in points and context sharing instructions
+- Ensure tasks are broken down into the smallest possible actionable steps
+- Every team member should be able to follow their tasks without asking questions
 
-Make it comprehensive enough that each person can work independently with their AI coding assistant using this document as context.`;
+This document will be used by each team member with their own AI coding assistant. The assistants must understand they're part of a coordinated team effort.`;
 
         return prompt;
     };
@@ -2174,7 +2563,26 @@ Make it comprehensive enough that each person can work independently with their 
                     <h2 className="text-2xl font-bold text-gvcs-navy">Hackathon Project Wizard</h2>
                     <p className="text-sm text-gray-500">Step {step + 1} of {steps.length}: {steps[step].title}</p>
                 </div>
-                <button onClick={onCancel} className="text-gray-500 hover:text-gray-700">Cancel</button>
+                <div className="flex items-center gap-3">
+                    <div className="flex gap-1">
+                        {steps.map((s, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setStep(i)}
+                                className={`px-2 py-1 text-xs rounded transition-colors ${i === step
+                                        ? 'bg-purple-600 text-white font-bold'
+                                        : i < step
+                                            ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+                                            : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                                    }`}
+                                title={s.title}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
+                    </div>
+                    <button onClick={onCancel} className="text-gray-500 hover:text-gray-700">Cancel</button>
+                </div>
             </div>
 
             {/* Progress Bar */}
@@ -2238,10 +2646,13 @@ Make it comprehensive enough that each person can work independently with their 
                             <h4 className="font-bold text-purple-900 mb-3">Choose One AI Build Tool (Required):</h4>
                             <p className="text-xs text-purple-700 mb-3">Each team member should pick one AI coding assistant. Compare pricing below:</p>
                             <div className="space-y-3">
-                                <div className="bg-white rounded-lg p-3 border border-purple-200">
+                                <div className="bg-white rounded-lg p-3 border-2 border-green-500 border-purple-200">
                                     <div className="flex justify-between items-start mb-1">
                                         <div>
-                                            <h5 className="font-bold text-gray-900">Cursor</h5>
+                                            <div className="flex items-center gap-2">
+                                                <h5 className="font-bold text-gray-900">Cursor</h5>
+                                                <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">⭐ Recommended</span>
+                                            </div>
                                             <p className="text-xs text-gray-600">AI-powered code editor (VS Code fork)</p>
                                         </div>
                                         <span className="text-xs font-bold text-purple-700 bg-purple-100 px-2 py-1 rounded">Free + $20/mo</span>
@@ -2260,10 +2671,13 @@ Make it comprehensive enough that each person can work independently with their 
                                     <p className="text-xs text-gray-500 mt-1">Free for students/teachers. Individual: $10/month, Business: $19/user/month</p>
                                 </div>
 
-                                <div className="bg-white rounded-lg p-3 border border-purple-200">
+                                <div className="bg-white rounded-lg p-3 border-2 border-green-500 border-purple-200">
                                     <div className="flex justify-between items-start mb-1">
                                         <div>
-                                            <h5 className="font-bold text-gray-900">Claude Code (via Cline)</h5>
+                                            <div className="flex items-center gap-2">
+                                                <h5 className="font-bold text-gray-900">Claude Code (via Cline)</h5>
+                                                <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">⭐ Recommended</span>
+                                            </div>
                                             <p className="text-xs text-gray-600">VS Code extension using Claude AI</p>
                                         </div>
                                         <span className="text-xs font-bold text-purple-700 bg-purple-100 px-2 py-1 rounded">$20/mo</span>
@@ -2315,10 +2729,13 @@ Make it comprehensive enough that each person can work independently with their 
                                     <p className="text-xs text-gray-500 mt-1">Free and open source. Requires API key (OpenAI, Anthropic, etc.)</p>
                                 </div>
 
-                                <div className="bg-white rounded-lg p-3 border border-purple-200">
+                                <div className="bg-white rounded-lg p-3 border-2 border-green-500 border-purple-200">
                                     <div className="flex justify-between items-start mb-1">
                                         <div>
-                                            <h5 className="font-bold text-gray-900">Antigravity</h5>
+                                            <div className="flex items-center gap-2">
+                                                <h5 className="font-bold text-gray-900">Antigravity</h5>
+                                                <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">⭐ Recommended</span>
+                                            </div>
                                             <p className="text-xs text-gray-600">AI code generation tool</p>
                                         </div>
                                         <span className="text-xs font-bold text-purple-700 bg-purple-100 px-2 py-1 rounded">$15/mo</span>
@@ -2342,159 +2759,6 @@ Make it comprehensive enough that each person can work independently with their 
                             </div>
                         </div>
 
-                        <div className="mb-4">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Discord Server/Group Link</label>
-                            <input
-                                type="url"
-                                value={hackathonData.discord_link}
-                                onChange={(e) => setHackathonData({ ...hackathonData, discord_link: e.target.value })}
-                                placeholder="https://discord.gg/..."
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Team Members</label>
-                            <div className="flex gap-2 mb-2">
-                                <input
-                                    type="text"
-                                    value={teamMemberInput}
-                                    onChange={(e) => setTeamMemberInput(e.target.value)}
-                                    onKeyPress={(e) => {
-                                        if (e.key === 'Enter' && teamMemberInput.trim()) {
-                                            setHackathonData({
-                                                ...hackathonData,
-                                                team_members: [...hackathonData.team_members, teamMemberInput.trim()]
-                                            });
-                                            setTeamMemberInput('');
-                                        }
-                                    }}
-                                    placeholder="Enter name and press Enter"
-                                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
-                                />
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                {hackathonData.team_members.map((member, i) => (
-                                    <span key={i} className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm flex items-center gap-2">
-                                        {member}
-                                        <button
-                                            onClick={() => setHackathonData({
-                                                ...hackathonData,
-                                                team_members: hackathonData.team_members.filter((_, idx) => idx !== i)
-                                            })}
-                                            className="text-purple-700 hover:text-purple-900"
-                                        >
-                                            ×
-                                        </button>
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Tracks/Interests</label>
-                            <div className="flex gap-2 mb-2">
-                                <input
-                                    type="text"
-                                    value={trackInput}
-                                    onChange={(e) => setTrackInput(e.target.value)}
-                                    onKeyPress={(e) => {
-                                        if (e.key === 'Enter' && trackInput.trim()) {
-                                            setHackathonData({
-                                                ...hackathonData,
-                                                tracks: [...hackathonData.tracks, trackInput.trim()]
-                                            });
-                                            setTrackInput('');
-                                        }
-                                    }}
-                                    placeholder="e.g., Web Dev, AI, Mobile, etc."
-                                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
-                                />
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                {hackathonData.tracks.map((track, i) => (
-                                    <span key={i} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm flex items-center gap-2">
-                                        {track}
-                                        <button
-                                            onClick={() => setHackathonData({
-                                                ...hackathonData,
-                                                tracks: hackathonData.tracks.filter((_, idx) => idx !== i)
-                                            })}
-                                            className="text-blue-700 hover:text-blue-900"
-                                        >
-                                            ×
-                                        </button>
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Hackathon Name</label>
-                            <input
-                                type="text"
-                                value={hackathonData.hackathon_name}
-                                onChange={(e) => setHackathonData({ ...hackathonData, hackathon_name: e.target.value })}
-                                placeholder="e.g., PennApps, HackMIT"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Duration</label>
-                            <input
-                                type="text"
-                                value={hackathonInfo.duration}
-                                onChange={(e) => setHackathonInfo({ ...hackathonInfo, duration: e.target.value })}
-                                placeholder="e.g., 24 hours, 48 hours"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Theme (optional)</label>
-                            <input
-                                type="text"
-                                value={hackathonInfo.theme}
-                                onChange={(e) => setHackathonInfo({ ...hackathonInfo, theme: e.target.value })}
-                                placeholder="e.g., Education, Healthcare"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Prizes/Categories (optional)</label>
-                            <input
-                                type="text"
-                                value={hackathonInfo.prizes}
-                                onChange={(e) => setHackathonInfo({ ...hackathonInfo, prizes: e.target.value })}
-                                placeholder="e.g., Best Education Hack"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Constraints (optional)</label>
-                            <textarea
-                                value={hackathonInfo.constraints}
-                                onChange={(e) => setHackathonInfo({ ...hackathonInfo, constraints: e.target.value })}
-                                placeholder="e.g., Must use specific API"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                                rows="2"
-                            />
-                        </div>
-
-                        <div className="mb-6">
-                            <label className="block text-sm font-bold text-gray-800 mb-2">Live Master Prompt Preview</label>
-                            <p className="text-xs text-gray-500 mb-2">This prompt updates automatically as you fill out the form above.</p>
-                            <textarea
-                                value={hackathonData.ideation_prompt || ideationPromptPreview}
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs bg-gray-50"
-                                rows="15"
-                            />
-                        </div>
-
                         <button
                             onClick={handleStep1}
                             className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700"
@@ -2510,22 +2774,157 @@ Make it comprehensive enough that each person can work independently with their 
                 <div className="space-y-4">
                     <h3 className="text-lg font-bold">Step 2: Ideation</h3>
                     <p className="text-sm text-gray-600 mb-4">
-                        Use this prompt template with Perplexity or your preferred LLM to brainstorm ideas. Keep iterating with your team and the LLM until you finalize an idea.
+                        Fill out the hackathon details below, then use the generated prompt with your LLM to brainstorm ideas.
                     </p>
 
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                        <h4 className="font-bold text-blue-900 mb-2">Instructions:</h4>
-                        <ol className="text-sm text-blue-800 space-y-2 list-decimal list-inside">
-                            <li>Click "Generate Ideation Prompt" below to create your prompt template</li>
-                            <li>Copy the prompt and paste it into Perplexity, Claude, GPT-4, or your preferred LLM</li>
-                            <li>Have your team discuss and iterate with the LLM to refine ideas</li>
-                            <li>Once you've finalized an idea, paste it in the text area below</li>
-                        </ol>
+                    <div className="mb-4">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Team Members</label>
+                        <div className="flex gap-2 mb-2">
+                            <input
+                                type="text"
+                                value={teamMemberInput}
+                                onChange={(e) => setTeamMemberInput(e.target.value)}
+                                onKeyPress={(e) => {
+                                    if (e.key === 'Enter' && teamMemberInput.trim()) {
+                                        setHackathonData({
+                                            ...hackathonData,
+                                            team_members: [...hackathonData.team_members, teamMemberInput.trim()]
+                                        });
+                                        setTeamMemberInput('');
+                                    }
+                                }}
+                                placeholder="Enter name and press Enter"
+                                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+                            />
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {hackathonData.team_members.map((member, i) => (
+                                <span key={i} className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm flex items-center gap-2">
+                                    {member}
+                                    <button
+                                        onClick={() => setHackathonData({
+                                            ...hackathonData,
+                                            team_members: hackathonData.team_members.filter((_, idx) => idx !== i)
+                                        })}
+                                        className="text-purple-700 hover:text-purple-900"
+                                    >
+                                        ×
+                                    </button>
+                                </span>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="mb-4">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Prize Categories</label>
+                        <p className="text-xs text-gray-500 mb-2">List all available prize categories. The AI will help you pick ones you have a good shot at.</p>
+                        <div className="flex gap-2 mb-2">
+                            <input
+                                type="text"
+                                value={trackInput}
+                                onChange={(e) => setTrackInput(e.target.value)}
+                                onKeyPress={(e) => {
+                                    if (e.key === 'Enter' && trackInput.trim()) {
+                                        setHackathonData({
+                                            ...hackathonData,
+                                            tracks: [...hackathonData.tracks, trackInput.trim()]
+                                        });
+                                        setTrackInput('');
+                                    }
+                                }}
+                                placeholder="e.g., Best Overall, Best Design, Best Education Hack, etc."
+                                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+                            />
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {hackathonData.tracks.map((track, i) => (
+                                <span key={i} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm flex items-center gap-2">
+                                    {track}
+                                    <button
+                                        onClick={() => setHackathonData({
+                                            ...hackathonData,
+                                            tracks: hackathonData.tracks.filter((_, idx) => idx !== i)
+                                        })}
+                                        className="text-blue-700 hover:text-blue-900"
+                                    >
+                                        ×
+                                    </button>
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Hackathon Name</label>
+                        <input
+                            type="text"
+                            value={hackathonData.hackathon_name}
+                            onChange={(e) => setHackathonData({ ...hackathonData, hackathon_name: e.target.value })}
+                            placeholder="e.g., PennApps, HackMIT"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Theme (optional)</label>
+                        <input
+                            type="text"
+                            value={hackathonInfo.theme}
+                            onChange={(e) => setHackathonInfo({ ...hackathonInfo, theme: e.target.value })}
+                            placeholder="e.g., Education, Healthcare"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Tool-Specific Awards</label>
+                        <p className="text-xs text-gray-500 mb-2">Awards that require using specific tools/APIs (e.g., Best Use of Twilio, Best AWS Integration)</p>
+                        <textarea
+                            value={hackathonInfo.tool_specific_awards}
+                            onChange={(e) => setHackathonInfo({ ...hackathonInfo, tool_specific_awards: e.target.value })}
+                            placeholder="e.g., Best Use of Twilio API, Best Mobile App, Best AWS Integration"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            rows="2"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Sponsors</label>
+                        <textarea
+                            value={hackathonInfo.sponsors}
+                            onChange={(e) => setHackathonInfo({ ...hackathonInfo, sponsors: e.target.value })}
+                            placeholder="List all sponsors for the event"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            rows="3"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Judge Demographic</label>
+                        <input
+                            type="text"
+                            value={hackathonInfo.judge_demographic}
+                            onChange={(e) => setHackathonInfo({ ...hackathonInfo, judge_demographic: e.target.value })}
+                            placeholder="e.g., Industry professionals, VCs, University professors"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Additional Context</label>
+                        <p className="text-xs text-gray-500 mb-2">Paste relevant context (e.g., CTRL+A of hackathon website, important rules, special requirements)</p>
+                        <textarea
+                            value={hackathonInfo.context}
+                            onChange={(e) => setHackathonInfo({ ...hackathonInfo, context: e.target.value })}
+                            placeholder="Paste hackathon website content, rules, requirements, etc."
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            rows="6"
+                        />
+                    </div>
+
+                    <div className="mb-6">
                         <div className="flex justify-between items-center mb-2">
-                            <label className="block text-sm font-semibold text-gray-700">Ideation Prompt Template</label>
+                            <label className="block text-sm font-bold text-gray-800">Live Ideation Prompt Preview</label>
                             <button
                                 onClick={() => {
                                     const prompt = generateIdeationPrompt();
@@ -2535,17 +2934,28 @@ Make it comprehensive enough that each person can work independently with their 
                                 }}
                                 className="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
                             >
-                                Generate & Copy
+                                Copy Prompt
                             </button>
                         </div>
+                        <p className="text-xs text-gray-500 mb-2">This prompt updates automatically as you fill out the form above. Use it with Perplexity, Claude, GPT-4, or your preferred LLM to brainstorm ideas.</p>
                         <textarea
-                            value={hackathonData.ideation_prompt}
-                            onChange={(e) => setHackathonData({ ...hackathonData, ideation_prompt: e.target.value })}
-                            placeholder="Click 'Generate & Copy' to create your ideation prompt..."
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs"
-                            rows="15"
+                            value={hackathonData.ideation_prompt || ideationPromptPreview}
                             readOnly
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs bg-gray-50"
+                            rows="15"
                         />
+                    </div>
+
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <h4 className="font-bold text-blue-900 mb-2">Instructions:</h4>
+                        <ol className="text-sm text-blue-800 space-y-2 list-decimal list-inside">
+                            <li>Fill out all the hackathon details above</li>
+                            <li>Review the generated prompt preview</li>
+                            <li>Click "Copy Prompt" to copy it to your clipboard</li>
+                            <li>Paste it into Perplexity, Claude, GPT-4, or your preferred LLM</li>
+                            <li>Have your team discuss and iterate with the LLM to refine ideas</li>
+                            <li>Once you've finalized an idea, paste it in the text area below</li>
+                        </ol>
                     </div>
 
                     <div className="mb-4">
@@ -2623,14 +3033,40 @@ Make it comprehensive enough that each person can work independently with their 
 
                     <div className="mb-4">
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Master Document *</label>
-                        <p className="text-xs text-gray-500 mb-2">Paste your complete master execution document here (should be very long and detailed):</p>
-                        <textarea
-                            value={hackathonData.master_document}
-                            onChange={(e) => setHackathonData({ ...hackathonData, master_document: e.target.value })}
-                            placeholder="Paste your complete master document here. It should include: project overview, technical architecture, feature breakdown, team member batches with specific tasks, timeline, git workflow, deployment plan, and demo preparation..."
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs"
-                            rows="25"
-                        />
+                        <p className="text-xs text-gray-500 mb-3">Upload a file or paste your complete master execution document below:</p>
+
+                        {/* File Upload Option */}
+                        <div className="mb-4">
+                            <label className="block text-xs font-semibold text-gray-600 mb-2">Option 1: Upload File</label>
+                            <input
+                                type="file"
+                                accept=".txt,.md,.doc,.docx"
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        const reader = new FileReader();
+                                        reader.onload = (event) => {
+                                            setHackathonData({ ...hackathonData, master_document: event.target.result });
+                                        };
+                                        reader.readAsText(file);
+                                    }
+                                }}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                            />
+                            <p className="text-xs text-gray-400 mt-1">Supported formats: .txt, .md, .doc, .docx</p>
+                        </div>
+
+                        {/* Text Box Option */}
+                        <div>
+                            <label className="block text-xs font-semibold text-gray-600 mb-2">Option 2: Paste Text</label>
+                            <textarea
+                                value={hackathonData.master_document}
+                                onChange={(e) => setHackathonData({ ...hackathonData, master_document: e.target.value })}
+                                placeholder="Paste your complete master document here. It should include: project overview, technical architecture, step-by-step tasks for each team member, team coordination protocol, git workflow, deployment plan, and demo preparation..."
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs"
+                                rows="25"
+                            />
+                        </div>
                     </div>
 
                     <div className="flex gap-2">
@@ -3006,45 +3442,25 @@ const HackathonProgramView = ({ hackathon, user, onBack, onUpdate }) => {
 
 // Hackathons Section Component
 const HackathonsSection = ({ hackathons, user, onSelect, onRefresh }) => {
-    const [isCreating, setIsCreating] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gvcs-navy">Hackathon Projects</h2>
                 <button
-                    onClick={() => setIsCreating(true)}
+                    onClick={() => navigate('/hackathons')}
                     className="px-4 py-2 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 flex items-center gap-2"
                 >
-                    <Icons.Sparkles /> Start New Program
+                    <Icons.Sparkles /> Start New Project
                 </button>
             </div>
 
-            {isCreating ? (
-                <HackathonProgramWizard
-                    user={user}
-                    onComplete={async (hackathonData) => {
-                        try {
-                            const { error } = await supabase
-                                .from('hackathon_programs')
-                                .insert([hackathonData]);
-
-                            if (error) throw error;
-                            setIsCreating(false);
-                            onRefresh();
-                            alert('Hackathon project created!');
-                        } catch (error) {
-                            console.error('Error creating hackathon:', error);
-                            alert('Failed to create hackathon project.');
-                        }
-                    }}
-                    onCancel={() => setIsCreating(false)}
-                />
-            ) : hackathons.length === 0 ? (
+            {hackathons.length === 0 ? (
                 <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
                     <p className="text-gray-600 mb-4">You haven't created any hackathon projects yet.</p>
                     <button
-                        onClick={() => setIsCreating(true)}
+                        onClick={() => navigate('/hackathons')}
                         className="px-4 py-2 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700"
                     >
                         Start Your First Project
@@ -3084,8 +3500,340 @@ const HackathonsSection = ({ hackathons, user, onSelect, onRefresh }) => {
     );
 };
 
+// Admin Panel Component
+const AdminPanel = ({ user, onBack }) => {
+    const [users, setUsers] = useState([]);
+    const [allCourses, setAllCourses] = useState([]);
+    const [allHackathons, setAllHackathons] = useState([]);
+    const [allProfiles, setAllProfiles] = useState([]);
+    const [allProblemStatuses, setAllProblemStatuses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [activeTab, setActiveTab] = useState('users'); // 'users', 'courses', 'hackathons', 'problems'
+
+    useEffect(() => {
+        fetchAllData();
+    }, []);
+
+    const fetchAllData = async () => {
+        setLoading(true);
+        try {
+            // Fetch all users from auth (we'll get them via courses/hackathons user_ids)
+            // Fetch all courses
+            const { data: coursesData, error: coursesError } = await supabase
+                .from('user_courses')
+                .select('*, user_id')
+                .order('created_at', { ascending: false });
+
+            if (coursesError) throw coursesError;
+            setAllCourses(coursesData || []);
+
+            // Fetch all hackathons
+            const { data: hackathonsData, error: hackathonsError } = await supabase
+                .from('hackathon_programs')
+                .select('*, user_id')
+                .order('created_at', { ascending: false });
+
+            if (hackathonsError && hackathonsError.code !== '42P01') throw hackathonsError;
+            setAllHackathons(hackathonsData || []);
+
+            // Fetch all profiles
+            const { data: profilesData, error: profilesError } = await supabase
+                .from('user_profiles')
+                .select('*, user_id')
+                .order('created_at', { ascending: false });
+
+            if (profilesError && profilesError.code !== 'PGRST116' && profilesError.code !== '42P01') throw profilesError;
+            setAllProfiles(profilesData || []);
+
+            // Fetch all problem statuses
+            const { data: problemStatusesData, error: problemStatusesError } = await supabase
+                .from('user_problem_statuses')
+                .select('*, user_id')
+                .order('created_at', { ascending: false });
+
+            if (problemStatusesError && problemStatusesError.code !== '42P01') throw problemStatusesError;
+            setAllProblemStatuses(problemStatusesData || []);
+
+            // Get unique user IDs and create user list
+            const userIds = new Set();
+            coursesData?.forEach(c => userIds.add(c.user_id));
+            hackathonsData?.forEach(h => userIds.add(h.user_id));
+            profilesData?.forEach(p => userIds.add(p.user_id));
+            problemStatusesData?.forEach(ps => userIds.add(ps.user_id));
+
+            // Create user objects with aggregated data
+            const usersList = Array.from(userIds).map(userId => {
+                const userCourses = coursesData?.filter(c => c.user_id === userId) || [];
+                const userHackathons = hackathonsData?.filter(h => h.user_id === userId) || [];
+                const userProfile = profilesData?.find(p => p.user_id === userId);
+                const userProblems = problemStatusesData?.filter(ps => ps.user_id === userId) || [];
+
+                return {
+                    id: userId,
+                    email: userProfile?.display_name || `User ${userId.substring(0, 8)}`,
+                    courses: userCourses,
+                    hackathons: userHackathons,
+                    profile: userProfile,
+                    problemStatuses: userProblems,
+                    totalCourses: userCourses.length,
+                    totalHackathons: userHackathons.length,
+                    totalProblems: userProblems.length
+                };
+            });
+
+            setUsers(usersList);
+        } catch (error) {
+            console.error('Error fetching admin data:', error);
+            alert('Failed to load admin data. Make sure you have admin permissions.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const calculateCourseProgress = (weeks) => {
+        if (!weeks || weeks.length === 0) return 0;
+        const completed = weeks.filter(w => w.submissions && w.submissions[w.selectedActivity || w.selected_activity]).length;
+        return Math.round((completed / weeks.length) * 100);
+    };
+
+    if (loading) {
+        return (
+            <div className="max-w-7xl mx-auto px-4 py-8">
+                <div className="text-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gvcs-navy mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading admin data...</p>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-7xl mx-auto px-4 py-8">
+            <div className="flex justify-between items-center mb-8">
+                <div>
+                    <h1 className="text-3xl font-bold text-gvcs-navy mb-2">Admin Panel</h1>
+                    <p className="text-gray-600">View all users, courses, hackathons, and progress</p>
+                </div>
+                <button
+                    onClick={onBack}
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-bold hover:bg-gray-200 transition-colors"
+                >
+                    Back to Dashboard
+                </button>
+            </div>
+
+            {/* Stats Overview */}
+            <div className="grid md:grid-cols-4 gap-4 mb-8">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div className="text-3xl font-bold text-gvcs-navy mb-1">{users.length}</div>
+                    <div className="text-sm text-gray-600">Total Users</div>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div className="text-3xl font-bold text-purple-600 mb-1">{allCourses.length}</div>
+                    <div className="text-sm text-gray-600">Total Courses</div>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div className="text-3xl font-bold text-green-600 mb-1">{allHackathons.length}</div>
+                    <div className="text-sm text-gray-600">Total Hackathons</div>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div className="text-3xl font-bold text-blue-600 mb-1">{allProblemStatuses.length}</div>
+                    <div className="text-sm text-gray-600">Problem Attempts</div>
+                </div>
+            </div>
+
+            {/* Tabs */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
+                <div className="flex border-b border-gray-200">
+                    <button
+                        onClick={() => setActiveTab('users')}
+                        className={`px-6 py-4 font-bold transition-colors ${activeTab === 'users' ? 'text-gvcs-navy border-b-2 border-gvcs-navy' : 'text-gray-500 hover:text-gray-700'
+                            }`}
+                    >
+                        Users ({users.length})
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('courses')}
+                        className={`px-6 py-4 font-bold transition-colors ${activeTab === 'courses' ? 'text-gvcs-navy border-b-2 border-gvcs-navy' : 'text-gray-500 hover:text-gray-700'
+                            }`}
+                    >
+                        All Courses ({allCourses.length})
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('hackathons')}
+                        className={`px-6 py-4 font-bold transition-colors ${activeTab === 'hackathons' ? 'text-gvcs-navy border-b-2 border-gvcs-navy' : 'text-gray-500 hover:text-gray-700'
+                            }`}
+                    >
+                        All Hackathons ({allHackathons.length})
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('problems')}
+                        className={`px-6 py-4 font-bold transition-colors ${activeTab === 'problems' ? 'text-gvcs-navy border-b-2 border-gvcs-navy' : 'text-gray-500 hover:text-gray-700'
+                            }`}
+                    >
+                        Problem Statuses ({allProblemStatuses.length})
+                    </button>
+                </div>
+
+                <div className="p-6">
+                    {activeTab === 'users' && (
+                        <div className="space-y-4">
+                            {users.map(user => (
+                                <div
+                                    key={user.id}
+                                    className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                                >
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex-1">
+                                            <h3 className="text-lg font-bold text-gray-900 mb-2">{user.email}</h3>
+                                            <div className="grid md:grid-cols-3 gap-4 text-sm">
+                                                <div>
+                                                    <span className="text-gray-600">Courses: </span>
+                                                    <span className="font-bold text-purple-600">{user.totalCourses}</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-gray-600">Hackathons: </span>
+                                                    <span className="font-bold text-green-600">{user.totalHackathons}</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-gray-600">Problems: </span>
+                                                    <span className="font-bold text-blue-600">{user.totalProblems}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => setSelectedUser(selectedUser?.id === user.id ? null : user)}
+                                            className="px-4 py-2 bg-gvcs-navy text-white rounded-lg font-bold hover:bg-blue-900 transition-colors text-sm"
+                                        >
+                                            {selectedUser?.id === user.id ? 'Hide Details' : 'View Details'}
+                                        </button>
+                                    </div>
+
+                                    {selectedUser?.id === user.id && (
+                                        <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
+                                            {/* User Courses */}
+                                            {user.courses.length > 0 && (
+                                                <div>
+                                                    <h4 className="font-bold text-gray-800 mb-2">Courses:</h4>
+                                                    <div className="space-y-2">
+                                                        {user.courses.map(course => (
+                                                            <div key={course.id} className="bg-gray-50 p-3 rounded-lg">
+                                                                <div className="font-bold text-gray-900">{course.course_title}</div>
+                                                                <div className="text-sm text-gray-600">
+                                                                    Progress: {calculateCourseProgress(course.weeks)}% •
+                                                                    Weeks: {course.weeks?.length || 0}
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* User Hackathons */}
+                                            {user.hackathons.length > 0 && (
+                                                <div>
+                                                    <h4 className="font-bold text-gray-800 mb-2">Hackathons:</h4>
+                                                    <div className="space-y-2">
+                                                        {user.hackathons.map(hackathon => (
+                                                            <div key={hackathon.id} className="bg-gray-50 p-3 rounded-lg">
+                                                                <div className="font-bold text-gray-900">{hackathon.hackathon_name}</div>
+                                                                <div className="text-sm text-gray-600">
+                                                                    Date: {hackathon.hackathon_date ? new Date(hackathon.hackathon_date).toLocaleDateString() : 'TBD'} •
+                                                                    Step: {hackathon.current_step + 1}/6
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* User Profile */}
+                                            {user.profile && (
+                                                <div>
+                                                    <h4 className="font-bold text-gray-800 mb-2">Profile:</h4>
+                                                    <div className="bg-gray-50 p-3 rounded-lg">
+                                                        <div className="text-sm text-gray-600">
+                                                            Grade: {user.profile.grade_level || 'N/A'} •
+                                                            Graduation: {user.profile.graduation_year || 'N/A'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {activeTab === 'courses' && (
+                        <div className="space-y-4">
+                            {allCourses.map(course => (
+                                <div key={course.id} className="border border-gray-200 rounded-lg p-4">
+                                    <div className="font-bold text-gray-900 mb-1">{course.course_title}</div>
+                                    <div className="text-sm text-gray-600">
+                                        User ID: {course.user_id.substring(0, 8)}... •
+                                        Progress: {calculateCourseProgress(course.weeks)}% •
+                                        Created: {new Date(course.created_at).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {activeTab === 'hackathons' && (
+                        <div className="space-y-4">
+                            {allHackathons.map(hackathon => (
+                                <div key={hackathon.id} className="border border-gray-200 rounded-lg p-4">
+                                    <div className="font-bold text-gray-900 mb-1">{hackathon.hackathon_name}</div>
+                                    <div className="text-sm text-gray-600">
+                                        User ID: {hackathon.user_id.substring(0, 8)}... •
+                                        Date: {hackathon.hackathon_date ? new Date(hackathon.hackathon_date).toLocaleDateString() : 'TBD'} •
+                                        Step: {hackathon.current_step + 1}/6 •
+                                        Created: {new Date(hackathon.created_at).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {activeTab === 'problems' && (
+                        <div className="space-y-4">
+                            {allProblemStatuses.map(problem => (
+                                <div key={problem.id} className="border border-gray-200 rounded-lg p-4">
+                                    <div className="font-bold text-gray-900 mb-1">
+                                        {problem.problem_url.substring(0, 60)}...
+                                    </div>
+                                    <div className="text-sm text-gray-600">
+                                        User ID: {problem.user_id.substring(0, 8)}... •
+                                        Status: <span className={`font-bold ${problem.status === 'solved' ? 'text-green-600' :
+                                                problem.status === 'attempted' ? 'text-yellow-600' : 'text-red-600'
+                                            }`}>{problem.status}</span> •
+                                        Updated: {new Date(problem.updated_at).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Dashboard = ({ user }) => {
-    const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'courses', 'hackathons'
+    const location = useLocation();
+    const [activeSection, setActiveSection] = useState('courses'); // 'courses' or 'hackathons'
+
+    // Check URL for tab parameter (for navigation from hackathon hub)
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const tab = params.get('tab');
+        if (tab === 'hackathons') {
+            setActiveSection('hackathons');
+        }
+    }, [location.search]);
     const [courses, setCourses] = useState([]);
     const [hackathons, setHackathons] = useState([]);
     const [profile, setProfile] = useState(null);
@@ -3272,16 +4020,16 @@ const Dashboard = ({ user }) => {
                     <Icons.ArrowRight /> Back to Dashboard
                 </button>
                 <h2 className="text-2xl font-bold text-gvcs-navy mb-6">{selectedCourse.courseTitle}</h2>
-                
+
                 <div className="space-y-4">
                     {selectedCourse.weeks.map((week, idx) => {
                         const hasSubmission = (type) => week.submissions && week.submissions && week.submissions[type];
                         const isExpanded = expandedWeek === idx;
-                        
+
                         return (
                             <div key={week.week} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                                 {/* Week Header */}
-                                <div 
+                                <div
                                     className="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
                                     onClick={() => setExpandedWeek(isExpanded ? null : idx)}
                                 >
@@ -3295,23 +4043,19 @@ const Dashboard = ({ user }) => {
                                         <div className="flex items-center gap-3">
                                             {/* Activity Status Indicators */}
                                             <div className="flex gap-2" title="Ellis Activities: Academic, Builder, Communicator">
-                                                <div className={`w-3 h-3 rounded-full ${
-                                                    hasSubmission('academic') ? 'bg-green-500' : 'bg-gray-300'
-                                                }`} title="Academic"></div>
-                                                <div className={`w-3 h-3 rounded-full ${
-                                                    hasSubmission('builder') ? 'bg-green-500' : 'bg-gray-300'
-                                                }`} title="Builder"></div>
-                                                <div className={`w-3 h-3 rounded-full ${
-                                                    hasSubmission('communicator') ? 'bg-green-500' : 'bg-gray-300'
-                                                }`} title="Communicator"></div>
+                                                <div className={`w-3 h-3 rounded-full ${hasSubmission('academic') ? 'bg-green-500' : 'bg-gray-300'
+                                                    }`} title="Academic"></div>
+                                                <div className={`w-3 h-3 rounded-full ${hasSubmission('builder') ? 'bg-green-500' : 'bg-gray-300'
+                                                    }`} title="Builder"></div>
+                                                <div className={`w-3 h-3 rounded-full ${hasSubmission('communicator') ? 'bg-green-500' : 'bg-gray-300'
+                                                    }`} title="Communicator"></div>
                                             </div>
-                                            <Icons.ArrowRight className={`w-5 h-5 text-gray-400 transition-transform ${
-                                                isExpanded ? 'rotate-90' : ''
-                                            }`} />
+                                            <Icons.ArrowRight className={`w-5 h-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-90' : ''
+                                                }`} />
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 {/* Expanded Week Content */}
                                 {isExpanded && (
                                     <WeekDetailView
@@ -3340,7 +4084,7 @@ const Dashboard = ({ user }) => {
 
                                                 if (error) throw error;
 
-                                                const updated = courses.map(c => 
+                                                const updated = courses.map(c =>
                                                     c.id === updatedCourse.id ? updatedCourse : c
                                                 );
                                                 setCourses(updated);
@@ -3381,162 +4125,62 @@ const Dashboard = ({ user }) => {
                 <p className="text-gray-600">Manage your courses, hackathons, and profile</p>
             </div>
 
-            {/* Tabs */}
+            {/* Account Info Section */}
+            <div className="mb-8">
+                <AccountInfoSection
+                    user={user}
+                    profile={profile}
+                    isEditing={isEditingProfile}
+                    onEdit={() => setIsEditingProfile(true)}
+                    onSave={async (updatedProfile) => {
+                        try {
+                            const { error } = await supabase
+                                .from('user_profiles')
+                                .upsert({
+                                    user_id: user.id,
+                                    ...updatedProfile,
+                                    updated_at: new Date().toISOString()
+                                }, {
+                                    onConflict: 'user_id'
+                                });
+
+                            if (error) throw error;
+                            setProfile({ ...profile, ...updatedProfile });
+                            setIsEditingProfile(false);
+                            alert('Profile updated!');
+                        } catch (error) {
+                            console.error('Error updating profile:', error);
+                            alert('Failed to update profile.');
+                        }
+                    }}
+                    onCancel={() => setIsEditingProfile(false)}
+                />
+            </div>
+
+            {/* Section Navigation */}
             <div className="flex gap-2 mb-6 border-b border-gray-200">
                 <button
-                    onClick={() => setActiveTab('overview')}
-                    className={`px-4 py-2 font-semibold transition-colors ${activeTab === 'overview'
+                    onClick={() => setActiveSection('courses')}
+                    className={`px-4 py-2 font-semibold transition-colors ${activeSection === 'courses'
                         ? 'text-gvcs-navy border-b-2 border-gvcs-navy'
                         : 'text-gray-500 hover:text-gray-700'
                         }`}
                 >
-                    Overview
+                    My Courses
                 </button>
                 <button
-                    onClick={() => setActiveTab('courses')}
-                    className={`px-4 py-2 font-semibold transition-colors ${activeTab === 'courses'
+                    onClick={() => setActiveSection('hackathons')}
+                    className={`px-4 py-2 font-semibold transition-colors ${activeSection === 'hackathons'
                         ? 'text-gvcs-navy border-b-2 border-gvcs-navy'
                         : 'text-gray-500 hover:text-gray-700'
                         }`}
                 >
-                    Courses
-                </button>
-                <button
-                    onClick={() => setActiveTab('hackathons')}
-                    className={`px-4 py-2 font-semibold transition-colors ${activeTab === 'hackathons'
-                        ? 'text-gvcs-navy border-b-2 border-gvcs-navy'
-                        : 'text-gray-500 hover:text-gray-700'
-                        }`}
-                >
-                    Hackathons
+                    Hackathon Projects
                 </button>
             </div>
 
-            {/* Overview Tab */}
-            {activeTab === 'overview' && (
-                <div className="space-y-6">
-                    {/* Account Info Section */}
-                    <AccountInfoSection
-                        user={user}
-                        profile={profile}
-                        isEditing={isEditingProfile}
-                        onEdit={() => setIsEditingProfile(true)}
-                        onSave={async (updatedProfile) => {
-                            try {
-                                const { error } = await supabase
-                                    .from('user_profiles')
-                                    .upsert({
-                                        user_id: user.id,
-                                        ...updatedProfile,
-                                        updated_at: new Date().toISOString()
-                                    }, {
-                                        onConflict: 'user_id'
-                                    });
-
-                                if (error) throw error;
-                                setProfile({ ...profile, ...updatedProfile });
-                                setIsEditingProfile(false);
-                                alert('Profile updated!');
-                            } catch (error) {
-                                console.error('Error updating profile:', error);
-                                alert('Failed to update profile.');
-                            }
-                        }}
-                        onCancel={() => setIsEditingProfile(false)}
-                    />
-
-                    {/* Courses Summary */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-bold text-gvcs-navy">My Courses</h2>
-                            <button
-                                onClick={() => setActiveTab('courses')}
-                                className="text-sm text-blue-600 hover:underline"
-                            >
-                                View All
-                            </button>
-                        </div>
-                        {courses.length === 0 ? (
-                            <p className="text-gray-500 text-sm">No courses yet. Add one from Ellis Generator!</p>
-                        ) : (
-                            <div className="grid md:grid-cols-2 gap-4">
-                                {courses.slice(0, 2).map(course => (
-                                    <div
-                                        key={course.id}
-                                        className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-                                        onClick={() => setSelectedCourse(course)}
-                                    >
-                                        <h3 className="font-bold text-gray-800 mb-2">{course.courseTitle}</h3>
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                                <div
-                                                    className="bg-green-600 h-2 rounded-full transition-all"
-                                                    style={{ width: `${course.progress.percentage}%` }}
-                                                ></div>
-                                            </div>
-                                            <span className="text-xs text-gray-600">{course.progress.percentage}%</span>
-                                        </div>
-                                        <p className="text-xs text-gray-500">
-                                            {course.progress.completed} of {course.progress.total} weeks completed
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Hackathons Summary */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-bold text-gvcs-navy">Hackathon Projects</h2>
-                            <button
-                                onClick={() => setActiveTab('hackathons')}
-                                className="text-sm text-blue-600 hover:underline"
-                            >
-                                View All
-                            </button>
-                        </div>
-                        {hackathons.length === 0 ? (
-                            <div className="text-center py-4">
-                                <p className="text-gray-500 text-sm mb-3">No hackathon projects yet.</p>
-                                <button
-                                    onClick={() => setActiveTab('hackathons')}
-                                    className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-bold hover:bg-purple-700"
-                                >
-                                    Start New Project
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="grid md:grid-cols-2 gap-4">
-                                {hackathons.slice(0, 2).map(hackathon => (
-                                    <div
-                                        key={hackathon.id}
-                                        className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-                                        onClick={() => setSelectedHackathon(hackathon)}
-                                    >
-                                        <h3 className="font-bold text-gray-800 mb-1">{hackathon.hackathon_name}</h3>
-                                        <p className="text-xs text-gray-500 mb-3">
-                                            {hackathon.hackathon_date ? new Date(hackathon.hackathon_date).toLocaleDateString() : 'Date TBD'}
-                                        </p>
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                                <div
-                                                    className="bg-purple-600 h-2 rounded-full transition-all"
-                                                    style={{ width: `${(hackathon.current_step / 6) * 100}%` }}
-                                                ></div>
-                                            </div>
-                                            <span className="text-xs text-gray-600">Step {hackathon.current_step + 1}/6</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {/* Courses Tab */}
-            {activeTab === 'courses' && (
+            {/* My Courses Section */}
+            {activeSection === 'courses' && (
                 <div className="space-y-4">
                     <div className="flex justify-between items-center">
                         <h2 className="text-2xl font-bold text-gvcs-navy">My Courses</h2>
@@ -3544,7 +4188,7 @@ const Dashboard = ({ user }) => {
                     {courses.length === 0 ? (
                         <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
                             <p className="text-gray-600 mb-4">You haven't added any courses yet.</p>
-                            <p className="text-sm text-gray-500">Go to Ellis Generator and add a course to get started!</p>
+                            <p className="text-sm text-gray-500">Go to Curriculum Generator and add a course to get started!</p>
                         </div>
                     ) : (
                         <div className="grid gap-4">
@@ -3589,8 +4233,8 @@ const Dashboard = ({ user }) => {
                 </div>
             )}
 
-            {/* Hackathons Tab */}
-            {activeTab === 'hackathons' && (
+            {/* Hackathon Projects Section */}
+            {activeSection === 'hackathons' && (
                 <HackathonsSection
                     hackathons={hackathons}
                     user={user}
@@ -3605,28 +4249,26 @@ const Dashboard = ({ user }) => {
 // Week Detail View Component
 const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
     const [activeSection, setActiveSection] = useState('learning'); // 'learning', 'academic', 'builder', 'communicator'
-    
+
     return (
         <div className="border-t border-gray-200">
             {/* Section Tabs */}
             <div className="flex border-b border-gray-200 bg-gray-50">
                 <button
                     onClick={() => setActiveSection('learning')}
-                    className={`px-4 py-3 text-sm font-semibold transition-colors ${
-                        activeSection === 'learning'
+                    className={`px-4 py-3 text-sm font-semibold transition-colors ${activeSection === 'learning'
                             ? 'text-gvcs-navy border-b-2 border-gvcs-navy bg-white'
                             : 'text-gray-600 hover:text-gray-900'
-                    }`}
+                        }`}
                 >
                     📚 Learning Resources
                 </button>
                 <button
                     onClick={() => setActiveSection('academic')}
-                    className={`px-4 py-3 text-sm font-semibold transition-colors relative ${
-                        activeSection === 'academic'
+                    className={`px-4 py-3 text-sm font-semibold transition-colors relative ${activeSection === 'academic'
                             ? 'text-purple-600 border-b-2 border-purple-600 bg-white'
                             : 'text-gray-600 hover:text-gray-900'
-                    }`}
+                        }`}
                 >
                     🎓 Academic: Test
                     {week.submissions?.academic && (
@@ -3635,11 +4277,10 @@ const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
                 </button>
                 <button
                     onClick={() => setActiveSection('builder')}
-                    className={`px-4 py-3 text-sm font-semibold transition-colors relative ${
-                        activeSection === 'builder'
+                    className={`px-4 py-3 text-sm font-semibold transition-colors relative ${activeSection === 'builder'
                             ? 'text-blue-600 border-b-2 border-blue-600 bg-white'
                             : 'text-gray-600 hover:text-gray-900'
-                    }`}
+                        }`}
                 >
                     🔨 Builder: Project
                     {week.submissions?.builder && (
@@ -3648,11 +4289,10 @@ const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
                 </button>
                 <button
                     onClick={() => setActiveSection('communicator')}
-                    className={`px-4 py-3 text-sm font-semibold transition-colors relative ${
-                        activeSection === 'communicator'
+                    className={`px-4 py-3 text-sm font-semibold transition-colors relative ${activeSection === 'communicator'
                             ? 'text-orange-600 border-b-2 border-orange-600 bg-white'
                             : 'text-gray-600 hover:text-gray-900'
-                    }`}
+                        }`}
                 >
                     🎤 Communicator: Presentation
                     {week.submissions?.communicator && (
@@ -3660,34 +4300,34 @@ const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
                     )}
                 </button>
             </div>
-            
+
             {/* Section Content */}
             <div className="p-6">
                 {activeSection === 'learning' && (
                     <LearningResourcesSection week={week} />
                 )}
-                
+
                 {activeSection === 'academic' && (
-                    <AcademicTestSection 
-                        week={week} 
+                    <AcademicTestSection
+                        week={week}
                         weekIndex={weekIndex}
                         course={course}
                         onUpdateCourse={onUpdateCourse}
                     />
                 )}
-                
+
                 {activeSection === 'builder' && (
-                    <BuilderProjectSection 
-                        week={week} 
+                    <BuilderProjectSection
+                        week={week}
                         weekIndex={weekIndex}
                         course={course}
                         onUpdateCourse={onUpdateCourse}
                     />
                 )}
-                
+
                 {activeSection === 'communicator' && (
-                    <CommunicatorPresentationSection 
-                        week={week} 
+                    <CommunicatorPresentationSection
+                        week={week}
                         weekIndex={weekIndex}
                         course={course}
                         onUpdateCourse={onUpdateCourse}
@@ -3707,9 +4347,9 @@ const LearningResourcesSection = ({ week }) => {
                     <strong>Note:</strong> These resources are optional learning materials to help you understand the week's content before completing your Ellis activities. You don't need to complete them, but they're recommended!
                 </p>
             </div>
-            
+
             <h3 className="text-lg font-bold text-gray-800 mb-4">Learning Resources</h3>
-            
+
             {week.resources && week.resources.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-4">
                     {week.resources.map((resource, idx) => (
@@ -3721,11 +4361,10 @@ const LearningResourcesSection = ({ week }) => {
                             className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
                         >
                             <div className="flex items-start gap-3">
-                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                                    resource.type === 'Video' ? 'bg-red-100 text-red-600' :
-                                    resource.type === 'Article' ? 'bg-blue-100 text-blue-600' :
-                                    'bg-green-100 text-green-600'
-                                }`}>
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${resource.type === 'Video' ? 'bg-red-100 text-red-600' :
+                                        resource.type === 'Article' ? 'bg-blue-100 text-blue-600' :
+                                            'bg-green-100 text-green-600'
+                                    }`}>
                                     {resource.type === 'Video' ? '▶' : '📄'}
                                 </div>
                                 <div className="flex-1">
@@ -3746,67 +4385,249 @@ const LearningResourcesSection = ({ week }) => {
 
 // Academic Test Section
 const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
-    const [testAnswers, setTestAnswers] = useState(week.submissions?.academic?.answers || {});
+    const [testAnswers, setTestAnswers] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
+    const [quizStarted, setQuizStarted] = useState(false);
+    const [showHistory, setShowHistory] = useState(false);
+    const [testHistory, setTestHistory] = useState(week.submissions?.academic?.history || []);
+    const currentSubmission = week.submissions?.academic;
+
     // Generate test questions based on week topic
     const generateTestQuestions = (week) => {
         const questions = {
-            "Asymptotic Analysis: Big-O Notation": [
-                {
-                    id: 'q1',
-                    question: "What is the time complexity of the following code snippet?\n\n```python\nfor i in range(n):\n    for j in range(i):\n        print(i, j)\n```",
-                    type: 'text',
-                    points: 10
-                },
-                {
-                    id: 'q2',
-                    question: "Explain the difference between Big-O, Big-Θ (Theta), and Big-Ω (Omega) notation. Provide an example for each.",
-                    type: 'text',
-                    points: 15
-                },
-                {
-                    id: 'q3',
-                    question: "Analyze the time complexity of binary search. Show your work step-by-step and explain why it is O(log n).",
-                    type: 'text',
-                    points: 15
-                },
-                {
-                    id: 'q4',
-                    question: "Compare the time complexity of bubble sort (O(n²)) vs merge sort (O(n log n)). In what scenarios would you choose one over the other?",
-                    type: 'text',
-                    points: 10
-                }
-            ],
-            "Linear Structures: Dynamic Arrays and Linked Lists": [
-                {
-                    id: 'q1',
-                    question: "What is the time complexity of inserting an element at the beginning of a dynamic array? Explain why and how this differs from a linked list.",
-                    type: 'text',
-                    points: 10
-                },
-                {
-                    id: 'q2',
-                    question: "Describe the resizing strategy for dynamic arrays. What happens when the array needs to grow? What is the amortized time complexity?",
-                    type: 'text',
-                    points: 15
-                },
-                {
-                    id: 'q3',
-                    question: "Compare the space complexity of arrays vs linked lists. Include overhead in your analysis.",
-                    type: 'text',
-                    points: 10
-                },
-                {
-                    id: 'q4',
-                    question: "When would you choose a dynamic array over a linked list? Provide specific use cases.",
-                    type: 'text',
-                    points: 15
-                }
-            ]
+            "Asymptotic Analysis: Big-O Notation": {
+                mcq: [
+                    {
+                        id: 'q1',
+                        question: "What is the time complexity of the following code snippet?\n\n```python\nfor i in range(n):\n    for j in range(i):\n        print(i, j)\n```",
+                        type: 'mcq',
+                        options: ['O(n)', 'O(n²)', 'O(n log n)', 'O(2ⁿ)'],
+                        correct: 1,
+                        points: 2
+                    },
+                    {
+                        id: 'q2',
+                        question: "What is the time complexity of accessing an element in an array by index?",
+                        type: 'mcq',
+                        options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'],
+                        correct: 0,
+                        points: 2
+                    },
+                    {
+                        id: 'q3',
+                        question: "Which of the following best describes Big-O notation?",
+                        type: 'mcq',
+                        options: ['Exact runtime', 'Upper bound on growth rate', 'Lower bound on growth rate', 'Average case complexity'],
+                        correct: 1,
+                        points: 2
+                    },
+                    {
+                        id: 'q4',
+                        question: "What is the time complexity of binary search on a sorted array?",
+                        type: 'mcq',
+                        options: ['O(1)', 'O(n)', 'O(log n)', 'O(n log n)'],
+                        correct: 2,
+                        points: 2
+                    },
+                    {
+                        id: 'q5',
+                        question: "What is the space complexity of merge sort?",
+                        type: 'mcq',
+                        options: ['O(1)', 'O(n)', 'O(log n)', 'O(n log n)'],
+                        correct: 1,
+                        points: 2
+                    },
+                    {
+                        id: 'q6',
+                        question: "Which sorting algorithm has the best average time complexity?",
+                        type: 'mcq',
+                        options: ['Bubble sort', 'Insertion sort', 'Quick sort', 'Selection sort'],
+                        correct: 2,
+                        points: 2
+                    },
+                    {
+                        id: 'q7',
+                        question: "What is the time complexity of finding an element in an unsorted array?",
+                        type: 'mcq',
+                        options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
+                        correct: 2,
+                        points: 2
+                    },
+                    {
+                        id: 'q8',
+                        question: "Which data structure allows O(1) average time complexity for insert, delete, and search?",
+                        type: 'mcq',
+                        options: ['Array', 'Linked List', 'Hash Table', 'Binary Search Tree'],
+                        correct: 2,
+                        points: 2
+                    },
+                    {
+                        id: 'q9',
+                        question: "What is the time complexity of the following operation: finding the maximum element in an unsorted array?",
+                        type: 'mcq',
+                        options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+                        correct: 2,
+                        points: 2
+                    },
+                    {
+                        id: 'q10',
+                        question: "Which notation describes the tight bound (both upper and lower bound)?",
+                        type: 'mcq',
+                        options: ['Big-O', 'Big-Ω (Omega)', 'Big-Θ (Theta)', 'Little-o'],
+                        correct: 2,
+                        points: 2
+                    }
+                ],
+                fillblank: [
+                    {
+                        id: 'q11',
+                        question: "The time complexity of binary search is O(___).",
+                        type: 'fillblank',
+                        points: 3
+                    },
+                    {
+                        id: 'q12',
+                        question: "Big-O notation describes the ___ bound on the growth rate of an algorithm.",
+                        type: 'fillblank',
+                        points: 2
+                    }
+                ],
+                saq: [
+                    {
+                        id: 'q13',
+                        question: "Explain the difference between Big-O, Big-Θ (Theta), and Big-Ω (Omega) notation. Provide an example for each.",
+                        type: 'text',
+                        points: 15
+                    },
+                    {
+                        id: 'q14',
+                        question: "Analyze the time complexity of binary search. Show your work step-by-step and explain why it is O(log n).",
+                        type: 'text',
+                        points: 15
+                    }
+                ]
+            },
+            "Linear Structures: Dynamic Arrays and Linked Lists": {
+                mcq: [
+                    {
+                        id: 'q1',
+                        question: "What is the time complexity of inserting an element at the beginning of a dynamic array?",
+                        type: 'mcq',
+                        options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'],
+                        correct: 1,
+                        points: 2
+                    },
+                    {
+                        id: 'q2',
+                        question: "What is the time complexity of inserting an element at the beginning of a linked list?",
+                        type: 'mcq',
+                        options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'],
+                        correct: 0,
+                        points: 2
+                    },
+                    {
+                        id: 'q3',
+                        question: "What is the amortized time complexity of appending to a dynamic array?",
+                        type: 'mcq',
+                        options: ['O(1)', 'O(n)', 'O(log n)', 'O(n log n)'],
+                        correct: 0,
+                        points: 2
+                    },
+                    {
+                        id: 'q4',
+                        question: "Which data structure uses contiguous memory allocation?",
+                        type: 'mcq',
+                        options: ['Linked List', 'Dynamic Array', 'Both', 'Neither'],
+                        correct: 1,
+                        points: 2
+                    },
+                    {
+                        id: 'q5',
+                        question: "What happens when a dynamic array needs to grow beyond its current capacity?",
+                        type: 'mcq',
+                        options: ['It fails', 'It automatically resizes', 'It overwrites existing elements', 'It uses linked list internally'],
+                        correct: 1,
+                        points: 2
+                    },
+                    {
+                        id: 'q6',
+                        question: "What is the time complexity of accessing an element by index in a linked list?",
+                        type: 'mcq',
+                        options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'],
+                        correct: 1,
+                        points: 2
+                    },
+                    {
+                        id: 'q7',
+                        question: "Which operation is more efficient in a dynamic array compared to a linked list?",
+                        type: 'mcq',
+                        options: ['Insertion at beginning', 'Random access by index', 'Deletion at beginning', 'All of the above'],
+                        correct: 1,
+                        points: 2
+                    },
+                    {
+                        id: 'q8',
+                        question: "What is the typical resizing strategy for dynamic arrays?",
+                        type: 'mcq',
+                        options: ['Add 1 element', 'Double the size', 'Triple the size', 'Add 10 elements'],
+                        correct: 1,
+                        points: 2
+                    },
+                    {
+                        id: 'q9',
+                        question: "Which data structure has better cache locality?",
+                        type: 'mcq',
+                        options: ['Linked List', 'Dynamic Array', 'Both are equal', 'Depends on implementation'],
+                        correct: 1,
+                        points: 2
+                    },
+                    {
+                        id: 'q10',
+                        question: "What is the space overhead per element in a linked list (assuming pointers)?",
+                        type: 'mcq',
+                        options: ['O(1)', 'O(n)', 'O(log n)', 'Depends on data size'],
+                        correct: 0,
+                        points: 2
+                    }
+                ],
+                fillblank: [
+                    {
+                        id: 'q11',
+                        question: "Inserting an element at the beginning of a dynamic array has time complexity O(___).",
+                        type: 'fillblank',
+                        points: 2
+                    },
+                    {
+                        id: 'q12',
+                        question: "The amortized time complexity of appending to a dynamic array is O(___).",
+                        type: 'fillblank',
+                        points: 2
+                    }
+                ],
+                saq: [
+                    {
+                        id: 'q13',
+                        question: "Describe the resizing strategy for dynamic arrays. What happens when the array needs to grow? What is the amortized time complexity?",
+                        type: 'text',
+                        points: 15
+                    },
+                    {
+                        id: 'q14',
+                        question: "Compare the space complexity of arrays vs linked lists. Include overhead in your analysis. When would you choose a dynamic array over a linked list?",
+                        type: 'text',
+                        points: 15
+                    }
+                ]
+            }
         };
-        
-        return questions[week.topic] || [
+
+        const topicQuestions = questions[week.topic];
+        if (topicQuestions) {
+            return [...topicQuestions.mcq, ...(topicQuestions.fillblank || []), ...topicQuestions.saq];
+        }
+
+        // Default fallback
+        return [
             {
                 id: 'q1',
                 question: `Explain the key concepts covered in "${week.topic}". Provide examples.`,
@@ -3821,64 +4642,203 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             }
         ];
     };
-    
+
     const questions = generateTestQuestions(week);
     const totalPoints = questions.reduce((sum, q) => sum + q.points, 0);
     const hasSubmission = week.submissions?.academic;
-    
+    const mcqQuestions = questions.filter(q => q.type === 'mcq');
+    const fillblankQuestions = questions.filter(q => q.type === 'fillblank');
+    const saqQuestions = questions.filter(q => q.type === 'text');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        
+
         // Calculate score (hardcoded for now - in future, this would be auto-graded)
         const score = Math.floor(Math.random() * 20) + 80; // Random score 80-100 for demo
-        
-        const updated = { ...course };
-        if (!updated.weeks[weekIndex].submissions) {
-            updated.weeks[weekIndex].submissions = { builder: null, academic: null, communicator: null };
-        }
-        updated.weeks[weekIndex].submissions.academic = {
+
+        const submission = {
             answers: testAnswers,
             submittedDate: new Date().toISOString(),
             score: score,
             totalPoints: totalPoints,
             grade: score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : 'D'
         };
-        
+
+        const updated = { ...course };
+        if (!updated.weeks[weekIndex].submissions) {
+            updated.weeks[weekIndex].submissions = { builder: null, academic: null, communicator: null };
+        }
+
+        // Add to history
+        const newHistory = [...testHistory, submission];
+        updated.weeks[weekIndex].submissions.academic = {
+            ...submission,
+            history: newHistory
+        };
+
+        setTestHistory(newHistory);
         onUpdateCourse(updated);
         setIsSubmitting(false);
-        alert(`Test submitted! Score: ${score}/${totalPoints} (${updated.weeks[weekIndex].submissions.academic.grade})`);
+        setQuizStarted(false);
+        setTestAnswers({});
+        alert(`Test submitted! Score: ${score}/${totalPoints} (${submission.grade})`);
     };
-    
-    if (hasSubmission) {
+
+    if (currentSubmission && !quizStarted && !showHistory) {
         return (
             <div className="space-y-4">
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-bold text-green-800">✓ Test Completed</h3>
+                        <h3 className="font-bold text-green-800">✓ Latest Test Completed</h3>
                         <span className="text-lg font-bold text-green-700">
-                            Score: {hasSubmission.score}/{hasSubmission.totalPoints} ({hasSubmission.grade})
+                            Score: {currentSubmission.score}/{currentSubmission.totalPoints} ({currentSubmission.grade})
                         </span>
                     </div>
                     <p className="text-sm text-green-600">
-                        Submitted {new Date(hasSubmission.submittedDate).toLocaleDateString()}
+                        Submitted {new Date(currentSubmission.submittedDate).toISOString().split('T')[0]}
                     </p>
                 </div>
-                
-                <div className="bg-white border border-gray-200 rounded-lg p-4">
-                    <h4 className="font-bold mb-3">Your Answers</h4>
-                    <div className="space-y-4">
-                        {questions.map((q, idx) => (
-                            <div key={q.id} className="border-b border-gray-200 pb-4 last:border-0">
-                                <div className="flex justify-between items-start mb-2">
-                                    <h5 className="font-semibold text-gray-800">Question {idx + 1} ({q.points} points)</h5>
-                                </div>
-                                <p className="text-sm text-gray-700 mb-2 whitespace-pre-wrap">{q.question}</p>
-                                <div className="bg-gray-50 p-3 rounded mt-2">
-                                    <p className="text-sm text-gray-600 whitespace-pre-wrap">
-                                        {hasSubmission.answers[q.id] || 'No answer provided'}
+
+                <div className="flex gap-3">
+                    <button
+                        onClick={() => setShowHistory(true)}
+                        className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200"
+                    >
+                        View History ({testHistory.length} attempts)
+                    </button>
+                    <button
+                        onClick={() => {
+                            setQuizStarted(true);
+                            setTestAnswers({});
+                        }}
+                        className="px-4 py-2 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700"
+                    >
+                        Retake Test
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    if (showHistory && !quizStarted) {
+        return (
+            <div className="space-y-4">
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-bold text-gray-800">Test History</h3>
+                    <button
+                        onClick={() => setShowHistory(false)}
+                        className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200"
+                    >
+                        Back
+                    </button>
+                </div>
+
+                <div className="space-y-4">
+                    {testHistory.map((attempt, attemptIdx) => (
+                        <div key={attemptIdx} className="bg-white border border-gray-200 rounded-lg p-4">
+                            <div className="flex items-center justify-between mb-3">
+                                <div>
+                                    <h4 className="font-bold text-gray-800">Attempt #{testHistory.length - attemptIdx}</h4>
+                                    <p className="text-sm text-gray-600">
+                                        {new Date(attempt.submittedDate).toLocaleString()}
                                     </p>
                                 </div>
+                                <div className="text-right">
+                                    <div className="text-lg font-bold text-gray-800">
+                                        {attempt.score}/{attempt.totalPoints} ({attempt.grade})
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3">
+                                {questions.map((q, qIdx) => (
+                                    <div key={q.id} className="border-b border-gray-100 pb-2 last:border-0">
+                                        <p className="text-xs font-semibold text-gray-700 mb-1">
+                                            Q{qIdx + 1} ({q.points} pts)
+                                        </p>
+                                        <div className="text-xs text-gray-600">
+                                            {q.type === 'mcq' ? (
+                                                <span>Selected: {attempt.answers[q.id] !== undefined ? q.options[attempt.answers[q.id]] : 'No answer'}</span>
+                                            ) : q.type === 'fillblank' ? (
+                                                <span>Answer: {attempt.answers[q.id] || 'No answer'}</span>
+                                            ) : (
+                                                <span className="line-clamp-2">{attempt.answers[q.id] || 'No answer'}</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <button
+                    onClick={() => {
+                        setQuizStarted(true);
+                        setShowHistory(false);
+                        setTestAnswers({});
+                    }}
+                    className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700"
+                >
+                    Start New Attempt
+                </button>
+            </div>
+        );
+    }
+
+    if (!quizStarted) {
+        return (
+            <div className="space-y-6">
+                <div>
+                    <h3 className="text-lg font-bold text-gray-800 mb-2">
+                        {week.deliverables?.academic?.title || 'Academic Assessment'}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                        {week.deliverables?.academic?.description || 'Complete this assessment to demonstrate your understanding.'}
+                    </p>
+
+                    {week.deliverables?.academic?.guidelines && (
+                        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                            <h4 className="font-semibold text-purple-900 mb-2">Guidelines:</h4>
+                            <ul className="text-sm text-purple-800 space-y-1 list-disc list-inside">
+                                {week.deliverables.academic.guidelines.map((g, i) => (
+                                    <li key={i}>{g}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                    <p className="text-sm text-gray-600 mb-2">
+                        <strong>Total Points:</strong> {totalPoints} | <strong>Time Limit:</strong> None |
+                        <strong> Attempts:</strong> Unlimited
+                    </p>
+                    <p className="text-sm text-gray-600">
+                        <strong>Format:</strong> {mcqQuestions.length} Multiple Choice Questions ({mcqQuestions.reduce((sum, q) => sum + q.points, 0)} points) |
+                        {questions.filter(q => q.type === 'fillblank').length} Fill-in-the-Blank ({questions.filter(q => q.type === 'fillblank').reduce((sum, q) => sum + q.points, 0)} points) |
+                        {saqQuestions.length} Short Answer Questions ({saqQuestions.reduce((sum, q) => sum + q.points, 0)} points)
+                    </p>
+                </div>
+
+                <button
+                    onClick={() => setQuizStarted(true)}
+                    className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700"
+                >
+                    Take Quiz
+                </button>
+
+                <div className="bg-white border border-gray-200 rounded-lg p-4 mt-4">
+                    <h4 className="font-bold mb-3">Preview Questions</h4>
+                    <div className="space-y-3">
+                        {questions.map((q, idx) => (
+                            <div key={q.id} className="border-b border-gray-200 pb-3 last:border-0">
+                                <div className="flex justify-between items-start mb-1">
+                                    <h5 className="font-semibold text-gray-800 text-sm">Question {idx + 1} ({q.points} points)</h5>
+                                    <span className="text-xs text-gray-500">{q.type === 'mcq' ? 'MCQ' : q.type === 'fillblank' ? 'Fill-in-Blank' : 'SAQ'}</span>
+                                </div>
+                                <p className="text-xs text-gray-600 line-clamp-2">{q.question}</p>
                             </div>
                         ))}
                     </div>
@@ -3886,7 +4846,7 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             </div>
         );
     }
-    
+
     return (
         <div className="space-y-6">
             <div>
@@ -3896,27 +4856,16 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                 <p className="text-sm text-gray-600 mb-4">
                     {week.deliverables?.academic?.description || 'Complete this assessment to demonstrate your understanding.'}
                 </p>
-                
-                {week.deliverables?.academic?.guidelines && (
-                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
-                        <h4 className="font-semibold text-purple-900 mb-2">Guidelines:</h4>
-                        <ul className="text-sm text-purple-800 space-y-1 list-disc list-inside">
-                            {week.deliverables.academic.guidelines.map((g, i) => (
-                                <li key={i}>{g}</li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
             </div>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
                     <p className="text-sm text-gray-600">
-                        <strong>Total Points:</strong> {totalPoints} | <strong>Time Limit:</strong> None | 
+                        <strong>Total Points:</strong> {totalPoints} | <strong>Time Limit:</strong> None |
                         <strong> Attempts:</strong> Unlimited
                     </p>
                 </div>
-                
+
                 {questions.map((q, idx) => (
                     <div key={q.id} className="bg-white border border-gray-200 rounded-lg p-4">
                         <div className="flex justify-between items-start mb-3">
@@ -3928,17 +4877,56 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                                 {q.question}
                             </pre>
                         </div>
-                        <textarea
-                            value={testAnswers[q.id] || ''}
-                            onChange={(e) => setTestAnswers({ ...testAnswers, [q.id]: e.target.value })}
-                            className="w-full p-3 border border-gray-300 rounded-lg"
-                            rows="6"
-                            placeholder="Type your answer here..."
-                            required
-                        />
+                        {q.type === 'mcq' ? (
+                            <div className="space-y-2">
+                                {q.options.map((option, optIdx) => (
+                                    <label key={optIdx} className="flex items-center gap-2 p-2 border border-gray-200 rounded hover:bg-gray-50 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name={q.id}
+                                            value={optIdx}
+                                            checked={testAnswers[q.id] === optIdx}
+                                            onChange={(e) => setTestAnswers({ ...testAnswers, [q.id]: parseInt(e.target.value) })}
+                                            className="w-4 h-4"
+                                            required
+                                        />
+                                        <span className="text-sm text-gray-700">{option}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        ) : q.type === 'fillblank' ? (
+                            <div className="space-y-2">
+                                <div className="text-sm text-gray-700 whitespace-pre-wrap mb-2">
+                                    {q.question.split('___').map((part, partIdx, parts) => (
+                                        <span key={partIdx}>
+                                            {part}
+                                            {partIdx < parts.length - 1 && (
+                                                <input
+                                                    type="text"
+                                                    value={testAnswers[q.id] || ''}
+                                                    onChange={(e) => setTestAnswers({ ...testAnswers, [q.id]: e.target.value })}
+                                                    className="inline-block mx-1 px-2 py-1 border-b-2 border-purple-500 focus:outline-none focus:border-purple-700 min-w-[100px]"
+                                                    placeholder="fill in"
+                                                    required
+                                                />
+                                            )}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <textarea
+                                value={testAnswers[q.id] || ''}
+                                onChange={(e) => setTestAnswers({ ...testAnswers, [q.id]: e.target.value })}
+                                className="w-full p-3 border border-gray-300 rounded-lg"
+                                rows="6"
+                                placeholder="Type your answer here..."
+                                required
+                            />
+                        )}
                     </div>
                 ))}
-                
+
                 <button
                     type="submit"
                     disabled={isSubmitting}
@@ -3954,9 +4942,14 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
 // Builder Project Section
 const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
     const fileInputRef = React.useRef(null);
+    const [submissionType, setSubmissionType] = useState('file'); // 'file' or 'github'
+    const [githubRepo, setGithubRepo] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const hasSubmission = week.submissions?.builder;
-    
+
+    // Check if this is CS 102 DS course (template-based builder)
+    const isCS102DS = course?.title?.includes('CS 102') || course?.title?.includes('Data Structures');
+
     // Hardcoded rubric
     const rubric = [
         { criterion: "Functionality", maxPoints: 30, description: "Code works correctly and meets all requirements" },
@@ -3965,17 +4958,31 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
         { criterion: "Documentation", maxPoints: 15, description: "README, comments, and usage instructions" },
         { criterion: "Creativity/Extra Features", maxPoints: 15, description: "Additional features beyond requirements" }
     ];
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const file = fileInputRef.current?.files?.[0];
-        if (!file) {
-            alert('Please select a file to submit');
-            return;
+
+        if (submissionType === 'file') {
+            const file = fileInputRef.current?.files?.[0];
+            if (!file) {
+                alert('Please select a file to submit');
+                return;
+            }
+        } else {
+            if (!githubRepo.trim()) {
+                alert('Please enter a GitHub repository URL');
+                return;
+            }
+            // Validate GitHub URL
+            const githubUrlPattern = /^https?:\/\/(www\.)?(github\.com|github\.io)\/.+/;
+            if (!githubUrlPattern.test(githubRepo.trim())) {
+                alert('Please enter a valid GitHub repository URL (e.g., https://github.com/username/repo)');
+                return;
+            }
         }
-        
+
         setIsSubmitting(true);
-        
+
         // Hardcoded grading (for now)
         const grades = rubric.map(r => ({
             criterion: r.criterion,
@@ -3983,18 +4990,17 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             maxPoints: r.maxPoints,
             feedback: `Good work on ${r.criterion.toLowerCase()}. ${r.description}`
         }));
-        
+
         const totalScore = grades.reduce((sum, g) => sum + g.points, 0);
         const totalMax = grades.reduce((sum, g) => sum + g.maxPoints, 0);
         const percentage = Math.round((totalScore / totalMax) * 100);
-        
+
         const updated = { ...course };
         if (!updated.weeks[weekIndex].submissions) {
             updated.weeks[weekIndex].submissions = { builder: null, academic: null, communicator: null };
         }
-        updated.weeks[weekIndex].submissions.builder = {
-            fileName: file.name,
-            fileSize: file.size,
+
+        const submissionData = {
             submittedDate: new Date().toISOString(),
             rubric: grades,
             score: totalScore,
@@ -4002,12 +5008,24 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             percentage: percentage,
             grade: percentage >= 90 ? 'A' : percentage >= 80 ? 'B' : percentage >= 70 ? 'C' : 'D'
         };
-        
+
+        if (submissionType === 'file') {
+            const file = fileInputRef.current?.files?.[0];
+            submissionData.fileName = file.name;
+            submissionData.fileSize = file.size;
+            submissionData.type = 'file';
+        } else {
+            submissionData.githubRepo = githubRepo.trim();
+            submissionData.type = 'github';
+        }
+
+        updated.weeks[weekIndex].submissions.builder = submissionData;
+
         onUpdateCourse(updated);
         setIsSubmitting(false);
         alert(`Project submitted! Score: ${totalScore}/${totalMax} (${updated.weeks[weekIndex].submissions.builder.grade})`);
     };
-    
+
     if (hasSubmission) {
         return (
             <div className="space-y-4">
@@ -4018,14 +5036,23 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                             Score: {hasSubmission.score}/{hasSubmission.totalPoints} ({hasSubmission.grade})
                         </span>
                     </div>
-                    <p className="text-sm text-green-600 mb-2">
-                        File: {hasSubmission.fileName} ({Math.round(hasSubmission.fileSize / 1024)} KB)
-                    </p>
+                    {hasSubmission.type === 'file' && (
+                        <p className="text-sm text-green-600 mb-2">
+                            File: {hasSubmission.fileName} ({Math.round(hasSubmission.fileSize / 1024)} KB)
+                        </p>
+                    )}
+                    {hasSubmission.type === 'github' && (
+                        <p className="text-sm text-green-600 mb-2">
+                            <a href={hasSubmission.githubRepo} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                                GitHub Repository: {hasSubmission.githubRepo}
+                            </a>
+                        </p>
+                    )}
                     <p className="text-sm text-green-600">
                         Submitted {new Date(hasSubmission.submittedDate).toLocaleDateString()}
                     </p>
                 </div>
-                
+
                 {hasSubmission.rubric && (
                     <div className="bg-white border border-gray-200 rounded-lg p-4">
                         <h4 className="font-bold mb-3">Grading Rubric</h4>
@@ -4047,7 +5074,113 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             </div>
         );
     }
+
+    // Template-based builder for CS 102 DS
+    if (isCS102DS) {
+        const templateFileName = `${week.topic?.replace(/[^a-zA-Z0-9]/g, '_')}_template.java`;
+
+        return (
+            <div className="space-y-6">
+                <div>
+                    <h3 className="text-lg font-bold text-gray-800 mb-2">
+                        {week.deliverables?.builder?.title || 'Complete the Template'}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                        Download the template file below. Fill in the missing code sections (marked with TODO comments) to complete the data structure implementation.
+                    </p>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <h4 className="font-semibold text-blue-900 mb-2">Instructions:</h4>
+                    <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
+                        <li>Download the template file</li>
+                        <li>Open it in your IDE</li>
+                        <li>Find all TODO comments and fill in the missing code</li>
+                        <li>Test your implementation</li>
+                        <li>Upload your completed file</li>
+                    </ol>
+                </div>
+
+                <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+                    <button
+                        onClick={() => {
+                            // Create a simple template file content
+                            const templateContent = `public class ${week.topic?.replace(/[^a-zA-Z0-9]/g, '') || 'DataStructure'} {
+    // TODO: Add necessary instance variables
     
+    // TODO: Implement constructor
+    
+    // TODO: Implement required methods
+    
+    // Example method structure:
+    public void exampleMethod() {
+        // TODO: Fill in implementation
+    }
+}`;
+
+                            const blob = new Blob([templateContent], { type: 'text/plain' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = templateFileName;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                        }}
+                        className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 flex items-center justify-center gap-2"
+                    >
+                        <Icons.Link className="w-5 h-5" />
+                        Download Template File
+                    </button>
+                    <p className="text-xs text-gray-500 mt-2 text-center">
+                        {templateFileName}
+                    </p>
+                </div>
+
+                {hasSubmission ? (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                            <h3 className="font-bold text-green-800">✓ Template Completed</h3>
+                            <span className="text-lg font-bold text-green-700">
+                                Score: {hasSubmission.score}/{hasSubmission.totalPoints} ({hasSubmission.grade})
+                            </span>
+                        </div>
+                        <p className="text-sm text-green-600">
+                            Submitted {new Date(hasSubmission.submittedDate).toLocaleDateString()}
+                        </p>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                Upload Completed Template File
+                            </label>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                accept=".java,.py,.cpp,.c"
+                                className="w-full p-2 border border-gray-300 rounded-lg"
+                                required
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                                Upload your completed template file (.java, .py, .cpp, or .c)
+                            </p>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50"
+                        >
+                            {isSubmitting ? 'Submitting...' : 'Submit Completed Template'}
+                        </button>
+                    </form>
+                )}
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-6">
             <div>
@@ -4057,7 +5190,7 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                 <p className="text-sm text-gray-600 mb-4">
                     {week.deliverables?.builder?.description || 'Complete this project to demonstrate your building skills.'}
                 </p>
-                
+
                 {week.deliverables?.builder?.guidelines && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                         <h4 className="font-semibold text-blue-900 mb-2">Guidelines:</h4>
@@ -4069,7 +5202,7 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     </div>
                 )}
             </div>
-            
+
             <div className="bg-white border border-gray-200 rounded-lg p-4">
                 <h4 className="font-bold mb-3">Grading Rubric</h4>
                 <div className="space-y-2">
@@ -4084,23 +5217,72 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     Total: {rubric.reduce((sum, r) => sum + r.maxPoints, 0)} points
                 </p>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Submit Project File
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        Submission Type
                     </label>
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        required
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                        Acceptable formats: .zip, .tar.gz, or link to GitHub repository
-                    </p>
+                    <div className="flex gap-4 mb-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                                type="radio"
+                                name="submissionType"
+                                value="file"
+                                checked={submissionType === 'file'}
+                                onChange={(e) => setSubmissionType(e.target.value)}
+                                className="w-4 h-4"
+                            />
+                            <span className="text-sm">File Upload</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                                type="radio"
+                                name="submissionType"
+                                value="github"
+                                checked={submissionType === 'github'}
+                                onChange={(e) => setSubmissionType(e.target.value)}
+                                className="w-4 h-4"
+                            />
+                            <span className="text-sm">GitHub Repository</span>
+                        </label>
+                    </div>
                 </div>
-                
+
+                {submissionType === 'file' ? (
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Upload Project File
+                        </label>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            required={submissionType === 'file'}
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                            Acceptable formats: .zip, .tar.gz, or any project archive file
+                        </p>
+                    </div>
+                ) : (
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            GitHub Repository URL
+                        </label>
+                        <input
+                            type="url"
+                            value={githubRepo}
+                            onChange={(e) => setGithubRepo(e.target.value)}
+                            placeholder="https://github.com/username/repository"
+                            className="w-full p-3 border border-gray-300 rounded-lg"
+                            required={submissionType === 'github'}
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                            Enter the full URL to your GitHub repository
+                        </p>
+                    </div>
+                )}
+
                 <button
                     type="submit"
                     disabled={isSubmitting}
@@ -4115,10 +5297,12 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
 
 // Communicator Presentation Section
 const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCourse }) => {
+    const fileInputRef = React.useRef(null);
     const [presentationLink, setPresentationLink] = useState('');
+    const [submissionType, setSubmissionType] = useState('file'); // 'file' or 'link'
     const [isSubmitting, setIsSubmitting] = useState(false);
     const hasSubmission = week.submissions?.communicator;
-    
+
     // Hardcoded rubric
     const rubric = [
         { criterion: "Content Quality", maxPoints: 30, description: "Accurate, comprehensive, well-researched content" },
@@ -4127,16 +5311,25 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
         { criterion: "Delivery", maxPoints: 15, description: "Clear speaking, appropriate pace, engagement" },
         { criterion: "Examples & Demonstrations", maxPoints: 10, description: "Relevant examples and practical demonstrations" }
     ];
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!presentationLink.trim()) {
-            alert('Please enter a presentation link');
-            return;
+
+        if (submissionType === 'file') {
+            const file = fileInputRef.current?.files?.[0];
+            if (!file) {
+                alert('Please select a presentation file to submit');
+                return;
+            }
+        } else {
+            if (!presentationLink.trim()) {
+                alert('Please enter a presentation link');
+                return;
+            }
         }
-        
+
         setIsSubmitting(true);
-        
+
         // Hardcoded grading (for now)
         const grades = rubric.map(r => ({
             criterion: r.criterion,
@@ -4144,30 +5337,41 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
             maxPoints: r.maxPoints,
             feedback: `Good work on ${r.criterion.toLowerCase()}. ${r.description}`
         }));
-        
+
         const totalScore = grades.reduce((sum, g) => sum + g.points, 0);
         const totalMax = grades.reduce((sum, g) => sum + g.maxPoints, 0);
         const percentage = Math.round((totalScore / totalMax) * 100);
-        
+
         const updated = { ...course };
         if (!updated.weeks[weekIndex].submissions) {
             updated.weeks[weekIndex].submissions = { builder: null, academic: null, communicator: null };
         }
-        updated.weeks[weekIndex].submissions.communicator = {
-            link: presentationLink,
+
+        const submissionData = {
             submittedDate: new Date().toISOString(),
             rubric: grades,
             score: totalScore,
             totalPoints: totalMax,
             percentage: percentage,
-            grade: percentage >= 90 ? 'A' : percentage >= 80 ? 'B' : percentage >= 70 ? 'C' : 'D'
+            grade: percentage >= 90 ? 'A' : percentage >= 80 ? 'B' : percentage >= 70 ? 'C' : 'D',
+            type: submissionType
         };
-        
+
+        if (submissionType === 'file') {
+            const file = fileInputRef.current?.files?.[0];
+            submissionData.fileName = file.name;
+            submissionData.fileSize = file.size;
+        } else {
+            submissionData.link = presentationLink;
+        }
+
+        updated.weeks[weekIndex].submissions.communicator = submissionData;
+
         onUpdateCourse(updated);
         setIsSubmitting(false);
         alert(`Presentation submitted! Score: ${totalScore}/${totalMax} (${updated.weeks[weekIndex].submissions.communicator.grade})`);
     };
-    
+
     if (hasSubmission) {
         return (
             <div className="space-y-4">
@@ -4178,19 +5382,26 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
                             Score: {hasSubmission.score}/{hasSubmission.totalPoints} ({hasSubmission.grade})
                         </span>
                     </div>
-                    <a
-                        href={hasSubmission.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline text-sm block mb-2"
-                    >
-                        {hasSubmission.link}
-                    </a>
+                    {hasSubmission.type === 'file' && (
+                        <p className="text-sm text-green-600 mb-2">
+                            File: {hasSubmission.fileName} ({Math.round(hasSubmission.fileSize / 1024)} KB)
+                        </p>
+                    )}
+                    {hasSubmission.type === 'link' && hasSubmission.link && (
+                        <a
+                            href={hasSubmission.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline text-sm block mb-2"
+                        >
+                            {hasSubmission.link}
+                        </a>
+                    )}
                     <p className="text-sm text-green-600">
                         Submitted {new Date(hasSubmission.submittedDate).toLocaleDateString()}
                     </p>
                 </div>
-                
+
                 {hasSubmission.rubric && (
                     <div className="bg-white border border-gray-200 rounded-lg p-4">
                         <h4 className="font-bold mb-3">Grading Rubric</h4>
@@ -4212,7 +5423,7 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
             </div>
         );
     }
-    
+
     return (
         <div className="space-y-6">
             <div>
@@ -4222,7 +5433,7 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
                 <p className="text-sm text-gray-600 mb-4">
                     {week.deliverables?.communicator?.description || 'Create a presentation to demonstrate your communication skills.'}
                 </p>
-                
+
                 {week.deliverables?.communicator?.guidelines && (
                     <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
                         <h4 className="font-semibold text-orange-900 mb-2">Guidelines:</h4>
@@ -4234,7 +5445,7 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
                     </div>
                 )}
             </div>
-            
+
             <div className="bg-white border border-gray-200 rounded-lg p-4">
                 <h4 className="font-bold mb-3">Grading Rubric</h4>
                 <div className="space-y-2">
@@ -4249,25 +5460,73 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
                     Total: {rubric.reduce((sum, r) => sum + r.maxPoints, 0)} points
                 </p>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Presentation Link
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        Submission Type
                     </label>
-                    <input
-                        type="url"
-                        value={presentationLink}
-                        onChange={(e) => setPresentationLink(e.target.value)}
-                        placeholder="https://docs.google.com/presentation/... or YouTube link"
-                        className="w-full p-3 border border-gray-300 rounded-lg"
-                        required
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                        Provide a link to Google Slides, PowerPoint Online, YouTube video, or similar
-                    </p>
+                    <div className="flex gap-4 mb-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                                type="radio"
+                                name="presentationType"
+                                value="file"
+                                checked={submissionType === 'file'}
+                                onChange={(e) => setSubmissionType(e.target.value)}
+                                className="w-4 h-4"
+                            />
+                            <span className="text-sm">Upload File</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                                type="radio"
+                                name="presentationType"
+                                value="link"
+                                checked={submissionType === 'link'}
+                                onChange={(e) => setSubmissionType(e.target.value)}
+                                className="w-4 h-4"
+                            />
+                            <span className="text-sm">Link (Google Slides, YouTube, etc.)</span>
+                        </label>
+                    </div>
                 </div>
-                
+
+                {submissionType === 'file' ? (
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Upload Presentation File
+                        </label>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            accept=".pptx,.ppt,.pdf,.key"
+                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            required={submissionType === 'file'}
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                            Acceptable formats: .pptx, .ppt, .pdf, .key (PowerPoint, PDF, Keynote)
+                        </p>
+                    </div>
+                ) : (
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Presentation Link
+                        </label>
+                        <input
+                            type="url"
+                            value={presentationLink}
+                            onChange={(e) => setPresentationLink(e.target.value)}
+                            placeholder="https://docs.google.com/presentation/... or YouTube link"
+                            className="w-full p-3 border border-gray-300 rounded-lg"
+                            required={submissionType === 'link'}
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                            Provide a link to Google Slides, PowerPoint Online, YouTube video, or similar
+                        </p>
+                    </div>
+                )}
+
                 <button
                     type="submit"
                     disabled={isSubmitting}
@@ -4512,303 +5771,420 @@ const InteractiveWeekView = ({ course, week, weekIndex, onBack, onUpdateCourse }
 };
 
 const HackathonHubView = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [user, setUser] = useState(null);
+    const [isCreating, setIsCreating] = useState(false);
+
+    // Get user from auth
+    useEffect(() => {
+        const checkUser = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+                setUser({
+                    id: session.user.id,
+                    name: session.user.user_metadata?.name || session.user.email,
+                    email: session.user.email
+                });
+            }
+        };
+        checkUser();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (session?.user) {
+                setUser({
+                    id: session.user.id,
+                    name: session.user.user_metadata?.name || session.user.email,
+                    email: session.user.email
+                });
+            } else {
+                setUser(null);
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
     return (
         <div className="max-w-7xl mx-auto px-4 py-8 space-y-16">
             <div className="text-center">
                 <h2 className="text-3xl font-bold text-gvcs-navy mb-2">Hackathon Hub</h2>
-                <p className="text-gray-600">Your ultimate guide to winning competitions and building cool things.</p>
+                <p className="text-gray-600 mb-6">Your ultimate guide to winning competitions and building cool things.</p>
+                {!isCreating && (
+                    <>
+                        <button
+                            onClick={() => {
+                                if (!user) {
+                                    alert('Please log in to create a hackathon project.');
+                                    return;
+                                }
+                                setIsCreating(true);
+                            }}
+                            className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 transition-colors shadow-lg hover:shadow-xl"
+                        >
+                            🚀 Start a Hackathon Project
+                        </button>
+                        <p className="text-xs text-gray-500 mt-2">Use our AI-powered wizard to organize your next hackathon</p>
+                    </>
+                )}
             </div>
 
-            {/* Guides Section */}
-            <div className="grid md:grid-cols-2 gap-8">
-                {/* Algorithmic Competitions */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
-                            <Icons.Brain />
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900">Algorithmic Competitions</h3>
-                    </div>
-                    <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                        Focus on data structures, algorithms, and problem-solving speed. Great for technical interviews.
-                        <br />
-                        <span className="text-xs font-bold text-blue-600 mt-2 block">
-                            💡 Check out the "Algorithms" track in the <span className="cursor-pointer underline" onClick={() => document.getElementById('curriculum-tab')?.click()}>Ellis Generator</span> for a structured learning path.
-                        </span>
-                    </p>
-                    <div className="space-y-6">
-                        <div>
-                            <h4 className="font-bold text-sm text-gray-800 mb-2 uppercase tracking-wider">Recommended Courses</h4>
-                            <ul className="space-y-2">
-                                <li>
-                                    <a href="https://usaco.guide" className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group">
-                                        <span className="font-bold text-gray-700 group-hover:text-blue-700">USACO Guide</span>
-                                        <span className="text-xs bg-white border border-gray-200 px-2 py-1 rounded text-gray-500">Free</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.coursera.org/learn/algorithms-part1" className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group">
-                                        <span className="font-bold text-gray-700 group-hover:text-blue-700">Princeton Algorithms (Coursera)</span>
-                                        <span className="text-xs bg-white border border-gray-200 px-2 py-1 rounded text-gray-500">Free Audit</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 className="font-bold text-sm text-gray-800 mb-2 uppercase tracking-wider">Practice Sites</h4>
-                            <div className="flex gap-2">
-                                <a href="https://leetcode.com" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">LeetCode</a>
-                                <a href="https://codeforces.com" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">Codeforces</a>
-                                <a href="https://cses.fi/problemset/" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">CSES</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {isCreating && user && (
+                <HackathonProgramWizard
+                    user={user}
+                    onComplete={async (hackathonData) => {
+                        try {
+                            const { error } = await supabase
+                                .from('hackathon_programs')
+                                .insert([hackathonData]);
 
-                {/* Project Hackathons */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600">
-                            <Icons.Lightbulb />
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900">The AI Workflow</h3>
-                    </div>
-                    <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                        Don't just code. Orchestrate. Use this pipeline to build winning projects in record time.
-                    </p>
-                    <div className="space-y-4">
-                        <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">1</div>
-                            <div>
-                                <h4 className="font-bold text-gray-900">Brainstorm with Perplexity</h4>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Use Perplexity or an LLM to research problems and brainstorm solutions. Validate your idea before you build.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">2</div>
-                            <div>
-                                <h4 className="font-bold text-gray-900">Master Plan & Tasks</h4>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Feed your research into a strong LLM (Claude 3.5 Sonnet / GPT-4o). Ask it to generate a "Master Plan" and assign specific tasks to each team member.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">3</div>
-                            <div>
-                                <h4 className="font-bold text-gray-900">Prompt Engineering</h4>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Each member uses their own LLM to generate detailed prompts for their tasks. These prompts become the instructions for your coding tools.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">4</div>
-                            <div>
-                                <h4 className="font-bold text-gray-900">Execution</h4>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Feed your prompts into <strong>Cursor</strong> for backend/logic and <strong>Lovable</strong> for frontend. Assemble the pieces.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">5</div>
-                            <div>
-                                <h4 className="font-bold text-gray-900">The Pitch</h4>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Use <strong>Canva</strong> for the deck and <strong>Figma</strong> for high-fidelity mockups. The story sells the product.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            if (error) throw error;
+                            setIsCreating(false);
+                            alert('Hackathon project created! You can view it in your Dashboard.');
+                            navigate('/dashboard?tab=hackathons');
+                        } catch (error) {
+                            console.error('Error creating hackathon:', error);
+                            alert('Failed to create hackathon project.');
+                        }
+                    }}
+                    onCancel={() => setIsCreating(false)}
+                />
+            )}
 
-            {/* AI Power Tools - Expanded */}
-            <section>
-                <div className="flex items-center gap-3 mb-8">
-                    <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600">
-                        <Icons.Sparkles />
+            {!isCreating && (
+                <>
+                    {/* Guides Section */}
+                    <div className="grid md:grid-cols-2 gap-8">
+            {/* Algorithmic Competitions */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                        <Icons.Brain />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900">Algorithmic Competitions</h3>
+                </div>
+                <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+                    Focus on data structures, algorithms, and problem-solving speed. Great for technical interviews.
+                    <br />
+                    <span className="text-xs font-bold text-blue-600 mt-2 block">
+                        💡 Check out the "Algorithms" track in the <span className="cursor-pointer underline" onClick={() => navigate('/ellis')}>Curriculum Generator</span> for a structured learning path.
+                    </span>
+                </p>
+                <div className="space-y-6">
+                    <div>
+                        <h4 className="font-bold text-sm text-gray-800 mb-2 uppercase tracking-wider">Recommended Courses</h4>
+                        <ul className="space-y-2">
+                            <li>
+                                <a href="https://usaco.guide" className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group">
+                                    <span className="font-bold text-gray-700 group-hover:text-blue-700">USACO Guide</span>
+                                    <span className="text-xs bg-white border border-gray-200 px-2 py-1 rounded text-gray-500">Free</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.coursera.org/learn/algorithms-part1" className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group">
+                                    <span className="font-bold text-gray-700 group-hover:text-blue-700">Princeton Algorithms (Coursera)</span>
+                                    <span className="text-xs bg-white border border-gray-200 px-2 py-1 rounded text-gray-500">Free Audit</span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                     <div>
-                        <h3 className="text-2xl font-bold text-gvcs-navy">AI Power Tools</h3>
-                        <p className="text-gray-500 text-sm">The modern stack for building fast.</p>
-                    </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[
-                        {
-                            name: "Cursor",
-                            tagline: "The AI Code Editor",
-                            desc: "A fork of VS Code with AI built-in. It can write entire functions, refactor code, and fix bugs automatically.",
-                            bestFor: "Writing code 10x faster",
-                            price: "Free Tier",
-                            url: "https://cursor.sh/"
-                        },
-                        {
-                            name: "Lovable",
-                            tagline: "Full Stack Generator",
-                            desc: "Describe your app and get a full stack React/Node application generated. Great for starting the frontend.",
-                            bestFor: "Frontend & Full Stack",
-                            price: "Free Tier",
-                            url: "https://lovable.dev/"
-                        },
-                        {
-                            name: "Perplexity",
-                            tagline: "AI Search Engine",
-                            desc: "Like Google but it gives you answers. Great for finding libraries, debugging errors, and research.",
-                            bestFor: "Brainstorming & Research",
-                            price: "Free",
-                            url: "https://perplexity.ai/"
-                        },
-
-                        {
-                            name: "Figma",
-                            tagline: "Interface Design",
-                            desc: "The industry standard for UI/UX design. Map out your user flow before you write a single line of code.",
-                            bestFor: "Wireframing & Pitch Decks",
-                            price: "Free for Students",
-                            url: "https://figma.com/"
-                        },
-                        {
-                            name: "Canva",
-                            tagline: "Design Made Easy",
-                            desc: "Create stunning pitch decks and social media graphics in minutes. Essential for the final presentation.",
-                            bestFor: "Pitch Decks",
-                            price: "Free",
-                            url: "https://canva.com/"
-                        },
-                        {
-                            name: "Gemini / Claude / ChatGPT",
-                            tagline: "LLM Assistants",
-                            desc: "Use these for brainstorming ideas, writing pitch scripts, and generating dummy data for your app.",
-                            bestFor: "Ideation & Copywriting",
-                            price: "Free",
-                            url: "https://gemini.google.com/"
-                        }
-                    ].map((tool, i) => (
-                        <a key={i} href={tool.url} target="_blank" rel="noopener noreferrer" className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all flex flex-col">
-                            <div className="flex justify-between items-start mb-4">
-                                <div>
-                                    <h4 className="font-bold text-lg text-gray-900 group-hover:text-indigo-600 transition-colors">{tool.name}</h4>
-                                    <span className="text-xs font-bold text-indigo-500 uppercase tracking-wider">{tool.tagline}</span>
-                                </div>
-                                <Icons.Link className="text-gray-300 group-hover:text-indigo-400" />
-                            </div>
-                            <p className="text-sm text-gray-600 mb-4 flex-grow">{tool.desc}</p>
-                            <div className="pt-4 border-t border-gray-100">
-                                <div className="flex justify-between items-center text-xs">
-                                    <span className="font-bold text-gray-700 bg-gray-100 px-2 py-1 rounded">Best for: {tool.bestFor}</span>
-                                    <span className="text-gray-400">{tool.price}</span>
-                                </div>
-                            </div>
-                        </a>
-                    ))}
-                </div>
-            </section>
-
-            {/* Upcoming Hackathons */}
-            <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
-                        <Icons.Clock />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900">Upcoming Hackathons</h3>
-                </div>
-
-                <div className="space-y-4">
-                    {[
-                        {
-                            name: "Philly Codefest",
-                            date: "March 1-2, 2025",
-                            location: "Drexel University (Philly)",
-                            desc: "Massive collegiate hackathon. Great for networking.",
-                            status: "Register Now",
-                            link: "https://phillycodefest.com/"
-                        },
-                        {
-                            name: "Ridgehacks",
-                            date: "April 26, 2025",
-                            location: "Basking Ridge, NJ",
-                            desc: "High school hackathon. Good for beginners.",
-                            status: "Coming Soon",
-                            link: "https://ridgehacks.us/"
-                        },
-                        {
-                            name: "Philly Codefest (HS Edition)",
-                            date: "May 10, 2025",
-                            location: "Drexel University (Philly)",
-                            desc: "Dedicated event for high schoolers.",
-                            status: "Coming Soon",
-                            link: "https://drexel.edu/cci/news-events/events/"
-                        },
-                        {
-                            name: "HackMHS",
-                            date: "May 30-31, 2025",
-                            location: "Millburn, NJ",
-                            desc: "Beginner-friendly high school hackathon.",
-                            status: "Coming Soon",
-                            link: "https://hackmhs.com/"
-                        },
-                        {
-                            name: "HackJPS",
-                            date: "June 14, 2025",
-                            location: "Edison, NJ",
-                            desc: "Hybrid event. Good for summer projects.",
-                            status: "Coming Soon",
-                            link: "https://hackjps.org/"
-                        },
-                        {
-                            name: "PennApps XXVI",
-                            date: "Sept 19-21, 2025",
-                            location: "UPenn (Philly)",
-                            desc: "The OG college hackathon. Very competitive.",
-                            status: "Fall 2025",
-                            link: "https://pennapps.com/"
-                        },
-                        {
-                            name: "HackRU Fall",
-                            date: "Oct 4-5, 2025",
-                            location: "Rutgers (New Brunswick, NJ)",
-                            desc: "Huge event, easy train ride from Philly.",
-                            status: "Fall 2025",
-                            link: "https://hackru.org/"
-                        },
-                        {
-                            name: "hackPHS",
-                            date: "Nov 1-2, 2025",
-                            location: "Princeton, NJ",
-                            desc: "Top tier high school hackathon. Must do.",
-                            status: "Fall 2025",
-                            link: "https://hackphs.tech/"
-                        }
-                    ].map((hack, i) => (
-                        <div key={i} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-gray-50 rounded-xl border border-gray-200 gap-4 hover:border-green-300 transition-colors">
-                            <div>
-                                <div className="flex items-center gap-3 mb-1">
-                                    <h4 className="font-bold text-lg text-gray-900">{hack.name}</h4>
-                                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${hack.status.includes('Open') || hack.status.includes('Register') ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
-                                        {hack.status}
-                                    </span>
-                                </div>
-                                <div className="text-sm font-bold text-gray-600 mb-1">{hack.date} • {hack.location}</div>
-                                <p className="text-sm text-gray-500">{hack.desc}</p>
-                            </div>
-                            <a
-                                href={hack.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-bold rounded-lg hover:bg-green-50 hover:text-green-700 hover:border-green-200 transition-all text-center whitespace-nowrap"
-                            >
-                                Visit Website
-                            </a>
+                        <h4 className="font-bold text-sm text-gray-800 mb-2 uppercase tracking-wider">Practice Sites</h4>
+                        <div className="flex gap-2">
+                            <a href="https://leetcode.com" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">LeetCode</a>
+                            <a href="https://codeforces.com" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">Codeforces</a>
+                            <a href="https://cses.fi/problemset/" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">CSES</a>
                         </div>
-                    ))}
+                    </div>
                 </div>
-            </section>
+            </div>
+
+            {/* Project Hackathons */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600">
+                        <Icons.Lightbulb />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900">The AI Workflow</h3>
+                </div>
+                <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+                    Don't just code. Orchestrate. Use this pipeline to build winning projects in record time.
+                </p>
+                <div className="space-y-4">
+                    <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">1</div>
+                        <div>
+                            <h4 className="font-bold text-gray-900">Brainstorm with Perplexity</h4>
+                            <p className="text-xs text-gray-500 mt-1">
+                                Use Perplexity or an LLM to research problems and brainstorm solutions. Validate your idea before you build.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">2</div>
+                        <div>
+                            <h4 className="font-bold text-gray-900">Master Plan & Tasks</h4>
+                            <p className="text-xs text-gray-500 mt-1">
+                                Feed your research into a strong LLM (Claude 3.5 Sonnet / GPT-4o). Ask it to generate a "Master Plan" and assign specific tasks to each team member.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">3</div>
+                        <div>
+                            <h4 className="font-bold text-gray-900">Prompt Engineering</h4>
+                            <p className="text-xs text-gray-500 mt-1">
+                                Each member uses their own LLM to generate detailed prompts for their tasks. These prompts become the instructions for your coding tools.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">4</div>
+                        <div>
+                            <h4 className="font-bold text-gray-900">Execution</h4>
+                            <p className="text-xs text-gray-500 mt-1">
+                                Feed your prompts into <strong>Cursor</strong> for backend/logic and <strong>Lovable</strong> for frontend. Assemble the pieces.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">5</div>
+                        <div>
+                            <h4 className="font-bold text-gray-900">The Pitch</h4>
+                            <p className="text-xs text-gray-500 mt-1">
+                                Use <strong>Canva</strong> for the deck and <strong>Figma</strong> for high-fidelity mockups. The story sells the product.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            {/* AI Power Tools - Expanded */ }
+    <section>
+        <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600">
+                <Icons.Sparkles />
+            </div>
+            <div>
+                <h3 className="text-2xl font-bold text-gvcs-navy">AI Power Tools</h3>
+                <p className="text-gray-500 text-sm">The modern stack for building fast.</p>
+            </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+                {
+                    name: "Cursor",
+                    tagline: "The AI Code Editor",
+                    desc: "A fork of VS Code with AI built-in. It can write entire functions, refactor code, and fix bugs automatically.",
+                    bestFor: "Writing code 10x faster",
+                    price: "Free Tier",
+                    url: "https://cursor.sh/"
+                },
+                {
+                    name: "Lovable",
+                    tagline: "Full Stack Generator",
+                    desc: "Describe your app and get a full stack React/Node application generated. Great for starting the frontend.",
+                    bestFor: "Frontend & Full Stack",
+                    price: "Free Tier",
+                    url: "https://lovable.dev/"
+                },
+                {
+                    name: "Perplexity",
+                    tagline: "AI Search Engine",
+                    desc: "Like Google but it gives you answers. Great for finding libraries, debugging errors, and research.",
+                    bestFor: "Brainstorming & Research",
+                    price: "Free",
+                    url: "https://perplexity.ai/"
+                },
+
+                {
+                    name: "Figma",
+                    tagline: "Interface Design",
+                    desc: "The industry standard for UI/UX design. Map out your user flow before you write a single line of code.",
+                    bestFor: "Wireframing & Pitch Decks",
+                    price: "Free for Students",
+                    url: "https://figma.com/"
+                },
+                {
+                    name: "Canva",
+                    tagline: "Design Made Easy",
+                    desc: "Create stunning pitch decks and social media graphics in minutes. Essential for the final presentation.",
+                    bestFor: "Pitch Decks",
+                    price: "Free",
+                    url: "https://canva.com/"
+                },
+                {
+                    name: "Gemini / Claude / ChatGPT",
+                    tagline: "LLM Assistants",
+                    desc: "Use these for brainstorming ideas, writing pitch scripts, and generating dummy data for your app.",
+                    bestFor: "Ideation & Copywriting",
+                    price: "Free",
+                    url: "https://gemini.google.com/"
+                }
+            ].map((tool, i) => (
+                <a key={i} href={tool.url} target="_blank" rel="noopener noreferrer" className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all flex flex-col">
+                    <div className="flex justify-between items-start mb-4">
+                        <div>
+                            <h4 className="font-bold text-lg text-gray-900 group-hover:text-indigo-600 transition-colors">{tool.name}</h4>
+                            <span className="text-xs font-bold text-indigo-500 uppercase tracking-wider">{tool.tagline}</span>
+                        </div>
+                        <Icons.Link className="text-gray-300 group-hover:text-indigo-400" />
+                    </div>
+                    <p className="text-sm text-gray-600 mb-4 flex-grow">{tool.desc}</p>
+                    <div className="pt-4 border-t border-gray-100">
+                        <div className="flex justify-between items-center text-xs">
+                            <span className="font-bold text-gray-700 bg-gray-100 px-2 py-1 rounded">Best for: {tool.bestFor}</span>
+                            <span className="text-gray-400">{tool.price}</span>
+                        </div>
+                    </div>
+                </a>
+            ))}
+        </div>
+    </section>
+
+    {/* Upcoming Hackathons */ }
+    <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+                <Icons.Clock />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900">Upcoming Hackathons</h3>
+        </div>
+
+        <div className="space-y-4">
+            {[
+                {
+                    name: "United Hacks V6",
+                    date: "January 16-18, 2026",
+                    location: "Online (Virtual)",
+                    desc: "Student-led free hackathon for high school and college students. Builds tech and soft skills.",
+                    status: "Register Now",
+                    link: "https://www.hackunited.org/"
+                },
+                {
+                    name: "Hack BI",
+                    date: "January 17-18, 2026",
+                    location: "Alexandria, Virginia",
+                    desc: "High school and middle school hackathon. All skill levels welcome with workshops.",
+                    status: "Register Now",
+                    link: "https://mlh.io/minor-league/events"
+                },
+                {
+                    name: "Hack the Ram",
+                    date: "January 2026",
+                    location: "Gibsonia, PA",
+                    desc: "Free 12-hour invention marathon for 6th-12th graders. Great for beginners.",
+                    status: "Coming Soon",
+                    link: "https://www.joinsilicon.org/hackathons"
+                },
+                {
+                    name: "ElleHacks",
+                    date: "January 23-25, 2026",
+                    location: "Toronto, Ontario",
+                    desc: "Canada's largest hackathon for women and gender-diverse students. Beginner-friendly.",
+                    status: "Register Now",
+                    link: "https://mlh.io/events"
+                },
+                {
+                    name: "HackHERS",
+                    date: "February 21, 2026",
+                    location: "New Brunswick, NJ",
+                    desc: "Women-centric hackathon empowering female and non-binary students. Close to Philly.",
+                    status: "Coming Soon",
+                    link: "https://hackathonmap.com/"
+                },
+                {
+                    name: "HenHacks",
+                    date: "February 28, 2026",
+                    location: "Newark, Delaware",
+                    desc: "University of Delaware hackathon. Great for collegiate networking.",
+                    status: "Coming Soon",
+                    link: "https://hackathonmap.com/"
+                },
+                {
+                    name: "MEGA Hackathon 2026",
+                    date: "February 28 - March 1, 2026",
+                    location: "Online",
+                    desc: "Global hackathon integrating CS, STEM, economics. Advances human development.",
+                    status: "Register Now",
+                    link: "https://mega-hackathon-2026-students.devpost.com/"
+                },
+                {
+                    name: "HackNA",
+                    date: "March 2026",
+                    location: "Wexford, PA",
+                    desc: "High school hackathon at North Allegheny. Projects based on revealed theme.",
+                    status: "Coming Soon",
+                    link: "https://www.joinsilicon.org/hackathons"
+                },
+                {
+                    name: "Bitcamp",
+                    date: "April 10-12, 2026",
+                    location: "College Park, Maryland",
+                    desc: "University of Maryland's annual spring hackathon. 1000+ students expected.",
+                    status: "Coming Soon",
+                    link: "https://mlh.io/events"
+                },
+                {
+                    name: "HackAmerica 2026",
+                    date: "April 11-18, 2026",
+                    location: "Online",
+                    desc: "Virtual hackathon for high schoolers. Tackle social and environmental issues.",
+                    status: "Register Now",
+                    link: "https://netzerocompare.com/events/hackamerica-2026"
+                },
+                {
+                    name: "Hudson Valley Digital Rally",
+                    date: "May 18, 2026",
+                    location: "Poughkeepsie, NY",
+                    desc: "AI-focused hackathon for high school and college students. Theme: Using AI to serve the community.",
+                    status: "Coming Soon",
+                    link: "https://hvtechfest.com/2026/05/hackathon"
+                },
+                {
+                    name: "Tech Innovation for Good",
+                    date: "June 1-21, 2026",
+                    location: "Online",
+                    desc: "Three-week global innovation sprint. Challenges in AI, climate, and health.",
+                    status: "Register Now",
+                    link: "https://www.youthtechandethics.org/events"
+                },
+                {
+                    name: "Hack the Land",
+                    date: "July 25-26, 2026",
+                    location: "Cleveland, Ohio",
+                    desc: "High school hackathon. Turn ideas into reality over a weekend.",
+                    status: "Coming Soon",
+                    link: "https://www.joinsilicon.org/hackathons"
+                }
+            ].map((hack, i) => (
+                <div key={i} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-gray-50 rounded-xl border border-gray-200 gap-4 hover:border-green-300 transition-colors">
+                    <div>
+                        <div className="flex items-center gap-3 mb-1">
+                            <h4 className="font-bold text-lg text-gray-900">{hack.name}</h4>
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${hack.status.includes('Open') || hack.status.includes('Register') ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                                {hack.status}
+                            </span>
+                        </div>
+                        <div className="text-sm font-bold text-gray-600 mb-1">{hack.date} • {hack.location}</div>
+                        <p className="text-sm text-gray-500">{hack.desc}</p>
+                    </div>
+                    <a
+                        href={hack.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-bold rounded-lg hover:bg-green-50 hover:text-green-700 hover:border-green-200 transition-all text-center whitespace-nowrap"
+                    >
+                        Visit Website
+                    </a>
+                </div>
+            ))}
+        </div>
+    </section>
+                </>
+            )}
         </div>
     );
 };
@@ -5155,7 +6531,7 @@ const MyPlans = ({ user }) => {
                                             {isSelectorOpen?.year === year && isSelectorOpen?.mp === mp ? (
                                                 <div className="absolute inset-0 bg-white z-10 p-2 overflow-y-auto rounded-xl">
                                                     <div className="text-xs font-bold text-gray-400 mb-2">Select a Saved Plan:</div>
-                                                    {savedPlans.length === 0 && <div className="text-xs text-red-500">No saved plans found. Go to Ellis Generator to create one!</div>}
+                                                    {savedPlans.length === 0 && <div className="text-xs text-red-500">No saved plans found. Go to Curriculum Generator to create one!</div>}
                                                     {savedPlans.map(p => (
                                                         <button
                                                             key={p.id}
@@ -5376,7 +6752,7 @@ const Header = ({ user, onLoginClick, onLogout }) => {
                     {[
                         { name: 'Home', path: '/' },
                         { name: 'Weekly', path: '/weekly' },
-                        { name: 'Ellis', path: '/ellis' },
+                        { name: 'Curriculum', path: '/ellis' },
                         { name: 'Hackathons', path: '/hackathons' },
                         { name: 'Careers', path: '/careers' },
                         { name: 'Resources', path: '/resources' }
@@ -5443,12 +6819,17 @@ const ClubWebsite = () => {
         const checkSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session?.user) {
+                const isAdminUser = session.user.email === 'admin@gvcs.com' ||
+                    session.user.user_metadata?.isAdmin === true ||
+                    session.user.user_metadata?.role === 'admin';
                 setUser({
                     id: session.user.id,
                     name: session.user.user_metadata?.name || session.user.email,
                     email: session.user.email,
-                    isDemo: session.user.user_metadata?.isDemo || false
+                    isDemo: session.user.user_metadata?.isDemo || false,
+                    isAdmin: isAdminUser
                 });
+                setIsAdmin(isAdminUser);
             }
         };
         checkSession();
@@ -5456,14 +6837,20 @@ const ClubWebsite = () => {
         // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             if (session?.user) {
+                const isAdminUser = session.user.email === 'admin@gvcs.com' ||
+                    session.user.user_metadata?.isAdmin === true ||
+                    session.user.user_metadata?.role === 'admin';
                 setUser({
                     id: session.user.id,
                     name: session.user.user_metadata?.name || session.user.email,
                     email: session.user.email,
-                    isDemo: session.user.user_metadata?.isDemo || false
+                    isDemo: session.user.user_metadata?.isDemo || false,
+                    isAdmin: isAdminUser
                 });
+                setIsAdmin(isAdminUser);
             } else {
                 setUser(null);
+                setIsAdmin(false);
             }
         });
 
@@ -5490,7 +6877,11 @@ const ClubWebsite = () => {
             <LoginModal
                 isOpen={isLoginOpen}
                 onClose={() => setIsLoginOpen(false)}
-                onLogin={(u) => setUser(u)}
+                onLogin={(u) => {
+                    setUser(u);
+                    const isAdminUser = u.email === 'admin@gvcs.com' || u.isAdmin === true;
+                    setIsAdmin(isAdminUser);
+                }}
             />
 
             <Header
@@ -5521,6 +6912,17 @@ const ClubWebsite = () => {
                                 <div className="text-center">
                                     <h2 className="text-xl font-bold text-red-600">Access Denied</h2>
                                     <button onClick={handleAdminAccess} className="mt-4 text-blue-600 underline">Try Again</button>
+                                </div>
+                            </div>
+                        )
+                    } />
+                    <Route path="/admin-panel" element={
+                        user?.isAdmin ? <AdminPanel user={user} onBack={() => navigate('/dashboard')} /> : (
+                            <div className="flex items-center justify-center h-full">
+                                <div className="text-center">
+                                    <h2 className="text-xl font-bold text-red-600">Access Denied</h2>
+                                    <p className="text-gray-600 mt-2">Admin access required</p>
+                                    <button onClick={() => navigate('/dashboard')} className="mt-4 text-blue-600 underline">Back to Dashboard</button>
                                 </div>
                             </div>
                         )

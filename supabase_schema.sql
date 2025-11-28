@@ -200,8 +200,50 @@ CREATE TRIGGER update_user_problem_statuses_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
+-- Admin policies: Allow admins to view all data
+-- Admin is determined by checking if email is admin@gvcs.com
+-- Note: This uses auth.jwt() to get the email from the JWT token
+
+-- Admin can view all courses
+DROP POLICY IF EXISTS "Admins can view all courses" ON user_courses;
+CREATE POLICY "Admins can view all courses"
+    ON user_courses FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'admin@gvcs.com'
+    );
+
+-- Admin can view all hackathons
+DROP POLICY IF EXISTS "Admins can view all hackathons" ON hackathon_programs;
+CREATE POLICY "Admins can view all hackathons"
+    ON hackathon_programs FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'admin@gvcs.com'
+    );
+
+-- Admin can view all profiles
+DROP POLICY IF EXISTS "Admins can view all profiles" ON user_profiles;
+CREATE POLICY "Admins can view all profiles"
+    ON user_profiles FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'admin@gvcs.com'
+    );
+
+-- Admin can view all problem statuses
+DROP POLICY IF EXISTS "Admins can view all problem statuses" ON user_problem_statuses;
+CREATE POLICY "Admins can view all problem statuses"
+    ON user_problem_statuses FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'admin@gvcs.com'
+    );
+
 -- Note: Demo account should be created manually or via Supabase dashboard
 -- Email: demo@gvcs.com
 -- Password: demo123456
 -- You can create this user via Supabase Auth dashboard or by running the signup in the app
+
+-- Note: Admin account should be created manually or via Supabase dashboard
+-- Email: admin@gvcs.com
+-- Password: admin123456
+-- You can create this user via Supabase Auth dashboard or by running the signup in the app
+-- Make sure to set user_metadata: { isAdmin: true, role: 'admin' }
 

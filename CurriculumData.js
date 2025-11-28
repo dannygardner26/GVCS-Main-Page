@@ -13,20 +13,22 @@ export const CURRICULUM_DATA = {
         "topic": "Asymptotic Analysis: Big-O Notation",
         "description": "Formal Big-O analysis of time and space complexity. Learn to analyze algorithm efficiency.",
         "resources": [
-          { "title": "Big-O Notation Explained", "url": "https://www.youtube.com/watch?v=8hly31xKli0", "type": "Video" },
+          { "title": "Big-O Notation Explained", "url": "https://www.youtube.com/watch?v=__vX2sjlpXU", "type": "Video" },
+          { "title": "Big-O Notation Tutorial", "url": "https://www.youtube.com/watch?v=Mo4vesaut8g", "type": "Video" },
+          { "title": "Understanding Big-O Notation", "url": "https://www.youtube.com/watch?v=kS_gr2_-ws8", "type": "Video" },
           { "title": "Big-O Cheat Sheet", "url": "https://www.bigocheatsheet.com/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Algorithm Complexity Analyzer Project",
-            "description": "Build a tool that analyzes the time complexity of 10 different algorithms. Implement each algorithm and measure its performance across different input sizes. Create visualizations showing how runtime grows (graphs of n vs time) and classify each using Big-O notation.",
+            "title": "Big-O Analysis Template",
+            "description": "Download the template file and fill in the missing code sections. The template contains partially implemented algorithms with TODO comments. Complete the implementations and analyze their time complexity using Big-O notation.",
             "guidelines": [
-              "Implement at least 10 different algorithms (e.g., linear search, binary search, bubble sort, merge sort, etc.)",
-              "Measure actual runtime for different input sizes (n = 10, 100, 1000, 10000)",
-              "Create graphs/charts showing runtime vs input size",
-              "Classify each algorithm with Big-O notation (O(1), O(log n), O(n), O(n log n), O(n²), etc.)",
-              "Document your findings in a report explaining why each algorithm has its complexity",
-              "Include code, test results, and analysis"
+              "Download the template file provided",
+              "Fill in the missing code sections marked with TODO comments",
+              "The template includes 3-4 simple algorithms (e.g., finding max in array, linear search, simple loop examples)",
+              "For each completed algorithm, write a comment explaining its time complexity in Big-O notation",
+              "Test your implementations with sample inputs",
+              "Submit your completed template file"
             ]
           },
           "academic": {
@@ -61,21 +63,23 @@ export const CURRICULUM_DATA = {
         "topic": "Linear Structures: Dynamic Arrays and Linked Lists",
         "description": "Implement dynamic arrays with resize logic, and singly/doubly linked lists. Compare tradeoffs.",
         "resources": [
-          { "title": "Data Structures: Arrays and Linked Lists", "url": "https://www.youtube.com/watch?v=8hly31xKli0", "type": "Video" },
-          { "title": "Linked Lists Tutorial", "url": "https://www.geeksforgeeks.org/data-structures/linked-list/", "type": "Article" }
+          { "title": "Dynamic Arrays Explained", "url": "https://www.youtube.com/watch?v=8hly31xKli0", "type": "Video" },
+          { "title": "Linked Lists Tutorial", "url": "https://www.youtube.com/watch?v=WwfhLC16bis", "type": "Video" },
+          { "title": "Arrays vs Linked Lists", "url": "https://www.youtube.com/watch?v=lC-yYCOnN8Q", "type": "Video" },
+          { "title": "Linked Lists Article", "url": "https://www.geeksforgeeks.org/data-structures/linked-list/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Dynamic Array and Linked List Implementation Project",
-            "description": "Implement a dynamic array with automatic resizing and a doubly linked list from scratch. Build a benchmarking tool that compares insertion/deletion performance at different positions (beginning, middle, end) for both data structures. Create visualizations showing the performance differences.",
+            "title": "Dynamic Array and Linked List Template",
+            "description": "Download the template file containing a partially implemented dynamic array and linked list class. Fill in the missing methods marked with TODO comments. The template includes method signatures, helper methods, and test cases.",
             "guidelines": [
-              "Complete implementations of dynamic array and doubly linked list (no built-in libraries)",
-              "Dynamic array must handle automatic resizing (grow/shrink as needed)",
-              "Benchmarking tool comparing insertion/deletion at beginning, middle, and end",
-              "Performance graphs showing time complexity differences",
-              "Test with different data sizes (100, 1000, 10000 elements)",
-              "Written analysis explaining when to use each data structure",
-              "Clean, documented code with comments"
+              "Download the template file provided",
+              "Complete the dynamic array methods: resize(), add(), remove(), get()",
+              "Complete the linked list methods: addFirst(), addLast(), remove(), get()",
+              "Fill in helper methods like findNode() and updateSize()",
+              "Test your implementations using the provided test cases",
+              "Add comments explaining the time complexity of each method in Big-O notation",
+              "Submit your completed template file"
             ]
           },
           "academic": {
@@ -111,20 +115,23 @@ export const CURRICULUM_DATA = {
         "description": "Implement stacks, queues, and double-ended queues. Learn common use cases and applications.",
         "resources": [
           { "title": "Stacks and Queues Explained", "url": "https://www.youtube.com/watch?v=wjI1WNcIntg", "type": "Video" },
-          { "title": "Stack and Queue Data Structures", "url": "https://www.programiz.com/dsa/stack", "type": "Article" }
+          { "title": "Stack Data Structure", "url": "https://www.youtube.com/watch?v=I37kGX-nZEI", "type": "Video" },
+          { "title": "Queue Data Structure", "url": "https://www.youtube.com/watch?v=XuCbpw6Bj1U", "type": "Video" },
+          { "title": "Stack and Queue Tutorial", "url": "https://www.programiz.com/dsa/stack", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Stack, Queue, and Deque Implementation Project",
-            "description": "Implement stack, queue, and deque classes from scratch. Build applications using each: use a stack to solve balanced parentheses, expression evaluation, and undo/redo functionality. Use a queue for BFS traversal and task scheduling. Create a deque-based palindrome checker.",
+            "title": "Stack, Queue, and Deque Template",
+            "description": "Download the template file with partially implemented Stack, Queue, and Deque classes. Fill in the missing methods and complete a simple application using each structure.",
             "guidelines": [
-              "Complete implementations of stack, queue, and deque (using arrays or linked lists)",
-              "Stack application: balanced parentheses checker with detailed error reporting",
-              "Stack application: expression evaluator (infix to postfix conversion)",
-              "Queue application: BFS implementation on a graph",
-              "Deque application: palindrome checker",
-              "At least 5 test cases for each application",
-              "Documentation explaining each use case"
+              "Download the template file provided",
+              "Complete Stack methods: push(), pop(), peek(), isEmpty()",
+              "Complete Queue methods: enqueue(), dequeue(), front(), isEmpty()",
+              "Complete Deque methods: addFirst(), addLast(), removeFirst(), removeLast()",
+              "Implement a simple balanced parentheses checker using the Stack (template provided)",
+              "Implement a simple task scheduler using the Queue (template provided)",
+              "Add comments explaining the time complexity of each operation",
+              "Test your implementations and submit your completed template file"
             ]
           },
           "academic": {
@@ -161,21 +168,23 @@ export const CURRICULUM_DATA = {
         "description": "Understand hashing, collision resolution (chaining vs probing), and load factors.",
         "resources": [
           { "title": "Hash Tables Explained", "url": "https://www.youtube.com/watch?v=shs0KM3wKv8", "type": "Video" },
+          { "title": "Hash Tables Tutorial", "url": "https://www.youtube.com/watch?v=2Ti5yvumFTU", "type": "Video" },
+          { "title": "Hash Maps and Hash Sets", "url": "https://www.youtube.com/watch?v=U79Bo8c0rLk", "type": "Video" },
           { "title": "Hash Table Implementation", "url": "https://www.geeksforgeeks.org/implementing-our-own-hash-table-with-separate-chaining-in-java/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Hash Map Implementation with Collision Resolution Project",
-            "description": "Implement a hash map from scratch with chaining collision resolution. Build a testing framework that measures performance with different load factors (0.5, 0.75, 1.0, 1.5). Compare chaining vs linear probing implementations. Create visualizations showing collision distribution and performance metrics.",
+            "title": "Hash Map Template",
+            "description": "Download the template file with a partially implemented HashMap class using chaining collision resolution. Fill in the missing methods including hash function, put(), get(), and remove().",
             "guidelines": [
-              "Complete hash map implementation with chaining collision resolution",
-              "Implement at least one hash function (e.g., polynomial rolling hash)",
-              "Testing framework measuring performance at different load factors",
-              "Optional: implement linear probing for comparison",
-              "Visualization showing collision distribution and bucket sizes",
-              "Performance graphs showing insertion/lookup time vs load factor",
-              "Written analysis of optimal load factor and resizing strategy",
-              "Test with at least 1000 key-value pairs"
+              "Download the template file provided",
+              "Complete the hash function: hash(key) - use a simple polynomial hash for strings",
+              "Complete put(key, value) method: handle collisions using chaining",
+              "Complete get(key) method: search through the chain if collision occurred",
+              "Complete remove(key) method: remove from chain if found",
+              "Complete resize() method: rehash all elements when load factor exceeds threshold",
+              "Add comments explaining how chaining handles collisions",
+              "Test with the provided test cases and submit your completed template file"
             ]
           },
           "academic": {
@@ -213,20 +222,23 @@ export const CURRICULUM_DATA = {
         "description": "Implement BSTs with insert, search, delete. Master in-order, pre-order, and post-order traversals.",
         "resources": [
           { "title": "Binary Search Trees", "url": "https://www.youtube.com/watch?v=H5JubkIy_p8", "type": "Video" },
-          { "title": "Tree Traversals", "url": "https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/", "type": "Article" }
+          { "title": "BST Implementation", "url": "https://www.youtube.com/watch?v=zIX3zQP0khM", "type": "Video" },
+          { "title": "Tree Traversals Explained", "url": "https://www.youtube.com/watch?v=1WxLM2hwL-U", "type": "Video" },
+          { "title": "Tree Traversals Article", "url": "https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Binary Search Tree Implementation and Visualization Project",
-            "description": "Implement a complete BST with insert, search, delete, and all three traversal methods (in-order, pre-order, post-order). Build a visualization tool that displays the tree structure graphically and shows the traversal order. Include functionality to build trees from arrays and validate BST properties.",
+            "title": "Binary Search Tree Template",
+            "description": "Download the template file with a partially implemented BST class. Fill in the missing methods for insert, search, delete, and all three traversal methods.",
             "guidelines": [
-              "Complete BST implementation with insert, search, delete operations",
-              "All three traversal methods: in-order, pre-order, post-order",
-              "Tree visualization (can use ASCII art, graphviz, or simple graphics library)",
-              "Tool to build BST from array and display structure",
-              "BST validation function (check if tree maintains BST property)",
-              "At least 5 test cases with different tree structures",
-              "Documentation explaining traversal use cases"
+              "Download the template file provided",
+              "Complete insert(value) method: maintain BST property (left < node < right)",
+              "Complete search(value) method: return true if value exists, false otherwise",
+              "Complete delete(value) method: handle three cases (no children, one child, two children)",
+              "Complete inOrder(), preOrder(), postOrder() traversal methods",
+              "Complete findMin() helper method used in delete operation",
+              "Add comments explaining the BST property and time complexity of each method",
+              "Test with the provided test cases and submit your completed template file"
             ]
           },
           "academic": {
@@ -264,20 +276,23 @@ export const CURRICULUM_DATA = {
         "description": "Learn why self-balancing is needed. Implement AVL trees or study Red-Black tree rotations.",
         "resources": [
           { "title": "AVL Trees Explained", "url": "https://www.youtube.com/watch?v=jDM6_TnYIqE", "type": "Video" },
-          { "title": "Red-Black Trees", "url": "https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/", "type": "Article" }
+          { "title": "AVL Tree Rotations", "url": "https://www.youtube.com/watch?v=vRwi_UcZjeE", "type": "Video" },
+          { "title": "Red-Black Trees Tutorial", "url": "https://www.youtube.com/watch?v=qvZGUFHWChY", "type": "Video" },
+          { "title": "Red-Black Trees Article", "url": "https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "AVL Tree Implementation and Balancing Visualization Project",
-            "description": "Implement an AVL tree with all rotation operations (left, right, left-right, right-left). Build a visualization tool that shows the tree before and after rotations. Create a comparison tool that inserts the same sequence into both a regular BST and an AVL tree, showing the height difference and performance impact.",
+            "title": "AVL Tree Template",
+            "description": "Download the template file with a partially implemented AVL tree class. Fill in the missing rotation methods and update the insert method to maintain balance.",
             "guidelines": [
-              "Complete AVL tree implementation with all rotation types",
-              "Insert operation with automatic balancing",
-              "Visualization showing tree structure before and after rotations",
-              "Comparison tool: same insertions in BST vs AVL, showing height difference",
-              "Performance benchmarking: search time in balanced vs unbalanced trees",
-              "At least 5 test cases demonstrating different rotation scenarios",
-              "Documentation explaining rotation logic"
+              "Download the template file provided",
+              "Complete getHeight() and getBalanceFactor() helper methods",
+              "Complete rotateLeft() method: perform left rotation",
+              "Complete rotateRight() method: perform right rotation",
+              "Complete rotateLeftRight() and rotateRightLeft() methods (double rotations)",
+              "Update insert() method to check balance factor and perform rotations when needed",
+              "Add comments explaining when each rotation type is needed",
+              "Test with the provided test cases and submit your completed template file"
             ]
           },
           "academic": {
@@ -319,17 +334,18 @@ export const CURRICULUM_DATA = {
         ],
         "deliverables": {
           "builder": {
-            "title": "Heap and Priority Queue Implementation Project",
-            "description": "Implement a min-heap and max-heap from scratch. Build a priority queue using the heap. Solve at least two real-world problems: (1) Task scheduling system (process tasks by priority), (2) Merge k sorted lists using a priority queue. Create visualizations showing heap structure and operations.",
+            "title": "Heap and Priority Queue Template",
+            "description": "Download the template file with a partially implemented MinHeap class. Fill in the missing heap operations and use it to implement a simple priority queue.",
             "guidelines": [
-              "Complete min-heap and max-heap implementations",
-              "All heap operations: insert, extract-min/max, heapify-up, heapify-down",
-              "Priority queue implementation using heap",
-              "Task scheduling application: process tasks by priority",
-              "Merge k sorted lists algorithm using priority queue",
-              "Visualization showing heap structure (array representation and tree view)",
-              "At least 5 test cases for each application",
-              "Documentation explaining heap properties"
+              "Download the template file provided",
+              "Complete parent(), leftChild(), rightChild() helper methods for array indexing",
+              "Complete heapifyUp() method: bubble up element to maintain heap property",
+              "Complete heapifyDown() method: bubble down element to maintain heap property",
+              "Complete insert(value) method: add to end and heapify up",
+              "Complete extractMin() method: remove root, replace with last element, heapify down",
+              "Complete a simple PriorityQueue class using the MinHeap (template provided)",
+              "Add comments explaining the heap property and array representation",
+              "Test with the provided test cases and submit your completed template file"
             ]
           },
           "academic": {
@@ -372,18 +388,17 @@ export const CURRICULUM_DATA = {
         ],
         "deliverables": {
           "builder": {
-            "title": "Graph Representation and Traversal Implementation Project",
-            "description": "Implement graph data structure using both adjacency matrix and adjacency list representations. Implement BFS and DFS traversal algorithms. Build applications: (1) Find shortest path using BFS, (2) Detect cycles using DFS, (3) Find connected components. Create visualizations showing graph structure and traversal order.",
+            "title": "Graph Representation and Traversal Template",
+            "description": "Download the template file with a partially implemented Graph class using adjacency list representation. Fill in the missing BFS and DFS traversal methods.",
             "guidelines": [
-              "Graph implementation with both adjacency matrix and adjacency list",
-              "BFS implementation with path tracking",
-              "DFS implementation (iterative and recursive)",
-              "Application: shortest path finder using BFS",
-              "Application: cycle detection using DFS",
-              "Application: connected components finder",
-              "Visualization showing graph structure and traversal order",
-              "At least 3 test graphs (directed, undirected, with cycles)",
-              "Documentation comparing matrix vs list representations"
+              "Download the template file provided",
+              "Complete addEdge() method: add edges to the adjacency list",
+              "Complete BFS(start) method: use a queue to traverse level by level",
+              "Complete DFS(start) method: use recursion or a stack to traverse depth-first",
+              "Complete hasPath(start, end) method using BFS or DFS (template provided)",
+              "Add comments explaining the difference between BFS and DFS",
+              "Add comments explaining adjacency list representation",
+              "Test with the provided test graphs and submit your completed template file"
             ]
           },
           "academic": {
@@ -424,17 +439,30 @@ export const CURRICULUM_DATA = {
         "resources": [],
         "deliverables": {
           "builder": {
-            "title": "Comprehensive Data Structures Library Project",
-            "description": "Build a complete library of all data structures covered in the course: dynamic arrays, linked lists, stacks, queues, hash maps, BSTs, heaps, and graphs. Include comprehensive testing, documentation, performance benchmarks, and visualizations. Create a unified API for accessing all structures.",
+            "title": "Maze Generator and Pathfinding Solver",
+            "description": "Build an interactive maze generator and solver application. Generate random mazes using graph algorithms, then solve them using multiple pathfinding strategies (BFS, DFS, A*). Visualize the generation and solving process in real-time. This project naturally uses graphs, stacks, queues, heaps, and hash maps to create a cohesive, engaging application.",
             "guidelines": [
-              "Implement all major data structures: arrays, linked lists, stacks, queues, hash maps, BSTs, heaps, graphs",
-              "Comprehensive test suite with edge cases for each structure",
-              "Full documentation: API reference, usage examples, complexity analysis",
-              "Performance benchmarks comparing implementations",
-              "Visualizations for at least 3 data structures",
-              "Unified interface/API for accessing all structures",
-              "README with installation, usage, and contribution guidelines",
-              "Demonstrate mastery through clean, efficient code"
+              "Maze Generation: Implement at least 2 algorithms (e.g., Randomized Depth-First Search, Kruskal's algorithm, Prim's algorithm) using graph data structures",
+              "Maze Representation: Use adjacency lists or matrices to represent the maze graph, and arrays/2D arrays for the visual grid",
+              "Pathfinding Solvers: Implement at least 3 solving algorithms:",
+              "  - BFS (using Queue) for shortest path in unweighted mazes",
+              "  - DFS (using Stack) for any valid path",
+              "  - A* Algorithm (using Priority Queue/Heap) for optimal pathfinding",
+              "Visualization: Create real-time visualizations showing:",
+              "  - Maze generation process (walls being removed)",
+              "  - Pathfinding algorithms exploring the maze",
+              "  - Final solution path highlighted",
+              "Interactive Features: Allow users to adjust maze size, generation algorithm, solving algorithm, and animation speed",
+              "Data Structure Usage: Clearly demonstrate use of:",
+              "  - Graphs (maze structure, adjacency representation)",
+              "  - Stacks (DFS, backtracking in generation)",
+              "  - Queues (BFS traversal)",
+              "  - Heaps/Priority Queues (A* algorithm)",
+              "  - Hash Maps (visited nodes tracking, path reconstruction)",
+              "  - Arrays (grid representation, coordinate storage)",
+              "Performance Analysis: Compare solving times and path lengths for different algorithms on various maze sizes",
+              "Documentation: Include README explaining algorithms, data structure choices, complexity analysis, and usage instructions",
+              "Bonus: Add features like maze difficulty levels, custom start/end points, or multiple solution paths"
             ]
           },
           "academic": {
@@ -1923,5 +1951,538 @@ export const CURRICULUM_DATA = {
         "description": "Create a comprehensive tutorial series explaining compiler phases: lexing, parsing, type checking, and code generation."
       }
     }
+  },
+
+  // ============================================
+  // TIER 3: Track A - Artificial Intelligence (Additional)
+  // ============================================
+  
+  "AI 403: Reinforcement Learning": {
+    "prereqs": ["AI 401: Intro to Machine Learning"],
+    "description": "Teaching AI to play games and make decisions through trial and error. Learn the algorithms behind AlphaGo and game-playing agents.",
+    "tier": 3,
+    "track": "Artificial Intelligence",
+    "weeks": [
+      {
+        "week": 1,
+        "topic": "Introduction to Reinforcement Learning",
+        "description": "Understand the RL framework: agents, environments, rewards, and policies.",
+        "resources": [
+          { "title": "Reinforcement Learning Basics", "url": "https://www.youtube.com/watch?v=JgvyzIkgxF0", "type": "Video" },
+          { "title": "RL Tutorial Series", "url": "https://www.youtube.com/watch?v=2pWv7GOvuf0", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "RL Environment Template",
+            "description": "Download and complete a simple RL environment (like a grid world). Implement the agent-environment interaction loop.",
+            "guidelines": [
+              "Download the template file provided",
+              "Complete the environment step() and reset() methods",
+              "Implement a random policy agent",
+              "Test the agent-environment interaction",
+              "Submit your completed template file"
+            ]
+          },
+          "academic": {
+            "title": "RL Fundamentals Assessment",
+            "description": "Complete a written test on RL concepts: Markov Decision Processes, rewards, policies, and value functions.",
+            "guidelines": [
+              "Define MDP components: states, actions, transitions, rewards",
+              "Explain the difference between policy and value function",
+              "Compare model-based vs model-free RL",
+              "All solutions must show clear understanding of RL framework"
+            ]
+          },
+          "communicator": {
+            "title": "RL Introduction Presentation",
+            "description": "Create a 10-15 minute presentation explaining what reinforcement learning is and how it differs from supervised learning.",
+            "guidelines": [
+              "10-15 minute presentation with examples",
+              "Explain the agent-environment loop",
+              "Compare RL to supervised and unsupervised learning",
+              "Use game examples (chess, Mario) to illustrate concepts",
+              "Clear explanations and engaging delivery"
+            ]
+          }
+        }
+      }
+    ]
+  },
+
+  // ============================================
+  // TIER 3: Track D - Cybersecurity
+  // ============================================
+  
+  "Sec 301: Network & Computer Security": {
+    "prereqs": ["Sys 201: Computer Systems (The Hardware/Software Interface)"],
+    "description": "The 'Hacker' course. Learn how systems break to understand how to defend them. Covers vulnerabilities, exploits, and defense mechanisms.",
+    "tier": 3,
+    "track": "Cybersecurity",
+    "weeks": [
+      {
+        "week": 1,
+        "topic": "Introduction to Security and Threat Models",
+        "description": "Understand security principles: confidentiality, integrity, availability. Learn common threat models and attack vectors.",
+        "resources": [
+          { "title": "Computer Security Basics", "url": "https://www.youtube.com/watch?v=inWWhr5tnEA", "type": "Video" },
+          { "title": "Security Fundamentals", "url": "https://www.youtube.com/watch?v=3b86p7XGlqk", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Security Analysis Template",
+            "description": "Download a template with vulnerable code examples. Identify security flaws and suggest fixes.",
+            "guidelines": [
+              "Download the template file provided",
+              "Identify at least 5 security vulnerabilities",
+              "Explain why each is a vulnerability",
+              "Suggest fixes for each issue",
+              "Submit your completed analysis"
+            ]
+          },
+          "academic": {
+            "title": "Security Fundamentals Assessment",
+            "description": "Complete a written test on security principles, threat models, and common vulnerabilities.",
+            "guidelines": [
+              "Explain CIA triad (Confidentiality, Integrity, Availability)",
+              "Describe common attack vectors",
+              "Compare different threat models",
+              "All solutions must demonstrate understanding of security principles"
+            ]
+          },
+          "communicator": {
+            "title": "Security Awareness Presentation",
+            "description": "Create a 10-15 minute presentation explaining common security threats and how to protect against them.",
+            "guidelines": [
+              "10-15 minute presentation with real-world examples",
+              "Explain common vulnerabilities (SQL injection, XSS, buffer overflow)",
+              "Discuss defense mechanisms",
+              "Use engaging examples and clear explanations"
+            ]
+          }
+        }
+      }
+    ]
+  },
+
+  "Math 302: Cryptography": {
+    "prereqs": ["Math 201: Discrete Mathematics for CS"],
+    "description": "The math behind secrets. Learn how encryption works, from symmetric ciphers to public key cryptography and zero-knowledge proofs.",
+    "tier": 3,
+    "track": "Cybersecurity",
+    "weeks": [
+      {
+        "week": 1,
+        "topic": "Introduction to Cryptography and Symmetric Encryption",
+        "description": "Learn the fundamentals of encryption: symmetric ciphers, one-time pads, and block ciphers like AES.",
+        "resources": [
+          { "title": "Cryptography Basics", "url": "https://www.youtube.com/watch?v=jhXCTbFnK8o", "type": "Video" },
+          { "title": "Symmetric Encryption", "url": "https://www.youtube.com/watch?v=VFjP2ZLx8hU", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Encryption Template",
+            "description": "Download a template implementing basic encryption. Complete the encryption and decryption functions.",
+            "guidelines": [
+              "Download the template file provided",
+              "Complete the encryption function",
+              "Complete the decryption function",
+              "Test with sample plaintext",
+              "Submit your completed template file"
+            ]
+          },
+          "academic": {
+            "title": "Cryptography Fundamentals Assessment",
+            "description": "Complete a written test on symmetric encryption, key management, and cryptographic properties.",
+            "guidelines": [
+              "Explain symmetric vs asymmetric encryption",
+              "Describe properties of good ciphers",
+              "Analyze security of different encryption methods",
+              "All solutions must show mathematical understanding"
+            ]
+          },
+          "communicator": {
+            "title": "Cryptography Introduction Presentation",
+            "description": "Create a 10-15 minute presentation explaining how encryption works and why it matters.",
+            "guidelines": [
+              "10-15 minute presentation with examples",
+              "Explain encryption concepts in accessible terms",
+              "Use real-world examples (HTTPS, messaging apps)",
+              "Clear explanations and engaging delivery"
+            ]
+          }
+        }
+      }
+    ]
+  },
+
+  "Sec 402: Reverse Engineering & Malware Analysis": {
+    "prereqs": ["Sys 201: Computer Systems (The Hardware/Software Interface)"],
+    "description": "Disassembling viruses to see how they work. Learn to use tools like Ghidra and IDA Pro to analyze malicious code safely.",
+    "tier": 3,
+    "track": "Cybersecurity",
+    "weeks": [
+      {
+        "week": 1,
+        "topic": "Introduction to Reverse Engineering",
+        "description": "Learn the basics of disassembly, decompilation, and analyzing binary code. Understand assembly language patterns.",
+        "resources": [
+          { "title": "Reverse Engineering Basics", "url": "https://www.youtube.com/watch?v=VroEiMOueMo", "type": "Video" },
+          { "title": "Binary Analysis", "url": "https://www.youtube.com/watch?v=3NTXFUxcKPc", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Reverse Engineering Template",
+            "description": "Download a template with a simple binary. Use Ghidra or similar tools to reverse engineer its functionality.",
+            "guidelines": [
+              "Download the template file provided",
+              "Use Ghidra/IDA Pro to analyze the binary",
+              "Document the program's functionality",
+              "Identify key functions and their purposes",
+              "Submit your analysis report"
+            ]
+          },
+          "academic": {
+            "title": "Reverse Engineering Assessment",
+            "description": "Complete a written test on assembly language, disassembly techniques, and binary analysis.",
+            "guidelines": [
+              "Explain common assembly patterns",
+              "Describe disassembly process",
+              "Analyze control flow in binaries",
+              "All solutions must demonstrate understanding of low-level code"
+            ]
+          },
+          "communicator": {
+            "title": "Reverse Engineering Presentation",
+            "description": "Create a 10-15 minute presentation explaining what reverse engineering is and how it's used in security.",
+            "guidelines": [
+              "10-15 minute presentation with examples",
+              "Explain reverse engineering process",
+              "Discuss legal and ethical considerations",
+              "Use safe, educational examples",
+              "Clear explanations and engaging delivery"
+            ]
+          }
+        }
+      }
+    ]
+  },
+
+  // ============================================
+  // TIER 3: Track E - Game Design & Simulation
+  // ============================================
+  
+  "CS 403: Computer Graphics (Real-Time Rendering)": {
+    "prereqs": ["CS 102: Data Structures & Functional Utility"],
+    "description": "How to render millions of polygons onto the screen at 60 FPS. Learn the GPU pipeline, shaders, and 3D mathematics.",
+    "tier": 3,
+    "track": "Game Design & Simulation",
+    "weeks": [
+      {
+        "week": 1,
+        "topic": "Introduction to Computer Graphics and 3D Mathematics",
+        "description": "Learn the fundamentals: coordinate systems, vectors, matrices, and transformations in 3D space.",
+        "resources": [
+          { "title": "Computer Graphics Basics", "url": "https://www.youtube.com/watch?v=HIvNePu7UEE", "type": "Video" },
+          { "title": "3D Math for Graphics", "url": "https://www.youtube.com/watch?v=U0_ONQQ5ZNM", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Graphics Math Template",
+            "description": "Download a template with 3D math functions. Complete matrix multiplication, vector operations, and transformations.",
+            "guidelines": [
+              "Download the template file provided",
+              "Complete matrix multiplication function",
+              "Complete vector operations (dot product, cross product)",
+              "Implement translation, rotation, and scaling transformations",
+              "Submit your completed template file"
+            ]
+          },
+          "academic": {
+            "title": "Graphics Mathematics Assessment",
+            "description": "Complete a written test on 3D mathematics, transformations, and coordinate systems.",
+            "guidelines": [
+              "Explain 3D coordinate systems",
+              "Describe matrix transformations",
+              "Calculate transformations for given scenarios",
+              "All solutions must show mathematical work"
+            ]
+          },
+          "communicator": {
+            "title": "Graphics Introduction Presentation",
+            "description": "Create a 10-15 minute presentation explaining how 3D graphics work and the mathematics behind them.",
+            "guidelines": [
+              "10-15 minute presentation with visual examples",
+              "Explain 3D coordinate systems and transformations",
+              "Use diagrams to illustrate concepts",
+              "Clear explanations and engaging delivery"
+            ]
+          }
+        }
+      }
+    ]
+  },
+
+  "CS 405: Game Engine Architecture": {
+    "prereqs": ["CS 102: Data Structures & Functional Utility"],
+    "description": "Building 'Unity' from scratch. Learn the game loop, physics engines, entity component systems, and memory management for games.",
+    "tier": 3,
+    "track": "Game Design & Simulation",
+    "weeks": [
+      {
+        "week": 1,
+        "topic": "Introduction to Game Engines and The Game Loop",
+        "description": "Understand the core architecture: the game loop, fixed vs variable timesteps, and game state management.",
+        "resources": [
+          { "title": "Game Engine Basics", "url": "https://www.youtube.com/watch?v=W7vXz2bq-0Y", "type": "Video" },
+          { "title": "Game Loop Design", "url": "https://www.youtube.com/watch?v=4n_I6cYV7WY", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Game Loop Template",
+            "description": "Download a template with a basic game structure. Implement the game loop with update and render phases.",
+            "guidelines": [
+              "Download the template file provided",
+              "Complete the game loop (input, update, render)",
+              "Implement fixed timestep logic",
+              "Add basic game state management",
+              "Submit your completed template file"
+            ]
+          },
+          "academic": {
+            "title": "Game Engine Architecture Assessment",
+            "description": "Complete a written test on game loop design, timesteps, and game state management.",
+            "guidelines": [
+              "Explain the game loop architecture",
+              "Compare fixed vs variable timesteps",
+              "Describe game state management patterns",
+              "All solutions must show understanding of engine design"
+            ]
+          },
+          "communicator": {
+            "title": "Game Engine Presentation",
+            "description": "Create a 10-15 minute presentation explaining how game engines work and their core components.",
+            "guidelines": [
+              "10-15 minute presentation with examples",
+              "Explain the game loop and its phases",
+              "Discuss common engine architectures",
+              "Use examples from popular game engines",
+              "Clear explanations and engaging delivery"
+            ]
+          }
+        }
+      }
+    ]
+  },
+
+  "CS 406: VR & Augmented Reality (XR)": {
+    "prereqs": ["CS 403: Computer Graphics (Real-Time Rendering)"],
+    "description": "Building immersive spatial interfaces. Learn head tracking, spatial audio, hand tracking, and SLAM algorithms.",
+    "tier": 3,
+    "track": "Game Design & Simulation",
+    "weeks": [
+      {
+        "week": 1,
+        "topic": "Introduction to XR and Spatial Computing",
+        "description": "Understand the fundamentals of VR/AR: tracking, rendering, and interaction in 3D space.",
+        "resources": [
+          { "title": "VR/AR Basics", "url": "https://www.youtube.com/watch?v=HBNH8tzsfVM", "type": "Video" },
+          { "title": "Spatial Computing", "url": "https://www.youtube.com/watch?v=5TjXIsj1vK0", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "XR Template",
+            "description": "Download a template for a basic VR/AR application. Implement head tracking and basic interactions.",
+            "guidelines": [
+              "Download the template file provided",
+              "Implement head tracking",
+              "Add basic hand/controller tracking",
+              "Create a simple interactive scene",
+              "Submit your completed template file"
+            ]
+          },
+          "academic": {
+            "title": "XR Fundamentals Assessment",
+            "description": "Complete a written test on VR/AR concepts, tracking systems, and spatial computing.",
+            "guidelines": [
+              "Explain VR vs AR vs MR",
+              "Describe tracking systems (6DOF, SLAM)",
+              "Analyze challenges in XR development",
+              "All solutions must show understanding of spatial computing"
+            ]
+          },
+          "communicator": {
+            "title": "XR Technology Presentation",
+            "description": "Create a 10-15 minute presentation explaining VR/AR technology and its applications.",
+            "guidelines": [
+              "10-15 minute presentation with examples",
+              "Explain VR/AR/MR differences",
+              "Discuss tracking and rendering challenges",
+              "Use real-world XR applications as examples",
+              "Clear explanations and engaging delivery"
+            ]
+          }
+        }
+      }
+    ]
+  },
+
+  // ============================================
+  // TIER 3: Track F - Futurist Electives
+  // ============================================
+  
+  "CS 410: Quantum Computing": {
+    "prereqs": ["Math 201: Discrete Mathematics for CS"],
+    "description": "Coding for physics-defying computers. Learn qubits, superposition, entanglement, and quantum algorithms like Shor's algorithm.",
+    "tier": 3,
+    "track": "Futurist Electives",
+    "weeks": [
+      {
+        "week": 1,
+        "topic": "Introduction to Quantum Computing",
+        "description": "Understand quantum mechanics basics: qubits, superposition, and measurement. Learn the difference between classical and quantum bits.",
+        "resources": [
+          { "title": "Quantum Computing Basics", "url": "https://www.youtube.com/watch?v=JhHMJCUmq28", "type": "Video" },
+          { "title": "Qubits and Superposition", "url": "https://www.youtube.com/watch?v=zNzzGgr2mhk", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Quantum Circuit Template",
+            "description": "Download a template using Qiskit or similar. Implement basic quantum gates and simple quantum circuits.",
+            "guidelines": [
+              "Download the template file provided",
+              "Implement basic quantum gates (Hadamard, CNOT)",
+              "Create simple quantum circuits",
+              "Run circuits on quantum simulators",
+              "Submit your completed template file"
+            ]
+          },
+          "academic": {
+            "title": "Quantum Computing Fundamentals Assessment",
+            "description": "Complete a written test on quantum mechanics basics, qubits, and quantum gates.",
+            "guidelines": [
+              "Explain qubits vs classical bits",
+              "Describe superposition and entanglement",
+              "Analyze quantum gate operations",
+              "All solutions must show understanding of quantum principles"
+            ]
+          },
+          "communicator": {
+            "title": "Quantum Computing Presentation",
+            "description": "Create a 10-15 minute presentation explaining what quantum computing is and why it matters.",
+            "guidelines": [
+              "10-15 minute presentation with examples",
+              "Explain quantum mechanics basics in accessible terms",
+              "Compare quantum to classical computing",
+              "Discuss potential applications",
+              "Clear explanations and engaging delivery"
+            ]
+          }
+        }
+      }
+    ]
+  },
+
+  "Fin 301: Blockchain & Decentralized Finance": {
+    "prereqs": ["Math 302: Cryptography"],
+    "description": "Web3 engineering. Learn distributed ledgers, consensus algorithms, smart contracts, and DeFi protocols.",
+    "tier": 3,
+    "track": "Futurist Electives",
+    "weeks": [
+      {
+        "week": 1,
+        "topic": "Introduction to Blockchain Technology",
+        "description": "Understand the fundamentals: distributed ledgers, blocks, hashing, and the blockchain data structure.",
+        "resources": [
+          { "title": "Blockchain Basics", "url": "https://www.youtube.com/watch?v=SSo_EIwHSd4", "type": "Video" },
+          { "title": "How Blockchain Works", "url": "https://www.youtube.com/watch?v=3xGLc-zz9cA", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Blockchain Template",
+            "description": "Download a template implementing a simple blockchain. Complete the block structure, hashing, and chain validation.",
+            "guidelines": [
+              "Download the template file provided",
+              "Complete the Block class with hash calculation",
+              "Implement blockchain validation",
+              "Add mining functionality (proof of work)",
+              "Submit your completed template file"
+            ]
+          },
+          "academic": {
+            "title": "Blockchain Fundamentals Assessment",
+            "description": "Complete a written test on blockchain architecture, consensus mechanisms, and cryptographic hashing.",
+            "guidelines": [
+              "Explain blockchain data structure",
+              "Describe proof of work vs proof of stake",
+              "Analyze security properties of blockchains",
+              "All solutions must show understanding of distributed systems"
+            ]
+          },
+          "communicator": {
+            "title": "Blockchain Technology Presentation",
+            "description": "Create a 10-15 minute presentation explaining how blockchain works and its applications.",
+            "guidelines": [
+              "10-15 minute presentation with examples",
+              "Explain blockchain architecture",
+              "Discuss consensus mechanisms",
+              "Use real-world blockchain examples",
+              "Clear explanations and engaging delivery"
+            ]
+          }
+        }
+      }
+    ]
+  },
+
+  "Bio 301: Computational Biology": {
+    "prereqs": ["CS 301: Design & Analysis of Algorithms"],
+    "description": "Using algorithms to cure disease. Learn DNA sequencing, protein folding, and biological data analysis.",
+    "tier": 3,
+    "track": "Futurist Electives",
+    "weeks": [
+      {
+        "week": 1,
+        "topic": "Introduction to Bioinformatics",
+        "description": "Understand biological data: DNA sequences, proteins, and how computer science applies to biology.",
+        "resources": [
+          { "title": "Bioinformatics Basics", "url": "https://www.youtube.com/watch?v=K2F7pO0J7X4", "type": "Video" },
+          { "title": "Computational Biology", "url": "https://www.youtube.com/watch?v=Y7s7mQwYQqE", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Sequence Analysis Template",
+            "description": "Download a template for DNA sequence analysis. Implement sequence alignment and pattern matching algorithms.",
+            "guidelines": [
+              "Download the template file provided",
+              "Implement basic sequence alignment",
+              "Complete pattern matching in DNA sequences",
+              "Analyze sequence similarity",
+              "Submit your completed template file"
+            ]
+          },
+          "academic": {
+            "title": "Bioinformatics Fundamentals Assessment",
+            "description": "Complete a written test on biological data structures, sequence analysis, and algorithmic approaches.",
+            "guidelines": [
+              "Explain DNA/RNA/Protein data representation",
+              "Describe sequence alignment algorithms",
+              "Analyze computational challenges in biology",
+              "All solutions must show understanding of biological computing"
+            ]
+          },
+          "communicator": {
+            "title": "Computational Biology Presentation",
+            "description": "Create a 10-15 minute presentation explaining how computer science is used in biology and medicine.",
+            "guidelines": [
+              "10-15 minute presentation with examples",
+              "Explain bioinformatics applications",
+              "Discuss DNA sequencing and analysis",
+              "Use real-world examples (CRISPR, AlphaFold)",
+              "Clear explanations and engaging delivery"
+            ]
+          }
+        }
+      }
+    ]
   }
 };
