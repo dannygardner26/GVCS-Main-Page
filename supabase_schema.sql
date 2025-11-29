@@ -113,6 +113,54 @@ CREATE TRIGGER update_hackathon_programs_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
+-- Create weekly_activities table to track user progress on weekly problems
+CREATE TABLE IF NOT EXISTS weekly_activities (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    week_number INTEGER NOT NULL,
+    school_year INTEGER NOT NULL,
+    problem_type TEXT NOT NULL CHECK (problem_type IN ('leetcode', 'usaco', 'codeforces')),
+    problem_title TEXT NOT NULL,
+    problem_url TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'not_attempted' CHECK (status IN ('not_attempted', 'viewed', 'completed')),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user_id, week_number, school_year, problem_type, problem_title)
+);
+
+CREATE INDEX IF NOT EXISTS idx_weekly_activities_user_id ON weekly_activities(user_id);
+CREATE INDEX IF NOT EXISTS idx_weekly_activities_week ON weekly_activities(week_number, school_year);
+
+ALTER TABLE weekly_activities ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can view their own weekly activities" ON weekly_activities;
+DROP POLICY IF EXISTS "Users can insert their own weekly activities" ON weekly_activities;
+DROP POLICY IF EXISTS "Users can update their own weekly activities" ON weekly_activities;
+DROP POLICY IF EXISTS "Users can delete their own weekly activities" ON weekly_activities;
+
+CREATE POLICY "Users can view their own weekly activities"
+    ON weekly_activities FOR SELECT
+    USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own weekly activities"
+    ON weekly_activities FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own weekly activities"
+    ON weekly_activities FOR UPDATE
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own weekly activities"
+    ON weekly_activities FOR DELETE
+    USING (auth.uid() = user_id);
+
+DROP TRIGGER IF EXISTS update_weekly_activities_updated_at ON weekly_activities;
+CREATE TRIGGER update_weekly_activities_updated_at
+    BEFORE UPDATE ON weekly_activities
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
 -- Add user_profiles table for account info
 CREATE TABLE IF NOT EXISTS user_profiles (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -235,6 +283,99 @@ CREATE POLICY "Admins can view all problem statuses"
     USING (
         (auth.jwt() ->> 'email')::text = 'admin@gvcs.com'
     );
+
+-- Add hackathon_teams table for team management (must be created first)
+CREATE TABLE IF NOT EXISTS hackathon_teams (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    hackathon_name TEXT NOT NULL,
+    team_name TEXT,
+    max_members INTEGER DEFAULT 4,
+    created_by UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_hackathon_teams_hackathon_name ON hackathon_teams(hackathon_name);
+CREATE INDEX IF NOT EXISTS idx_hackathon_teams_created_by ON hackathon_teams(created_by);
+
+ALTER TABLE hackathon_teams ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing policies if they exist, then recreate them
+DROP POLICY IF EXISTS "Users can view all teams" ON hackathon_teams;
+DROP POLICY IF EXISTS "Users can insert teams" ON hackathon_teams;
+DROP POLICY IF EXISTS "Users can update teams they created" ON hackathon_teams;
+DROP POLICY IF EXISTS "Users can delete teams they created" ON hackathon_teams;
+
+-- Everyone can view all teams
+CREATE POLICY "Users can view all teams"
+    ON hackathon_teams FOR SELECT
+    USING (true);
+
+-- Users can create teams
+CREATE POLICY "Users can insert teams"
+    ON hackathon_teams FOR INSERT
+    WITH CHECK (auth.uid() = created_by);
+
+-- Users can update teams they created
+CREATE POLICY "Users can update teams they created"
+    ON hackathon_teams FOR UPDATE
+    USING (auth.uid() = created_by)
+    WITH CHECK (auth.uid() = created_by);
+
+-- Users can delete teams they created
+CREATE POLICY "Users can delete teams they created"
+    ON hackathon_teams FOR DELETE
+    USING (auth.uid() = created_by);
+
+DROP TRIGGER IF EXISTS update_hackathon_teams_updated_at ON hackathon_teams;
+CREATE TRIGGER update_hackathon_teams_updated_at
+    BEFORE UPDATE ON hackathon_teams
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Add hackathon_registrations table for tracking who registered for which hackathons
+CREATE TABLE IF NOT EXISTS hackathon_registrations (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    hackathon_name TEXT NOT NULL,
+    team_id UUID REFERENCES hackathon_teams(id) ON DELETE SET NULL,
+    user_name TEXT, -- Store user's name at registration time for display
+    registered_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user_id, hackathon_name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_hackathon_registrations_user_id ON hackathon_registrations(user_id);
+CREATE INDEX IF NOT EXISTS idx_hackathon_registrations_hackathon_name ON hackathon_registrations(hackathon_name);
+CREATE INDEX IF NOT EXISTS idx_hackathon_registrations_team_id ON hackathon_registrations(team_id);
+
+ALTER TABLE hackathon_registrations ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing policies if they exist, then recreate them
+DROP POLICY IF EXISTS "Users can view all registrations" ON hackathon_registrations;
+DROP POLICY IF EXISTS "Users can insert their own registrations" ON hackathon_registrations;
+DROP POLICY IF EXISTS "Users can update their own registrations" ON hackathon_registrations;
+DROP POLICY IF EXISTS "Users can delete their own registrations" ON hackathon_registrations;
+
+-- Everyone can view all registrations (to see teams)
+CREATE POLICY "Users can view all registrations"
+    ON hackathon_registrations FOR SELECT
+    USING (true);
+
+-- Users can only insert their own registrations
+CREATE POLICY "Users can insert their own registrations"
+    ON hackathon_registrations FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+
+-- Users can only update their own registrations
+CREATE POLICY "Users can update their own registrations"
+    ON hackathon_registrations FOR UPDATE
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- Users can only delete their own registrations
+CREATE POLICY "Users can delete their own registrations"
+    ON hackathon_registrations FOR DELETE
+    USING (auth.uid() = user_id);
 
 -- Note: Demo account should be created manually or via Supabase dashboard
 -- Email: demo@gvcs.com

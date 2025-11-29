@@ -670,7 +670,7 @@ const EventList = () => {
                                     <Icons.Link className="w-3 h-3 text-gray-400" />
                                 </a>
                             ) : (
-                                <h4 className="text-sm font-bold text-gray-900">{e.name}</h4>
+                            <h4 className="text-sm font-bold text-gray-900">{e.name}</h4>
                             )}
                             <div className="flex gap-2 mt-1">
                                 <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{e.type}</span>
@@ -693,9 +693,8 @@ const POTENTIAL_COURSES = Object.keys(CURRICULUM_DATA).map(title => {
         title,
         type: "premade",
         difficulty: course.tier === 1 ? "Intermediate" : course.tier === 2 ? "Advanced" : "Expert",
-        tags: course.track ? [course.track] : [],
+        tags: [],
         tier: course.tier,
-        track: course.track,
         description: course.description,
         prereqs: course.prereqs || []
     };
@@ -707,17 +706,17 @@ const CurriculumMap = ({ courses, onSelect }) => {
     const tier2Courses = courses.filter(c => c.tier === 2);
     const tier3Courses = courses.filter(c => c.tier === 3);
 
-    // Organize Tier 3 by track
-    const trackA = tier3Courses.filter(c => c.track === "Artificial Intelligence");
-    const trackB = tier3Courses.filter(c => c.track === "Systems & Data");
-    const trackC = tier3Courses.filter(c => c.track === "Languages & Theory");
-    const trackD = tier3Courses.filter(c => c.track === "Cybersecurity");
-    const trackE = tier3Courses.filter(c => c.track === "Game Design & Simulation");
-    const trackF = tier3Courses.filter(c => c.track === "Futurist Electives");
+    // Organize Tier 3 by subject area
+    const aiCourses = tier3Courses.filter(c => c.title.startsWith("AI 40"));
+    const sysCourses = tier3Courses.filter(c => c.title.startsWith("Sys 40"));
+    const secCourses = tier3Courses.filter(c => c.title.startsWith("Sec ") || c.title === "Math 302: Cryptography");
+    const graphicsCourses = tier3Courses.filter(c => c.title.startsWith("CS 40") && (c.title.includes("Graphics") || c.title.includes("Game") || c.title.includes("VR")));
+    const langCourses = tier3Courses.filter(c => c.title === "CS 401: Programming Languages & Compilers");
+    const emergingCourses = tier3Courses.filter(c => c.title.startsWith("CS 410") || c.title.startsWith("Fin 30") || c.title.startsWith("Bio 30"));
 
     const getCourse = (title) => courses.find(c => c.title === title) || { title, difficulty: "Unknown", tags: [], description: "" };
 
-    const CourseCard = ({ course, tier, track }) => {
+    const CourseCard = ({ course, tier }) => {
         const courseData = getCourse(course.title);
         const fullCourseData = CURRICULUM_DATA[course.title] || {};
         const tierColors = {
@@ -778,14 +777,6 @@ const CurriculumMap = ({ courses, onSelect }) => {
                         </div>
                     )}
 
-                    {/* Track Badge (Tier 3 only) */}
-                    {track && (
-                        <div className="mt-3">
-                            <span className="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-1 rounded">
-                                Track: {track}
-                            </span>
-                        </div>
-                    )}
                 </div>
             </div>
         );
@@ -826,94 +817,106 @@ const CurriculumMap = ({ courses, onSelect }) => {
                     </div>
                 </section>
 
-                {/* TIER 3: Senior Tracks / Specializations */}
+                {/* TIER 3: Advanced Specializations */}
                 <section>
                     <div className="mb-6">
                         <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
                             <span className="w-1 h-8 bg-emerald-500 rounded"></span>
-                            TIER 3: Senior Tracks / Specializations
+                            TIER 3: Advanced Specializations
                         </h2>
-                        <p className="text-gray-400 text-sm ml-4">Junior Spring / Senior Year • Pick one track to specialize</p>
+                        <p className="text-gray-400 text-sm ml-4">Junior Spring / Senior Year • Advanced topics organized by subject area</p>
                     </div>
 
                     <div className="space-y-8">
-                        {/* Track A: Artificial Intelligence */}
-                        <div>
-                            <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
-                                <span className="w-1 h-6 bg-emerald-500 rounded"></span>
-                                Track A: Artificial Intelligence
-                            </h3>
-                            <div className="grid md:grid-cols-2 gap-6">
-                                {trackA.map((course, i) => (
-                                    <CourseCard key={i} course={course} tier={3} track="Artificial Intelligence" />
-                                ))}
+                        {/* Artificial Intelligence & Machine Learning */}
+                        {aiCourses.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
+                                    <span className="w-1 h-6 bg-emerald-500 rounded"></span>
+                                    Artificial Intelligence & Machine Learning
+                                </h3>
+                                <div className={`grid gap-6 ${aiCourses.length === 3 ? 'md:grid-cols-3' : aiCourses.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-1'}`}>
+                                    {aiCourses.map((course, i) => (
+                                        <CourseCard key={i} course={course} tier={3} />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
-                        {/* Track B: Systems & Data */}
-                        <div>
-                            <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
-                                <span className="w-1 h-6 bg-emerald-500 rounded"></span>
-                                Track B: Systems & Data
-                            </h3>
-                            <div className="grid md:grid-cols-2 gap-6">
-                                {trackB.map((course, i) => (
-                                    <CourseCard key={i} course={course} tier={3} track="Systems & Data" />
-                                ))}
+                        {/* Systems & Infrastructure */}
+                        {sysCourses.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
+                                    <span className="w-1 h-6 bg-emerald-500 rounded"></span>
+                                    Systems & Infrastructure
+                                </h3>
+                                <div className={`grid gap-6 ${sysCourses.length === 3 ? 'md:grid-cols-3' : sysCourses.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-1'}`}>
+                                    {sysCourses.map((course, i) => (
+                                        <CourseCard key={i} course={course} tier={3} />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
-                        {/* Track C: Languages & Theory */}
-                        <div>
-                            <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
-                                <span className="w-1 h-6 bg-emerald-500 rounded"></span>
-                                Track C: Languages & Theory
-                            </h3>
-                            <div className="grid md:grid-cols-1 gap-6 max-w-2xl">
-                                {trackC.map((course, i) => (
-                                    <CourseCard key={i} course={course} tier={3} track="Languages & Theory" />
-                                ))}
+                        {/* Security & Cryptography */}
+                        {secCourses.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
+                                    <span className="w-1 h-6 bg-emerald-500 rounded"></span>
+                                    Security & Cryptography
+                                </h3>
+                                <div className={`grid gap-6 ${secCourses.length === 3 ? 'md:grid-cols-3' : secCourses.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-1'}`}>
+                                    {secCourses.map((course, i) => (
+                                        <CourseCard key={i} course={course} tier={3} />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
-                        {/* Track D: Cybersecurity */}
-                        <div>
-                            <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
-                                <span className="w-1 h-6 bg-emerald-500 rounded"></span>
-                                Track D: Cybersecurity
-                            </h3>
-                            <div className="grid md:grid-cols-2 gap-6">
-                                {trackD.map((course, i) => (
-                                    <CourseCard key={i} course={course} tier={3} track="Cybersecurity" />
-                                ))}
+                        {/* Graphics & Game Development */}
+                        {graphicsCourses.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
+                                    <span className="w-1 h-6 bg-emerald-500 rounded"></span>
+                                    Graphics & Game Development
+                                </h3>
+                                <div className={`grid gap-6 ${graphicsCourses.length === 3 ? 'md:grid-cols-3' : graphicsCourses.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-1'}`}>
+                                    {graphicsCourses.map((course, i) => (
+                                        <CourseCard key={i} course={course} tier={3} />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
-                        {/* Track E: Game Design & Simulation */}
-                        <div>
-                            <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
-                                <span className="w-1 h-6 bg-emerald-500 rounded"></span>
-                                Track E: Game Design & Simulation
-                            </h3>
-                            <div className="grid md:grid-cols-2 gap-6">
-                                {trackE.map((course, i) => (
-                                    <CourseCard key={i} course={course} tier={3} track="Game Design & Simulation" />
-                                ))}
+                        {/* Programming Languages & Theory */}
+                        {langCourses.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
+                                    <span className="w-1 h-6 bg-emerald-500 rounded"></span>
+                                    Programming Languages & Theory
+                                </h3>
+                                <div className="grid md:grid-cols-1 gap-6 max-w-2xl">
+                                    {langCourses.map((course, i) => (
+                                        <CourseCard key={i} course={course} tier={3} />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
-                        {/* Track F: Futurist Electives */}
-                        <div>
-                            <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
-                                <span className="w-1 h-6 bg-emerald-500 rounded"></span>
-                                Track F: Futurist Electives
-                            </h3>
-                            <div className="grid md:grid-cols-2 gap-6">
-                                {trackF.map((course, i) => (
-                                    <CourseCard key={i} course={course} tier={3} track="Futurist Electives" />
-                                ))}
+                        {/* Emerging Technologies */}
+                        {emergingCourses.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
+                                    <span className="w-1 h-6 bg-emerald-500 rounded"></span>
+                                    Emerging Technologies
+                                </h3>
+                                <div className={`grid gap-6 ${emergingCourses.length === 3 ? 'md:grid-cols-3' : emergingCourses.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-1'}`}>
+                                    {emergingCourses.map((course, i) => (
+                                        <CourseCard key={i} course={course} tier={3} />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </section>
             </div>
@@ -1746,26 +1749,95 @@ const ResourcesView = () => {
 
 
 const WeeklyActivitiesView = ({ user }) => {
-    const { problems } = useDailyProblem(1); // Reusing hook for demo data
+    const navigate = useNavigate();
+    const [weeklyProblems, setWeeklyProblems] = useState([]);
     const [problemStatuses, setProblemStatuses] = useState({});
+    const [loading, setLoading] = useState(true);
+    const currentWeek = Math.floor((getSchoolDayNumber(new Date()) - 1) / 5) + 1;
+    const currentYear = new Date().getFullYear();
 
     useEffect(() => {
         if (user) {
+            fetchWeeklyProblems();
             fetchProblemStatuses();
         }
     }, [user]);
 
+    const fetchWeeklyProblems = async () => {
+        setLoading(true);
+        try {
+            const problems = [];
+            const weekStartDay = (currentWeek - 1) * 5 + 1;
+            
+            // Daily LeetCode problems (5 per week, one per day)
+            for (let day = weekStartDay; day < weekStartDay + 5; day++) {
+                const leetcodeIndex = (day - 1) % LEETCODE_POOL.length;
+                const leetcodeProblem = LEETCODE_POOL[leetcodeIndex];
+                problems.push({
+                    type: 'leetcode',
+                    title: leetcodeProblem.title,
+                    url: leetcodeProblem.url,
+                    day: day
+                });
+            }
+
+            // 3 Weekly USACO problems (all 3 for the week, not per day)
+            const weekNum = Math.floor((weekStartDay - 1) / 5);
+            const contestIndex = weekNum % USACO_POOL.length;
+            const contest = USACO_POOL[contestIndex];
+            contest.problems.forEach((usacoProblem, index) => {
+                problems.push({
+                    type: 'usaco',
+                    title: usacoProblem.title,
+                    url: usacoProblem.url,
+                    day: weekStartDay, // All 3 problems are for the week
+                    problemNumber: index + 1 // Problem 1, 2, or 3
+                });
+            });
+
+            // Daily Codeforces problems (5 per week, one per day)
+            // Using a simple pattern - you can customize this with actual Codeforces problems
+            const codeforcesProblems = [
+                { title: 'Problem A', url: 'https://codeforces.com/problemset/problem/1926/A' },
+                { title: 'Problem B', url: 'https://codeforces.com/problemset/problem/1926/B' },
+                { title: 'Problem C', url: 'https://codeforces.com/problemset/problem/1926/C' },
+                { title: 'Problem D', url: 'https://codeforces.com/problemset/problem/1926/D' },
+                { title: 'Problem E', url: 'https://codeforces.com/problemset/problem/1926/E' }
+            ];
+            
+            for (let day = weekStartDay; day < weekStartDay + 5; day++) {
+                const codeforcesIndex = (day - weekStartDay) % codeforcesProblems.length;
+                const codeforcesProblem = codeforcesProblems[codeforcesIndex];
+                problems.push({
+                    type: 'codeforces',
+                    title: codeforcesProblem.title,
+                    url: codeforcesProblem.url,
+                    day: day
+                });
+            }
+
+            setWeeklyProblems(problems);
+        } catch (error) {
+            console.error('Error fetching weekly problems:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const fetchProblemStatuses = async () => {
+        if (!user?.id) return;
+
         try {
             const { data, error } = await supabase
-                .from('user_problem_statuses')
+                .from('weekly_activities')
                 .select('*')
-                .eq('user_id', user.id);
+                .eq('user_id', user.id)
+                .eq('week_number', currentWeek)
+                .eq('school_year', currentYear);
 
             if (error) {
-                // If table doesn't exist, ignore error and set empty status map
                 if (error.code === '42P01' || error.message?.includes('404')) {
-                    console.warn('user_problem_statuses table does not exist yet. Run the SQL schema in Supabase.');
+                    console.warn('weekly_activities table does not exist yet. Run the SQL schema in Supabase.');
                     setProblemStatuses({});
                     return;
                 }
@@ -1775,193 +1847,228 @@ const WeeklyActivitiesView = ({ user }) => {
             const statusMap = {};
             if (data) {
                 data.forEach(item => {
-                    statusMap[item.problem_url] = item.status;
+                    const key = `${item.problem_type}_${item.problem_title}`;
+                    statusMap[key] = item.status;
                 });
             }
             setProblemStatuses(statusMap);
         } catch (error) {
             console.error('Error fetching statuses:', error);
-            setProblemStatuses({}); // Set empty map on error
+            setProblemStatuses({});
         }
     };
 
-    const updateStatus = async (url, status) => {
-        if (!user) return;
+    const updateStatus = async (problem, status) => {
+        if (!user?.id) return;
 
+        const key = `${problem.type}_${problem.title}`;
+        
         // Optimistic update
-        setProblemStatuses(prev => ({ ...prev, [url]: status }));
+        setProblemStatuses(prev => ({ ...prev, [key]: status }));
 
         try {
             const { error } = await supabase
-                .from('user_problem_statuses')
+                .from('weekly_activities')
                 .upsert({
                     user_id: user.id,
-                    problem_url: url,
+                    week_number: currentWeek,
+                    school_year: currentYear,
+                    problem_type: problem.type,
+                    problem_title: problem.title,
+                    problem_url: problem.url,
                     status: status,
                     updated_at: new Date().toISOString()
-                }, { onConflict: 'user_id, problem_url' });
+                }, { 
+                    onConflict: 'user_id, week_number, school_year, problem_type, problem_title' 
+                });
 
             if (error) {
-                // If table doesn't exist, ignore error for demo purposes
                 if (error.code === '42P01' || error.message?.includes('404')) {
-                    console.warn('user_problem_statuses table does not exist yet. Run the SQL schema in Supabase.');
+                    console.warn('weekly_activities table does not exist yet.');
                     return;
                 }
                 throw error;
             }
         } catch (error) {
             console.error('Error updating status:', error);
+            // Revert optimistic update on error
+            setProblemStatuses(prev => {
+                const newStatuses = { ...prev };
+                delete newStatuses[key];
+                return newStatuses;
+            });
         }
     };
 
-    const handleProblemClick = (url) => {
-        if (!problemStatuses[url]) {
-            updateStatus(url, 'attempted');
+    const getStatusIcon = (problem) => {
+        const key = `${problem.type}_${problem.title}`;
+        const status = problemStatuses[key];
+
+        if (status === 'completed') {
+            return (
+                <button
+                    onClick={() => updateStatus(problem, 'not_attempted')}
+                    className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600 transition-colors"
+                    title="Completed - Click to reset"
+                >
+                    ✓
+                </button>
+            );
+        } else if (status === 'viewed') {
+            return (
+                <button
+                    onClick={() => updateStatus(problem, 'completed')}
+                    className="w-8 h-8 rounded-full bg-yellow-500 text-white flex items-center justify-center hover:bg-yellow-600 transition-colors"
+                    title="Viewed - Click to mark completed"
+                >
+                    👁
+                </button>
+            );
+        } else {
+            return (
+                <button
+                    onClick={() => updateStatus(problem, 'viewed')}
+                    className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors"
+                    title="Not attempted - Click to mark viewed"
+                >
+                    ✕
+                </button>
+            );
         }
     };
 
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'solved': return 'bg-green-50 border-green-200';
-            case 'dnf': return 'bg-red-50 border-red-200';
-            case 'attempted': return 'bg-yellow-50 border-yellow-200';
-            default: return 'bg-gray-50 border-transparent';
-        }
-    };
+    if (!user) {
+        return (
+            <div className="max-w-7xl mx-auto px-4 py-8 text-center">
+                <h2 className="text-3xl font-bold text-gvcs-navy mb-4">Weekly Activities</h2>
+                <p className="text-gray-600 mb-4">Please log in to view your weekly activities.</p>
+            </div>
+        );
+    }
+
+    const leetcodeProblems = weeklyProblems.filter(p => p.type === 'leetcode');
+    const usacoProblems = weeklyProblems.filter(p => p.type === 'usaco');
+    const codeforcesProblems = weeklyProblems.filter(p => p.type === 'codeforces');
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 space-y-12">
-            <div className="text-center">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+            <div className="mb-6">
+                <button
+                    onClick={() => navigate('/dashboard')}
+                    className="mb-4 text-sm text-gray-500 hover:text-gvcs-navy flex items-center gap-1"
+                >
+                    <Icons.ArrowRight className="rotate-180" /> Back to Dashboard
+                </button>
                 <h2 className="text-3xl font-bold text-gvcs-navy mb-2">Weekly Activities</h2>
-                <p className="text-gray-600">Sharpen your skills with this week's curated challenges.</p>
+                <p className="text-gray-600">Week {currentWeek} • Track your progress on this week's problems</p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* USACO Column */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
-                    <div className="bg-amber-50 px-4 py-3 border-b border-amber-100 flex justify-between items-center">
-                        <h3 className="font-bold text-amber-800">USACO Bronze</h3>
-                        <Icons.Brain className="text-amber-600 w-5 h-5" />
-                    </div>
-                    <div className="p-4 flex-grow space-y-4">
-                        <div className="space-y-2">
-                            {[
-                                { name: 'Candy Cane Feast', url: 'http://www.usaco.org/index.php?page=viewproblem2&cpid=1347' },
-                                { name: 'Cowntact Tracing 2', url: 'http://usaco.org/index.php?page=viewproblem2&cpid=1348' },
-                                { name: 'Farmer John Actually Farms', url: 'http://usaco.org/index.php?page=viewproblem2&cpid=1349' }
-                            ].map((p, i) => (
-                                <div key={i} className={`rounded-lg border transition-all ${getStatusColor(problemStatuses[p.url])}`}>
-                                    <a
-                                        href={p.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={() => handleProblemClick(p.url)}
-                                        className="block p-3 hover:opacity-80"
-                                    >
-                                        <div className="text-sm font-bold text-gray-800">{p.name}</div>
-                                        {problemStatuses[p.url] && (
-                                            <div className="text-xs font-bold uppercase mt-1 flex items-center gap-1">
-                                                {problemStatuses[p.url] === 'solved' && <span className="text-green-700">✓ Solved</span>}
-                                                {problemStatuses[p.url] === 'dnf' && <span className="text-red-700">✕ DNF</span>}
-                                                {problemStatuses[p.url] === 'attempted' && <span className="text-yellow-700">⚠ Attempted</span>}
+            {loading ? (
+                <div className="text-center py-12">
+                    <p className="text-gray-600">Loading problems...</p>
+                </div>
+            ) : (
+                <div className="space-y-8">
+                    {/* LeetCode Section */}
+                    {leetcodeProblems.length > 0 && (
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <div className="bg-green-50 px-6 py-4 border-b border-green-100">
+                                <h3 className="text-xl font-bold text-green-800 flex items-center gap-2">
+                                    <Icons.Code className="w-6 h-6" /> LeetCode
+                                </h3>
+                            </div>
+                            <div className="p-6">
+                                <div className="space-y-3">
+                                    {leetcodeProblems.map((problem, i) => (
+                                        <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <div className="flex-1">
+                                                <a
+                                                    href={problem.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors"
+                                                >
+                                                    {problem.title}
+                                                </a>
+                                                <div className="text-sm text-gray-500 mt-1">Day {problem.day}</div>
                                             </div>
-                                        )}
-                                    </a>
-                                    {problemStatuses[p.url] && problemStatuses[p.url] !== 'solved' && (
-                                        <div className="flex border-t border-gray-200 divide-x divide-gray-200">
-                                            <button
-                                                onClick={() => updateStatus(p.url, 'solved')}
-                                                className="flex-1 py-1 text-xs font-bold text-green-600 hover:bg-green-100 transition-colors"
-                                            >
-                                                Solved
-                                            </button>
-                                            <button
-                                                onClick={() => updateStatus(p.url, 'dnf')}
-                                                className="flex-1 py-1 text-xs font-bold text-red-600 hover:bg-red-100 transition-colors"
-                                            >
-                                                DNF
-                                            </button>
+                                            {getStatusIcon(problem)}
                                         </div>
-                                    )}
+                                    ))}
                                 </div>
-                            ))}
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    )}
 
-                {/* LeetCode Column */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
-                    <div className="bg-green-50 px-4 py-3 border-b border-green-100 flex justify-between items-center">
-                        <h3 className="font-bold text-green-800">LeetCode Daily</h3>
-                        <Icons.Code className="text-green-600 w-5 h-5" />
-                    </div>
-                    <div className="p-4 flex-grow space-y-4">
-                        <div className="p-4 bg-green-50/50 rounded-xl border border-green-100 text-center">
-                            <div className="text-2xl font-bold text-green-700 mb-1">Day 12</div>
-                            <div className="text-sm font-medium text-green-800">Two Sum II</div>
-                            <a
-                                href="https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="mt-3 block w-full py-2 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700 transition-colors"
-                            >
-                                Solve Now
-                            </a>
+                    {/* USACO Section - 3 Weekly Problems */}
+                    {usacoProblems.length > 0 && (
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <div className="bg-amber-50 px-6 py-4 border-b border-amber-100">
+                                <h3 className="text-xl font-bold text-amber-800 flex items-center gap-2">
+                                    <Icons.Brain className="w-6 h-6" /> USACO (3 Weekly Problems)
+                                </h3>
+                            </div>
+                            <div className="p-6">
+                                <div className="space-y-3">
+                                    {usacoProblems.map((problem, i) => (
+                                        <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <div className="flex-1">
+                                                <a
+                                                    href={problem.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors"
+                                                >
+                                                    {problem.title}
+                                                </a>
+                                                <div className="text-sm text-gray-500 mt-1">Problem {problem.problemNumber || i + 1} of 3</div>
+                                            </div>
+                                            {getStatusIcon(problem)}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
-                        <div className="text-xs text-center text-gray-400">Streak: 12 Days 🔥</div>
-                    </div>
-                </div>
+                    )}
 
-                {/* Codeforces Column */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
-                    <div className="bg-blue-50 px-4 py-3 border-b border-blue-100 flex justify-between items-center">
-                        <h3 className="font-bold text-blue-800">Codeforces</h3>
-                        <Icons.Sparkles className="text-blue-600 w-5 h-5" />
-                    </div>
-                    <div className="p-4 flex-grow space-y-4">
-                        <div className="text-sm text-gray-600">Contest: <span className="font-bold">Div 3 #921</span></div>
-                        <div className="p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-                            <div className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Virtual Contest</div>
-                            <div className="text-sm font-bold text-gray-800 mb-1">Round #921 (Div. 3)</div>
-                            <div className="text-xs text-gray-500 mb-3">7 Problems • 2 Hours</div>
-                            <a
-                                href="https://codeforces.com/contest/1926"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block w-full py-2 border border-blue-600 text-blue-600 rounded-lg text-sm font-bold hover:bg-blue-50 transition-colors text-center"
-                            >
-                                Start Virtual
-                            </a>
+                    {/* Codeforces Section */}
+                    {codeforcesProblems.length > 0 && (
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <div className="bg-blue-50 px-6 py-4 border-b border-blue-100">
+                                <h3 className="text-xl font-bold text-blue-800 flex items-center gap-2">
+                                    <Icons.Sparkles className="w-6 h-6" /> Codeforces
+                                </h3>
+                            </div>
+                            <div className="p-6">
+                                <div className="space-y-3">
+                                    {codeforcesProblems.map((problem, i) => (
+                                        <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <div className="flex-1">
+                                                <a
+                                                    href={problem.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors"
+                                                >
+                                                    {problem.title}
+                                                </a>
+                                                <div className="text-sm text-gray-500 mt-1">Day {problem.day}</div>
+                                            </div>
+                                            {getStatusIcon(problem)}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    )}
 
-                {/* GV Project Column */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
-                    <div className="bg-purple-50 px-4 py-3 border-b border-purple-100 flex justify-between items-center">
-                        <h3 className="font-bold text-purple-800">GV Project</h3>
-                        <Icons.Lightbulb className="text-purple-600 w-5 h-5" />
-                    </div>
-                    <div className="p-4 flex-grow space-y-4">
-                        <div className="text-sm text-gray-600">Theme: <span className="font-bold">Club Platform</span></div>
-                        <div className="p-4 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl text-white">
-                            <div className="text-xs font-bold opacity-75 uppercase tracking-wider mb-2">Active Sprint</div>
-                            <div className="font-bold text-lg mb-2">Finalize Contest Platform</div>
-                            <p className="text-xs opacity-90 leading-relaxed mb-4">
-                                We are building our own competitive programming platform. Help us ship v1.0!
-                            </p>
-                            <a
-                                href="https://github.com/Archontas123/GVCS-Website"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block w-full py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg text-sm font-bold transition-colors text-center backdrop-blur-sm"
-                            >
-                                Contribute
-                            </a>
+                    {weeklyProblems.length === 0 && (
+                        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+                            <p className="text-gray-600">No problems available for this week.</p>
                         </div>
-                    </div>
+                    )}
                 </div>
-            </div>
+            )}
         </div>
     );
 };
@@ -2580,8 +2687,8 @@ This document will be used by each team member with their own AI coding assistan
                                 {i + 1}
                             </button>
                         ))}
-                    </div>
-                    <button onClick={onCancel} className="text-gray-500 hover:text-gray-700">Cancel</button>
+                </div>
+                <button onClick={onCancel} className="text-gray-500 hover:text-gray-700">Cancel</button>
                 </div>
             </div>
 
@@ -2650,7 +2757,7 @@ This document will be used by each team member with their own AI coding assistan
                                     <div className="flex justify-between items-start mb-1">
                                         <div>
                                             <div className="flex items-center gap-2">
-                                                <h5 className="font-bold text-gray-900">Cursor</h5>
+                                            <h5 className="font-bold text-gray-900">Cursor</h5>
                                                 <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">⭐ Recommended</span>
                                             </div>
                                             <p className="text-xs text-gray-600">AI-powered code editor (VS Code fork)</p>
@@ -2675,7 +2782,7 @@ This document will be used by each team member with their own AI coding assistan
                                     <div className="flex justify-between items-start mb-1">
                                         <div>
                                             <div className="flex items-center gap-2">
-                                                <h5 className="font-bold text-gray-900">Claude Code (via Cline)</h5>
+                                            <h5 className="font-bold text-gray-900">Claude Code (via Cline)</h5>
                                                 <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">⭐ Recommended</span>
                                             </div>
                                             <p className="text-xs text-gray-600">VS Code extension using Claude AI</p>
@@ -2733,7 +2840,7 @@ This document will be used by each team member with their own AI coding assistan
                                     <div className="flex justify-between items-start mb-1">
                                         <div>
                                             <div className="flex items-center gap-2">
-                                                <h5 className="font-bold text-gray-900">Antigravity</h5>
+                                            <h5 className="font-bold text-gray-900">Antigravity</h5>
                                                 <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">⭐ Recommended</span>
                                             </div>
                                             <p className="text-xs text-gray-600">AI code generation tool</p>
@@ -2765,7 +2872,7 @@ This document will be used by each team member with their own AI coding assistan
                         >
                             Continue
                         </button>
-                    </div>
+                        </div>
                 </div>
             )}
 
@@ -2777,127 +2884,127 @@ This document will be used by each team member with their own AI coding assistan
                         Fill out the hackathon details below, then use the generated prompt with your LLM to brainstorm ideas.
                     </p>
 
-                    <div className="mb-4">
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Team Members</label>
-                        <div className="flex gap-2 mb-2">
-                            <input
-                                type="text"
-                                value={teamMemberInput}
-                                onChange={(e) => setTeamMemberInput(e.target.value)}
-                                onKeyPress={(e) => {
-                                    if (e.key === 'Enter' && teamMemberInput.trim()) {
-                                        setHackathonData({
-                                            ...hackathonData,
-                                            team_members: [...hackathonData.team_members, teamMemberInput.trim()]
-                                        });
-                                        setTeamMemberInput('');
-                                    }
-                                }}
-                                placeholder="Enter name and press Enter"
-                                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
-                            />
+                        <div className="mb-4">
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Team Members</label>
+                            <div className="flex gap-2 mb-2">
+                                <input
+                                    type="text"
+                                    value={teamMemberInput}
+                                    onChange={(e) => setTeamMemberInput(e.target.value)}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter' && teamMemberInput.trim()) {
+                                            setHackathonData({
+                                                ...hackathonData,
+                                                team_members: [...hackathonData.team_members, teamMemberInput.trim()]
+                                            });
+                                            setTeamMemberInput('');
+                                        }
+                                    }}
+                                    placeholder="Enter name and press Enter"
+                                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+                                />
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {hackathonData.team_members.map((member, i) => (
+                                    <span key={i} className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm flex items-center gap-2">
+                                        {member}
+                                        <button
+                                            onClick={() => setHackathonData({
+                                                ...hackathonData,
+                                                team_members: hackathonData.team_members.filter((_, idx) => idx !== i)
+                                            })}
+                                            className="text-purple-700 hover:text-purple-900"
+                                        >
+                                            ×
+                                        </button>
+                                    </span>
+                                ))}
+                            </div>
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                            {hackathonData.team_members.map((member, i) => (
-                                <span key={i} className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm flex items-center gap-2">
-                                    {member}
-                                    <button
-                                        onClick={() => setHackathonData({
-                                            ...hackathonData,
-                                            team_members: hackathonData.team_members.filter((_, idx) => idx !== i)
-                                        })}
-                                        className="text-purple-700 hover:text-purple-900"
-                                    >
-                                        ×
-                                    </button>
-                                </span>
-                            ))}
-                        </div>
-                    </div>
 
-                    <div className="mb-4">
+                        <div className="mb-4">
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Prize Categories</label>
                         <p className="text-xs text-gray-500 mb-2">List all available prize categories. The AI will help you pick ones you have a good shot at.</p>
-                        <div className="flex gap-2 mb-2">
+                            <div className="flex gap-2 mb-2">
+                                <input
+                                    type="text"
+                                    value={trackInput}
+                                    onChange={(e) => setTrackInput(e.target.value)}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter' && trackInput.trim()) {
+                                            setHackathonData({
+                                                ...hackathonData,
+                                                tracks: [...hackathonData.tracks, trackInput.trim()]
+                                            });
+                                            setTrackInput('');
+                                        }
+                                    }}
+                                placeholder="e.g., Best Overall, Best Design, Best Education Hack, etc."
+                                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+                                />
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {hackathonData.tracks.map((track, i) => (
+                                    <span key={i} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm flex items-center gap-2">
+                                        {track}
+                                        <button
+                                            onClick={() => setHackathonData({
+                                                ...hackathonData,
+                                                tracks: hackathonData.tracks.filter((_, idx) => idx !== i)
+                                            })}
+                                            className="text-blue-700 hover:text-blue-900"
+                                        >
+                                            ×
+                                        </button>
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Hackathon Name</label>
                             <input
                                 type="text"
-                                value={trackInput}
-                                onChange={(e) => setTrackInput(e.target.value)}
-                                onKeyPress={(e) => {
-                                    if (e.key === 'Enter' && trackInput.trim()) {
-                                        setHackathonData({
-                                            ...hackathonData,
-                                            tracks: [...hackathonData.tracks, trackInput.trim()]
-                                        });
-                                        setTrackInput('');
-                                    }
-                                }}
-                                placeholder="e.g., Best Overall, Best Design, Best Education Hack, etc."
-                                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+                                value={hackathonData.hackathon_name}
+                                onChange={(e) => setHackathonData({ ...hackathonData, hackathon_name: e.target.value })}
+                                placeholder="e.g., PennApps, HackMIT"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                             />
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                            {hackathonData.tracks.map((track, i) => (
-                                <span key={i} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm flex items-center gap-2">
-                                    {track}
-                                    <button
-                                        onClick={() => setHackathonData({
-                                            ...hackathonData,
-                                            tracks: hackathonData.tracks.filter((_, idx) => idx !== i)
-                                        })}
-                                        className="text-blue-700 hover:text-blue-900"
-                                    >
-                                        ×
-                                    </button>
-                                </span>
-                            ))}
+
+                        <div className="mb-4">
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Theme (optional)</label>
+                            <input
+                                type="text"
+                                value={hackathonInfo.theme}
+                                onChange={(e) => setHackathonInfo({ ...hackathonInfo, theme: e.target.value })}
+                                placeholder="e.g., Education, Healthcare"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            />
                         </div>
-                    </div>
 
-                    <div className="mb-4">
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Hackathon Name</label>
-                        <input
-                            type="text"
-                            value={hackathonData.hackathon_name}
-                            onChange={(e) => setHackathonData({ ...hackathonData, hackathon_name: e.target.value })}
-                            placeholder="e.g., PennApps, HackMIT"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Theme (optional)</label>
-                        <input
-                            type="text"
-                            value={hackathonInfo.theme}
-                            onChange={(e) => setHackathonInfo({ ...hackathonInfo, theme: e.target.value })}
-                            placeholder="e.g., Education, Healthcare"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        />
-                    </div>
-
-                    <div className="mb-4">
+                        <div className="mb-4">
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Tool-Specific Awards</label>
                         <p className="text-xs text-gray-500 mb-2">Awards that require using specific tools/APIs (e.g., Best Use of Twilio, Best AWS Integration)</p>
                         <textarea
                             value={hackathonInfo.tool_specific_awards}
                             onChange={(e) => setHackathonInfo({ ...hackathonInfo, tool_specific_awards: e.target.value })}
                             placeholder="e.g., Best Use of Twilio API, Best Mobile App, Best AWS Integration"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                             rows="2"
-                        />
-                    </div>
+                            />
+                        </div>
 
-                    <div className="mb-4">
+                        <div className="mb-4">
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Sponsors</label>
-                        <textarea
+                            <textarea
                             value={hackathonInfo.sponsors}
                             onChange={(e) => setHackathonInfo({ ...hackathonInfo, sponsors: e.target.value })}
                             placeholder="List all sponsors for the event"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                             rows="3"
-                        />
-                    </div>
+                            />
+                        </div>
 
                     <div className="mb-4">
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Judge Demographic</label>
@@ -2907,8 +3014,8 @@ This document will be used by each team member with their own AI coding assistan
                             onChange={(e) => setHackathonInfo({ ...hackathonInfo, judge_demographic: e.target.value })}
                             placeholder="e.g., Industry professionals, VCs, University professors"
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        />
-                    </div>
+                            />
+                        </div>
 
                     <div className="mb-4">
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Additional Context</label>
@@ -3059,13 +3166,13 @@ This document will be used by each team member with their own AI coding assistan
                         {/* Text Box Option */}
                         <div>
                             <label className="block text-xs font-semibold text-gray-600 mb-2">Option 2: Paste Text</label>
-                            <textarea
-                                value={hackathonData.master_document}
-                                onChange={(e) => setHackathonData({ ...hackathonData, master_document: e.target.value })}
+                        <textarea
+                            value={hackathonData.master_document}
+                            onChange={(e) => setHackathonData({ ...hackathonData, master_document: e.target.value })}
                                 placeholder="Paste your complete master document here. It should include: project overview, technical architecture, step-by-step tasks for each team member, team coordination protocol, git workflow, deployment plan, and demo preparation..."
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs"
-                                rows="25"
-                            />
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-xs"
+                            rows="25"
+                        />
                         </div>
                     </div>
 
@@ -3266,7 +3373,9 @@ This document will be used by each team member with their own AI coding assistan
 
 // Hackathon Project View Component
 const HackathonProgramView = ({ hackathon, user, onBack, onUpdate }) => {
-    const [currentStep, setCurrentStep] = useState(hackathon.current_step || 0);
+    // Use local state that we control - don't sync from props to avoid conflicts
+    const [currentStep, setCurrentStep] = useState(() => hackathon.current_step || 0);
+    const lastSavedStepRef = useRef(hackathon.current_step || 0);
 
     const steps = [
         'Download Tools',
@@ -3278,6 +3387,13 @@ const HackathonProgramView = ({ hackathon, user, onBack, onUpdate }) => {
     ];
 
     const updateStep = async (newStep) => {
+        if (newStep === currentStep) return; // Already on this step
+        
+        // Optimistic update - change UI immediately
+        setCurrentStep(newStep);
+        lastSavedStepRef.current = newStep;
+        
+        // Update database in background (don't call onUpdate to avoid refresh that resets state)
         try {
             const { error } = await supabase
                 .from('hackathon_programs')
@@ -3287,11 +3403,17 @@ const HackathonProgramView = ({ hackathon, user, onBack, onUpdate }) => {
                 })
                 .eq('id', hackathon.id);
 
-            if (error) throw error;
-            setCurrentStep(newStep);
-            onUpdate();
+            if (error) {
+                console.error('Error updating step:', error);
+                // Revert on error
+                setCurrentStep(lastSavedStepRef.current);
+            }
+            // Don't call onUpdate() - it causes a refresh that resets the step
+            // The step will persist in the database and be loaded on next page visit
         } catch (error) {
             console.error('Error updating step:', error);
+            // Revert on error
+            setCurrentStep(lastSavedStepRef.current);
         }
     };
 
@@ -3306,12 +3428,12 @@ const HackathonProgramView = ({ hackathon, user, onBack, onUpdate }) => {
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
                 <h2 className="text-2xl font-bold text-gvcs-navy mb-2">{hackathon.hackathon_name}</h2>
-                <p className="text-gray-600">
+                <p className="text-gray-600 mb-4">
                     {hackathon.hackathon_date ? new Date(hackathon.hackathon_date).toLocaleDateString() : 'Date TBD'}
                 </p>
 
                 {/* Progress */}
-                <div className="mt-4">
+                <div className="mb-6">
                     <div className="flex justify-between text-sm text-gray-600 mb-2">
                         <span>Progress</span>
                         <span>Step {currentStep + 1} of {steps.length}</span>
@@ -3321,6 +3443,63 @@ const HackathonProgramView = ({ hackathon, user, onBack, onUpdate }) => {
                             className="bg-purple-600 h-2 rounded-full transition-all"
                             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
                         ></div>
+                    </div>
+                </div>
+
+                {/* Project Information Summary */}
+                <div className="border-t border-gray-200 pt-6">
+                    <h3 className="text-lg font-bold text-gray-800 mb-4">Project Information</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {/* Team Members */}
+                        {hackathon.team_members && hackathon.team_members.length > 0 && (
+                            <div>
+                                <h4 className="text-sm font-semibold text-gray-700 mb-2">Team Members</h4>
+                                <div className="flex flex-wrap gap-2">
+                                    {hackathon.team_members.map((member, i) => (
+                                        <span key={i} className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                                            {member}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Tracks / Prize Categories */}
+                        {hackathon.tracks && hackathon.tracks.length > 0 && (
+                            <div>
+                                <h4 className="text-sm font-semibold text-gray-700 mb-2">Prize Categories / Tracks</h4>
+                                <div className="flex flex-wrap gap-2">
+                                    {hackathon.tracks.map((track, i) => (
+                                        <span key={i} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                                            {track}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Discord Link */}
+                        {hackathon.discord_link && (
+                            <div>
+                                <h4 className="text-sm font-semibold text-gray-700 mb-2">Discord Link</h4>
+                                <a 
+                                    href={hackathon.discord_link} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="text-blue-600 hover:underline text-sm break-all"
+                                >
+                                    {hackathon.discord_link}
+                                </a>
+                            </div>
+                        )}
+
+                        {/* Created Date */}
+                        <div>
+                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Created</h4>
+                            <p className="text-sm text-gray-600">
+                                {hackathon.created_at ? new Date(hackathon.created_at).toLocaleDateString() : 'N/A'}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3343,56 +3522,196 @@ const HackathonProgramView = ({ hackathon, user, onBack, onUpdate }) => {
                 ))}
             </div>
 
+            {/* Documents & Resources Section */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                <h3 className="text-xl font-bold mb-4">Documents & Resources</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                    {/* Ideation Prompt */}
+                    {hackathon.ideation_prompt && (
+                        <div className="border border-gray-200 rounded-lg p-4">
+                            <div className="flex justify-between items-start mb-2">
+                                <h4 className="font-semibold text-gray-800">Ideation Prompt</h4>
+                                <button
+                                    onClick={() => {
+                                        const blob = new Blob([hackathon.ideation_prompt], { type: 'text/plain' });
+                                        const url = URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = `${hackathon.hackathon_name}_ideation_prompt.txt`;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                        URL.revokeObjectURL(url);
+                                    }}
+                                    className="text-xs text-blue-600 hover:underline"
+                                >
+                                    Download
+                                </button>
+                            </div>
+                            <div className="border border-gray-200 rounded-lg p-3 bg-gray-50 max-h-48 overflow-y-auto">
+                                <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono">{hackathon.ideation_prompt}</pre>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Master Document Prompt */}
+                    {hackathon.master_document_prompt && (
+                        <div className="border border-gray-200 rounded-lg p-4">
+                            <div className="flex justify-between items-start mb-2">
+                                <h4 className="font-semibold text-gray-800">Master Document Prompt</h4>
+                                <button
+                                    onClick={() => {
+                                        const blob = new Blob([hackathon.master_document_prompt], { type: 'text/plain' });
+                                        const url = URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = `${hackathon.hackathon_name}_master_document_prompt.txt`;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                        URL.revokeObjectURL(url);
+                                    }}
+                                    className="text-xs text-blue-600 hover:underline"
+                                >
+                                    Download
+                                </button>
+                            </div>
+                            <div className="border border-gray-200 rounded-lg p-3 bg-gray-50 max-h-48 overflow-y-auto">
+                                <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono">{hackathon.master_document_prompt}</pre>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Finalized Idea */}
+                    {hackathon.finalized_idea && (
+                        <div className="border border-gray-200 rounded-lg p-4">
+                            <div className="flex justify-between items-start mb-2">
+                                <h4 className="font-semibold text-gray-800">Finalized Idea</h4>
+                                <button
+                                    onClick={() => {
+                                        const blob = new Blob([hackathon.finalized_idea], { type: 'text/plain' });
+                                        const url = URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = `${hackathon.hackathon_name}_finalized_idea.txt`;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                        URL.revokeObjectURL(url);
+                                    }}
+                                    className="text-xs text-blue-600 hover:underline"
+                                >
+                                    Download
+                                </button>
+                            </div>
+                            <div className="border border-gray-200 rounded-lg p-3 bg-gray-50 max-h-48 overflow-y-auto">
+                                <pre className="text-sm text-gray-700 whitespace-pre-wrap">{hackathon.finalized_idea}</pre>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Master Document */}
+                    {hackathon.master_document && (
+                        <div className="border border-gray-200 rounded-lg p-4 md:col-span-2">
+                            <div className="flex justify-between items-start mb-2">
+                                <h4 className="font-semibold text-gray-800">Master Document</h4>
+                                <button
+                                    onClick={() => {
+                                        const blob = new Blob([hackathon.master_document], { type: 'text/plain' });
+                                        const url = URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = `${hackathon.hackathon_name}_master_document.txt`;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                        URL.revokeObjectURL(url);
+                                    }}
+                                    className="text-xs text-blue-600 hover:underline"
+                                >
+                                    Download
+                                </button>
+                            </div>
+                            <div className="border border-gray-200 rounded-lg p-3 bg-gray-50 max-h-64 overflow-y-auto">
+                                <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono">{hackathon.master_document}</pre>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+
             {/* Step Content */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <h3 className="text-xl font-bold mb-4">{steps[currentStep]}</h3>
 
                 {currentStep === 0 && (
                     <div className="space-y-4">
-                        <div>
-                            <h4 className="font-semibold mb-2">Discord Link</h4>
-                            <a href={hackathon.discord_link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                                {hackathon.discord_link}
-                            </a>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold mb-2">Team Members</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {hackathon.team_members?.map((member, i) => (
-                                    <span key={i} className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
-                                        {member}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold mb-2">Tracks</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {hackathon.tracks?.map((track, i) => (
-                                    <span key={i} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                                        {track}
-                                    </span>
-                                ))}
-                            </div>
+                        <p className="text-gray-600">
+                            Review your project information above. Make sure all team members have access to the Discord link and understand the prize categories you're targeting.
+                        </p>
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 className="font-semibold text-blue-900 mb-2">Quick Links</h4>
+                            <ul className="space-y-2 text-sm text-blue-800">
+                                {hackathon.discord_link && (
+                                    <li>
+                                        <a href={hackathon.discord_link} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                            → Join Discord Server
+                                        </a>
+                                    </li>
+                                )}
+                                <li>→ Download required tools (Cursor, Lovable, etc.)</li>
+                                <li>→ Set up development environment</li>
+                            </ul>
                         </div>
                     </div>
                 )}
 
-                {currentStep === 1 && hackathon.finalized_idea && (
-                    <div>
-                        <h4 className="font-semibold mb-2">Finalized Idea</h4>
-                        <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                            <pre className="text-sm text-gray-700 whitespace-pre-wrap">{hackathon.finalized_idea}</pre>
-                        </div>
+                {currentStep === 1 && (
+                    <div className="space-y-4">
+                        {hackathon.finalized_idea ? (
+                            <>
+                                <p className="text-gray-600">
+                                    Your finalized idea is shown in the Documents & Resources section above. Use this to guide your development.
+                                </p>
+                                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                                    <p className="text-sm text-green-800">
+                                        ✓ Idea finalized. You can reference it above or download it for easy access.
+                                    </p>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                <p className="text-sm text-yellow-800">
+                                    No finalized idea yet. Complete the ideation step in the wizard to generate your project idea.
+                                </p>
+                            </div>
+                        )}
                     </div>
                 )}
 
-                {currentStep === 2 && hackathon.master_document && (
-                    <div>
-                        <h4 className="font-semibold mb-2">Master Document</h4>
-                        <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 max-h-96 overflow-y-auto">
-                            <pre className="text-xs text-gray-700 whitespace-pre-wrap">{hackathon.master_document}</pre>
-                        </div>
+                {currentStep === 2 && (
+                    <div className="space-y-4">
+                        {hackathon.master_document ? (
+                            <>
+                                <p className="text-gray-600">
+                                    Your master document is shown in the Documents & Resources section above. This is your complete execution plan.
+                                </p>
+                                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                                    <p className="text-sm text-green-800 mb-2">
+                                        ✓ Master document created. Use this to coordinate with your team and AI assistants.
+                                    </p>
+                                    <p className="text-xs text-green-700">
+                                        Tip: Each team member should copy the master document and paste it into their LLM (Claude, GPT-4, etc.) to get personalized task breakdowns.
+                                    </p>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                <p className="text-sm text-yellow-800">
+                                    No master document yet. Complete the master document step in the wizard to generate your execution plan.
+                                </p>
+                            </div>
+                        )}
                     </div>
                 )}
 
@@ -3543,8 +3862,18 @@ const AdminPanel = ({ user, onBack }) => {
                 .select('*, user_id')
                 .order('created_at', { ascending: false });
 
-            if (profilesError && profilesError.code !== 'PGRST116' && profilesError.code !== '42P01') throw profilesError;
-            setAllProfiles(profilesData || []);
+            // Handle 406 and other errors gracefully
+            if (profilesError) {
+                if (profilesError.code === 'PGRST116' || profilesError.code === '42P01' || profilesError.code === '406') {
+                    console.warn('user_profiles table not accessible:', profilesError.code);
+                    setAllProfiles([]);
+                } else {
+                    console.error('Error fetching profiles:', profilesError);
+                    setAllProfiles([]);
+                }
+            } else {
+                setAllProfiles(profilesData || []);
+            }
 
             // Fetch all problem statuses
             const { data: problemStatusesData, error: problemStatusesError } = await supabase
@@ -3824,16 +4153,10 @@ const AdminPanel = ({ user, onBack }) => {
 
 const Dashboard = ({ user }) => {
     const location = useLocation();
-    const [activeSection, setActiveSection] = useState('courses'); // 'courses' or 'hackathons'
-
-    // Check URL for tab parameter (for navigation from hackathon hub)
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const tab = params.get('tab');
-        if (tab === 'hackathons') {
-            setActiveSection('hackathons');
-        }
-    }, [location.search]);
+    const navigate = useNavigate();
+    const [weeklyProgress, setWeeklyProgress] = useState(null);
+    const [weeklyHistory, setWeeklyHistory] = useState([]);
+    const [isWeeklyProgressExpanded, setIsWeeklyProgressExpanded] = useState(false);
     const [courses, setCourses] = useState([]);
     const [hackathons, setHackathons] = useState([]);
     const [profile, setProfile] = useState(null);
@@ -3878,6 +4201,130 @@ const Dashboard = ({ user }) => {
 
             setCourses(transformedCourses);
 
+            // Fetch weekly progress for current week
+            const currentWeek = Math.floor((getSchoolDayNumber(new Date()) - 1) / 5) + 1;
+            const currentYear = new Date().getFullYear();
+            const { data: weeklyData, error: weeklyError } = await supabase
+                .from('weekly_activities')
+                .select('*')
+                .eq('user_id', user.id)
+                .eq('week_number', currentWeek)
+                .eq('school_year', currentYear);
+
+            if (!weeklyError && weeklyData) {
+                const completed = weeklyData.filter(a => a.status === 'completed').length;
+                const viewed = weeklyData.filter(a => a.status === 'viewed').length;
+                const total = weeklyData.length;
+                setWeeklyProgress({
+                    completed,
+                    viewed,
+                    total,
+                    percentage: total > 0 ? Math.round((completed / total) * 100) : 0
+                });
+            } else {
+                setWeeklyProgress({ completed: 0, viewed: 0, total: 0, percentage: 0 });
+            }
+
+            // Fetch weekly history (all weeks)
+            const { data: historyData, error: historyError } = await supabase
+                .from('weekly_activities')
+                .select('*')
+                .eq('user_id', user.id)
+                .eq('school_year', currentYear)
+                .order('week_number', { ascending: false });
+
+            if (!historyError && historyData) {
+                // Group by week
+                const weekMap = {};
+                historyData.forEach(activity => {
+                    if (!weekMap[activity.week_number]) {
+                        weekMap[activity.week_number] = [];
+                    }
+                    weekMap[activity.week_number].push(activity);
+                });
+
+                // Get all weeks that have data, plus current week
+                const allWeeks = new Set([...Object.keys(weekMap).map(Number), currentWeek]);
+                const maxWeek = Math.max(...Array.from(allWeeks));
+
+                // Convert to array and calculate progress for each week
+                const history = Array.from({ length: maxWeek }, (_, i) => {
+                    const weekNum = maxWeek - i; // Start from most recent
+                    const weekActivities = weekMap[weekNum] || [];
+                    
+                    // Generate expected problems for this week
+                    const weekStartDay = (weekNum - 1) * 5 + 1;
+                    const expectedLeetcode = [];
+                    const expectedUsaco = [];
+                    const expectedCodeforces = [];
+
+                    // LeetCode: 5 problems (one per day)
+                    for (let day = weekStartDay; day < weekStartDay + 5; day++) {
+                        const leetcodeIndex = (day - 1) % LEETCODE_POOL.length;
+                        const leetcodeProblem = LEETCODE_POOL[leetcodeIndex];
+                        const existing = weekActivities.find(a => 
+                            a.problem_type === 'leetcode' && a.problem_title === leetcodeProblem.title
+                        );
+                        expectedLeetcode.push({
+                            problem_title: leetcodeProblem.title,
+                            problem_url: leetcodeProblem.url,
+                            status: existing?.status || 'not_attempted'
+                        });
+                    }
+
+                    // USACO: 3 problems (weekly)
+                    const weekNumIndex = Math.floor((weekStartDay - 1) / 5);
+                    const contestIndex = weekNumIndex % USACO_POOL.length;
+                    const contest = USACO_POOL[contestIndex];
+                    contest.problems.forEach((usacoProblem) => {
+                        const existing = weekActivities.find(a => 
+                            a.problem_type === 'usaco' && a.problem_title === usacoProblem.title
+                        );
+                        expectedUsaco.push({
+                            problem_title: usacoProblem.title,
+                            problem_url: usacoProblem.url,
+                            status: existing?.status || 'not_attempted'
+                        });
+                    });
+
+                    // Codeforces: 5 problems (one per day) - using placeholder for now
+                    const codeforcesProblems = [
+                        { title: 'Problem A', url: 'https://codeforces.com/problemset/problem/1926/A' },
+                        { title: 'Problem B', url: 'https://codeforces.com/problemset/problem/1926/B' },
+                        { title: 'Problem C', url: 'https://codeforces.com/problemset/problem/1926/C' },
+                        { title: 'Problem D', url: 'https://codeforces.com/problemset/problem/1926/D' },
+                        { title: 'Problem E', url: 'https://codeforces.com/problemset/problem/1926/E' }
+                    ];
+                    for (let day = weekStartDay; day < weekStartDay + 5; day++) {
+                        const cfIndex = (day - weekStartDay) % codeforcesProblems.length;
+                        const cfProblem = codeforcesProblems[cfIndex];
+                        const existing = weekActivities.find(a => 
+                            a.problem_type === 'codeforces' && a.problem_title === cfProblem.title
+                        );
+                        expectedCodeforces.push({
+                            problem_title: cfProblem.title,
+                            problem_url: cfProblem.url,
+                            status: existing?.status || 'not_attempted'
+                        });
+                    }
+                    
+                    return {
+                        weekNumber: weekNum,
+                        leetcode: expectedLeetcode,
+                        usaco: expectedUsaco,
+                        codeforces: expectedCodeforces,
+                        total: expectedLeetcode.length + expectedUsaco.length + expectedCodeforces.length,
+                        completed: [...expectedLeetcode, ...expectedUsaco, ...expectedCodeforces].filter(a => a.status === 'completed').length,
+                        viewed: [...expectedLeetcode, ...expectedUsaco, ...expectedCodeforces].filter(a => a.status === 'viewed').length,
+                        notAttempted: [...expectedLeetcode, ...expectedUsaco, ...expectedCodeforces].filter(a => a.status === 'not_attempted').length
+                    };
+                }).filter(week => week.weekNumber <= currentWeek); // Only show weeks up to current
+
+                setWeeklyHistory(history);
+            } else {
+                setWeeklyHistory([]);
+            }
+
             // Fetch hackathons
             const { data: hackathonsData, error: hackathonsError } = await supabase
                 .from('hackathon_programs')
@@ -3909,17 +4356,19 @@ const Dashboard = ({ user }) => {
                 .from('user_profiles')
                 .select('*')
                 .eq('user_id', user.id)
-                .single();
+                .maybeSingle(); // Use maybeSingle instead of single to avoid errors when no row exists
 
             // If table doesn't exist or no profile found, set to null
             if (profileError) {
-                if (profileError.code === 'PGRST116' || profileError.code === '42P01' || profileError.message?.includes('404')) {
-                    if (profileError.code !== 'PGRST116') {
+                // 406 errors are often due to API format issues - handle gracefully
+                if (profileError.code === 'PGRST116' || profileError.code === '42P01' || profileError.code === '406' || profileError.message?.includes('404') || profileError.message?.includes('406')) {
+                    if (profileError.code !== 'PGRST116' && profileError.code !== '406') {
                         console.warn('user_profiles table does not exist yet. Run the SQL schema in Supabase.');
                     }
                     setProfile(null);
                 } else {
-                    throw profileError;
+                    console.warn('Error fetching profile:', profileError);
+                    setProfile(null);
                 }
             } else {
                 setProfile(profileData);
@@ -4020,16 +4469,16 @@ const Dashboard = ({ user }) => {
                     <Icons.ArrowRight /> Back to Dashboard
                 </button>
                 <h2 className="text-2xl font-bold text-gvcs-navy mb-6">{selectedCourse.courseTitle}</h2>
-
+                
                 <div className="space-y-4">
                     {selectedCourse.weeks.map((week, idx) => {
                         const hasSubmission = (type) => week.submissions && week.submissions && week.submissions[type];
                         const isExpanded = expandedWeek === idx;
-
+                        
                         return (
                             <div key={week.week} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                                 {/* Week Header */}
-                                <div
+                                <div 
                                     className="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
                                     onClick={() => setExpandedWeek(isExpanded ? null : idx)}
                                 >
@@ -4044,18 +4493,18 @@ const Dashboard = ({ user }) => {
                                             {/* Activity Status Indicators */}
                                             <div className="flex gap-2" title="Ellis Activities: Academic, Builder, Communicator">
                                                 <div className={`w-3 h-3 rounded-full ${hasSubmission('academic') ? 'bg-green-500' : 'bg-gray-300'
-                                                    }`} title="Academic"></div>
+                                                }`} title="Academic"></div>
                                                 <div className={`w-3 h-3 rounded-full ${hasSubmission('builder') ? 'bg-green-500' : 'bg-gray-300'
-                                                    }`} title="Builder"></div>
+                                                }`} title="Builder"></div>
                                                 <div className={`w-3 h-3 rounded-full ${hasSubmission('communicator') ? 'bg-green-500' : 'bg-gray-300'
-                                                    }`} title="Communicator"></div>
+                                                }`} title="Communicator"></div>
                                             </div>
                                             <Icons.ArrowRight className={`w-5 h-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-90' : ''
-                                                }`} />
+                                            }`} />
                                         </div>
                                     </div>
                                 </div>
-
+                                
                                 {/* Expanded Week Content */}
                                 {isExpanded && (
                                     <WeekDetailView
@@ -4084,7 +4533,7 @@ const Dashboard = ({ user }) => {
 
                                                 if (error) throw error;
 
-                                                const updated = courses.map(c =>
+                                                const updated = courses.map(c => 
                                                     c.id === updatedCourse.id ? updatedCourse : c
                                                 );
                                                 setCourses(updated);
@@ -4119,14 +4568,14 @@ const Dashboard = ({ user }) => {
 
     // Main Dashboard View
     return (
-        <div className="max-w-7xl mx-auto p-6">
-            <div className="mb-8">
+        <div className="max-w-7xl mx-auto p-6 space-y-8">
+            <div>
                 <h1 className="text-3xl font-bold text-gvcs-navy mb-2">Dashboard</h1>
                 <p className="text-gray-600">Manage your courses, hackathons, and profile</p>
             </div>
 
             {/* Account Info Section */}
-            <div className="mb-8">
+            <div>
                 <AccountInfoSection
                     user={user}
                     profile={profile}
@@ -4157,91 +4606,225 @@ const Dashboard = ({ user }) => {
                 />
             </div>
 
-            {/* Section Navigation */}
-            <div className="flex gap-2 mb-6 border-b border-gray-200">
-                <button
-                    onClick={() => setActiveSection('courses')}
-                    className={`px-4 py-2 font-semibold transition-colors ${activeSection === 'courses'
-                        ? 'text-gvcs-navy border-b-2 border-gvcs-navy'
-                        : 'text-gray-500 hover:text-gray-700'
-                        }`}
-                >
-                    My Courses
-                </button>
-                <button
-                    onClick={() => setActiveSection('hackathons')}
-                    className={`px-4 py-2 font-semibold transition-colors ${activeSection === 'hackathons'
-                        ? 'text-gvcs-navy border-b-2 border-gvcs-navy'
-                        : 'text-gray-500 hover:text-gray-700'
-                        }`}
-                >
-                    Hackathon Projects
-                </button>
+            {/* Weekly Progress Section */}
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-bold text-gvcs-navy">Weekly Progress</h2>
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => setIsWeeklyProgressExpanded(!isWeeklyProgressExpanded)}
+                            className="text-sm text-gray-600 hover:text-gray-800 font-semibold flex items-center gap-1"
+                        >
+                            {isWeeklyProgressExpanded ? 'Hide History' : 'View History'}
+                            <Icons.ArrowRight className={`w-4 h-4 transition-transform ${isWeeklyProgressExpanded ? 'rotate-90' : ''}`} />
+                        </button>
+                        <button
+                            onClick={() => navigate('/weekly-activities')}
+                            className="text-sm text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1"
+                        >
+                            View Details <Icons.ArrowRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
+                {weeklyProgress ? (
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-4">
+                            <div className="flex-1 bg-gray-200 rounded-full h-4">
+                                <div
+                                    className="bg-green-600 h-4 rounded-full transition-all"
+                                    style={{ width: `${weeklyProgress.percentage}%` }}
+                                ></div>
+                            </div>
+                            <span className="text-lg font-bold text-gray-800">
+                                {weeklyProgress.percentage}%
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4 text-center">
+                            <div>
+                                <div className="text-2xl font-bold text-green-600">{weeklyProgress.completed}</div>
+                                <div className="text-sm text-gray-600">Completed</div>
+                            </div>
+                            <div>
+                                <div className="text-2xl font-bold text-yellow-600">{weeklyProgress.viewed}</div>
+                                <div className="text-sm text-gray-600">Viewed</div>
+                            </div>
+                            <div>
+                                <div className="text-2xl font-bold text-gray-600">{weeklyProgress.total}</div>
+                                <div className="text-sm text-gray-600">Total Problems</div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <p className="text-gray-500">No weekly activities yet. Check out the Weekly Activities page to get started!</p>
+                )}
+
+                {/* Weekly History */}
+                {isWeeklyProgressExpanded && weeklyHistory.length > 0 && (
+                    <div className="mt-6 pt-6 border-t border-gray-200 space-y-6">
+                        <h3 className="text-lg font-bold text-gvcs-navy">Weekly History</h3>
+                        {weeklyHistory.map((week) => {
+                            // Get expected counts for this week
+                            const expectedLeetcode = 5; // Daily LeetCode = 5 per week
+                            const expectedUsaco = 3; // 3 USACO per week
+                            const expectedCodeforces = 5; // Daily Codeforces = 5 per week
+                            const totalExpected = expectedLeetcode + expectedUsaco + expectedCodeforces;
+
+                            return (
+                                <div key={week.weekNumber} className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <h4 className="font-semibold text-gray-800">Week {week.weekNumber}</h4>
+                                        <div className="text-sm text-gray-600">
+                                            {week.completed}/{totalExpected} completed
+                                        </div>
+                                    </div>
+
+                                    {/* LeetCode Progress Bar */}
+                                    <div>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-sm font-medium text-gray-700">LeetCode (5 problems)</span>
+                                            <span className="text-xs text-gray-500">
+                                                {week.leetcode.filter(a => a.status === 'completed').length}/{expectedLeetcode}
+                                            </span>
+                                        </div>
+                                        <div className="flex gap-1 h-6">
+                                            {week.leetcode.map((activity, i) => {
+                                                let color = 'bg-gray-300'; // Not attempted
+                                                if (activity.status === 'completed') color = 'bg-green-500';
+                                                else if (activity.status === 'viewed') color = 'bg-yellow-500';
+                                                
+                                                return (
+                                                    <div
+                                                        key={i}
+                                                        className={`flex-1 rounded ${color} border border-gray-400 transition-colors`}
+                                                        title={`${activity.problem_title}: ${activity.status === 'completed' ? 'Completed' : activity.status === 'viewed' ? 'Viewed' : 'Not attempted'}`}
+                                                    ></div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+
+                                    {/* USACO Progress Bar */}
+                                    <div>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-sm font-medium text-gray-700">USACO (3 problems)</span>
+                                            <span className="text-xs text-gray-500">
+                                                {week.usaco.filter(a => a.status === 'completed').length}/{expectedUsaco}
+                                            </span>
+                                        </div>
+                                        <div className="flex gap-1 h-6">
+                                            {week.usaco.map((activity, i) => {
+                                                let color = 'bg-gray-300'; // Not attempted
+                                                if (activity.status === 'completed') color = 'bg-green-500';
+                                                else if (activity.status === 'viewed') color = 'bg-yellow-500';
+                                                
+                                                return (
+                                                    <div
+                                                        key={i}
+                                                        className={`flex-1 rounded ${color} border border-gray-400 transition-colors`}
+                                                        title={`${activity.problem_title}: ${activity.status === 'completed' ? 'Completed' : activity.status === 'viewed' ? 'Viewed' : 'Not attempted'}`}
+                                                    ></div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+
+                                    {/* Codeforces Progress Bar */}
+                                    <div>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-sm font-medium text-gray-700">Codeforces (5 problems)</span>
+                                            <span className="text-xs text-gray-500">
+                                                {week.codeforces.filter(a => a.status === 'completed').length}/{expectedCodeforces}
+                                            </span>
+                                        </div>
+                                        <div className="flex gap-1 h-6">
+                                            {week.codeforces.map((activity, i) => {
+                                                let color = 'bg-gray-300'; // Not attempted
+                                                if (activity.status === 'completed') color = 'bg-green-500';
+                                                else if (activity.status === 'viewed') color = 'bg-yellow-500';
+                                                
+                                                return (
+                                                    <div
+                                                        key={i}
+                                                        className={`flex-1 rounded ${color} border border-gray-400 transition-colors`}
+                                                        title={`${activity.problem_title}: ${activity.status === 'completed' ? 'Completed' : activity.status === 'viewed' ? 'Viewed' : 'Not attempted'}`}
+                                                    ></div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+
+                {isWeeklyProgressExpanded && weeklyHistory.length === 0 && (
+                    <div className="mt-6 pt-6 border-t border-gray-200 text-center py-4">
+                        <p className="text-gray-500">No weekly history yet. Start completing problems to see your progress!</p>
+                    </div>
+                )}
             </div>
 
             {/* My Courses Section */}
-            {activeSection === 'courses' && (
-                <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                        <h2 className="text-2xl font-bold text-gvcs-navy">My Courses</h2>
+            <div className="space-y-4">
+                <h2 className="text-2xl font-bold text-gvcs-navy">My Courses</h2>
+                {courses.length === 0 ? (
+                    <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+                        <p className="text-gray-600 mb-4">You haven't added any courses yet.</p>
+                        <p className="text-sm text-gray-500">Go to Curriculum Generator and add a course to get started!</p>
                     </div>
-                    {courses.length === 0 ? (
-                        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-                            <p className="text-gray-600 mb-4">You haven't added any courses yet.</p>
-                            <p className="text-sm text-gray-500">Go to Curriculum Generator and add a course to get started!</p>
-                        </div>
-                    ) : (
-                        <div className="grid gap-4">
-                            {courses.map(course => {
-                                const progress = calculateCourseProgress(course.weeks);
-                                return (
-                                    <div
-                                        key={course.id}
-                                        className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
-                                        onClick={() => setSelectedCourse(course)}
-                                    >
-                                        <div className="flex justify-between items-center">
-                                            <div className="flex-1">
-                                                <h3 className="text-xl font-bold text-gvcs-navy mb-2">{course.courseTitle}</h3>
-                                                <p className="text-sm text-gray-500 mb-3">
-                                                    Added {new Date(course.addedDate).toLocaleDateString()} • {course.weeks.length} weeks
-                                                </p>
-                                                <div className="flex items-center gap-3">
-                                                    <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-xs">
-                                                        <div
-                                                            className="bg-green-600 h-2 rounded-full transition-all"
-                                                            style={{ width: `${progress.percentage}%` }}
-                                                        ></div>
-                                                    </div>
-                                                    <span className="text-sm text-gray-600 font-semibold">
-                                                        {progress.completed}/{progress.total} weeks
-                                                    </span>
-                                                    {progress.percentage === 100 && (
-                                                        <span className="px-3 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">
-                                                            Completed
-                                                        </span>
-                                                    )}
+                ) : (
+                    <div className="grid gap-4">
+                        {courses.map(course => {
+                            const progress = calculateCourseProgress(course.weeks);
+                            return (
+                                <div
+                                    key={course.id}
+                                    className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+                                    onClick={() => setSelectedCourse(course)}
+                                >
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex-1">
+                                            <h3 className="text-xl font-bold text-gvcs-navy mb-2">{course.courseTitle}</h3>
+                                            <p className="text-sm text-gray-500 mb-3">
+                                                Added {new Date(course.addedDate).toLocaleDateString()} • {course.weeks.length} weeks
+                                            </p>
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-xs">
+                                                    <div
+                                                        className="bg-green-600 h-2 rounded-full transition-all"
+                                                        style={{ width: `${progress.percentage}%` }}
+                                                    ></div>
                                                 </div>
+                                                <span className="text-sm text-gray-600 font-semibold">
+                                                    {progress.completed}/{progress.total} weeks
+                                                </span>
+                                                {progress.percentage === 100 && (
+                                                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">
+                                                        Completed
+                                                    </span>
+                                                )}
                                             </div>
-                                            <Icons.ArrowRight className="w-6 h-6 text-gray-400" />
                                         </div>
+                                        <Icons.ArrowRight className="w-6 h-6 text-gray-400" />
                                     </div>
-                                );
-                            })}
-                        </div>
-                    )}
-                </div>
-            )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
 
             {/* Hackathon Projects Section */}
-            {activeSection === 'hackathons' && (
+            <div className="space-y-4">
+                <h2 className="text-2xl font-bold text-gvcs-navy">Hackathon Projects</h2>
                 <HackathonsSection
                     hackathons={hackathons}
                     user={user}
                     onSelect={(hackathon) => setSelectedHackathon(hackathon)}
                     onRefresh={fetchDashboardData}
                 />
-            )}
+            </div>
         </div>
     );
 };
@@ -4249,7 +4832,7 @@ const Dashboard = ({ user }) => {
 // Week Detail View Component
 const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
     const [activeSection, setActiveSection] = useState('learning'); // 'learning', 'academic', 'builder', 'communicator'
-
+    
     return (
         <div className="border-t border-gray-200">
             {/* Section Tabs */}
@@ -4259,7 +4842,7 @@ const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
                     className={`px-4 py-3 text-sm font-semibold transition-colors ${activeSection === 'learning'
                             ? 'text-gvcs-navy border-b-2 border-gvcs-navy bg-white'
                             : 'text-gray-600 hover:text-gray-900'
-                        }`}
+                    }`}
                 >
                     📚 Learning Resources
                 </button>
@@ -4268,7 +4851,7 @@ const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
                     className={`px-4 py-3 text-sm font-semibold transition-colors relative ${activeSection === 'academic'
                             ? 'text-purple-600 border-b-2 border-purple-600 bg-white'
                             : 'text-gray-600 hover:text-gray-900'
-                        }`}
+                    }`}
                 >
                     🎓 Academic: Test
                     {week.submissions?.academic && (
@@ -4280,7 +4863,7 @@ const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
                     className={`px-4 py-3 text-sm font-semibold transition-colors relative ${activeSection === 'builder'
                             ? 'text-blue-600 border-b-2 border-blue-600 bg-white'
                             : 'text-gray-600 hover:text-gray-900'
-                        }`}
+                    }`}
                 >
                     🔨 Builder: Project
                     {week.submissions?.builder && (
@@ -4292,7 +4875,7 @@ const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
                     className={`px-4 py-3 text-sm font-semibold transition-colors relative ${activeSection === 'communicator'
                             ? 'text-orange-600 border-b-2 border-orange-600 bg-white'
                             : 'text-gray-600 hover:text-gray-900'
-                        }`}
+                    }`}
                 >
                     🎤 Communicator: Presentation
                     {week.submissions?.communicator && (
@@ -4300,34 +4883,34 @@ const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
                     )}
                 </button>
             </div>
-
+            
             {/* Section Content */}
             <div className="p-6">
                 {activeSection === 'learning' && (
                     <LearningResourcesSection week={week} />
                 )}
-
+                
                 {activeSection === 'academic' && (
-                    <AcademicTestSection
-                        week={week}
+                    <AcademicTestSection 
+                        week={week} 
                         weekIndex={weekIndex}
                         course={course}
                         onUpdateCourse={onUpdateCourse}
                     />
                 )}
-
+                
                 {activeSection === 'builder' && (
-                    <BuilderProjectSection
-                        week={week}
+                    <BuilderProjectSection 
+                        week={week} 
                         weekIndex={weekIndex}
                         course={course}
                         onUpdateCourse={onUpdateCourse}
                     />
                 )}
-
+                
                 {activeSection === 'communicator' && (
-                    <CommunicatorPresentationSection
-                        week={week}
+                    <CommunicatorPresentationSection 
+                        week={week} 
                         weekIndex={weekIndex}
                         course={course}
                         onUpdateCourse={onUpdateCourse}
@@ -4347,9 +4930,9 @@ const LearningResourcesSection = ({ week }) => {
                     <strong>Note:</strong> These resources are optional learning materials to help you understand the week's content before completing your Ellis activities. You don't need to complete them, but they're recommended!
                 </p>
             </div>
-
+            
             <h3 className="text-lg font-bold text-gray-800 mb-4">Learning Resources</h3>
-
+            
             {week.resources && week.resources.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-4">
                     {week.resources.map((resource, idx) => (
@@ -4362,9 +4945,9 @@ const LearningResourcesSection = ({ week }) => {
                         >
                             <div className="flex items-start gap-3">
                                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${resource.type === 'Video' ? 'bg-red-100 text-red-600' :
-                                        resource.type === 'Article' ? 'bg-blue-100 text-blue-600' :
-                                            'bg-green-100 text-green-600'
-                                    }`}>
+                                    resource.type === 'Article' ? 'bg-blue-100 text-blue-600' :
+                                    'bg-green-100 text-green-600'
+                                }`}>
                                     {resource.type === 'Video' ? '▶' : '📄'}
                                 </div>
                                 <div className="flex-1">
@@ -4391,22 +4974,22 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
     const [showHistory, setShowHistory] = useState(false);
     const [testHistory, setTestHistory] = useState(week.submissions?.academic?.history || []);
     const currentSubmission = week.submissions?.academic;
-
+    
     // Generate test questions based on week topic
     const generateTestQuestions = (week) => {
         const questions = {
             "Asymptotic Analysis: Big-O Notation": {
                 mcq: [
-                    {
-                        id: 'q1',
-                        question: "What is the time complexity of the following code snippet?\n\n```python\nfor i in range(n):\n    for j in range(i):\n        print(i, j)\n```",
+                {
+                    id: 'q1',
+                    question: "What is the time complexity of the following code snippet?\n\n```python\nfor i in range(n):\n    for j in range(i):\n        print(i, j)\n```",
                         type: 'mcq',
                         options: ['O(n)', 'O(n²)', 'O(n log n)', 'O(2ⁿ)'],
                         correct: 1,
                         points: 2
-                    },
-                    {
-                        id: 'q2',
+                },
+                {
+                    id: 'q2',
                         question: "What is the time complexity of accessing an element in an array by index?",
                         type: 'mcq',
                         options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'],
@@ -4495,15 +5078,15 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                 saq: [
                     {
                         id: 'q13',
-                        question: "Explain the difference between Big-O, Big-Θ (Theta), and Big-Ω (Omega) notation. Provide an example for each.",
-                        type: 'text',
-                        points: 15
-                    },
-                    {
+                    question: "Explain the difference between Big-O, Big-Θ (Theta), and Big-Ω (Omega) notation. Provide an example for each.",
+                    type: 'text',
+                    points: 15
+                },
+                {
                         id: 'q14',
-                        question: "Analyze the time complexity of binary search. Show your work step-by-step and explain why it is O(log n).",
-                        type: 'text',
-                        points: 15
+                    question: "Analyze the time complexity of binary search. Show your work step-by-step and explain why it is O(log n).",
+                    type: 'text',
+                    points: 15
                     }
                 ]
             },
@@ -4532,9 +5115,9 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                         options: ['O(1)', 'O(n)', 'O(log n)', 'O(n log n)'],
                         correct: 0,
                         points: 2
-                    },
-                    {
-                        id: 'q4',
+                },
+                {
+                    id: 'q4',
                         question: "Which data structure uses contiguous memory allocation?",
                         type: 'mcq',
                         options: ['Linked List', 'Dynamic Array', 'Both', 'Neither'],
@@ -4581,7 +5164,7 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                         correct: 1,
                         points: 2
                     },
-                    {
+                {
                         id: 'q10',
                         question: "What is the space overhead per element in a linked list (assuming pointers)?",
                         type: 'mcq',
@@ -4605,22 +5188,22 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     }
                 ],
                 saq: [
-                    {
+                {
                         id: 'q13',
-                        question: "Describe the resizing strategy for dynamic arrays. What happens when the array needs to grow? What is the amortized time complexity?",
-                        type: 'text',
-                        points: 15
-                    },
-                    {
+                    question: "Describe the resizing strategy for dynamic arrays. What happens when the array needs to grow? What is the amortized time complexity?",
+                    type: 'text',
+                    points: 15
+                },
+                {
                         id: 'q14',
                         question: "Compare the space complexity of arrays vs linked lists. Include overhead in your analysis. When would you choose a dynamic array over a linked list?",
-                        type: 'text',
-                        points: 15
-                    }
-                ]
+                    type: 'text',
+                    points: 15
+                }
+            ]
             }
         };
-
+        
         const topicQuestions = questions[week.topic];
         if (topicQuestions) {
             return [...topicQuestions.mcq, ...(topicQuestions.fillblank || []), ...topicQuestions.saq];
@@ -4642,21 +5225,21 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             }
         ];
     };
-
+    
     const questions = generateTestQuestions(week);
     const totalPoints = questions.reduce((sum, q) => sum + q.points, 0);
     const hasSubmission = week.submissions?.academic;
     const mcqQuestions = questions.filter(q => q.type === 'mcq');
     const fillblankQuestions = questions.filter(q => q.type === 'fillblank');
     const saqQuestions = questions.filter(q => q.type === 'text');
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-
+        
         // Calculate score (hardcoded for now - in future, this would be auto-graded)
         const score = Math.floor(Math.random() * 20) + 80; // Random score 80-100 for demo
-
+        
         const submission = {
             answers: testAnswers,
             submittedDate: new Date().toISOString(),
@@ -4664,7 +5247,7 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             totalPoints: totalPoints,
             grade: score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : 'D'
         };
-
+        
         const updated = { ...course };
         if (!updated.weeks[weekIndex].submissions) {
             updated.weeks[weekIndex].submissions = { builder: null, academic: null, communicator: null };
@@ -4684,7 +5267,7 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
         setTestAnswers({});
         alert(`Test submitted! Score: ${score}/${totalPoints} (${submission.grade})`);
     };
-
+    
     if (currentSubmission && !quizStarted && !showHistory) {
         return (
             <div className="space-y-4">
@@ -4699,7 +5282,7 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                         Submitted {new Date(currentSubmission.submittedDate).toISOString().split('T')[0]}
                     </p>
                 </div>
-
+                
                 <div className="flex gap-3">
                     <button
                         onClick={() => setShowHistory(true)}
@@ -4723,7 +5306,7 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
 
     if (showHistory && !quizStarted) {
         return (
-            <div className="space-y-4">
+                    <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-bold text-gray-800">Test History</h3>
                     <button
@@ -4732,7 +5315,7 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     >
                         Back
                     </button>
-                </div>
+                                </div>
 
                 <div className="space-y-4">
                     {testHistory.map((attempt, attemptIdx) => (
@@ -4765,11 +5348,11 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                                             ) : (
                                                 <span className="line-clamp-2">{attempt.answers[q.id] || 'No answer'}</span>
                                             )}
-                                        </div>
-                                    </div>
-                                ))}
+                                </div>
                             </div>
-                        </div>
+                        ))}
+                    </div>
+                </div>
                     ))}
                 </div>
 
@@ -4786,28 +5369,28 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             </div>
         );
     }
-
+    
     if (!quizStarted) {
-        return (
-            <div className="space-y-6">
-                <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-2">
-                        {week.deliverables?.academic?.title || 'Academic Assessment'}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                        {week.deliverables?.academic?.description || 'Complete this assessment to demonstrate your understanding.'}
-                    </p>
-
-                    {week.deliverables?.academic?.guidelines && (
-                        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
-                            <h4 className="font-semibold text-purple-900 mb-2">Guidelines:</h4>
-                            <ul className="text-sm text-purple-800 space-y-1 list-disc list-inside">
-                                {week.deliverables.academic.guidelines.map((g, i) => (
-                                    <li key={i}>{g}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
+    return (
+        <div className="space-y-6">
+            <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-2">
+                    {week.deliverables?.academic?.title || 'Academic Assessment'}
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">
+                    {week.deliverables?.academic?.description || 'Complete this assessment to demonstrate your understanding.'}
+                </p>
+                
+                {week.deliverables?.academic?.guidelines && (
+                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                        <h4 className="font-semibold text-purple-900 mb-2">Assessment Guidelines:</h4>
+                        <ol className="text-sm text-purple-800 space-y-2 list-decimal list-inside">
+                            {week.deliverables.academic.guidelines.map((g, i) => (
+                                <li key={i} className="ml-2">{g}</li>
+                            ))}
+                        </ol>
+                    </div>
+                )}
                 </div>
 
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
@@ -4857,15 +5440,15 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     {week.deliverables?.academic?.description || 'Complete this assessment to demonstrate your understanding.'}
                 </p>
             </div>
-
+            
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
                     <p className="text-sm text-gray-600">
-                        <strong>Total Points:</strong> {totalPoints} | <strong>Time Limit:</strong> None |
+                        <strong>Total Points:</strong> {totalPoints} | <strong>Time Limit:</strong> None | 
                         <strong> Attempts:</strong> Unlimited
                     </p>
                 </div>
-
+                
                 {questions.map((q, idx) => (
                     <div key={q.id} className="bg-white border border-gray-200 rounded-lg p-4">
                         <div className="flex justify-between items-start mb-3">
@@ -4915,18 +5498,18 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                                 </div>
                             </div>
                         ) : (
-                            <textarea
-                                value={testAnswers[q.id] || ''}
-                                onChange={(e) => setTestAnswers({ ...testAnswers, [q.id]: e.target.value })}
-                                className="w-full p-3 border border-gray-300 rounded-lg"
-                                rows="6"
-                                placeholder="Type your answer here..."
-                                required
-                            />
+                        <textarea
+                            value={testAnswers[q.id] || ''}
+                            onChange={(e) => setTestAnswers({ ...testAnswers, [q.id]: e.target.value })}
+                            className="w-full p-3 border border-gray-300 rounded-lg"
+                            rows="6"
+                            placeholder="Type your answer here..."
+                            required
+                        />
                         )}
                     </div>
                 ))}
-
+                
                 <button
                     type="submit"
                     disabled={isSubmitting}
@@ -4949,7 +5532,7 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
 
     // Check if this is CS 102 DS course (template-based builder)
     const isCS102DS = course?.title?.includes('CS 102') || course?.title?.includes('Data Structures');
-
+    
     // Hardcoded rubric
     const rubric = [
         { criterion: "Functionality", maxPoints: 30, description: "Code works correctly and meets all requirements" },
@@ -4958,15 +5541,15 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
         { criterion: "Documentation", maxPoints: 15, description: "README, comments, and usage instructions" },
         { criterion: "Creativity/Extra Features", maxPoints: 15, description: "Additional features beyond requirements" }
     ];
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (submissionType === 'file') {
-            const file = fileInputRef.current?.files?.[0];
-            if (!file) {
-                alert('Please select a file to submit');
-                return;
+        const file = fileInputRef.current?.files?.[0];
+        if (!file) {
+            alert('Please select a file to submit');
+            return;
             }
         } else {
             if (!githubRepo.trim()) {
@@ -4980,9 +5563,9 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                 return;
             }
         }
-
+        
         setIsSubmitting(true);
-
+        
         // Hardcoded grading (for now)
         const grades = rubric.map(r => ({
             criterion: r.criterion,
@@ -4990,11 +5573,11 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             maxPoints: r.maxPoints,
             feedback: `Good work on ${r.criterion.toLowerCase()}. ${r.description}`
         }));
-
+        
         const totalScore = grades.reduce((sum, g) => sum + g.points, 0);
         const totalMax = grades.reduce((sum, g) => sum + g.maxPoints, 0);
         const percentage = Math.round((totalScore / totalMax) * 100);
-
+        
         const updated = { ...course };
         if (!updated.weeks[weekIndex].submissions) {
             updated.weeks[weekIndex].submissions = { builder: null, academic: null, communicator: null };
@@ -5020,12 +5603,12 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
         }
 
         updated.weeks[weekIndex].submissions.builder = submissionData;
-
+        
         onUpdateCourse(updated);
         setIsSubmitting(false);
         alert(`Project submitted! Score: ${totalScore}/${totalMax} (${updated.weeks[weekIndex].submissions.builder.grade})`);
     };
-
+    
     if (hasSubmission) {
         return (
             <div className="space-y-4">
@@ -5037,9 +5620,9 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                         </span>
                     </div>
                     {hasSubmission.type === 'file' && (
-                        <p className="text-sm text-green-600 mb-2">
-                            File: {hasSubmission.fileName} ({Math.round(hasSubmission.fileSize / 1024)} KB)
-                        </p>
+                    <p className="text-sm text-green-600 mb-2">
+                        File: {hasSubmission.fileName} ({Math.round(hasSubmission.fileSize / 1024)} KB)
+                    </p>
                     )}
                     {hasSubmission.type === 'github' && (
                         <p className="text-sm text-green-600 mb-2">
@@ -5052,7 +5635,7 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                         Submitted {new Date(hasSubmission.submittedDate).toLocaleDateString()}
                     </p>
                 </div>
-
+                
                 {hasSubmission.rubric && (
                     <div className="bg-white border border-gray-200 rounded-lg p-4">
                         <h4 className="font-bold mb-3">Grading Rubric</h4>
@@ -5086,57 +5669,49 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                         {week.deliverables?.builder?.title || 'Complete the Template'}
                     </h3>
                     <p className="text-sm text-gray-600 mb-4">
-                        Download the template file below. Fill in the missing code sections (marked with TODO comments) to complete the data structure implementation.
+                        {week.deliverables?.builder?.description || 'Download the template file below. Fill in the missing code sections (marked with TODO comments) to complete the data structure implementation.'}
                     </p>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                    <h4 className="font-semibold text-blue-900 mb-2">Instructions:</h4>
-                    <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
-                        <li>Download the template file</li>
-                        <li>Open it in your IDE</li>
-                        <li>Find all TODO comments and fill in the missing code</li>
-                        <li>Test your implementation</li>
-                        <li>Upload your completed file</li>
-                    </ol>
-                </div>
+                {week.deliverables?.builder?.guidelines && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <h4 className="font-semibold text-blue-900 mb-2">Step-by-Step Guidelines:</h4>
+                        <ol className="text-sm text-blue-800 space-y-2 list-decimal list-inside">
+                            {week.deliverables.builder.guidelines.map((guideline, i) => (
+                                <li key={i} className="ml-2">{guideline}</li>
+                            ))}
+                        </ol>
+                    </div>
+                )}
 
-                <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
-                    <button
-                        onClick={() => {
-                            // Create a simple template file content
-                            const templateContent = `public class ${week.topic?.replace(/[^a-zA-Z0-9]/g, '') || 'DataStructure'} {
-    // TODO: Add necessary instance variables
-    
-    // TODO: Implement constructor
-    
-    // TODO: Implement required methods
-    
-    // Example method structure:
-    public void exampleMethod() {
-        // TODO: Fill in implementation
-    }
-}`;
+                {week.deliverables?.builder?.template_file && (
+                    <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+                        <button
+                            onClick={() => {
+                                const templateFile = week.deliverables.builder.template_file;
+                                const templateContent = templateFile.content || '';
+                                const fileName = templateFile.filename || templateFileName;
 
-                            const blob = new Blob([templateContent], { type: 'text/plain' });
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = templateFileName;
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                            URL.revokeObjectURL(url);
-                        }}
-                        className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 flex items-center justify-center gap-2"
-                    >
-                        <Icons.Link className="w-5 h-5" />
-                        Download Template File
-                    </button>
-                    <p className="text-xs text-gray-500 mt-2 text-center">
-                        {templateFileName}
-                    </p>
-                </div>
+                                const blob = new Blob([templateContent], { type: 'text/plain' });
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = fileName;
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                            }}
+                            className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 flex items-center justify-center gap-2"
+                        >
+                            <Icons.Link className="w-5 h-5" />
+                            Download Template File
+                        </button>
+                        <p className="text-xs text-gray-500 mt-2 text-center">
+                            {week.deliverables.builder.template_file.filename || templateFileName}
+                        </p>
+                    </div>
+                )}
 
                 {hasSubmission ? (
                     <div className="bg-green-50 border border-green-200 rounded-lg p-4">
@@ -5180,7 +5755,7 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             </div>
         );
     }
-
+    
     return (
         <div className="space-y-6">
             <div>
@@ -5190,7 +5765,7 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                 <p className="text-sm text-gray-600 mb-4">
                     {week.deliverables?.builder?.description || 'Complete this project to demonstrate your building skills.'}
                 </p>
-
+                
                 {week.deliverables?.builder?.guidelines && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                         <h4 className="font-semibold text-blue-900 mb-2">Guidelines:</h4>
@@ -5202,7 +5777,7 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     </div>
                 )}
             </div>
-
+            
             <div className="bg-white border border-gray-200 rounded-lg p-4">
                 <h4 className="font-bold mb-3">Grading Rubric</h4>
                 <div className="space-y-2">
@@ -5217,7 +5792,7 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     Total: {rubric.reduce((sum, r) => sum + r.maxPoints, 0)} points
                 </p>
             </div>
-
+            
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -5250,20 +5825,20 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                 </div>
 
                 {submissionType === 'file' ? (
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Upload Project File
-                        </label>
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            className="w-full p-2 border border-gray-300 rounded-lg"
+                    </label>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="w-full p-2 border border-gray-300 rounded-lg"
                             required={submissionType === 'file'}
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
                             Acceptable formats: .zip, .tar.gz, or any project archive file
-                        </p>
-                    </div>
+                    </p>
+                </div>
                 ) : (
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -5282,7 +5857,7 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                         </p>
                     </div>
                 )}
-
+                
                 <button
                     type="submit"
                     disabled={isSubmitting}
@@ -5302,7 +5877,7 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
     const [submissionType, setSubmissionType] = useState('file'); // 'file' or 'link'
     const [isSubmitting, setIsSubmitting] = useState(false);
     const hasSubmission = week.submissions?.communicator;
-
+    
     // Hardcoded rubric
     const rubric = [
         { criterion: "Content Quality", maxPoints: 30, description: "Accurate, comprehensive, well-researched content" },
@@ -5311,7 +5886,7 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
         { criterion: "Delivery", maxPoints: 15, description: "Clear speaking, appropriate pace, engagement" },
         { criterion: "Examples & Demonstrations", maxPoints: 10, description: "Relevant examples and practical demonstrations" }
     ];
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -5322,14 +5897,14 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
                 return;
             }
         } else {
-            if (!presentationLink.trim()) {
-                alert('Please enter a presentation link');
-                return;
+        if (!presentationLink.trim()) {
+            alert('Please enter a presentation link');
+            return;
             }
         }
-
+        
         setIsSubmitting(true);
-
+        
         // Hardcoded grading (for now)
         const grades = rubric.map(r => ({
             criterion: r.criterion,
@@ -5337,11 +5912,11 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
             maxPoints: r.maxPoints,
             feedback: `Good work on ${r.criterion.toLowerCase()}. ${r.description}`
         }));
-
+        
         const totalScore = grades.reduce((sum, g) => sum + g.points, 0);
         const totalMax = grades.reduce((sum, g) => sum + g.maxPoints, 0);
         const percentage = Math.round((totalScore / totalMax) * 100);
-
+        
         const updated = { ...course };
         if (!updated.weeks[weekIndex].submissions) {
             updated.weeks[weekIndex].submissions = { builder: null, academic: null, communicator: null };
@@ -5366,12 +5941,12 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
         }
 
         updated.weeks[weekIndex].submissions.communicator = submissionData;
-
+        
         onUpdateCourse(updated);
         setIsSubmitting(false);
         alert(`Presentation submitted! Score: ${totalScore}/${totalMax} (${updated.weeks[weekIndex].submissions.communicator.grade})`);
     };
-
+    
     if (hasSubmission) {
         return (
             <div className="space-y-4">
@@ -5388,20 +5963,20 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
                         </p>
                     )}
                     {hasSubmission.type === 'link' && hasSubmission.link && (
-                        <a
-                            href={hasSubmission.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline text-sm block mb-2"
-                        >
-                            {hasSubmission.link}
-                        </a>
+                    <a
+                        href={hasSubmission.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline text-sm block mb-2"
+                    >
+                        {hasSubmission.link}
+                    </a>
                     )}
                     <p className="text-sm text-green-600">
                         Submitted {new Date(hasSubmission.submittedDate).toLocaleDateString()}
                     </p>
                 </div>
-
+                
                 {hasSubmission.rubric && (
                     <div className="bg-white border border-gray-200 rounded-lg p-4">
                         <h4 className="font-bold mb-3">Grading Rubric</h4>
@@ -5423,7 +5998,7 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
             </div>
         );
     }
-
+    
     return (
         <div className="space-y-6">
             <div>
@@ -5433,19 +6008,19 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
                 <p className="text-sm text-gray-600 mb-4">
                     {week.deliverables?.communicator?.description || 'Create a presentation to demonstrate your communication skills.'}
                 </p>
-
+                
                 {week.deliverables?.communicator?.guidelines && (
                     <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
-                        <h4 className="font-semibold text-orange-900 mb-2">Guidelines:</h4>
-                        <ul className="text-sm text-orange-800 space-y-1 list-disc list-inside">
+                        <h4 className="font-semibold text-orange-900 mb-2">Presentation Guidelines:</h4>
+                        <ol className="text-sm text-orange-800 space-y-2 list-decimal list-inside">
                             {week.deliverables.communicator.guidelines.map((g, i) => (
-                                <li key={i}>{g}</li>
+                                <li key={i} className="ml-2">{g}</li>
                             ))}
-                        </ul>
+                        </ol>
                     </div>
                 )}
             </div>
-
+            
             <div className="bg-white border border-gray-200 rounded-lg p-4">
                 <h4 className="font-bold mb-3">Grading Rubric</h4>
                 <div className="space-y-2">
@@ -5460,7 +6035,7 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
                     Total: {rubric.reduce((sum, r) => sum + r.maxPoints, 0)} points
                 </p>
             </div>
-
+            
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -5509,24 +6084,24 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
                         </p>
                     </div>
                 ) : (
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Presentation Link
-                        </label>
-                        <input
-                            type="url"
-                            value={presentationLink}
-                            onChange={(e) => setPresentationLink(e.target.value)}
-                            placeholder="https://docs.google.com/presentation/... or YouTube link"
-                            className="w-full p-3 border border-gray-300 rounded-lg"
+                <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Presentation Link
+                    </label>
+                    <input
+                        type="url"
+                        value={presentationLink}
+                        onChange={(e) => setPresentationLink(e.target.value)}
+                        placeholder="https://docs.google.com/presentation/... or YouTube link"
+                        className="w-full p-3 border border-gray-300 rounded-lg"
                             required={submissionType === 'link'}
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                            Provide a link to Google Slides, PowerPoint Online, YouTube video, or similar
-                        </p>
-                    </div>
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                        Provide a link to Google Slides, PowerPoint Online, YouTube video, or similar
+                    </p>
+                </div>
                 )}
-
+                
                 <button
                     type="submit"
                     disabled={isSubmitting}
@@ -5775,6 +6350,10 @@ const HackathonHubView = () => {
     const location = useLocation();
     const [user, setUser] = useState(null);
     const [isCreating, setIsCreating] = useState(false);
+    const [registrations, setRegistrations] = useState({});
+    const [teams, setTeams] = useState({});
+    const [userProfiles, setUserProfiles] = useState({});
+    const [loading, setLoading] = useState(true);
 
     // Get user from auth
     useEffect(() => {
@@ -5804,6 +6383,315 @@ const HackathonHubView = () => {
 
         return () => subscription.unsubscribe();
     }, []);
+
+    // Fetch registrations and teams
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch all registrations
+                const { data: regs, error: regError } = await supabase
+                    .from('hackathon_registrations')
+                    .select('*');
+
+                if (regError) throw regError;
+
+                // Fetch all teams
+                const { data: teamsData, error: teamsError } = await supabase
+                    .from('hackathon_teams')
+                    .select('*');
+
+                if (teamsError) throw teamsError;
+
+                // Fetch user profiles for display names
+                const userIds = [...new Set([
+                    ...(regs?.map(r => r.user_id) || []),
+                    ...(teamsData?.map(t => t.created_by) || [])
+                ])];
+
+                const profilesMap = {};
+                if (userIds.length > 0 && userIds.every(id => id)) {
+                    try {
+                        const { data: profiles, error: profilesError } = await supabase
+                            .from('user_profiles')
+                            .select('user_id, display_name')
+                            .in('user_id', userIds);
+
+                        if (!profilesError && profiles) {
+                            profiles.forEach(p => {
+                                if (p.display_name) {
+                                    profilesMap[p.user_id] = p.display_name;
+                                }
+                            });
+                        } else if (profilesError && profilesError.code !== 'PGRST116' && profilesError.code !== '42P01') {
+                            console.warn('Error fetching user profiles:', profilesError);
+                        }
+                    } catch (err) {
+                        console.warn('Error fetching user profiles:', err);
+                    }
+                }
+
+                // For users without profiles, we'll use a fallback when displaying
+                // We can't access other users' auth metadata without admin privileges
+
+                // Organize registrations by hackathon name
+                const regsByHackathon = {};
+                regs?.forEach(reg => {
+                    if (!regsByHackathon[reg.hackathon_name]) {
+                        regsByHackathon[reg.hackathon_name] = [];
+                    }
+                    regsByHackathon[reg.hackathon_name].push(reg);
+                });
+
+                // Organize teams by hackathon name
+                const teamsByHackathon = {};
+                teamsData?.forEach(team => {
+                    if (!teamsByHackathon[team.hackathon_name]) {
+                        teamsByHackathon[team.hackathon_name] = [];
+                    }
+                    teamsByHackathon[team.hackathon_name].push(team);
+                });
+
+                setRegistrations(regsByHackathon);
+                setTeams(teamsByHackathon);
+                setUserProfiles(profilesMap);
+            } catch (error) {
+                console.error('Error fetching hackathon data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [user]);
+
+    const handleRegister = async (hackathonName) => {
+        if (!user) {
+            alert('Please log in to register for a hackathon.');
+            return;
+        }
+
+        try {
+            const { error } = await supabase
+                .from('hackathon_registrations')
+                .insert([{
+                    user_id: user.id,
+                    hackathon_name: hackathonName,
+                    user_name: user.name
+                }]);
+
+            if (error) throw error;
+
+            // Refresh data
+            const { data: regs } = await supabase
+                .from('hackathon_registrations')
+                .select('*');
+            
+            const regsByHackathon = {};
+            regs?.forEach(reg => {
+                if (!regsByHackathon[reg.hackathon_name]) {
+                    regsByHackathon[reg.hackathon_name] = [];
+                }
+                regsByHackathon[reg.hackathon_name].push(reg);
+            });
+            setRegistrations(regsByHackathon);
+        } catch (error) {
+            console.error('Error registering:', error);
+            alert('Failed to register. You may already be registered.');
+        }
+    };
+
+    const handleCreateTeam = async (hackathonName, teamName, maxMembers = 4) => {
+        if (!user) {
+            alert('Please log in to create a team.');
+            return;
+        }
+
+        try {
+            // First, make sure user is registered
+            const { data: existingReg } = await supabase
+                .from('hackathon_registrations')
+                .select('*')
+                .eq('user_id', user.id)
+                .eq('hackathon_name', hackathonName)
+                .single();
+
+            if (!existingReg) {
+                // Register first
+                await supabase
+                    .from('hackathon_registrations')
+                    .insert([{
+                        user_id: user.id,
+                        hackathon_name: hackathonName,
+                        user_name: user.name
+                    }]);
+            }
+
+            // Create team
+            const { data: team, error: teamError } = await supabase
+                .from('hackathon_teams')
+                .insert([{
+                    hackathon_name: hackathonName,
+                    team_name: teamName || `${user.name}'s Team`,
+                    max_members: maxMembers,
+                    created_by: user.id
+                }])
+                .select()
+                .single();
+
+            if (teamError) throw teamError;
+
+            // Update registration to join team
+            await supabase
+                .from('hackathon_registrations')
+                .update({ team_id: team.id })
+                .eq('user_id', user.id)
+                .eq('hackathon_name', hackathonName);
+
+            // Refresh data
+            const { data: regs } = await supabase
+                .from('hackathon_registrations')
+                .select('*');
+            
+            const { data: teamsData } = await supabase
+                .from('hackathon_teams')
+                .select('*');
+
+            const regsByHackathon = {};
+            regs?.forEach(reg => {
+                if (!regsByHackathon[reg.hackathon_name]) {
+                    regsByHackathon[reg.hackathon_name] = [];
+                }
+                regsByHackathon[reg.hackathon_name].push(reg);
+            });
+
+            const teamsByHackathon = {};
+            teamsData?.forEach(t => {
+                if (!teamsByHackathon[t.hackathon_name]) {
+                    teamsByHackathon[t.hackathon_name] = [];
+                }
+                teamsByHackathon[t.hackathon_name].push(t);
+            });
+
+            setRegistrations(regsByHackathon);
+            setTeams(teamsByHackathon);
+        } catch (error) {
+            console.error('Error creating team:', error);
+            alert('Failed to create team.');
+        }
+    };
+
+    const handleJoinTeam = async (hackathonName, teamId) => {
+        if (!user) {
+            alert('Please log in to join a team.');
+            return;
+        }
+
+        try {
+            // Check if team has space
+            const { data: team } = await supabase
+                .from('hackathon_teams')
+                .select('*')
+                .eq('id', teamId)
+                .single();
+
+            if (!team) {
+                alert('Team not found.');
+                return;
+            }
+
+            // Count current members
+            const { data: currentMembers } = await supabase
+                .from('hackathon_registrations')
+                .select('*')
+                .eq('team_id', teamId);
+
+            if (currentMembers && currentMembers.length >= team.max_members) {
+                alert('This team is full.');
+                return;
+            }
+
+            // Register if not already registered
+            const { data: existingReg } = await supabase
+                .from('hackathon_registrations')
+                .select('*')
+                .eq('user_id', user.id)
+                .eq('hackathon_name', hackathonName)
+                .single();
+
+            if (existingReg) {
+                // Update existing registration
+                await supabase
+                    .from('hackathon_registrations')
+                    .update({ team_id: teamId })
+                    .eq('user_id', user.id)
+                    .eq('hackathon_name', hackathonName);
+            } else {
+                // Create new registration
+                await supabase
+                    .from('hackathon_registrations')
+                    .insert([{
+                        user_id: user.id,
+                        hackathon_name: hackathonName,
+                        team_id: teamId,
+                        user_name: user.name
+                    }]);
+            }
+
+            // Refresh data
+            const { data: regs } = await supabase
+                .from('hackathon_registrations')
+                .select('*');
+            
+            const regsByHackathon = {};
+            regs?.forEach(reg => {
+                if (!regsByHackathon[reg.hackathon_name]) {
+                    regsByHackathon[reg.hackathon_name] = [];
+                }
+                regsByHackathon[reg.hackathon_name].push(reg);
+            });
+            setRegistrations(regsByHackathon);
+        } catch (error) {
+            console.error('Error joining team:', error);
+            alert('Failed to join team.');
+        }
+    };
+
+    const getUserDisplayName = (userId, registration) => {
+        // First try stored name from registration
+        if (registration?.user_name) {
+            return registration.user_name;
+        }
+        // Then try profile
+        if (userProfiles[userId]) {
+            return userProfiles[userId];
+        }
+        // If it's the current user, use their name
+        if (user && userId === user.id) {
+            return user.name;
+        }
+        // Fallback
+        return 'Team Member';
+    };
+
+    const getTeamMembers = (hackathonName, teamId) => {
+        return registrations[hackathonName]?.filter(r => r.team_id === teamId) || [];
+    };
+
+    const getEmptySpots = (team) => {
+        const members = getTeamMembers(team.hackathon_name, team.id);
+        return Math.max(0, team.max_members - members.length);
+    };
+
+    const isUserRegistered = (hackathonName) => {
+        return user && registrations[hackathonName]?.some(r => r.user_id === user.id);
+    };
+
+    const getUserTeam = (hackathonName) => {
+        if (!user) return null;
+        const reg = registrations[hackathonName]?.find(r => r.user_id === user.id && r.team_id);
+        if (!reg) return null;
+        return teams[hackathonName]?.find(t => t.id === reg.team_id);
+    };
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8 space-y-16">
@@ -5853,336 +6741,462 @@ const HackathonHubView = () => {
 
             {!isCreating && (
                 <>
-                    {/* Guides Section */}
-                    <div className="grid md:grid-cols-2 gap-8">
-            {/* Algorithmic Competitions */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
-                        <Icons.Brain />
+            {/* Guides Section */}
+            <div className="grid md:grid-cols-2 gap-8">
+                {/* Algorithmic Competitions */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                            <Icons.Brain />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">Algorithmic Competitions</h3>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900">Algorithmic Competitions</h3>
-                </div>
-                <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                    Focus on data structures, algorithms, and problem-solving speed. Great for technical interviews.
-                    <br />
-                    <span className="text-xs font-bold text-blue-600 mt-2 block">
+                    <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+                        Focus on data structures, algorithms, and problem-solving speed. Great for technical interviews.
+                        <br />
+                        <span className="text-xs font-bold text-blue-600 mt-2 block">
                         💡 Check out the "Algorithms" track in the <span className="cursor-pointer underline" onClick={() => navigate('/ellis')}>Curriculum Generator</span> for a structured learning path.
-                    </span>
-                </p>
-                <div className="space-y-6">
-                    <div>
-                        <h4 className="font-bold text-sm text-gray-800 mb-2 uppercase tracking-wider">Recommended Courses</h4>
-                        <ul className="space-y-2">
-                            <li>
-                                <a href="https://usaco.guide" className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group">
-                                    <span className="font-bold text-gray-700 group-hover:text-blue-700">USACO Guide</span>
-                                    <span className="text-xs bg-white border border-gray-200 px-2 py-1 rounded text-gray-500">Free</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.coursera.org/learn/algorithms-part1" className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group">
-                                    <span className="font-bold text-gray-700 group-hover:text-blue-700">Princeton Algorithms (Coursera)</span>
-                                    <span className="text-xs bg-white border border-gray-200 px-2 py-1 rounded text-gray-500">Free Audit</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-sm text-gray-800 mb-2 uppercase tracking-wider">Practice Sites</h4>
-                        <div className="flex gap-2">
-                            <a href="https://leetcode.com" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">LeetCode</a>
-                            <a href="https://codeforces.com" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">Codeforces</a>
-                            <a href="https://cses.fi/problemset/" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">CSES</a>
+                        </span>
+                    </p>
+                    <div className="space-y-6">
+                        <div>
+                            <h4 className="font-bold text-sm text-gray-800 mb-2 uppercase tracking-wider">Recommended Courses</h4>
+                            <ul className="space-y-2">
+                                <li>
+                                    <a href="https://usaco.guide" className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group">
+                                        <span className="font-bold text-gray-700 group-hover:text-blue-700">USACO Guide</span>
+                                        <span className="text-xs bg-white border border-gray-200 px-2 py-1 rounded text-gray-500">Free</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.coursera.org/learn/algorithms-part1" className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group">
+                                        <span className="font-bold text-gray-700 group-hover:text-blue-700">Princeton Algorithms (Coursera)</span>
+                                        <span className="text-xs bg-white border border-gray-200 px-2 py-1 rounded text-gray-500">Free Audit</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-sm text-gray-800 mb-2 uppercase tracking-wider">Practice Sites</h4>
+                            <div className="flex gap-2">
+                                <a href="https://leetcode.com" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">LeetCode</a>
+                                <a href="https://codeforces.com" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">Codeforces</a>
+                                <a href="https://cses.fi/problemset/" className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium text-gray-700">CSES</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Project Hackathons */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600">
-                        <Icons.Lightbulb />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900">The AI Workflow</h3>
-                </div>
-                <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                    Don't just code. Orchestrate. Use this pipeline to build winning projects in record time.
-                </p>
-                <div className="space-y-4">
-                    <div className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">1</div>
-                        <div>
-                            <h4 className="font-bold text-gray-900">Brainstorm with Perplexity</h4>
-                            <p className="text-xs text-gray-500 mt-1">
-                                Use Perplexity or an LLM to research problems and brainstorm solutions. Validate your idea before you build.
-                            </p>
+                {/* Project Hackathons */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600">
+                            <Icons.Lightbulb />
                         </div>
+                        <h3 className="text-xl font-bold text-gray-900">The AI Workflow</h3>
                     </div>
-                    <div className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">2</div>
-                        <div>
-                            <h4 className="font-bold text-gray-900">Master Plan & Tasks</h4>
-                            <p className="text-xs text-gray-500 mt-1">
-                                Feed your research into a strong LLM (Claude 3.5 Sonnet / GPT-4o). Ask it to generate a "Master Plan" and assign specific tasks to each team member.
-                            </p>
+                    <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+                        Don't just code. Orchestrate. Use this pipeline to build winning projects in record time.
+                    </p>
+                    <div className="space-y-4">
+                        <div className="flex gap-4">
+                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">1</div>
+                            <div>
+                                <h4 className="font-bold text-gray-900">Brainstorm with Perplexity</h4>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Use Perplexity or an LLM to research problems and brainstorm solutions. Validate your idea before you build.
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">3</div>
-                        <div>
-                            <h4 className="font-bold text-gray-900">Prompt Engineering</h4>
-                            <p className="text-xs text-gray-500 mt-1">
-                                Each member uses their own LLM to generate detailed prompts for their tasks. These prompts become the instructions for your coding tools.
-                            </p>
+                        <div className="flex gap-4">
+                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">2</div>
+                            <div>
+                                <h4 className="font-bold text-gray-900">Master Plan & Tasks</h4>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Feed your research into a strong LLM (Claude 3.5 Sonnet / GPT-4o). Ask it to generate a "Master Plan" and assign specific tasks to each team member.
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">4</div>
-                        <div>
-                            <h4 className="font-bold text-gray-900">Execution</h4>
-                            <p className="text-xs text-gray-500 mt-1">
-                                Feed your prompts into <strong>Cursor</strong> for backend/logic and <strong>Lovable</strong> for frontend. Assemble the pieces.
-                            </p>
+                        <div className="flex gap-4">
+                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">3</div>
+                            <div>
+                                <h4 className="font-bold text-gray-900">Prompt Engineering</h4>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Each member uses their own LLM to generate detailed prompts for their tasks. These prompts become the instructions for your coding tools.
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">5</div>
-                        <div>
-                            <h4 className="font-bold text-gray-900">The Pitch</h4>
-                            <p className="text-xs text-gray-500 mt-1">
-                                Use <strong>Canva</strong> for the deck and <strong>Figma</strong> for high-fidelity mockups. The story sells the product.
-                            </p>
+                        <div className="flex gap-4">
+                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">4</div>
+                            <div>
+                                <h4 className="font-bold text-gray-900">Execution</h4>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Feed your prompts into <strong>Cursor</strong> for backend/logic and <strong>Lovable</strong> for frontend. Assemble the pieces.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex gap-4">
+                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">5</div>
+                            <div>
+                                <h4 className="font-bold text-gray-900">The Pitch</h4>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Use <strong>Canva</strong> for the deck and <strong>Figma</strong> for high-fidelity mockups. The story sells the product.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
             {/* AI Power Tools - Expanded */ }
-    <section>
-        <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600">
-                <Icons.Sparkles />
-            </div>
-            <div>
-                <h3 className="text-2xl font-bold text-gvcs-navy">AI Power Tools</h3>
-                <p className="text-gray-500 text-sm">The modern stack for building fast.</p>
-            </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-                {
-                    name: "Cursor",
-                    tagline: "The AI Code Editor",
-                    desc: "A fork of VS Code with AI built-in. It can write entire functions, refactor code, and fix bugs automatically.",
-                    bestFor: "Writing code 10x faster",
-                    price: "Free Tier",
-                    url: "https://cursor.sh/"
-                },
-                {
-                    name: "Lovable",
-                    tagline: "Full Stack Generator",
-                    desc: "Describe your app and get a full stack React/Node application generated. Great for starting the frontend.",
-                    bestFor: "Frontend & Full Stack",
-                    price: "Free Tier",
-                    url: "https://lovable.dev/"
-                },
-                {
-                    name: "Perplexity",
-                    tagline: "AI Search Engine",
-                    desc: "Like Google but it gives you answers. Great for finding libraries, debugging errors, and research.",
-                    bestFor: "Brainstorming & Research",
-                    price: "Free",
-                    url: "https://perplexity.ai/"
-                },
-
-                {
-                    name: "Figma",
-                    tagline: "Interface Design",
-                    desc: "The industry standard for UI/UX design. Map out your user flow before you write a single line of code.",
-                    bestFor: "Wireframing & Pitch Decks",
-                    price: "Free for Students",
-                    url: "https://figma.com/"
-                },
-                {
-                    name: "Canva",
-                    tagline: "Design Made Easy",
-                    desc: "Create stunning pitch decks and social media graphics in minutes. Essential for the final presentation.",
-                    bestFor: "Pitch Decks",
-                    price: "Free",
-                    url: "https://canva.com/"
-                },
-                {
-                    name: "Gemini / Claude / ChatGPT",
-                    tagline: "LLM Assistants",
-                    desc: "Use these for brainstorming ideas, writing pitch scripts, and generating dummy data for your app.",
-                    bestFor: "Ideation & Copywriting",
-                    price: "Free",
-                    url: "https://gemini.google.com/"
-                }
-            ].map((tool, i) => (
-                <a key={i} href={tool.url} target="_blank" rel="noopener noreferrer" className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all flex flex-col">
-                    <div className="flex justify-between items-start mb-4">
-                        <div>
-                            <h4 className="font-bold text-lg text-gray-900 group-hover:text-indigo-600 transition-colors">{tool.name}</h4>
-                            <span className="text-xs font-bold text-indigo-500 uppercase tracking-wider">{tool.tagline}</span>
-                        </div>
-                        <Icons.Link className="text-gray-300 group-hover:text-indigo-400" />
+            <section>
+                <div className="flex items-center gap-3 mb-8">
+                    <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600">
+                        <Icons.Sparkles />
                     </div>
-                    <p className="text-sm text-gray-600 mb-4 flex-grow">{tool.desc}</p>
-                    <div className="pt-4 border-t border-gray-100">
-                        <div className="flex justify-between items-center text-xs">
-                            <span className="font-bold text-gray-700 bg-gray-100 px-2 py-1 rounded">Best for: {tool.bestFor}</span>
-                            <span className="text-gray-400">{tool.price}</span>
-                        </div>
+                    <div>
+                        <h3 className="text-2xl font-bold text-gvcs-navy">AI Power Tools</h3>
+                        <p className="text-gray-500 text-sm">The modern stack for building fast.</p>
                     </div>
-                </a>
-            ))}
-        </div>
-    </section>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[
+                        {
+                            name: "Cursor",
+                            tagline: "The AI Code Editor",
+                            desc: "A fork of VS Code with AI built-in. It can write entire functions, refactor code, and fix bugs automatically.",
+                            bestFor: "Writing code 10x faster",
+                            price: "Free Tier",
+                            url: "https://cursor.sh/"
+                        },
+                        {
+                            name: "Lovable",
+                            tagline: "Full Stack Generator",
+                            desc: "Describe your app and get a full stack React/Node application generated. Great for starting the frontend.",
+                            bestFor: "Frontend & Full Stack",
+                            price: "Free Tier",
+                            url: "https://lovable.dev/"
+                        },
+                        {
+                            name: "Perplexity",
+                            tagline: "AI Search Engine",
+                            desc: "Like Google but it gives you answers. Great for finding libraries, debugging errors, and research.",
+                            bestFor: "Brainstorming & Research",
+                            price: "Free",
+                            url: "https://perplexity.ai/"
+                        },
+
+                        {
+                            name: "Figma",
+                            tagline: "Interface Design",
+                            desc: "The industry standard for UI/UX design. Map out your user flow before you write a single line of code.",
+                            bestFor: "Wireframing & Pitch Decks",
+                            price: "Free for Students",
+                            url: "https://figma.com/"
+                        },
+                        {
+                            name: "Canva",
+                            tagline: "Design Made Easy",
+                            desc: "Create stunning pitch decks and social media graphics in minutes. Essential for the final presentation.",
+                            bestFor: "Pitch Decks",
+                            price: "Free",
+                            url: "https://canva.com/"
+                        },
+                        {
+                            name: "Gemini / Claude / ChatGPT",
+                            tagline: "LLM Assistants",
+                            desc: "Use these for brainstorming ideas, writing pitch scripts, and generating dummy data for your app.",
+                            bestFor: "Ideation & Copywriting",
+                            price: "Free",
+                            url: "https://gemini.google.com/"
+                        }
+                    ].map((tool, i) => (
+                        <a key={i} href={tool.url} target="_blank" rel="noopener noreferrer" className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all flex flex-col">
+                            <div className="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 className="font-bold text-lg text-gray-900 group-hover:text-indigo-600 transition-colors">{tool.name}</h4>
+                                    <span className="text-xs font-bold text-indigo-500 uppercase tracking-wider">{tool.tagline}</span>
+                                </div>
+                                <Icons.Link className="text-gray-300 group-hover:text-indigo-400" />
+                            </div>
+                            <p className="text-sm text-gray-600 mb-4 flex-grow">{tool.desc}</p>
+                            <div className="pt-4 border-t border-gray-100">
+                                <div className="flex justify-between items-center text-xs">
+                                    <span className="font-bold text-gray-700 bg-gray-100 px-2 py-1 rounded">Best for: {tool.bestFor}</span>
+                                    <span className="text-gray-400">{tool.price}</span>
+                                </div>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            </section>
 
     {/* Upcoming Hackathons */ }
-    <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-        <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
-                <Icons.Clock />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900">Upcoming Hackathons</h3>
-        </div>
-
-        <div className="space-y-4">
-            {[
-                {
-                    name: "United Hacks V6",
-                    date: "January 16-18, 2026",
-                    location: "Online (Virtual)",
-                    desc: "Student-led free hackathon for high school and college students. Builds tech and soft skills.",
-                    status: "Register Now",
-                    link: "https://www.hackunited.org/"
-                },
-                {
-                    name: "Hack BI",
-                    date: "January 17-18, 2026",
-                    location: "Alexandria, Virginia",
-                    desc: "High school and middle school hackathon. All skill levels welcome with workshops.",
-                    status: "Register Now",
-                    link: "https://mlh.io/minor-league/events"
-                },
-                {
-                    name: "Hack the Ram",
-                    date: "January 2026",
-                    location: "Gibsonia, PA",
-                    desc: "Free 12-hour invention marathon for 6th-12th graders. Great for beginners.",
-                    status: "Coming Soon",
-                    link: "https://www.joinsilicon.org/hackathons"
-                },
-                {
-                    name: "ElleHacks",
-                    date: "January 23-25, 2026",
-                    location: "Toronto, Ontario",
-                    desc: "Canada's largest hackathon for women and gender-diverse students. Beginner-friendly.",
-                    status: "Register Now",
-                    link: "https://mlh.io/events"
-                },
-                {
-                    name: "HackHERS",
-                    date: "February 21, 2026",
-                    location: "New Brunswick, NJ",
-                    desc: "Women-centric hackathon empowering female and non-binary students. Close to Philly.",
-                    status: "Coming Soon",
-                    link: "https://hackathonmap.com/"
-                },
-                {
-                    name: "HenHacks",
-                    date: "February 28, 2026",
-                    location: "Newark, Delaware",
-                    desc: "University of Delaware hackathon. Great for collegiate networking.",
-                    status: "Coming Soon",
-                    link: "https://hackathonmap.com/"
-                },
-                {
-                    name: "MEGA Hackathon 2026",
-                    date: "February 28 - March 1, 2026",
-                    location: "Online",
-                    desc: "Global hackathon integrating CS, STEM, economics. Advances human development.",
-                    status: "Register Now",
-                    link: "https://mega-hackathon-2026-students.devpost.com/"
-                },
-                {
-                    name: "HackNA",
-                    date: "March 2026",
-                    location: "Wexford, PA",
-                    desc: "High school hackathon at North Allegheny. Projects based on revealed theme.",
-                    status: "Coming Soon",
-                    link: "https://www.joinsilicon.org/hackathons"
-                },
-                {
-                    name: "Bitcamp",
-                    date: "April 10-12, 2026",
-                    location: "College Park, Maryland",
-                    desc: "University of Maryland's annual spring hackathon. 1000+ students expected.",
-                    status: "Coming Soon",
-                    link: "https://mlh.io/events"
-                },
-                {
-                    name: "HackAmerica 2026",
-                    date: "April 11-18, 2026",
-                    location: "Online",
-                    desc: "Virtual hackathon for high schoolers. Tackle social and environmental issues.",
-                    status: "Register Now",
-                    link: "https://netzerocompare.com/events/hackamerica-2026"
-                },
-                {
-                    name: "Hudson Valley Digital Rally",
-                    date: "May 18, 2026",
-                    location: "Poughkeepsie, NY",
-                    desc: "AI-focused hackathon for high school and college students. Theme: Using AI to serve the community.",
-                    status: "Coming Soon",
-                    link: "https://hvtechfest.com/2026/05/hackathon"
-                },
-                {
-                    name: "Tech Innovation for Good",
-                    date: "June 1-21, 2026",
-                    location: "Online",
-                    desc: "Three-week global innovation sprint. Challenges in AI, climate, and health.",
-                    status: "Register Now",
-                    link: "https://www.youthtechandethics.org/events"
-                },
-                {
-                    name: "Hack the Land",
-                    date: "July 25-26, 2026",
-                    location: "Cleveland, Ohio",
-                    desc: "High school hackathon. Turn ideas into reality over a weekend.",
-                    status: "Coming Soon",
-                    link: "https://www.joinsilicon.org/hackathons"
-                }
-            ].map((hack, i) => (
-                <div key={i} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-gray-50 rounded-xl border border-gray-200 gap-4 hover:border-green-300 transition-colors">
-                    <div>
-                        <div className="flex items-center gap-3 mb-1">
-                            <h4 className="font-bold text-lg text-gray-900">{hack.name}</h4>
-                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${hack.status.includes('Open') || hack.status.includes('Register') ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
-                                {hack.status}
-                            </span>
-                        </div>
-                        <div className="text-sm font-bold text-gray-600 mb-1">{hack.date} • {hack.location}</div>
-                        <p className="text-sm text-gray-500">{hack.desc}</p>
+            <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+                        <Icons.Clock />
                     </div>
-                    <a
-                        href={hack.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-bold rounded-lg hover:bg-green-50 hover:text-green-700 hover:border-green-200 transition-all text-center whitespace-nowrap"
-                    >
-                        Visit Website
-                    </a>
+                    <h3 className="text-2xl font-bold text-gray-900">Upcoming Hackathons</h3>
                 </div>
-            ))}
-        </div>
-    </section>
+
+                {loading ? (
+                    <div className="text-center py-8 text-gray-500">Loading...</div>
+                ) : (
+                    <div className="space-y-6">
+                        {[
+                            {
+                                name: "United Hacks V6",
+                                date: "January 16-18, 2026",
+                                location: "Online (Virtual)",
+                                desc: "Student-led free hackathon for high school and college students. Builds tech and soft skills.",
+                                status: "Register Now",
+                                link: "https://www.hackunited.org/"
+                            },
+                            {
+                                name: "Hack BI",
+                                date: "January 17-18, 2026",
+                                location: "Alexandria, Virginia",
+                                desc: "High school and middle school hackathon. All skill levels welcome with workshops.",
+                                status: "Register Now",
+                                link: "https://mlh.io/minor-league/events"
+                            },
+                            {
+                                name: "Hack the Ram",
+                                date: "January 2026",
+                                location: "Gibsonia, PA",
+                                desc: "Free 12-hour invention marathon for 6th-12th graders. Great for beginners.",
+                                status: "Coming Soon",
+                                link: "https://www.joinsilicon.org/hackathons"
+                            },
+                            {
+                                name: "ElleHacks",
+                                date: "January 23-25, 2026",
+                                location: "Toronto, Ontario",
+                                desc: "Canada's largest hackathon for women and gender-diverse students. Beginner-friendly.",
+                                status: "Register Now",
+                                link: "https://mlh.io/events"
+                            },
+                            {
+                                name: "HackHERS",
+                                date: "February 21, 2026",
+                                location: "New Brunswick, NJ",
+                                desc: "Women-centric hackathon empowering female and non-binary students. Close to Philly.",
+                                status: "Coming Soon",
+                                link: "https://hackathonmap.com/"
+                            },
+                            {
+                                name: "HenHacks",
+                                date: "February 28, 2026",
+                                location: "Newark, Delaware",
+                                desc: "University of Delaware hackathon. Great for collegiate networking.",
+                                status: "Coming Soon",
+                                link: "https://hackathonmap.com/"
+                            },
+                            {
+                                name: "MEGA Hackathon 2026",
+                                date: "February 28 - March 1, 2026",
+                                location: "Online",
+                                desc: "Global hackathon integrating CS, STEM, economics. Advances human development.",
+                                status: "Register Now",
+                                link: "https://mega-hackathon-2026-students.devpost.com/"
+                            },
+                            {
+                                name: "HackNA",
+                                date: "March 2026",
+                                location: "Wexford, PA",
+                                desc: "High school hackathon at North Allegheny. Projects based on revealed theme.",
+                                status: "Coming Soon",
+                                link: "https://www.joinsilicon.org/hackathons"
+                            },
+                            {
+                                name: "Bitcamp",
+                                date: "April 10-12, 2026",
+                                location: "College Park, Maryland",
+                                desc: "University of Maryland's annual spring hackathon. 1000+ students expected.",
+                                status: "Coming Soon",
+                                link: "https://mlh.io/events"
+                            },
+                            {
+                                name: "HackAmerica 2026",
+                                date: "April 11-18, 2026",
+                                location: "Online",
+                                desc: "Virtual hackathon for high schoolers. Tackle social and environmental issues.",
+                                status: "Register Now",
+                                link: "https://netzerocompare.com/events/hackamerica-2026"
+                            },
+                            {
+                                name: "Hudson Valley Digital Rally",
+                                date: "May 18, 2026",
+                                location: "Poughkeepsie, NY",
+                                desc: "AI-focused hackathon for high school and college students. Theme: Using AI to serve the community.",
+                                status: "Coming Soon",
+                                link: "https://hvtechfest.com/2026/05/hackathon"
+                            },
+                            {
+                                name: "Tech Innovation for Good",
+                                date: "June 1-21, 2026",
+                                location: "Online",
+                                desc: "Three-week global innovation sprint. Challenges in AI, climate, and health.",
+                                status: "Register Now",
+                                link: "https://www.youthtechandethics.org/events"
+                            },
+                            {
+                                name: "Hack the Land",
+                                date: "July 25-26, 2026",
+                                location: "Cleveland, Ohio",
+                                desc: "High school hackathon. Turn ideas into reality over a weekend.",
+                                status: "Coming Soon",
+                                link: "https://www.joinsilicon.org/hackathons"
+                            }
+                        ].map((hack, i) => {
+                            const hackRegistrations = registrations[hack.name] || [];
+                            const hackTeams = teams[hack.name] || [];
+                            const userRegistered = isUserRegistered(hack.name);
+                            const userTeam = getUserTeam(hack.name);
+
+                            return (
+                                <div key={i} className="p-6 bg-gray-50 rounded-xl border border-gray-200 hover:border-green-300 transition-colors">
+                                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <h4 className="font-bold text-lg text-gray-900">{hack.name}</h4>
+                                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${hack.status.includes('Open') || hack.status.includes('Register') ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                                                    {hack.status}
+                                                </span>
+                                                {userRegistered && (
+                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-purple-100 text-purple-700">
+                                                        Registered
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="text-sm font-bold text-gray-600 mb-1">{hack.date} • {hack.location}</div>
+                                            <p className="text-sm text-gray-500 mb-3">{hack.desc}</p>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            {!userRegistered ? (
+                                                <button
+                                                    onClick={() => {
+                                                        const teamName = prompt('Enter a team name (or leave blank for default):');
+                                                        if (teamName !== null) {
+                                                            if (teamName.trim()) {
+                                                                handleCreateTeam(hack.name, teamName.trim());
+                                                            } else {
+                                                                handleRegister(hack.name);
+                                                            }
+                                                        }
+                                                    }}
+                                                    className="px-4 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all text-sm whitespace-nowrap"
+                                                >
+                                                    Register
+                                                </button>
+                                            ) : !userTeam ? (
+                                                <button
+                                                    onClick={() => {
+                                                        const teamName = prompt('Enter a team name:');
+                                                        if (teamName && teamName.trim()) {
+                                                            handleCreateTeam(hack.name, teamName.trim());
+                                                        }
+                                                    }}
+                                                    className="px-4 py-2 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-all text-sm whitespace-nowrap"
+                                                >
+                                                    Create Team
+                                                </button>
+                                            ) : null}
+                                            <a
+                                                href={hack.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 font-bold rounded-lg hover:bg-green-50 hover:text-green-700 hover:border-green-200 transition-all text-sm whitespace-nowrap"
+                                            >
+                                                Visit Website
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    {/* Teams Section */}
+                                    {hackRegistrations.length > 0 && (
+                                        <div className="mt-4 pt-4 border-t border-gray-200">
+                                            <h5 className="font-bold text-sm text-gray-700 mb-3">Club Members Registered ({hackRegistrations.length})</h5>
+                                            <div className="space-y-3">
+                                                {hackTeams.map((team) => {
+                                                    const members = getTeamMembers(hack.name, team.id);
+                                                    const emptySpots = getEmptySpots(team);
+                                                    const isUserInTeam = user && members.some(m => m.user_id === user.id);
+                                                    const canJoin = user && !userTeam && emptySpots > 0;
+
+                                                    return (
+                                                        <div key={team.id} className="p-3 bg-white rounded-lg border border-gray-200">
+                                                            <div className="flex items-start justify-between mb-2">
+                                                                <div>
+                                                                    <div className="font-bold text-sm text-gray-900 mb-1">
+                                                                        {team.team_name || 'Unnamed Team'}
+                                                                    </div>
+                                                                    <div className="text-xs text-gray-500 mb-2">
+                                                                        Members: {members.length}/{team.max_members}
+                                                                        {emptySpots > 0 && (
+                                                                            <span className="ml-2 text-green-600 font-bold">
+                                                                                ({emptySpots} spot{emptySpots !== 1 ? 's' : ''} available)
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className="flex flex-wrap gap-2">
+                                                                        {members.map((member) => (
+                                                                            <span
+                                                                                key={member.id}
+                                                                                className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded"
+                                                                            >
+                                                                                {getUserDisplayName(member.user_id, member)}
+                                                                            </span>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                                {canJoin && (
+                                                                    <button
+                                                                        onClick={() => handleJoinTeam(hack.name, team.id)}
+                                                                        className="px-3 py-1 bg-green-600 text-white text-xs font-bold rounded hover:bg-green-700 transition-colors whitespace-nowrap"
+                                                                    >
+                                                                        Join Team
+                                                                    </button>
+                                                                )}
+                                                                {isUserInTeam && (
+                                                                    <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">
+                                                                        Your Team
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                                
+                                                {/* Solo registrations (no team) */}
+                                                {hackRegistrations.filter(r => !r.team_id).length > 0 && (
+                                                    <div className="p-3 bg-white rounded-lg border border-gray-200">
+                                                        <div className="text-xs text-gray-500 mb-2 font-bold">Looking for Team:</div>
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {hackRegistrations
+                                                                .filter(r => !r.team_id)
+                                                                .map((reg) => (
+                                                                    <span
+                                                                        key={reg.id}
+                                                                        className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded"
+                                                                    >
+                                                                        {getUserDisplayName(reg.user_id, reg)}
+                                                                    </span>
+                                                                ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </section>
                 </>
             )}
         </div>
@@ -6571,6 +7585,8 @@ const MyPlans = ({ user }) => {
 };
 
 const CareerPathwaysView = () => {
+    const [expandedPathway, setExpandedPathway] = useState(null);
+
     const pathways = [
         {
             title: "Quantitative Finance & Fintech",
@@ -6641,87 +7657,336 @@ const CareerPathwaysView = () => {
                 jobs: ["Security Analyst", "Penetration Tester", "Security Engineer", "Cryptographer"],
                 ecs: ["CTF Competitions (PicoCTF)", "CyberPatriot", "Ethical Hacking", "System Admin"]
             }
+        },
+        {
+            title: "Game Development & Interactive Media",
+            icon: <Icons.Sparkles className="w-6 h-6 text-pink-600" />,
+            description: "Create immersive digital experiences through game engines, real-time graphics, and interactive storytelling.",
+            color: "bg-pink-50 border-pink-100",
+            textColor: "text-pink-800",
+            details: {
+                ap: ["AP CSA", "AP CSP", "AP Physics C", "AP Art & Design"],
+                codecademy: ["Game Development", "Unity", "C#", "3D Programming"],
+                majors: ["Game Design", "Computer Science", "Digital Media Arts", "Interactive Media"],
+                jobs: ["Game Developer", "Game Engine Programmer", "Technical Artist", "VR/AR Developer", "Game Designer"],
+                ecs: ["Game Jams (Ludum Dare, Global Game Jam)", "Personal Game Projects", "Unity/Unreal Learning", "Game Design Club", "Indie Game Development"]
+            }
+        },
+        {
+            title: "DevOps & Cloud Engineering",
+            icon: <Icons.Code className="w-6 h-6 text-indigo-600" />,
+            description: "Build and maintain scalable infrastructure, automate deployments, and ensure system reliability at scale.",
+            color: "bg-indigo-50 border-indigo-100",
+            textColor: "text-indigo-800",
+            details: {
+                ap: ["AP CSA", "AP CSP"],
+                codecademy: ["DevOps", "AWS", "Docker", "Kubernetes", "Linux", "CI/CD"],
+                majors: ["Computer Science", "Information Systems", "Computer Engineering"],
+                jobs: ["DevOps Engineer", "Site Reliability Engineer (SRE)", "Cloud Architect", "Infrastructure Engineer", "Platform Engineer"],
+                ecs: ["Personal Server Projects", "Open Source Contributions", "System Administration", "Cloud Certifications (AWS/GCP)", "Infrastructure Projects"]
+            }
+        },
+        {
+            title: "Human-Computer Interaction (HCI) / UX Engineering",
+            icon: <Icons.Lightbulb className="w-6 h-6 text-teal-600" />,
+            description: "Design and build intuitive user experiences by combining design thinking with technical implementation.",
+            color: "bg-teal-50 border-teal-100",
+            textColor: "text-teal-800",
+            details: {
+                ap: ["AP CSA", "AP CSP", "AP Psychology", "AP Art & Design"],
+                codecademy: ["Front-End Development", "UI/UX Design", "React", "User Research"],
+                majors: ["HCI", "Computer Science", "Design", "Cognitive Science", "Human-Centered Design"],
+                jobs: ["UX Engineer", "Front-End Developer", "Product Designer", "Interaction Designer", "UX Researcher"],
+                ecs: ["Design Projects", "User Research Studies", "Web Development", "Design Competitions", "Portfolio Building"]
+            }
+        },
+        {
+            title: "Research & Academia",
+            icon: <Icons.Brain className="w-6 h-6 text-amber-600" />,
+            description: "Advance the frontiers of computer science through research, publications, and academic teaching.",
+            color: "bg-amber-50 border-amber-100",
+            textColor: "text-amber-800",
+            details: {
+                ap: ["AP CSA", "AP Calculus BC", "AP Statistics", "AP Research", "AP Seminar"],
+                codecademy: ["Python", "Data Science", "Machine Learning", "Research Methods"],
+                majors: ["Computer Science (Research Track)", "Applied Math", "Physics", "Research-focused programs"],
+                jobs: ["Research Scientist", "Professor", "Research Engineer", "PhD Researcher", "Postdoc"],
+                ecs: ["Research Projects", "Science Fair", "Research Internships", "Academic Competitions (ISEF)", "Publications"]
+            }
+        },
+        {
+            title: "Embedded Systems & IoT",
+            icon: <Icons.Code className="w-6 h-6 text-cyan-600" />,
+            description: "Program devices that interact with the physical world, from microcontrollers to smart home systems.",
+            color: "bg-cyan-50 border-cyan-100",
+            textColor: "text-cyan-800",
+            details: {
+                ap: ["AP CSA", "AP Physics C", "AP Calculus BC"],
+                codecademy: ["C/C++", "Embedded Systems", "Arduino/Raspberry Pi", "Microcontrollers"],
+                majors: ["Computer Engineering", "Electrical Engineering", "Computer Science"],
+                jobs: ["Embedded Systems Engineer", "Firmware Developer", "IoT Engineer", "Hardware Engineer", "Systems Programmer"],
+                ecs: ["Robotics", "Electronics Projects", "Arduino/Raspberry Pi Projects", "Maker Faire", "Hardware Hacking"]
+            }
+        },
+        {
+            title: "Bioinformatics & Computational Biology",
+            icon: <Icons.Sparkles className="w-6 h-6 text-emerald-600" />,
+            description: "Apply computational methods to solve biological problems, from genomics to drug discovery.",
+            color: "bg-emerald-50 border-emerald-100",
+            textColor: "text-emerald-800",
+            details: {
+                ap: ["AP CSA", "AP Biology", "AP Statistics", "AP Calculus BC"],
+                codecademy: ["Python", "Data Science", "Bioinformatics", "Scientific Computing"],
+                majors: ["Bioinformatics", "Computational Biology", "CS + Biology", "Biostatistics"],
+                jobs: ["Bioinformatics Scientist", "Computational Biologist", "Research Engineer", "Biotech Software Developer"],
+                ecs: ["Research Projects", "Science Fair", "Biology + CS Projects", "Internships at Biotech Companies"]
+            }
+        },
+        {
+            title: "Computer Graphics & Visualization",
+            icon: <Icons.Sparkles className="w-6 h-6 text-violet-600" />,
+            description: "Create stunning visual experiences through rendering, shaders, and 3D mathematics.",
+            color: "bg-violet-50 border-violet-100",
+            textColor: "text-violet-800",
+            details: {
+                ap: ["AP CSA", "AP Calculus BC", "AP Physics C", "AP Art & Design"],
+                codecademy: ["Computer Graphics", "3D Programming", "OpenGL", "Shader Programming"],
+                majors: ["Computer Science", "Computer Graphics", "Digital Arts", "Applied Math"],
+                jobs: ["Graphics Programmer", "Rendering Engineer", "Visualization Specialist", "Technical Artist", "Graphics Researcher"],
+                ecs: ["Graphics Projects", "3D Modeling", "Shader Programming", "Art + Code Projects", "Game Engine Development"]
+            }
+        },
+        {
+            title: "Quality Assurance & Testing Engineering",
+            icon: <Icons.Shield className="w-6 h-6 text-orange-600" />,
+            description: "Ensure software quality through systematic testing, automation, and quality processes.",
+            color: "bg-orange-50 border-orange-100",
+            textColor: "text-orange-800",
+            details: {
+                ap: ["AP CSA", "AP CSP", "AP Statistics"],
+                codecademy: ["Software Testing", "Automation", "Selenium", "Test-Driven Development"],
+                majors: ["Computer Science", "Software Engineering", "Quality Assurance"],
+                jobs: ["QA Engineer", "Test Automation Engineer", "Quality Engineer", "Test Architect", "SDET"],
+                ecs: ["Testing Projects", "Bug Bounty Programs", "Open Source Testing", "Test Automation Projects"]
+            }
+        },
+        {
+            title: "Digital Forensics & Incident Response",
+            icon: <Icons.Shield className="w-6 h-6 text-rose-600" />,
+            description: "Investigate cybercrimes, analyze digital evidence, and respond to security incidents.",
+            color: "bg-rose-50 border-rose-100",
+            textColor: "text-rose-800",
+            details: {
+                ap: ["AP CSA", "AP CSP", "AP Statistics"],
+                codecademy: ["Cybersecurity", "Digital Forensics", "Incident Response", "Linux"],
+                majors: ["Cybersecurity", "Digital Forensics", "Computer Science", "Criminal Justice + CS"],
+                jobs: ["Digital Forensics Analyst", "Incident Responder", "Malware Analyst", "Forensic Investigator", "Security Consultant"],
+                ecs: ["CTF Competitions", "Digital Forensics Challenges", "Security Research", "Internships at Law Enforcement"]
+            }
+        },
+        {
+            title: "Computational Linguistics & NLP",
+            icon: <Icons.Brain className="w-6 h-6 text-sky-600" />,
+            description: "Bridge language and technology by building systems that understand and generate human language.",
+            color: "bg-sky-50 border-sky-100",
+            textColor: "text-sky-800",
+            details: {
+                ap: ["AP CSA", "AP Statistics", "AP English Language", "AP Research"],
+                codecademy: ["Python", "Machine Learning", "NLP", "Linguistics"],
+                majors: ["Computational Linguistics", "CS + Linguistics", "AI", "Cognitive Science"],
+                jobs: ["NLP Engineer", "Computational Linguist", "AI Researcher (NLP)", "Language Technology Engineer"],
+                ecs: ["NLP Projects", "Language Learning Apps", "Research Projects", "Linguistics Competitions"]
+            }
+        },
+        {
+            title: "Robotics & Autonomous Systems",
+            icon: <Icons.Sparkles className="w-6 h-6 text-lime-600" />,
+            description: "Build intelligent machines that perceive, plan, and act in the physical world.",
+            color: "bg-lime-50 border-lime-100",
+            textColor: "text-lime-800",
+            details: {
+                ap: ["AP CSA", "AP Physics C", "AP Calculus BC"],
+                codecademy: ["Robotics", "Python", "Machine Learning", "Control Systems"],
+                majors: ["Robotics", "Computer Engineering", "Mechanical Engineering + CS"],
+                jobs: ["Robotics Engineer", "Autonomous Systems Engineer", "Control Systems Engineer", "Robotics Researcher"],
+                ecs: ["Robotics Competitions (FRC, VEX)", "Robotics Projects", "Research", "Maker Projects"]
+            }
+        },
+        {
+            title: "Technical Writing & Developer Relations",
+            icon: <Icons.Lightbulb className="w-6 h-6 text-fuchsia-600" />,
+            description: "Bridge the gap between technology and users through documentation, tutorials, and community engagement.",
+            color: "bg-fuchsia-50 border-fuchsia-100",
+            textColor: "text-fuchsia-800",
+            details: {
+                ap: ["AP CSA", "AP CSP", "AP English Language"],
+                codecademy: ["Technical Writing", "Documentation", "API Development", "Communication"],
+                majors: ["Computer Science", "Technical Writing", "Communications", "English + CS"],
+                jobs: ["Technical Writer", "Developer Advocate", "Documentation Engineer", "Technical Content Creator"],
+                ecs: ["Blogging", "Open Source Documentation", "Tutorial Creation", "Writing", "Speaking at Conferences"]
+            }
+        },
+        {
+            title: "Product Management (Technical)",
+            icon: <Icons.Brain className="w-6 h-6 text-amber-600" />,
+            description: "Lead product strategy and development by combining technical knowledge with business acumen.",
+            color: "bg-amber-50 border-amber-100",
+            textColor: "text-amber-800",
+            details: {
+                ap: ["AP CSA", "AP Statistics", "AP Economics", "AP Psychology"],
+                codecademy: ["Product Management", "Data Analysis", "Business Fundamentals"],
+                majors: ["Computer Science", "Business", "Product Management", "Engineering Management"],
+                jobs: ["Technical Product Manager", "Product Owner", "Program Manager", "Product Strategist"],
+                ecs: ["Product Projects", "Business Competitions", "Leadership Roles", "Internships", "Startup Experience"]
+            }
+        },
+        {
+            title: "High-Performance Computing & Parallel Systems",
+            icon: <Icons.Code className="w-6 h-6 text-slate-600" />,
+            description: "Optimize code for supercomputers and parallel systems to solve computationally intensive problems.",
+            color: "bg-slate-50 border-slate-100",
+            textColor: "text-slate-800",
+            details: {
+                ap: ["AP CSA", "AP Calculus BC", "AP Physics C"],
+                codecademy: ["C/C++", "Parallel Programming", "High-Performance Computing"],
+                majors: ["Computer Science", "Applied Math", "Computational Science"],
+                jobs: ["HPC Engineer", "Parallel Systems Developer", "Performance Engineer", "Scientific Computing Engineer"],
+                ecs: ["Research Projects", "Supercomputing Competitions", "Performance Optimization Projects"]
+            }
+        },
+        {
+            title: "Accessibility Engineering",
+            icon: <Icons.Shield className="w-6 h-6 text-emerald-600" />,
+            description: "Build inclusive technology that is usable by everyone, regardless of ability or disability.",
+            color: "bg-emerald-50 border-emerald-100",
+            textColor: "text-emerald-800",
+            details: {
+                ap: ["AP CSA", "AP CSP", "AP Psychology"],
+                codecademy: ["Web Accessibility", "Front-End Development", "Inclusive Design"],
+                majors: ["Computer Science", "HCI", "Accessibility Engineering"],
+                jobs: ["Accessibility Engineer", "Inclusive Design Engineer", "Assistive Technology Developer"],
+                ecs: ["Accessibility Audits", "Inclusive Design Projects", "Volunteering with Disability Organizations"]
+            }
         }
     ];
 
+    const togglePathway = (index) => {
+        setExpandedPathway(expandedPathway === index ? null : index);
+    };
+
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 space-y-12">
-            <div className="text-center">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+            <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gvcs-navy mb-4">Career Pathways</h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
-                    Explore different directions your CS journey can take. We've curated roadmaps including courses, majors, and extracurriculars to help you get there.
+                <p className="text-gray-600 max-w-2xl mx-auto mb-4">
+                    Explore different directions your CS journey can take. Click on any pathway to see detailed roadmaps including courses, majors, and extracurriculars.
                 </p>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-3xl mx-auto">
+                    <p className="text-sm text-blue-800">
+                        <strong>Disclaimer:</strong> These pathways are suggestions based on typical requirements. Real jobs are <strong>not</strong> confined to these specific skills or activities. The items highlighted here are what employers typically look for, but career paths are diverse and flexible. Your unique combination of experiences, skills, and interests can lead to success in any of these fields.
+                    </p>
+                </div>
             </div>
 
-            <div className="grid gap-8">
-                {pathways.map((path, i) => (
-                    <div key={i} className={`rounded-2xl border ${path.color.replace('bg-', 'border-')} overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow`}>
-                        <div className={`p-6 ${path.color} border-b ${path.color.replace('bg-', 'border-')} flex items-start gap-4`}>
-                            <div className="p-3 bg-white rounded-xl shadow-sm">
-                                {path.icon}
-                            </div>
-                            <div>
-                                <h3 className={`text-xl font-bold ${path.textColor}`}>{path.title}</h3>
-                                <p className="text-gray-600 mt-1">{path.description}</p>
-                            </div>
-                        </div>
-                        <div className="p-6 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div>
-                                <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                    <Icons.Book className="w-4 h-4 text-gray-400" /> Recommended APs
-                                </h4>
-                                <ul className="space-y-1">
-                                    {path.details.ap.map((item, j) => (
-                                        <li key={j} className="text-sm text-gray-600">• {item}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                    <Icons.Code className="w-4 h-4 text-gray-400" /> Codecademy
-                                </h4>
-                                <ul className="space-y-1">
-                                    {path.details.codecademy.map((item, j) => (
-                                        <li key={j} className="text-sm text-gray-600">• {item}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                    <Icons.GradCap className="w-4 h-4 text-gray-400" /> Majors & Jobs
-                                </h4>
-                                <div className="space-y-3">
-                                    <div>
-                                        <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Majors</div>
-                                        <ul className="space-y-1">
-                                            {path.details.majors.map((item, j) => (
-                                                <li key={j} className="text-sm text-gray-600">• {item}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Careers</div>
-                                        <ul className="space-y-1">
-                                            {path.details.jobs.map((item, j) => (
-                                                <li key={j} className="text-sm text-gray-600">• {item}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+                {pathways.map((path, i) => {
+                    const isExpanded = expandedPathway === i;
+                    return (
+                        <div 
+                            key={i} 
+                            className={`rounded-xl border-2 ${path.color.replace('bg-', 'border-')} overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer ${isExpanded ? 'ring-2 ring-offset-2 ' + path.color.replace('bg-', 'ring-') : ''} ${isExpanded ? 'md:col-span-2 lg:col-span-3' : ''}`}
+                            onClick={() => togglePathway(i)}
+                        >
+                            <div className={`p-4 ${path.color} flex items-start gap-3`}>
+                                <div className="p-2 bg-white rounded-lg shadow-sm flex-shrink-0">
+                                    {path.icon}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <h3 className={`text-lg font-bold ${path.textColor} mb-1`}>{path.title}</h3>
+                                    <p className="text-sm text-gray-600 line-clamp-2">{path.description}</p>
+                                </div>
+                                <div className="flex-shrink-0">
+                                    <Icons.ArrowRight 
+                                        className={`w-5 h-5 ${path.textColor} transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`} 
+                                    />
                                 </div>
                             </div>
-                            <div>
-                                <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                    <Icons.Sparkles className="w-4 h-4 text-gray-400" /> Extracurriculars
-                                </h4>
-                                <ul className="space-y-1">
-                                    {path.details.ecs.map((item, j) => (
-                                        <li key={j} className="text-sm text-gray-600">• {item}</li>
-                                    ))}
-                                </ul>
-                            </div>
+                            
+                            {isExpanded && (
+                                <div className="p-6 bg-gray-50 border-t border-gray-200" style={{ animation: 'fadeIn 0.3s ease-out forwards' }}>
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                                            <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2 text-sm">
+                                                <Icons.Book className="w-4 h-4 text-gray-400" /> Recommended APs
+                                            </h4>
+                                            <div className="flex flex-wrap gap-2">
+                                                {path.details.ap.map((item, j) => (
+                                                    <span key={j} className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-200 font-medium">
+                                                        {item}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                                            <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2 text-sm">
+                                                <Icons.Code className="w-4 h-4 text-gray-400" /> Codecademy
+                                            </h4>
+                                            <div className="flex flex-wrap gap-2">
+                                                {path.details.codecademy.map((item, j) => (
+                                                    <span key={j} className="text-xs bg-green-50 text-green-700 px-2.5 py-1 rounded-full border border-green-200 font-medium">
+                                                        {item}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                                            <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2 text-sm">
+                                                <Icons.GradCap className="w-4 h-4 text-gray-400" /> Majors
+                                            </h4>
+                                            <ul className="space-y-1.5">
+                                                {path.details.majors.map((item, j) => (
+                                                    <li key={j} className="text-sm text-gray-700 flex items-start gap-2">
+                                                        <span className="text-gray-400 mt-1">•</span>
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        
+                                        <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                                            <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2 text-sm">
+                                                <Icons.GradCap className="w-4 h-4 text-gray-400" /> Careers
+                                            </h4>
+                                            <ul className="space-y-1.5">
+                                                {path.details.jobs.map((item, j) => (
+                                                    <li key={j} className="text-sm text-gray-700 flex items-start gap-2">
+                                                        <span className="text-gray-400 mt-1">•</span>
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="mt-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                                        <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2 text-sm">
+                                            <Icons.Sparkles className="w-4 h-4 text-gray-400" /> Extracurriculars
+                                        </h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {path.details.ecs.map((item, j) => (
+                                                <span key={j} className="text-xs bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full border border-purple-200 font-medium">
+                                                    {item}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );
@@ -6897,6 +8162,7 @@ const ClubWebsite = () => {
             <div className="flex-grow">
                 <Routes>
                     <Route path="/" element={<HomeView />} />
+                    <Route path="/weekly-activities" element={<WeeklyActivitiesView user={user} />} />
                     <Route path="/weekly" element={<WeeklyActivitiesView user={user} />} />
                     <Route path="/ellis/*" element={<EllisGenerator user={user} onLoginRequest={() => setIsLoginOpen(true)} />} />
 

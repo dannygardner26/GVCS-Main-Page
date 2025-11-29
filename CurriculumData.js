@@ -21,39 +21,44 @@ export const CURRICULUM_DATA = {
         "deliverables": {
           "builder": {
             "title": "Big-O Analysis Template",
-            "description": "Download the template file and fill in the missing code sections. The template contains partially implemented algorithms with TODO comments. Complete the implementations and analyze their time complexity using Big-O notation.",
+            "description": "Complete a template file containing 4 partially implemented algorithms. Your task is to: (1) Implement the missing code sections marked with TODO comments, (2) Analyze and document the time complexity of each algorithm using Big-O notation, (3) Test each implementation with provided test cases, (4) Submit your completed file with all code working and complexity analysis included.",
             "guidelines": [
-              "Download the template file provided",
-              "Fill in the missing code sections marked with TODO comments",
-              "The template includes 3-4 simple algorithms (e.g., finding max in array, linear search, simple loop examples)",
-              "For each completed algorithm, write a comment explaining its time complexity in Big-O notation",
-              "Test your implementations with sample inputs",
-              "Submit your completed template file"
-            ]
+              "Step 1: Download the template file 'BigO_Analysis.java' from the download button below",
+              "Step 2: Open the file in your IDE. You will find 4 functions with TODO comments: findMax(), linearSearch(), bubbleSort(), and binarySearch()",
+              "Step 3: Implement each function according to the comments. For findMax(), return the maximum value in an array. For linearSearch(), find the index of a target value. For bubbleSort(), sort an array using bubble sort. For binarySearch(), find a target in a sorted array.",
+              "Step 4: Above each completed function, add a comment block explaining: (a) Time complexity in Big-O notation, (b) Space complexity, (c) Best case, average case, and worst case scenarios",
+              "Step 5: Run the provided test cases (included in the template) to verify your implementations work correctly",
+              "Step 6: Ensure your code compiles without errors and all test cases pass",
+              "Step 7: Submit your completed file. Your submission will be graded on: correctness (40%), complexity analysis accuracy (30%), code quality (20%), and test results (10%)"
+            ],
+            "template_file": {
+              "filename": "BigO_Analysis.java",
+              "content": "public class BigO_Analysis {\n    \n    // TODO: Implement this function to find the maximum value in an array\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int findMax(int[] arr) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // TODO: Implement linear search to find the index of target value\n    // Return -1 if not found\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int linearSearch(int[] arr, int target) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // TODO: Implement bubble sort algorithm\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static void bubbleSort(int[] arr) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement binary search (assumes array is sorted)\n    // Return -1 if not found\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int binarySearch(int[] arr, int target) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // Test cases - uncomment to test your implementations\n    public static void main(String[] args) {\n        int[] test1 = {3, 1, 4, 1, 5, 9, 2, 6};\n        System.out.println(\"findMax test: \" + (findMax(test1) == 9 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test2 = {1, 2, 3, 4, 5};\n        System.out.println(\"linearSearch test: \" + (linearSearch(test2, 3) == 2 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test3 = {5, 2, 8, 1, 9};\n        bubbleSort(test3);\n        System.out.println(\"bubbleSort test: \" + (test3[0] == 1 && test3[4] == 9 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test4 = {1, 3, 5, 7, 9};\n        System.out.println(\"binarySearch test: \" + (binarySearch(test4, 5) == 2 ? \"PASS\" : \"FAIL\"));\n    }\n}"
+            }
           },
           "academic": {
             "title": "Big-O Notation Assessment",
-            "description": "Complete a written test covering: (1) Analyzing code snippets to determine time complexity, (2) Proving Big-O bounds using formal definitions, (3) Comparing different algorithms and their complexity classes, (4) Space complexity analysis, (5) Best, average, and worst case scenarios. Submit detailed solutions with mathematical proofs.",
+            "description": "Complete a comprehensive written assessment demonstrating mastery of asymptotic analysis. You will: (1) Analyze 10 code snippets to determine their time and space complexity, (2) Prove 3 Big-O bounds using formal mathematical definitions, (3) Compare algorithms within the same complexity class, (4) Analyze best, average, and worst case scenarios. Submit a PDF document with all solutions showing step-by-step work and clear mathematical reasoning.",
             "guidelines": [
-              "Analyze 10 code snippets and determine their time complexity with justification",
-              "Prove at least 3 Big-O bounds using formal definition (f(n) = O(g(n)) if...)",
-              "Compare algorithms in same complexity class (e.g., O(n log n) sorting algorithms)",
-              "Analyze space complexity for at least 5 algorithms",
-              "Explain best, average, and worst case scenarios for algorithms that vary",
-              "All solutions must show step-by-step analysis with clear reasoning"
+              "Part 1 - Code Analysis (40 points): Analyze 10 provided code snippets. For each snippet: (a) Identify all loops and nested structures, (b) Count operations in terms of input size n, (c) Determine time complexity in Big-O notation, (d) Determine space complexity, (e) Provide 2-3 sentence justification for your answer",
+              "Part 2 - Formal Proofs (30 points): Prove 3 Big-O bounds using the formal definition: f(n) = O(g(n)) if there exist positive constants c and n₀ such that f(n) ≤ c·g(n) for all n ≥ n₀. Show: (a) Your choice of c and n₀, (b) Algebraic manipulation proving the inequality, (c) Clear conclusion",
+              "Part 3 - Algorithm Comparison (15 points): Compare 3 sorting algorithms (e.g., Merge Sort, Quick Sort, Heap Sort) all in O(n log n). Explain: (a) When each performs best, (b) Space requirements, (c) Stability, (d) Practical considerations",
+              "Part 4 - Case Analysis (15 points): For 2 algorithms with varying performance, analyze: (a) Best case scenario with example input, (b) Average case with expected input, (c) Worst case scenario with adversarial input, (d) Time complexity for each case",
+              "Format Requirements: Submit as a single PDF document. Use clear headings for each part. Show all work - partial credit will be given for correct reasoning even if final answer is wrong. Include your name and date on the first page",
+              "Grading: Correctness (60%), Mathematical rigor (25%), Clarity of explanation (15%)"
             ]
           },
           "communicator": {
             "title": "Big-O Notation Teaching Presentation",
-            "description": "Create a 10-15 minute presentation explaining Big-O notation. Include: (1) What is Big-O and why it matters, (2) Common complexity classes with examples, (3) How to analyze code to determine complexity, (4) Visual demonstrations showing how different complexities grow, (5) Real-world implications of choosing efficient algorithms. Use visual aids and code examples.",
+            "description": "Create and deliver a 10-15 minute educational presentation teaching Big-O notation to fellow students. Your presentation must: (1) Explain what Big-O notation is and why it matters in software development, (2) Cover 5 common complexity classes with real code examples, (3) Demonstrate how to analyze code step-by-step, (4) Use visual graphs showing how different complexities scale, (5) Connect theory to real-world impact. Submit your slides (PDF or PowerPoint) and either a video recording or deliver live to the class.",
             "guidelines": [
-              "10-15 minute presentation with visual aids",
-              "Explain Big-O notation in accessible terms (avoid heavy math jargon initially)",
-              "Cover at least 5 complexity classes: O(1), O(log n), O(n), O(n log n), O(n²)",
-              "Walk through analyzing 2-3 code examples step-by-step",
-              "Use graphs/charts to visualize how different complexities grow",
-              "Discuss real-world impact: why O(n²) vs O(n log n) matters in practice",
-              "Clear speaking, organized slides, and engaging delivery"
+              "Slide Structure (Required): (1) Title slide with your name, (2) Introduction: What is Big-O? (2-3 slides), (3) Why it matters: Real-world examples (2 slides), (4) Complexity classes: O(1), O(log n), O(n), O(n log n), O(n²) with code examples (5-6 slides), (5) How to analyze: Step-by-step walkthrough of 2 code examples (3-4 slides), (6) Visual comparison: Graph showing growth rates (1-2 slides), (7) Conclusion: Key takeaways (1 slide)",
+              "Content Requirements: For each complexity class, include: (a) Definition in simple terms, (b) At least one code example, (c) Real-world use case (e.g., O(log n) for binary search in phone contacts), (d) Visual representation (graph or chart)",
+              "Code Examples: Include 2-3 complete code examples that you analyze step-by-step. Show: (a) The code, (b) Line-by-line complexity analysis, (c) Final Big-O result, (d) Explanation of why",
+              "Visual Aids: Create or use a graph showing how O(1), O(log n), O(n), O(n log n), and O(n²) grow as input size increases. Use different colors for each line. Include axis labels and a legend",
+              "Delivery: Speak clearly and at an appropriate pace. Use transitions between slides. Engage the audience with questions or examples. If recording, ensure good audio quality and visible slides",
+              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time with your instructor",
+              "Grading Criteria: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
             ]
           }
         }
@@ -71,16 +76,21 @@ export const CURRICULUM_DATA = {
         "deliverables": {
           "builder": {
             "title": "Dynamic Array and Linked List Template",
-            "description": "Download the template file containing a partially implemented dynamic array and linked list class. Fill in the missing methods marked with TODO comments. The template includes method signatures, helper methods, and test cases.",
+            "description": "Complete a template file implementing two fundamental data structures: a DynamicArray class and a LinkedList class. Your task is to: (1) Implement all methods marked with TODO comments for both classes, (2) Ensure proper memory management (resizing for arrays, node management for lists), (3) Add time complexity comments for each method, (4) Pass all provided test cases, (5) Submit your working implementation. This project demonstrates understanding of linear data structures and their tradeoffs.",
             "guidelines": [
-              "Download the template file provided",
-              "Complete the dynamic array methods: resize(), add(), remove(), get()",
-              "Complete the linked list methods: addFirst(), addLast(), remove(), get()",
-              "Fill in helper methods like findNode() and updateSize()",
-              "Test your implementations using the provided test cases",
-              "Add comments explaining the time complexity of each method in Big-O notation",
-              "Submit your completed template file"
-            ]
+              "Step 1: Download 'DynamicArray_LinkedList.java' template file from the download button",
+              "Step 2: Implement DynamicArray class methods: (a) resize() - double capacity when full, (b) add(int index, T item) - insert at position with bounds checking, (c) remove(int index) - remove element and shift, (d) get(int index) - retrieve element, (e) size() - return current size",
+              "Step 3: Implement LinkedList class methods: (a) addFirst(T item) - add to head, (b) addLast(T item) - add to tail, (c) remove(T item) - find and remove first occurrence, (d) get(int index) - traverse to index and return, (e) Helper: findNode(T item) - locate node containing item",
+              "Step 4: For each implemented method, add a comment above it stating: (a) Time complexity in Big-O, (b) Space complexity if applicable, (c) Example: '// O(1) amortized time, O(1) space' for addLast()",
+              "Step 5: Run the test suite included in the template. All 15 test cases must pass. Fix any failing tests before submission",
+              "Step 6: Verify edge cases: empty list/array, single element, adding/removing at boundaries (index 0, last index)",
+              "Step 7: Code quality: Use meaningful variable names, add brief comments for complex logic, ensure no memory leaks (properly handle node references in LinkedList)",
+              "Step 8: Submit your completed file. Grading: Correctness (50%), Time complexity analysis (25%), Code quality (15%), Test results (10%)"
+            ],
+            "template_file": {
+              "filename": "DynamicArray_LinkedList.java",
+              "content": "public class DynamicArray<T> {\n    private T[] array;\n    private int size;\n    private int capacity;\n    \n    // TODO: Implement constructor that initializes array with initial capacity of 10\n    public DynamicArray() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement resize method that doubles the capacity when array is full\n    // Time Complexity: ???\n    private void resize() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement add method to insert item at given index\n    // Time Complexity: ???\n    public void add(int index, T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement remove method to remove item at given index\n    // Time Complexity: ???\n    public T remove(int index) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement get method to retrieve item at given index\n    // Time Complexity: ???\n    public T get(int index) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\nclass Node<T> {\n    T data;\n    Node<T> next;\n    \n    Node(T data) {\n        this.data = data;\n        this.next = null;\n    }\n}\n\npublic class LinkedList<T> {\n    private Node<T> head;\n    private int size;\n    \n    // TODO: Implement constructor\n    public LinkedList() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addFirst method\n    // Time Complexity: ???\n    public void addFirst(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addLast method\n    // Time Complexity: ???\n    public void addLast(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement helper method to find node containing item\n    // Time Complexity: ???\n    private Node<T> findNode(T item) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement remove method\n    // Time Complexity: ???\n    public boolean remove(T item) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement get method\n    // Time Complexity: ???\n    public T get(int index) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Test cases - uncomment to test\nclass TestCases {\n    public static void main(String[] args) {\n        // Test DynamicArray\n        DynamicArray<Integer> arr = new DynamicArray<>();\n        arr.add(0, 10);\n        arr.add(1, 20);\n        System.out.println(\"DynamicArray test 1: \" + (arr.get(0) == 10 ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"DynamicArray test 2: \" + (arr.size() == 2 ? \"PASS\" : \"FAIL\"));\n        \n        // Test LinkedList\n        LinkedList<Integer> list = new LinkedList<>();\n        list.addFirst(5);\n        list.addLast(15);\n        System.out.println(\"LinkedList test 1: \" + (list.get(0) == 5 ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"LinkedList test 2: \" + (list.size() == 2 ? \"PASS\" : \"FAIL\"));\n    }\n}"
+            }
           },
           "academic": {
             "title": "Linear Data Structures Assessment",
@@ -122,17 +132,22 @@ export const CURRICULUM_DATA = {
         "deliverables": {
           "builder": {
             "title": "Stack, Queue, and Deque Template",
-            "description": "Download the template file with partially implemented Stack, Queue, and Deque classes. Fill in the missing methods and complete a simple application using each structure.",
+            "description": "Complete a template file implementing three fundamental linear data structures: Stack, Queue, and Deque. Your task is to: (1) Implement all methods marked with TODO comments for all three classes, (2) Build a balanced parentheses checker using the Stack, (3) Build a task scheduler using the Queue, (4) Add time complexity comments for each method, (5) Pass all provided test cases, (6) Submit your working implementation. This project demonstrates understanding of LIFO, FIFO, and double-ended queue operations.",
             "guidelines": [
-              "Download the template file provided",
-              "Complete Stack methods: push(), pop(), peek(), isEmpty()",
-              "Complete Queue methods: enqueue(), dequeue(), front(), isEmpty()",
-              "Complete Deque methods: addFirst(), addLast(), removeFirst(), removeLast()",
-              "Implement a simple balanced parentheses checker using the Stack (template provided)",
-              "Implement a simple task scheduler using the Queue (template provided)",
-              "Add comments explaining the time complexity of each operation",
-              "Test your implementations and submit your completed template file"
-            ]
+              "Step 1: Download 'Stack_Queue_Deque.java' template file from the download button",
+              "Step 2: Implement Stack class methods: (a) push(T item) - add to top, (b) pop() - remove and return top element, (c) peek() - return top without removing, (d) isEmpty() - check if empty, (e) size() - return number of elements",
+              "Step 3: Implement Queue class methods: (a) enqueue(T item) - add to rear, (b) dequeue() - remove and return front element, (c) front() - return front without removing, (d) isEmpty() - check if empty, (e) size() - return number of elements",
+              "Step 4: Implement Deque class methods: (a) addFirst(T item) - add to front, (b) addLast(T item) - add to rear, (c) removeFirst() - remove and return front, (d) removeLast() - remove and return rear, (e) isEmpty() and size()",
+              "Step 5: Implement BalancedParenthesesChecker class using your Stack: (a) isBalanced(String expression) - returns true if parentheses are balanced, (b) Handle '(', ')', '[', ']', '{', '}' characters, (c) Use stack to track opening brackets",
+              "Step 6: Implement TaskScheduler class using your Queue: (a) scheduleTask(String task) - add task to queue, (b) executeNext() - remove and return next task, (c) hasTasks() - check if tasks remain",
+              "Step 7: For each implemented method, add a comment above it stating time complexity in Big-O notation",
+              "Step 8: Run the test suite included in the template. All test cases must pass. Fix any failing tests before submission",
+              "Step 9: Submit your completed file. Grading: Correctness (50%), Time complexity analysis (25%), Code quality (15%), Test results (10%)"
+            ],
+            "template_file": {
+              "filename": "Stack_Queue_Deque.java",
+              "content": "import java.util.LinkedList;\n\n// Stack Implementation (LIFO - Last In First Out)\npublic class Stack<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Stack() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement push method to add item to top\n    // Time Complexity: ???\n    public void push(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement pop method to remove and return top item\n    // Time Complexity: ???\n    public T pop() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement peek method to return top without removing\n    // Time Complexity: ???\n    public T peek() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: ???\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Queue Implementation (FIFO - First In First Out)\npublic class Queue<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Queue() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement enqueue method to add item to rear\n    // Time Complexity: ???\n    public void enqueue(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement dequeue method to remove and return front item\n    // Time Complexity: ???\n    public T dequeue() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement front method to return front without removing\n    // Time Complexity: ???\n    public T front() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: ???\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Deque Implementation (Double-Ended Queue)\npublic class Deque<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Deque() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addFirst method\n    // Time Complexity: ???\n    public void addFirst(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addLast method\n    // Time Complexity: ???\n    public void addLast(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement removeFirst method\n    // Time Complexity: ???\n    public T removeFirst() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement removeLast method\n    // Time Complexity: ???\n    public T removeLast() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: ???\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Balanced Parentheses Checker using Stack\nclass BalancedParenthesesChecker {\n    // TODO: Implement isBalanced method using your Stack\n    // Time Complexity: ???\n    public static boolean isBalanced(String expression) {\n        // Your implementation here\n        // Hint: Use a Stack to track opening brackets\n        // When you see '(', '[', '{' -> push to stack\n        // When you see ')', ']', '}' -> pop from stack and check if it matches\n        return false;\n    }\n}\n\n// Task Scheduler using Queue\nclass TaskScheduler {\n    private Queue<String> taskQueue;\n    \n    // TODO: Implement constructor\n    public TaskScheduler() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement scheduleTask method\n    // Time Complexity: ???\n    public void scheduleTask(String task) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement executeNext method\n    // Time Complexity: ???\n    public String executeNext() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement hasTasks method\n    // Time Complexity: ???\n    public boolean hasTasks() {\n        // Your implementation here\n        return false;\n    }\n}\n\n// Test cases - uncomment to test\nclass TestCases {\n    public static void main(String[] args) {\n        // Test Stack\n        Stack<Integer> stack = new Stack<>();\n        stack.push(1);\n        stack.push(2);\n        System.out.println(\\\"Stack test 1: \\\" + (stack.pop() == 2 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Stack test 2: \\\" + (stack.peek() == 1 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Queue\n        Queue<String> queue = new Queue<>();\n        queue.enqueue(\\\"first\\\");\n        queue.enqueue(\\\"second\\\");\n        System.out.println(\\\"Queue test 1: \\\" + (queue.dequeue().equals(\\\"first\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Queue test 2: \\\" + (queue.front().equals(\\\"second\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Deque\n        Deque<Character> deque = new Deque<>();\n        deque.addFirst('a');\n        deque.addLast('b');\n        System.out.println(\\\"Deque test 1: \\\" + (deque.removeFirst() == 'a' ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Deque test 2: \\\" + (deque.removeLast() == 'b' ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Balanced Parentheses\n        System.out.println(\\\"Parentheses test 1: \\\" + (BalancedParenthesesChecker.isBalanced(\\\"()\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Parentheses test 2: \\\" + (BalancedParenthesesChecker.isBalanced(\\\"([{}])\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Parentheses test 3: \\\" + (!BalancedParenthesesChecker.isBalanced(\\\"([)]\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Task Scheduler\n        TaskScheduler scheduler = new TaskScheduler();\n        scheduler.scheduleTask(\\\"Task 1\\\");\n        scheduler.scheduleTask(\\\"Task 2\\\");\n        System.out.println(\\\"Scheduler test 1: \\\" + (scheduler.executeNext().equals(\\\"Task 1\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Scheduler test 2: \\\" + (scheduler.hasTasks() ? \\\"PASS\\\" : \\\"FAIL\\\"));\n    }\n}"
+            }
           },
           "academic": {
             "title": "Stacks, Queues, and Deques Assessment",
@@ -175,17 +190,23 @@ export const CURRICULUM_DATA = {
         "deliverables": {
           "builder": {
             "title": "Hash Map Template",
-            "description": "Download the template file with a partially implemented HashMap class using chaining collision resolution. Fill in the missing methods including hash function, put(), get(), and remove().",
+            "description": "Complete a template file implementing a HashMap class with collision resolution using chaining. Your task is to: (1) Implement a hash function for string keys, (2) Implement put(), get(), and remove() methods with collision handling, (3) Implement automatic resizing when load factor exceeds threshold, (4) Add time complexity comments for each method, (5) Pass all provided test cases, (6) Submit your working implementation. This project demonstrates understanding of hashing, collision resolution, and hash table performance.",
             "guidelines": [
-              "Download the template file provided",
-              "Complete the hash function: hash(key) - use a simple polynomial hash for strings",
-              "Complete put(key, value) method: handle collisions using chaining",
-              "Complete get(key) method: search through the chain if collision occurred",
-              "Complete remove(key) method: remove from chain if found",
-              "Complete resize() method: rehash all elements when load factor exceeds threshold",
-              "Add comments explaining how chaining handles collisions",
-              "Test with the provided test cases and submit your completed template file"
-            ]
+              "Step 1: Download 'HashMap.java' template file from the download button",
+              "Step 2: Implement hash function: hash(String key) - use polynomial hashing: h = (h * 31 + char) % capacity. This distributes keys evenly across buckets",
+              "Step 3: Implement put(K key, V value) method: (a) Calculate hash index, (b) If bucket is empty, create new chain, (c) If key exists in chain, update value, (d) If key doesn't exist, add new entry to chain, (e) Check load factor and resize if needed",
+              "Step 4: Implement get(K key) method: (a) Calculate hash index, (b) Search through the chain at that index, (c) Return value if key found, null otherwise",
+              "Step 5: Implement remove(K key) method: (a) Calculate hash index, (b) Search chain for key, (c) Remove entry from chain if found, (d) Return removed value or null",
+              "Step 6: Implement resize() method: (a) Create new array with double capacity, (b) Rehash all existing entries into new array, (c) Update capacity and threshold",
+              "Step 7: For each implemented method, add a comment above it stating: (a) Time complexity in Big-O (average and worst case), (b) Space complexity if applicable",
+              "Step 8: Run the test suite included in the template. All test cases must pass. Test with various key types and collision scenarios",
+              "Step 9: Verify edge cases: empty map, single entry, many collisions, resizing triggers",
+              "Step 10: Submit your completed file. Grading: Correctness (50%), Hash function quality (15%), Collision handling (15%), Time complexity analysis (10%), Test results (10%)"
+            ],
+            "template_file": {
+              "filename": "HashMap.java",
+              "content": "import java.util.LinkedList;\n\n// Entry class to store key-value pairs\nclass Entry<K, V> {\n    K key;\n    V value;\n    \n    Entry(K key, V value) {\n        this.key = key;\n        this.value = value;\n    }\n}\n\n// HashMap Implementation with Chaining Collision Resolution\npublic class HashMap<K, V> {\n    private LinkedList<Entry<K, V>>[] buckets;\n    private int capacity;\n    private int size;\n    private static final double LOAD_FACTOR_THRESHOLD = 0.75;\n    \n    // TODO: Implement constructor that initializes buckets array with initial capacity of 16\n    @SuppressWarnings(\"unchecked\")\n    public HashMap() {\n        // Your implementation here\n        // Initialize buckets as array of LinkedLists\n        // Set initial capacity to 16\n        // Initialize size to 0\n    }\n    \n    // TODO: Implement hash function using polynomial hashing\n    // Formula: h = (h * 31 + char) % capacity\n    // Time Complexity: O(k) where k is length of key\n    private int hash(K key) {\n        // Your implementation here\n        // Convert key to string, then apply polynomial hash\n        return 0;\n    }\n    \n    // TODO: Implement put method to insert or update key-value pair\n    // Time Complexity: O(1) average, O(n) worst case (all keys hash to same bucket)\n    public void put(K key, V value) {\n        // Your implementation here\n        // 1. Calculate hash index\n        // 2. Get the chain (LinkedList) at that index\n        // 3. If chain is null, create new LinkedList\n        // 4. Search chain for existing key - if found, update value\n        // 5. If not found, add new Entry to chain\n        // 6. Increment size\n        // 7. Check if resize needed (size / capacity > LOAD_FACTOR_THRESHOLD)\n    }\n    \n    // TODO: Implement get method to retrieve value by key\n    // Time Complexity: O(1) average, O(n) worst case\n    public V get(K key) {\n        // Your implementation here\n        // 1. Calculate hash index\n        // 2. Get the chain at that index\n        // 3. Search chain for key\n        // 4. Return value if found, null otherwise\n        return null;\n    }\n    \n    // TODO: Implement remove method to delete key-value pair\n    // Time Complexity: O(1) average, O(n) worst case\n    public V remove(K key) {\n        // Your implementation here\n        // 1. Calculate hash index\n        // 2. Get the chain at that index\n        // 3. Search chain for key\n        // 4. Remove entry if found, decrement size\n        // 5. Return removed value or null\n        return null;\n    }\n    \n    // TODO: Implement resize method to double capacity and rehash all entries\n    // Time Complexity: O(n) where n is number of entries\n    @SuppressWarnings(\"unchecked\")\n    private void resize() {\n        // Your implementation here\n        // 1. Save old buckets array\n        // 2. Double the capacity\n        // 3. Create new buckets array with new capacity\n        // 4. Rehash all entries from old array to new array\n        // 5. Update capacity\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: O(1)\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: O(1)\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement containsKey method\n    // Time Complexity: O(1) average, O(n) worst case\n    public boolean containsKey(K key) {\n        // Your implementation here\n        return false;\n    }\n}\n\n// Test cases - uncomment to test\nclass TestCases {\n    public static void main(String[] args) {\n        HashMap<String, Integer> map = new HashMap<>();\n        \n        // Test put and get\n        map.put(\"apple\", 5);\n        map.put(\"banana\", 3);\n        System.out.println(\\\"HashMap test 1: \\\" + (map.get(\\\"apple\\\") == 5 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"HashMap test 2: \\\" + (map.get(\\\"banana\\\") == 3 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test update\n        map.put(\\\"apple\\\", 10);\n        System.out.println(\\\"HashMap test 3: \\\" + (map.get(\\\"apple\\\") == 10 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test remove\n        map.remove(\\\"banana\\\");\n        System.out.println(\\\"HashMap test 4: \\\" + (map.get(\\\"banana\\\") == null ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test containsKey\n        System.out.println(\\\"HashMap test 5: \\\" + (map.containsKey(\\\"apple\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"HashMap test 6: \\\" + (!map.containsKey(\\\"banana\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test size\n        System.out.println(\\\"HashMap test 7: \\\" + (map.size() == 1 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test collisions (keys that hash to same bucket)\n        map.put(\\\"cat\\\", 1);\n        map.put(\\\"dog\\\", 2);\n        map.put(\\\"bird\\\", 3);\n        System.out.println(\\\"HashMap test 8: \\\" + (map.size() == 4 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n    }\n}"
+            }
           },
           "academic": {
             "title": "Hash Tables Assessment",
@@ -1397,15 +1418,14 @@ export const CURRICULUM_DATA = {
   },
 
   // ============================================
-  // TIER 3: Senior Tracks / Specializations
+  // TIER 3: Advanced Specializations
   // ============================================
 
-  // Track A: Artificial Intelligence
+  // Artificial Intelligence & Machine Learning
   "AI 401: Intro to Machine Learning": {
     "prereqs": ["CS 301: Design & Analysis of Algorithms", "Linear Algebra"],
     "description": "Introduction to machine learning: regression, classification, neural networks, and backpropagation.",
     "tier": 3,
-    "track": "Artificial Intelligence",
     "weeks": [
       {
         "week": 1,
@@ -1515,7 +1535,6 @@ export const CURRICULUM_DATA = {
     "prereqs": ["AI 401: Intro to Machine Learning"],
     "description": "Advanced deep learning: CNNs for computer vision, RNNs/LSTMs for sequences, and Transformers with attention mechanisms.",
     "tier": 3,
-    "track": "Artificial Intelligence",
     "weeks": [
       {
         "week": 1,
@@ -1621,12 +1640,11 @@ export const CURRICULUM_DATA = {
     }
   },
 
-  // Track B: Systems & Data
+  // Systems & Infrastructure
   "Sys 401: Database System Implementation": {
     "prereqs": ["Sys 301: Operating Systems (OS)", "CS 102: Data Structures & Functional Utility"],
     "description": "Building a database engine (not just using SQL). B+ Trees, buffer management, query optimization, ACID transactions, and WAL.",
     "tier": 3,
-    "track": "Systems & Data",
     "weeks": [
       {
         "week": 1,
@@ -1736,7 +1754,6 @@ export const CURRICULUM_DATA = {
     "prereqs": ["Sys 301: Operating Systems (OS)"],
     "description": "MapReduce, distributed consensus (Paxos/Raft), fault tolerance, scalability, and the CAP Theorem.",
     "tier": 3,
-    "track": "Systems & Data",
     "weeks": [
       {
         "week": 1,
@@ -1842,12 +1859,11 @@ export const CURRICULUM_DATA = {
     }
   },
 
-  // Track C: Languages & Theory
+  // Programming Languages & Theory
   "CS 401: Programming Languages & Compilers": {
     "prereqs": ["Sys 201: Computer Systems (The Hardware/Software Interface)"],
     "description": "Lexical analysis, parsing (CFGs), Abstract Syntax Trees, type systems, code generation, and optimization.",
     "tier": 3,
-    "track": "Languages & Theory",
     "weeks": [
       {
         "week": 1,
@@ -1953,15 +1969,10 @@ export const CURRICULUM_DATA = {
     }
   },
 
-  // ============================================
-  // TIER 3: Track A - Artificial Intelligence (Additional)
-  // ============================================
-  
   "AI 403: Reinforcement Learning": {
     "prereqs": ["AI 401: Intro to Machine Learning"],
     "description": "Teaching AI to play games and make decisions through trial and error. Learn the algorithms behind AlphaGo and game-playing agents.",
     "tier": 3,
-    "track": "Artificial Intelligence",
     "weeks": [
       {
         "week": 1,
@@ -2009,15 +2020,11 @@ export const CURRICULUM_DATA = {
     ]
   },
 
-  // ============================================
-  // TIER 3: Track D - Cybersecurity
-  // ============================================
-  
+  // Security & Cryptography
   "Sec 301: Network & Computer Security": {
     "prereqs": ["Sys 201: Computer Systems (The Hardware/Software Interface)"],
     "description": "The 'Hacker' course. Learn how systems break to understand how to defend them. Covers vulnerabilities, exploits, and defense mechanisms.",
     "tier": 3,
-    "track": "Cybersecurity",
     "weeks": [
       {
         "week": 1,
@@ -2068,7 +2075,6 @@ export const CURRICULUM_DATA = {
     "prereqs": ["Math 201: Discrete Mathematics for CS"],
     "description": "The math behind secrets. Learn how encryption works, from symmetric ciphers to public key cryptography and zero-knowledge proofs.",
     "tier": 3,
-    "track": "Cybersecurity",
     "weeks": [
       {
         "week": 1,
@@ -2119,7 +2125,6 @@ export const CURRICULUM_DATA = {
     "prereqs": ["Sys 201: Computer Systems (The Hardware/Software Interface)"],
     "description": "Disassembling viruses to see how they work. Learn to use tools like Ghidra and IDA Pro to analyze malicious code safely.",
     "tier": 3,
-    "track": "Cybersecurity",
     "weeks": [
       {
         "week": 1,
@@ -2167,15 +2172,11 @@ export const CURRICULUM_DATA = {
     ]
   },
 
-  // ============================================
-  // TIER 3: Track E - Game Design & Simulation
-  // ============================================
-  
+  // Graphics & Game Development
   "CS 403: Computer Graphics (Real-Time Rendering)": {
     "prereqs": ["CS 102: Data Structures & Functional Utility"],
     "description": "How to render millions of polygons onto the screen at 60 FPS. Learn the GPU pipeline, shaders, and 3D mathematics.",
     "tier": 3,
-    "track": "Game Design & Simulation",
     "weeks": [
       {
         "week": 1,
@@ -2226,7 +2227,6 @@ export const CURRICULUM_DATA = {
     "prereqs": ["CS 102: Data Structures & Functional Utility"],
     "description": "Building 'Unity' from scratch. Learn the game loop, physics engines, entity component systems, and memory management for games.",
     "tier": 3,
-    "track": "Game Design & Simulation",
     "weeks": [
       {
         "week": 1,
@@ -2278,7 +2278,6 @@ export const CURRICULUM_DATA = {
     "prereqs": ["CS 403: Computer Graphics (Real-Time Rendering)"],
     "description": "Building immersive spatial interfaces. Learn head tracking, spatial audio, hand tracking, and SLAM algorithms.",
     "tier": 3,
-    "track": "Game Design & Simulation",
     "weeks": [
       {
         "week": 1,
@@ -2326,15 +2325,11 @@ export const CURRICULUM_DATA = {
     ]
   },
 
-  // ============================================
-  // TIER 3: Track F - Futurist Electives
-  // ============================================
-  
+  // Emerging Technologies
   "CS 410: Quantum Computing": {
     "prereqs": ["Math 201: Discrete Mathematics for CS"],
     "description": "Coding for physics-defying computers. Learn qubits, superposition, entanglement, and quantum algorithms like Shor's algorithm.",
     "tier": 3,
-    "track": "Futurist Electives",
     "weeks": [
       {
         "week": 1,
@@ -2386,7 +2381,6 @@ export const CURRICULUM_DATA = {
     "prereqs": ["Math 302: Cryptography"],
     "description": "Web3 engineering. Learn distributed ledgers, consensus algorithms, smart contracts, and DeFi protocols.",
     "tier": 3,
-    "track": "Futurist Electives",
     "weeks": [
       {
         "week": 1,
@@ -2438,7 +2432,6 @@ export const CURRICULUM_DATA = {
     "prereqs": ["CS 301: Design & Analysis of Algorithms"],
     "description": "Using algorithms to cure disease. Learn DNA sequencing, protein folding, and biological data analysis.",
     "tier": 3,
-    "track": "Futurist Electives",
     "weeks": [
       {
         "week": 1,
