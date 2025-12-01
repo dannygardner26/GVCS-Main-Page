@@ -38,6 +38,110 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.s
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// --- Notification System ---
+const NotificationContext = React.createContext();
+
+const NotificationProvider = ({ children }) => {
+    const [notifications, setNotifications] = useState([]);
+
+    const showNotification = (message, type = 'success', duration = 3000) => {
+        const id = Date.now();
+        const notification = { id, message, type };
+        setNotifications(prev => [...prev, notification]);
+        
+        if (duration > 0) {
+            setTimeout(() => {
+                setNotifications(prev => prev.filter(n => n.id !== id));
+            }, duration);
+        }
+        
+        return id;
+    };
+
+    const showConfirm = (message, onConfirm, onCancel) => {
+        const id = Date.now();
+        const notification = { 
+            id, 
+            message, 
+            type: 'confirm',
+            onConfirm: () => {
+                onConfirm();
+                setNotifications(prev => prev.filter(n => n.id !== id));
+            },
+            onCancel: () => {
+                if (onCancel) onCancel();
+                setNotifications(prev => prev.filter(n => n.id !== id));
+            }
+        };
+        setNotifications(prev => [...prev, notification]);
+        return id;
+    };
+
+    const removeNotification = (id) => {
+        setNotifications(prev => prev.filter(n => n.id !== id));
+    };
+
+    return (
+        <NotificationContext.Provider value={{ showNotification, showConfirm, removeNotification }}>
+            {children}
+            <div className="fixed top-4 right-4 z-50 space-y-2 max-w-sm">
+                {notifications.map(notification => (
+                    <div
+                        key={notification.id}
+                        className={`p-4 rounded-lg shadow-lg border-2 animate-fade-in-up ${
+                            notification.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
+                            notification.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' :
+                            notification.type === 'info' ? 'bg-blue-50 border-blue-200 text-blue-800' :
+                            notification.type === 'confirm' ? 'bg-yellow-50 border-yellow-200 text-yellow-800' :
+                            'bg-gray-50 border-gray-200 text-gray-800'
+                        }`}
+                    >
+                        {notification.type === 'confirm' ? (
+                            <div>
+                                <p className="font-semibold mb-3">{notification.message}</p>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={notification.onConfirm}
+                                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold"
+                                    >
+                                        Confirm
+                                    </button>
+                                    <button
+                                        onClick={notification.onCancel}
+                                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 font-semibold"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex items-center justify-between">
+                                <p className="font-semibold">{notification.message}</p>
+                                <button
+                                    onClick={() => removeNotification(notification.id)}
+                                    className="ml-4 text-gray-500 hover:text-gray-700"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </NotificationContext.Provider>
+    );
+};
+
+const useNotification = () => {
+    const context = React.useContext(NotificationContext);
+    if (!context) {
+        throw new Error('useNotification must be used within NotificationProvider');
+    }
+    return context;
+};
+
 // --- Icons ---
 const Icons = {
     Clock: (props) => <svg {...props} className={`w-5 h-5 ${props.className || ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>,
@@ -711,8 +815,8 @@ const CurriculumMap = ({ courses, onSelect }) => {
     const sysCourses = tier3Courses.filter(c => c.title.startsWith("Sys 40"));
     const secCourses = tier3Courses.filter(c => c.title.startsWith("Sec ") || c.title === "Math 302: Cryptography");
     const graphicsCourses = tier3Courses.filter(c => c.title.startsWith("CS 40") && (c.title.includes("Graphics") || c.title.includes("Game") || c.title.includes("VR")));
-    const langCourses = tier3Courses.filter(c => c.title === "CS 401: Programming Languages & Compilers");
-    const emergingCourses = tier3Courses.filter(c => c.title.startsWith("CS 410") || c.title.startsWith("Fin 30") || c.title.startsWith("Bio 30"));
+    const langCourses = tier3Courses.filter(c => c.title.startsWith("CS 40") && c.title.includes("Language"));
+    const emergingCourses = tier3Courses.filter(c => c.title.startsWith("Fin 30"));
 
     const getCourse = (title) => courses.find(c => c.title === title) || { title, difficulty: "Unknown", tags: [], description: "" };
 
@@ -1275,26 +1379,30 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
         }
 
         try {
-            // Generate course_id from topic
-            const courseId = topic.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_').toUpperCase();
+            // Use the course title as the course_id (key in CURRICULUM_DATA)
+            // For AI-generated courses, use the topic as-is
+            const courseId = topic;
+            
+            // Check if this is a premade course from CURRICULUM_DATA
+            const globalCourse = CURRICULUM_DATA[topic];
+            const numWeeks = globalCourse ? globalCourse.weeks.length : (plan ? plan.length : 0);
+            
+            // Store only user-specific progress data (not full course content)
+            const userProgress = Array.from({ length: numWeeks }, (_, i) => ({
+                week: i + 1,
+                selected_activity: null,
+                submissions: {
+                    builder: null,
+                    academic: null,
+                    communicator: null
+                }
+            }));
 
             const courseData = {
                 user_id: user.id,
                 course_title: topic,
                 course_id: courseId,
-                weeks: plan.map(week => ({
-                    week: week.week,
-                    topic: week.topic,
-                    description: week.description,
-                    resources: week.resources,
-                    deliverables: week.deliverables,
-                    selected_activity: null,
-                    submissions: {
-                        builder: null,
-                        academic: null,
-                        communicator: null
-                    }
-                }))
+                weeks: userProgress // Only store user progress, not full course data
             };
 
             // Check if course already exists
@@ -3921,9 +4029,47 @@ const AdminPanel = ({ user, onBack }) => {
     };
 
     const calculateCourseProgress = (weeks) => {
-        if (!weeks || weeks.length === 0) return 0;
-        const completed = weeks.filter(w => w.submissions && w.submissions[w.selectedActivity || w.selected_activity]).length;
-        return Math.round((completed / weeks.length) * 100);
+        if (!weeks || weeks.length === 0) return { percentage: 0, completed: 0, total: 0 };
+        const completed = weeks.filter(w => {
+            const activity = w.selectedActivity || w.selected_activity;
+            return activity && w.submissions && w.submissions[activity];
+        }).length;
+        return {
+            percentage: Math.round((completed / weeks.length) * 100),
+            completed,
+            total: weeks.length
+        };
+    };
+
+    const handleDeleteCourse = async (courseId, courseTitle, e) => {
+        e.stopPropagation(); // Prevent opening the course when clicking delete
+        
+        if (!confirm(`Are you sure you want to delete "${courseTitle}"? This will remove all your progress in this course.`)) {
+            return;
+        }
+
+        try {
+            const { error } = await supabase
+                .from('user_courses')
+                .delete()
+                .eq('id', courseId)
+                .eq('user_id', user.id);
+
+            if (error) throw error;
+
+            // Remove from local state
+            setCourses(courses.filter(c => c.id !== courseId));
+            
+            // If the deleted course was selected, clear selection
+            if (selectedCourse && selectedCourse.id === courseId) {
+                setSelectedCourse(null);
+            }
+
+            alert('Course deleted successfully!');
+        } catch (error) {
+            console.error('Error deleting course:', error);
+            alert('Failed to delete course. Please try again.');
+        }
     };
 
     if (loading) {
@@ -4187,17 +4333,59 @@ const Dashboard = ({ user }) => {
 
             if (coursesError) throw coursesError;
 
-            const transformedCourses = (coursesData || []).map(course => ({
-                id: course.id,
-                courseTitle: course.course_title,
-                courseId: course.course_id,
-                addedDate: course.created_at,
-                weeks: (course.weeks || []).map(week => ({
-                    ...week,
-                    selectedActivity: week.selected_activity || week.selectedActivity || null
-                })),
-                progress: calculateCourseProgress(course.weeks || [])
-            }));
+            // Merge database user progress with global curriculum data
+            const transformedCourses = (coursesData || []).map(course => {
+                // Get the global course data from CURRICULUM_DATA
+                const globalCourse = CURRICULUM_DATA[course.course_id];
+                
+                if (!globalCourse) {
+                    // Fallback for old courses or AI-generated courses not in CURRICULUM_DATA
+                    // Use stored data if available
+                    return {
+                        id: course.id,
+                        courseTitle: course.course_title,
+                        courseId: course.course_id,
+                        addedDate: course.created_at,
+                        weeks: (course.weeks || []).map(week => ({
+                            ...week,
+                            selectedActivity: week.selected_activity || week.selectedActivity || null
+                        })),
+                        progress: calculateCourseProgress(course.weeks || [])
+                    };
+                }
+                
+                // Merge global curriculum with user progress
+                const userProgressByWeek = {};
+                (course.weeks || []).forEach(progress => {
+                    userProgressByWeek[progress.week] = progress;
+                });
+                
+                const mergedWeeks = globalCourse.weeks.map(globalWeek => {
+                    const userProgress = userProgressByWeek[globalWeek.week] || {};
+                    return {
+                        ...globalWeek, // Full week data from global curriculum
+                        selected_activity: userProgress.selected_activity || null,
+                        selectedActivity: userProgress.selected_activity || userProgress.selectedActivity || null,
+                        submissions: userProgress.submissions || {
+                            builder: null,
+                            academic: null,
+                            communicator: null
+                        }
+                    };
+                });
+                
+                return {
+                    id: course.id,
+                    courseTitle: course.course_title,
+                    courseId: course.course_id,
+                    addedDate: course.created_at,
+                    weeks: mergedWeeks,
+                    progress: calculateCourseProgress(mergedWeeks),
+                    description: globalCourse.description,
+                    prereqs: globalCourse.prereqs || [],
+                    tier: globalCourse.tier
+                };
+            });
 
             setCourses(transformedCourses);
 
@@ -4423,12 +4611,9 @@ const Dashboard = ({ user }) => {
                 onBack={() => setSelectedWeek(null)}
                 onUpdateCourse={async (updatedCourse) => {
                     try {
+                        // Only store user-specific progress data, not full course content
                         const supabaseWeeks = updatedCourse.weeks.map(w => ({
                             week: w.week,
-                            topic: w.topic,
-                            description: w.description,
-                            resources: w.resources,
-                            deliverables: w.deliverables,
                             selected_activity: w.selectedActivity || w.selected_activity || null,
                             submissions: w.submissions || { builder: null, academic: null, communicator: null }
                         }));
@@ -4462,12 +4647,43 @@ const Dashboard = ({ user }) => {
     if (selectedCourse) {
         return (
             <div className="max-w-7xl mx-auto p-6">
-                <button
-                    onClick={() => setSelectedCourse(null)}
-                    className="mb-4 text-sm text-gray-500 hover:text-gvcs-navy flex items-center gap-1"
-                >
-                    <Icons.ArrowRight /> Back to Dashboard
-                </button>
+                <div className="flex justify-between items-center mb-4">
+                    <button
+                        onClick={() => setSelectedCourse(null)}
+                        className="text-sm text-gray-500 hover:text-gvcs-navy flex items-center gap-1"
+                    >
+                        <Icons.ArrowRight className="rotate-180" /> Back to Dashboard
+                    </button>
+                    <button
+                        onClick={async () => {
+                            if (!confirm(`Are you sure you want to delete "${selectedCourse.courseTitle}"? This will remove all your progress in this course.`)) {
+                                return;
+                            }
+                            try {
+                                const { error } = await supabase
+                                    .from('user_courses')
+                                    .delete()
+                                    .eq('id', selectedCourse.id)
+                                    .eq('user_id', user.id);
+
+                                if (error) throw error;
+
+                                setCourses(courses.filter(c => c.id !== selectedCourse.id));
+                                setSelectedCourse(null);
+                                alert('Course deleted successfully!');
+                            } catch (error) {
+                                console.error('Error deleting course:', error);
+                                alert('Failed to delete course. Please try again.');
+                            }
+                        }}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        Delete Course
+                    </button>
+                </div>
                 <h2 className="text-2xl font-bold text-gvcs-navy mb-6">{selectedCourse.courseTitle}</h2>
                 
                 <div className="space-y-4">
@@ -4513,12 +4729,9 @@ const Dashboard = ({ user }) => {
                                         course={selectedCourse}
                                         onUpdateCourse={async (updatedCourse) => {
                                             try {
+                                                // Only store user-specific progress data, not full course content
                                                 const supabaseWeeks = updatedCourse.weeks.map(w => ({
                                                     week: w.week,
-                                                    topic: w.topic,
-                                                    description: w.description,
-                                                    resources: w.resources,
-                                                    deliverables: w.deliverables,
                                                     selected_activity: w.selectedActivity || w.selected_activity || null,
                                                     submissions: w.submissions || { builder: null, academic: null, communicator: null }
                                                 }));
@@ -4780,7 +4993,7 @@ const Dashboard = ({ user }) => {
                             return (
                                 <div
                                     key={course.id}
-                                    className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+                                    className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer relative group"
                                     onClick={() => setSelectedCourse(course)}
                                 >
                                     <div className="flex justify-between items-center">
@@ -4806,7 +5019,18 @@ const Dashboard = ({ user }) => {
                                                 )}
                                             </div>
                                         </div>
-                                        <Icons.ArrowRight className="w-6 h-6 text-gray-400" />
+                                        <div className="flex items-center gap-2">
+                                            <button
+                                                onClick={(e) => handleDeleteCourse(course.id, course.courseTitle, e)}
+                                                className="opacity-0 group-hover:opacity-100 transition-opacity p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg"
+                                                title="Delete course"
+                                            >
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                            <Icons.ArrowRight className="w-6 h-6 text-gray-400" />
+                                        </div>
                                     </div>
                                 </div>
                             );

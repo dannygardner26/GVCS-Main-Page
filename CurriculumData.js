@@ -16,7 +16,8 @@ export const CURRICULUM_DATA = {
           { "title": "Big-O Notation Explained", "url": "https://www.youtube.com/watch?v=__vX2sjlpXU", "type": "Video" },
           { "title": "Big-O Notation Tutorial", "url": "https://www.youtube.com/watch?v=Mo4vesaut8g", "type": "Video" },
           { "title": "Understanding Big-O Notation", "url": "https://www.youtube.com/watch?v=kS_gr2_-ws8", "type": "Video" },
-          { "title": "Big-O Cheat Sheet", "url": "https://www.bigocheatsheet.com/", "type": "Article" }
+          { "title": "Big-O Cheat Sheet", "url": "https://www.bigocheatsheet.com/", "type": "Article" },
+          { "title": "Introduction to Algorithms (CLRS) - Chapter 3: Growth of Functions (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture2.pdf", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
@@ -765,7 +766,8 @@ export const CURRICULUM_DATA = {
         "description": "Implement Dijkstra's algorithm for single-source shortest paths. Understand priority queue usage.",
         "resources": [
           { "title": "Dijkstra's Algorithm", "url": "https://www.youtube.com/watch?v=XB4MIexjvY0", "type": "Video" },
-          { "title": "Shortest Path Algorithms", "url": "https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/", "type": "Article" }
+          { "title": "Shortest Path Algorithms", "url": "https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/", "type": "Article" },
+          { "title": "Introduction to Algorithms (CLRS) - Chapter 24: Single-Source Shortest Paths (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture9.pdf", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
@@ -810,7 +812,8 @@ export const CURRICULUM_DATA = {
         "description": "Learn Bellman-Ford for graphs with negative edges. Detect negative cycles.",
         "resources": [
           { "title": "Bellman-Ford Algorithm", "url": "https://www.youtube.com/watch?v=obWXjtg0L64", "type": "Video" },
-          { "title": "Bellman-Ford Tutorial", "url": "https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/", "type": "Article" }
+          { "title": "Bellman-Ford Tutorial", "url": "https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/", "type": "Article" },
+          { "title": "Introduction to Algorithms (CLRS) - Chapter 24: Bellman-Ford Algorithm (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture10.pdf", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
@@ -855,7 +858,8 @@ export const CURRICULUM_DATA = {
         "description": "Master Floyd-Warshall for finding shortest paths between all pairs of vertices.",
         "resources": [
           { "title": "Floyd-Warshall Algorithm", "url": "https://www.youtube.com/watch?v=oNI0rf2P9gE", "type": "Video" },
-          { "title": "Floyd-Warshall Tutorial", "url": "https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/", "type": "Article" }
+          { "title": "Floyd-Warshall Tutorial", "url": "https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/", "type": "Article" },
+          { "title": "Introduction to Algorithms (CLRS) - Chapter 25: All-Pairs Shortest Paths (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture11.pdf", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
@@ -901,7 +905,8 @@ export const CURRICULUM_DATA = {
         "description": "Learn Prim's and Kruskal's algorithms for finding minimum spanning trees.",
         "resources": [
           { "title": "MST Algorithms", "url": "https://www.youtube.com/watch?v=4ZlRH0eK-qQ", "type": "Video" },
-          { "title": "Prim and Kruskal", "url": "https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/", "type": "Article" }
+          { "title": "Prim and Kruskal", "url": "https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/", "type": "Article" },
+          { "title": "Introduction to Algorithms (CLRS) - Chapter 23: Minimum Spanning Trees (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture11.pdf", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
@@ -949,7 +954,8 @@ export const CURRICULUM_DATA = {
         "description": "Deep dive into divide-and-conquer paradigm. Analyze merge sort and quicksort complexity.",
         "resources": [
           { "title": "Divide and Conquer", "url": "https://www.youtube.com/watch?v=2Rr2tW9zRga", "type": "Video" },
-          { "title": "Merge Sort Analysis", "url": "https://www.geeksforgeeks.org/merge-sort/", "type": "Article" }
+          { "title": "Merge Sort Analysis", "url": "https://www.geeksforgeeks.org/merge-sort/", "type": "Article" },
+          { "title": "Introduction to Algorithms (CLRS) - Chapter 2 & 7: Divide and Conquer Sorting (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture3.pdf", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
@@ -997,7 +1003,8 @@ export const CURRICULUM_DATA = {
         "description": "Master DP techniques: bottom-up (tabulation) and top-down (memoization). Solve classic DP problems.",
         "resources": [
           { "title": "Dynamic Programming", "url": "https://www.youtube.com/watch?v=oBt53YbR9Kk", "type": "Video" },
-          { "title": "DP Tutorial", "url": "https://www.geeksforgeeks.org/dynamic-programming/", "type": "Article" }
+          { "title": "DP Tutorial", "url": "https://www.geeksforgeeks.org/dynamic-programming/", "type": "Article" },
+          { "title": "Introduction to Algorithms (CLRS) - Chapter 15: Dynamic Programming (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture5.pdf", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
@@ -1044,7 +1051,8 @@ export const CURRICULUM_DATA = {
         "description": "Learn when greedy algorithms work. Study activity selection, fractional knapsack, and Huffman coding.",
         "resources": [
           { "title": "Greedy Algorithms", "url": "https://www.youtube.com/watch?v=HzeK7g8cD0Y", "type": "Video" },
-          { "title": "Greedy Strategy", "url": "https://www.geeksforgeeks.org/greedy-algorithms/", "type": "Article" }
+          { "title": "Greedy Strategy", "url": "https://www.geeksforgeeks.org/greedy-algorithms/", "type": "Article" },
+          { "title": "Introduction to Algorithms (CLRS) - Chapter 16: Greedy Algorithms (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture7.pdf", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
@@ -1092,7 +1100,8 @@ export const CURRICULUM_DATA = {
         "description": "Introduction to computational complexity. Understand P, NP, NP-complete, and reductions.",
         "resources": [
           { "title": "P vs NP", "url": "https://www.youtube.com/watch?v=YX40hbAHx3s", "type": "Video" },
-          { "title": "NP-Completeness", "url": "https://www.geeksforgeeks.org/np-completeness-set-1/", "type": "Article" }
+          { "title": "NP-Completeness", "url": "https://www.geeksforgeeks.org/np-completeness-set-1/", "type": "Article" },
+          { "title": "Introduction to Algorithms (CLRS) - Chapter 34: NP-Completeness (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture15.pdf", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
@@ -1750,276 +1759,6 @@ export const CURRICULUM_DATA = {
     }
   },
 
-  "Sys 402: Distributed Systems": {
-    "prereqs": ["Sys 301: Operating Systems (OS)"],
-    "description": "MapReduce, distributed consensus (Paxos/Raft), fault tolerance, scalability, and the CAP Theorem.",
-    "tier": 3,
-    "weeks": [
-      {
-        "week": 1,
-        "topic": "Introduction to Distributed Systems: Challenges and Models",
-        "description": "Understand distributed system challenges: network failures, partial failures, and consistency.",
-        "resources": [
-          { "title": "Distributed Systems", "url": "https://www.youtube.com/watch?v=Y6Ev8GXbYV8", "type": "Video" },
-          { "title": "Distributed Systems Basics", "url": "https://www.youtube.com/watch?v=7CmL5IP8y4U", "type": "Video" }
-        ],
-        "deliverable": "Write a report analyzing distributed system challenges. Compare different system models."
-      },
-      {
-        "week": 2,
-        "topic": "MapReduce: Distributed Data Processing",
-        "description": "Learn MapReduce programming model. Implement map and reduce functions for parallel processing.",
-        "resources": [
-          { "title": "MapReduce Explained", "url": "https://www.youtube.com/watch?v=htEKd_VFfTs", "type": "Video" },
-          { "title": "MapReduce Tutorial", "url": "https://www.youtube.com/watch?v=1Eyb3VgSHLc", "type": "Video" }
-        ],
-        "deliverable": "Implement a simple MapReduce framework. Process a large dataset using map and reduce operations."
-      },
-      {
-        "week": 3,
-        "topic": "Distributed Consensus: Paxos Algorithm",
-        "description": "Master the Paxos algorithm for achieving consensus in distributed systems.",
-        "resources": [
-          { "title": "Paxos Algorithm", "url": "https://www.youtube.com/watch?v=JEpsBg0AO6o", "type": "Video" },
-          { "title": "Consensus Algorithms", "url": "https://www.youtube.com/watch?v=JEpsBg0AO6o", "type": "Video" }
-        ],
-        "deliverable": "Implement a simplified Paxos algorithm. Simulate consensus in a distributed environment."
-      },
-      {
-        "week": 4,
-        "topic": "Raft: A Understandable Consensus Algorithm",
-        "description": "Learn Raft algorithm as an alternative to Paxos. Understand leader election and log replication.",
-        "resources": [
-          { "title": "Raft Algorithm", "url": "https://www.youtube.com/watch?v=uXEYuDwm7e4", "type": "Video" },
-          { "title": "Raft Explained", "url": "https://raft.github.io/", "type": "Article" }
-        ],
-        "deliverable": "Implement Raft consensus algorithm. Build a distributed key-value store using Raft."
-      },
-      {
-        "week": 5,
-        "topic": "Fault Tolerance: Replication and Failure Handling",
-        "description": "Learn replication strategies. Implement failure detection and recovery mechanisms.",
-        "resources": [
-          { "title": "Fault Tolerance", "url": "https://www.youtube.com/watch?v=Y6Ev8GXbYV8", "type": "Video" },
-          { "title": "Replication", "url": "https://www.youtube.com/watch?v=7CmL5IP8y4U", "type": "Video" }
-        ],
-        "deliverable": "Implement a replicated service with primary-backup replication. Handle node failures gracefully."
-      },
-      {
-        "week": 6,
-        "topic": "Scalability: Load Balancing and Sharding",
-        "description": "Understand horizontal scaling. Learn load balancing and data sharding techniques.",
-        "resources": [
-          { "title": "Load Balancing", "url": "https://www.youtube.com/watch?v=K0Ta65Oiiw4", "type": "Video" },
-          { "title": "Sharding", "url": "https://www.youtube.com/watch?v=5faMjKuB9bc", "type": "Video" }
-        ],
-        "deliverable": "Design and implement a sharded database system. Implement consistent hashing for shard assignment."
-      },
-      {
-        "week": 7,
-        "topic": "CAP Theorem: Consistency, Availability, Partition Tolerance",
-        "description": "Understand the CAP theorem. Learn trade-offs between consistency and availability.",
-        "resources": [
-          { "title": "CAP Theorem", "url": "https://www.youtube.com/watch?v=k-Yaq8AHlFA", "type": "Video" },
-          { "title": "CAP Explained", "url": "https://www.youtube.com/watch?v=BHqjEjzA3pM", "type": "Video" }
-        ],
-        "deliverable": "Analyze real distributed systems (Cassandra, MongoDB, etc.) in terms of CAP theorem. Design a system for specific CAP guarantees."
-      },
-      {
-        "week": 8,
-        "topic": "Distributed Systems Project: Building a Distributed Service",
-        "description": "Build a distributed system: distributed cache, message queue, or key-value store.",
-        "resources": [
-          { "title": "Building Distributed Systems", "url": "https://www.youtube.com/watch?v=Y6Ev8GXbYV8", "type": "Video" },
-          { "title": "Distributed Services", "url": "https://www.youtube.com/watch?v=7CmL5IP8y4U", "type": "Video" }
-        ],
-        "deliverable": "Build a distributed service (e.g., distributed cache or message queue) with replication and fault tolerance."
-      },
-      {
-        "week": 9,
-        "topic": "Final Assessment: Distributed Systems Portfolio",
-        "description": "Complete one Ellis Activity demonstrating mastery of distributed systems.",
-        "resources": [],
-        "deliverable": "Submit your chosen Ellis Activity (distributed system implementation, research paper, or teaching resource)."
-      }
-    ],
-    "ellis_activities": {
-      "builder": {
-        "title": "Distributed System Implementation",
-        "description": "Build a complete distributed system: distributed key-value store, message queue, or cache with consensus, replication, and fault tolerance."
-      },
-      "academic": {
-        "title": "Distributed Systems Research",
-        "description": "Research and implement a distributed algorithm (Raft, Paxos, or Byzantine fault tolerance) with detailed analysis."
-      },
-      "communicator": {
-        "title": "Distributed Systems Tutorial",
-        "description": "Create a comprehensive tutorial explaining distributed systems concepts: consensus, CAP theorem, or replication strategies."
-      }
-    }
-  },
-
-  // Programming Languages & Theory
-  "CS 401: Programming Languages & Compilers": {
-    "prereqs": ["Sys 201: Computer Systems (The Hardware/Software Interface)"],
-    "description": "Lexical analysis, parsing (CFGs), Abstract Syntax Trees, type systems, code generation, and optimization.",
-    "tier": 3,
-    "weeks": [
-      {
-        "week": 1,
-        "topic": "Lexical Analysis: Tokenization and Regular Expressions",
-        "description": "Learn lexical analysis. Implement a tokenizer using regular expressions and finite automata.",
-        "resources": [
-          { "title": "Lexical Analysis", "url": "https://www.youtube.com/watch?v=e4hZg5NcYx4", "type": "Video" },
-          { "title": "Regular Expressions", "url": "https://www.youtube.com/watch?v=sa-TUpSx1JA", "type": "Video" }
-        ],
-        "deliverable": "Implement a lexical analyzer (tokenizer) for a simple programming language."
-      },
-      {
-        "week": 2,
-        "topic": "Parsing: Context-Free Grammars and Recursive Descent",
-        "description": "Learn context-free grammars. Implement recursive descent and LL parsing.",
-        "resources": [
-          { "title": "Parsing", "url": "https://www.youtube.com/watch?v=e4hZg5NcYx4", "type": "Video" },
-          { "title": "CFG and Parsing", "url": "https://www.youtube.com/watch?v=sa-TUpSx1JA", "type": "Video" }
-        ],
-        "deliverable": "Write a context-free grammar for a simple language. Implement a recursive descent parser."
-      },
-      {
-        "week": 3,
-        "topic": "Abstract Syntax Trees (ASTs)",
-        "description": "Build Abstract Syntax Trees from parse trees. Design AST node structures.",
-        "resources": [
-          { "title": "Abstract Syntax Trees", "url": "https://www.youtube.com/watch?v=e4hZg5NcYx4", "type": "Video" },
-          { "title": "AST Construction", "url": "https://www.youtube.com/watch?v=sa-TUpSx1JA", "type": "Video" }
-        ],
-        "deliverable": "Build an AST from your parser. Implement tree traversal and pretty-printing."
-      },
-      {
-        "week": 4,
-        "topic": "Type Systems: Static Typing and Type Checking",
-        "description": "Learn type systems. Implement type checking for a statically typed language.",
-        "resources": [
-          { "title": "Type Systems", "url": "https://www.youtube.com/watch?v=e4hZg5NcYx4", "type": "Video" },
-          { "title": "Type Checking", "url": "https://www.youtube.com/watch?v=sa-TUpSx1JA", "type": "Video" }
-        ],
-        "deliverable": "Implement a type checker for your language. Support basic types and type inference."
-      },
-      {
-        "week": 5,
-        "topic": "Semantic Analysis: Symbol Tables and Scoping",
-        "description": "Build symbol tables. Implement scoping rules and name resolution.",
-        "resources": [
-          { "title": "Symbol Tables", "url": "https://www.youtube.com/watch?v=e4hZg5NcYx4", "type": "Video" },
-          { "title": "Scoping", "url": "https://www.youtube.com/watch?v=sa-TUpSx1JA", "type": "Video" }
-        ],
-        "deliverable": "Implement symbol tables with scoping. Resolve variable and function names."
-      },
-      {
-        "week": 6,
-        "topic": "Code Generation: Intermediate Representation",
-        "description": "Learn intermediate representations (IR). Generate IR from AST.",
-        "resources": [
-          { "title": "Code Generation", "url": "https://www.youtube.com/watch?v=e4hZg5NcYx4", "type": "Video" },
-          { "title": "Intermediate Representation", "url": "https://www.youtube.com/watch?v=sa-TUpSx1JA", "type": "Video" }
-        ],
-        "deliverable": "Design an IR for your language. Generate IR code from AST."
-      },
-      {
-        "week": 7,
-        "topic": "Code Generation: Target Code and Assembly",
-        "description": "Generate assembly or bytecode from IR. Understand instruction selection and register allocation.",
-        "resources": [
-          { "title": "Assembly Generation", "url": "https://www.youtube.com/watch?v=e4hZg5NcYx4", "type": "Video" },
-          { "title": "Register Allocation", "url": "https://www.youtube.com/watch?v=sa-TUpSx1JA", "type": "Video" }
-        ],
-        "deliverable": "Generate assembly code from IR. Implement basic register allocation."
-      },
-      {
-        "week": 8,
-        "topic": "Optimization: Constant Folding and Dead Code Elimination",
-        "description": "Learn compiler optimizations: constant folding, dead code elimination, and basic optimizations.",
-        "resources": [
-          { "title": "Compiler Optimizations", "url": "https://www.youtube.com/watch?v=e4hZg5NcYx4", "type": "Video" },
-          { "title": "Optimization Techniques", "url": "https://www.youtube.com/watch?v=sa-TUpSx1JA", "type": "Video" }
-        ],
-        "deliverable": "Implement 3-4 compiler optimizations. Measure performance improvements."
-      },
-      {
-        "week": 9,
-        "topic": "Final Assessment: Compiler Project",
-        "description": "Complete one Ellis Activity demonstrating mastery of programming languages and compilers.",
-        "resources": [],
-        "deliverable": "Submit your chosen Ellis Activity (compiler implementation, language design, or teaching resource)."
-      }
-    ],
-    "ellis_activities": {
-      "builder": {
-        "title": "Complete Compiler",
-        "description": "Build a complete compiler for a simple programming language: lexer, parser, type checker, and code generator."
-      },
-      "academic": {
-        "title": "Language Design and Implementation",
-        "description": "Design and implement a domain-specific language (DSL) with full compiler toolchain."
-      },
-      "communicator": {
-        "title": "Compiler Construction Tutorial",
-        "description": "Create a comprehensive tutorial series explaining compiler phases: lexing, parsing, type checking, and code generation."
-      }
-    }
-  },
-
-  "AI 403: Reinforcement Learning": {
-    "prereqs": ["AI 401: Intro to Machine Learning"],
-    "description": "Teaching AI to play games and make decisions through trial and error. Learn the algorithms behind AlphaGo and game-playing agents.",
-    "tier": 3,
-    "weeks": [
-      {
-        "week": 1,
-        "topic": "Introduction to Reinforcement Learning",
-        "description": "Understand the RL framework: agents, environments, rewards, and policies.",
-        "resources": [
-          { "title": "Reinforcement Learning Basics", "url": "https://www.youtube.com/watch?v=JgvyzIkgxF0", "type": "Video" },
-          { "title": "RL Tutorial Series", "url": "https://www.youtube.com/watch?v=2pWv7GOvuf0", "type": "Video" }
-        ],
-        "deliverables": {
-          "builder": {
-            "title": "RL Environment Template",
-            "description": "Download and complete a simple RL environment (like a grid world). Implement the agent-environment interaction loop.",
-            "guidelines": [
-              "Download the template file provided",
-              "Complete the environment step() and reset() methods",
-              "Implement a random policy agent",
-              "Test the agent-environment interaction",
-              "Submit your completed template file"
-            ]
-          },
-          "academic": {
-            "title": "RL Fundamentals Assessment",
-            "description": "Complete a written test on RL concepts: Markov Decision Processes, rewards, policies, and value functions.",
-            "guidelines": [
-              "Define MDP components: states, actions, transitions, rewards",
-              "Explain the difference between policy and value function",
-              "Compare model-based vs model-free RL",
-              "All solutions must show clear understanding of RL framework"
-            ]
-          },
-          "communicator": {
-            "title": "RL Introduction Presentation",
-            "description": "Create a 10-15 minute presentation explaining what reinforcement learning is and how it differs from supervised learning.",
-            "guidelines": [
-              "10-15 minute presentation with examples",
-              "Explain the agent-environment loop",
-              "Compare RL to supervised and unsupervised learning",
-              "Use game examples (chess, Mario) to illustrate concepts",
-              "Clear explanations and engaging delivery"
-            ]
-          }
-        }
-      }
-    ]
-  },
-
   // Security & Cryptography
   "Sec 301: Network & Computer Security": {
     "prereqs": ["Sys 201: Computer Systems (The Hardware/Software Interface)"],
@@ -2325,58 +2064,6 @@ export const CURRICULUM_DATA = {
     ]
   },
 
-  // Emerging Technologies
-  "CS 410: Quantum Computing": {
-    "prereqs": ["Math 201: Discrete Mathematics for CS"],
-    "description": "Coding for physics-defying computers. Learn qubits, superposition, entanglement, and quantum algorithms like Shor's algorithm.",
-    "tier": 3,
-    "weeks": [
-      {
-        "week": 1,
-        "topic": "Introduction to Quantum Computing",
-        "description": "Understand quantum mechanics basics: qubits, superposition, and measurement. Learn the difference between classical and quantum bits.",
-        "resources": [
-          { "title": "Quantum Computing Basics", "url": "https://www.youtube.com/watch?v=JhHMJCUmq28", "type": "Video" },
-          { "title": "Qubits and Superposition", "url": "https://www.youtube.com/watch?v=zNzzGgr2mhk", "type": "Video" }
-        ],
-        "deliverables": {
-          "builder": {
-            "title": "Quantum Circuit Template",
-            "description": "Download a template using Qiskit or similar. Implement basic quantum gates and simple quantum circuits.",
-            "guidelines": [
-              "Download the template file provided",
-              "Implement basic quantum gates (Hadamard, CNOT)",
-              "Create simple quantum circuits",
-              "Run circuits on quantum simulators",
-              "Submit your completed template file"
-            ]
-          },
-          "academic": {
-            "title": "Quantum Computing Fundamentals Assessment",
-            "description": "Complete a written test on quantum mechanics basics, qubits, and quantum gates.",
-            "guidelines": [
-              "Explain qubits vs classical bits",
-              "Describe superposition and entanglement",
-              "Analyze quantum gate operations",
-              "All solutions must show understanding of quantum principles"
-            ]
-          },
-          "communicator": {
-            "title": "Quantum Computing Presentation",
-            "description": "Create a 10-15 minute presentation explaining what quantum computing is and why it matters.",
-            "guidelines": [
-              "10-15 minute presentation with examples",
-              "Explain quantum mechanics basics in accessible terms",
-              "Compare quantum to classical computing",
-              "Discuss potential applications",
-              "Clear explanations and engaging delivery"
-            ]
-          }
-        }
-      }
-    ]
-  },
-
   "Fin 301: Blockchain & Decentralized Finance": {
     "prereqs": ["Math 302: Cryptography"],
     "description": "Web3 engineering. Learn distributed ledgers, consensus algorithms, smart contracts, and DeFi protocols.",
@@ -2428,54 +2115,4 @@ export const CURRICULUM_DATA = {
     ]
   },
 
-  "Bio 301: Computational Biology": {
-    "prereqs": ["CS 301: Design & Analysis of Algorithms"],
-    "description": "Using algorithms to cure disease. Learn DNA sequencing, protein folding, and biological data analysis.",
-    "tier": 3,
-    "weeks": [
-      {
-        "week": 1,
-        "topic": "Introduction to Bioinformatics",
-        "description": "Understand biological data: DNA sequences, proteins, and how computer science applies to biology.",
-        "resources": [
-          { "title": "Bioinformatics Basics", "url": "https://www.youtube.com/watch?v=K2F7pO0J7X4", "type": "Video" },
-          { "title": "Computational Biology", "url": "https://www.youtube.com/watch?v=Y7s7mQwYQqE", "type": "Video" }
-        ],
-        "deliverables": {
-          "builder": {
-            "title": "Sequence Analysis Template",
-            "description": "Download a template for DNA sequence analysis. Implement sequence alignment and pattern matching algorithms.",
-            "guidelines": [
-              "Download the template file provided",
-              "Implement basic sequence alignment",
-              "Complete pattern matching in DNA sequences",
-              "Analyze sequence similarity",
-              "Submit your completed template file"
-            ]
-          },
-          "academic": {
-            "title": "Bioinformatics Fundamentals Assessment",
-            "description": "Complete a written test on biological data structures, sequence analysis, and algorithmic approaches.",
-            "guidelines": [
-              "Explain DNA/RNA/Protein data representation",
-              "Describe sequence alignment algorithms",
-              "Analyze computational challenges in biology",
-              "All solutions must show understanding of biological computing"
-            ]
-          },
-          "communicator": {
-            "title": "Computational Biology Presentation",
-            "description": "Create a 10-15 minute presentation explaining how computer science is used in biology and medicine.",
-            "guidelines": [
-              "10-15 minute presentation with examples",
-              "Explain bioinformatics applications",
-              "Discuss DNA sequencing and analysis",
-              "Use real-world examples (CRISPR, AlphaFold)",
-              "Clear explanations and engaging delivery"
-            ]
-          }
-        }
-      }
-    ]
-  }
 };
