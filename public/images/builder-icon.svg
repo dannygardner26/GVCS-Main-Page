@@ -1,0 +1,168 @@
+<svg width="500" height="600" viewBox="0 0 500 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Glow filters -->
+    <filter id="cyanGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="orangeGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="brightGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Gradients -->
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6a7a8a"/>
+      <stop offset="50%" style="stop-color:#4a5a6a"/>
+      <stop offset="100%" style="stop-color:#2a3a4a"/>
+    </linearGradient>
+    <linearGradient id="darkMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3d4d5d"/>
+      <stop offset="100%" style="stop-color:#1a2a3a"/>
+    </linearGradient>
+    <linearGradient id="orangeGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6600"/>
+      <stop offset="100%" style="stop-color:#ffaa00"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#00aacc"/>
+      <stop offset="100%" style="stop-color:#00ffff"/>
+    </linearGradient>
+  </defs>
+  
+
+  
+  <!-- Ambient glow behind pillar -->
+  <ellipse cx="250" cy="350" rx="120" ry="200" fill="#00ffff" opacity="0.03" filter="url(#softGlow)"/>
+  
+  <!-- ============ HEXAGONAL BASE ============ -->
+  <!-- Main hex platform - 3D effect -->
+  <polygon points="250,520 330,480 330,465 250,505 170,465 170,480" fill="url(#darkMetal)" stroke="#00ffff" stroke-width="1.5" filter="url(#cyanGlow)"/>
+  <polygon points="250,505 320,470 320,460 250,495 180,460 180,470" fill="url(#metalGrad)" stroke="#00ddff" stroke-width="1"/>
+  
+  <!-- Hex plates with glowing cracks -->
+  <polygon points="250,495 300,470 250,480 200,470" fill="#1a2a3a" stroke="#00ffff" stroke-width="0.5"/>
+  <polygon points="200,470 250,450 300,470 250,480" fill="#2a3a4a" stroke="#00ddff" stroke-width="0.5"/>
+  
+  <!-- Cyan light seeping through cracks -->
+  <path d="M190,475 L220,462 L250,478 L280,462 L310,475" fill="none" stroke="#00ffff" stroke-width="3" opacity="0.8" filter="url(#cyanGlow)"/>
+  <path d="M200,468 L250,455 L300,468" fill="none" stroke="#00ffff" stroke-width="2" opacity="0.5" filter="url(#cyanGlow)"/>
+  <line x1="250" y1="495" x2="250" y2="455" stroke="#00ffff" stroke-width="2" opacity="0.6" filter="url(#cyanGlow)"/>
+  
+  <!-- Small hex details on base -->
+  <polygon points="195,485 205,480 215,485 205,490" fill="none" stroke="#00ffff" stroke-width="1" opacity="0.6"/>
+  <polygon points="285,485 295,480 305,485 295,490" fill="none" stroke="#00ffff" stroke-width="1" opacity="0.6"/>
+  
+  <!-- ============ PILLAR SHAFT - Self-assembling blocks ============ -->
+  
+  <!-- Block 1 (bottom) - Solid metal -->
+  <rect x="210" y="405" width="80" height="45" fill="url(#metalGrad)" stroke="#00ffff" stroke-width="2"/>
+  <rect x="218" y="413" width="64" height="29" fill="none" stroke="#00ddff" stroke-width="0.5" opacity="0.5"/>
+  <line x1="210" y1="427" x2="290" y2="427" stroke="#00ffff" stroke-width="0.5" opacity="0.4"/>
+  
+  <!-- Block 2 - Orange accent solid -->
+  <rect x="215" y="355" width="70" height="45" fill="url(#darkMetal)" stroke="#ff8800" stroke-width="2" filter="url(#orangeGlow)"/>
+  <line x1="215" y1="377" x2="285" y2="377" stroke="#ffaa00" stroke-width="1" opacity="0.6"/>
+  <rect x="225" y="362" width="50" height="10" fill="#ff6600" opacity="0.3"/>
+  
+  <!-- Block 3 - Wireframe/translucent -->
+  <rect x="205" y="300" width="90" height="50" fill="none" stroke="#00ffff" stroke-width="2.5" filter="url(#cyanGlow)"/>
+  <rect x="215" y="308" width="70" height="34" fill="#00ffff" opacity="0.08"/>
+  <line x1="205" y1="325" x2="295" y2="325" stroke="#00ddff" stroke-width="1" opacity="0.5"/>
+  <line x1="250" y1="300" x2="250" y2="350" stroke="#00ddff" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Block 4 - Solid with orange details -->
+  <rect x="212" y="248" width="76" height="47" fill="url(#metalGrad)" stroke="#ff8800" stroke-width="2"/>
+  <polygon points="212,248 250,230 288,248" fill="url(#darkMetal)" stroke="#ffaa00" stroke-width="1"/>
+  <line x1="220" y1="270" x2="280" y2="270" stroke="#ffaa00" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Block 5 - Wireframe ascending -->
+  <rect x="208" y="195" width="84" height="48" fill="none" stroke="#00ffff" stroke-width="2" filter="url(#cyanGlow)" opacity="0.85"/>
+  <rect x="220" y="205" width="60" height="28" fill="#00ffff" opacity="0.06"/>
+  <line x1="250" y1="195" x2="250" y2="243" stroke="#00ddff" stroke-width="0.5" opacity="0.4"/>
+  
+  <!-- Floating/assembling block (being placed) -->
+  <g opacity="0.9">
+    <rect x="218" y="145" width="64" height="40" fill="none" stroke="#00ffff" stroke-width="2" filter="url(#cyanGlow)"/>
+    <rect x="225" y="152" width="50" height="26" fill="url(#metalGrad)" opacity="0.7"/>
+    <!-- Magnetic field lines -->
+    <line x1="218" y1="185" x2="218" y2="195" stroke="#00ffff" stroke-width="1" opacity="0.5" stroke-dasharray="3,2"/>
+    <line x1="282" y1="185" x2="282" y2="195" stroke="#00ffff" stroke-width="1" opacity="0.5" stroke-dasharray="3,2"/>
+  </g>
+  
+  <!-- Energy guide lines on sides -->
+  <line x1="195" y1="450" x2="185" y2="250" stroke="#00ffff" stroke-width="1" opacity="0.3" stroke-dasharray="5,5"/>
+  <line x1="305" y1="450" x2="315" y2="250" stroke="#00ffff" stroke-width="1" opacity="0.3" stroke-dasharray="5,5"/>
+  
+  <!-- ============ ROBOTIC ARM / ASSEMBLER ============ -->
+  
+  <!-- Arm mount on pillar -->
+  <rect x="290" y="200" width="25" height="20" fill="url(#metalGrad)" stroke="#00ddff" stroke-width="1"/>
+  
+  <!-- Arm segment 1 -->
+  <path d="M302,200 L302,150 L340,110" fill="none" stroke="#4a5a6a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M302,200 L302,150 L340,110" fill="none" stroke="#00ddff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#cyanGlow)"/>
+  
+  <!-- Joint 1 -->
+  <circle cx="302" cy="150" r="10" fill="#2a3a4a" stroke="#00ffff" stroke-width="2" filter="url(#cyanGlow)"/>
+  <circle cx="302" cy="150" r="4" fill="#00ffff" opacity="0.6"/>
+  
+  <!-- Arm segment 2 -->
+  <path d="M340,110 L380,100 L370,80" fill="none" stroke="#4a5a6a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M340,110 L380,100 L370,80" fill="none" stroke="#00ddff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#cyanGlow)"/>
+  
+  <!-- Joint 2 -->
+  <circle cx="340" cy="110" r="8" fill="#2a3a4a" stroke="#00ffff" stroke-width="2"/>
+  <circle cx="340" cy="110" r="3" fill="#ffaa00" opacity="0.8"/>
+  
+  <!-- Joint 3 (wrist) -->
+  <circle cx="380" cy="100" r="6" fill="#2a3a4a" stroke="#ff8800" stroke-width="2"/>
+  
+  <!-- Assembler head / nozzle -->
+  <polygon points="370,80 390,70 400,80 390,90 370,80" fill="url(#metalGrad)" stroke="#ff8800" stroke-width="2" filter="url(#orangeGlow)"/>
+  <circle cx="400" cy="80" r="6" fill="#ffaa00" filter="url(#orangeGlow)"/>
+  <circle cx="400" cy="80" r="3" fill="#ffffff" opacity="0.9"/>
+  
+  <!-- ============ CAPSTONE BEING PLACED ============ -->
+  
+  <!-- Glowing capstone -->
+  <polygon points="250,95 280,115 250,125 220,115" fill="none" stroke="#ffaa00" stroke-width="3" filter="url(#orangeGlow)"/>
+  <polygon points="250,100 275,115 250,122 225,115" fill="#ff8800" opacity="0.5"/>
+  <polygon points="250,105 268,115 250,120 232,115" fill="#ffcc00" opacity="0.4"/>
+  
+  <!-- Energy beam from nozzle to capstone -->
+  <line x1="395" y1="80" x2="275" y2="108" stroke="#ffcc00" stroke-width="3" opacity="0.7" filter="url(#orangeGlow)"/>
+  <line x1="395" y1="80" x2="275" y2="108" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Bright light at capstone center -->
+  <circle cx="250" cy="112" r="12" fill="#ffaa00" opacity="0.4" filter="url(#brightGlow)"/>
+  <circle cx="250" cy="112" r="6" fill="#ffffff" opacity="0.7" filter="url(#orangeGlow)"/>
+  
+  <!-- Particle effects around capstone -->
+  <circle cx="235" cy="100" r="2" fill="#00ffff" opacity="0.7" filter="url(#cyanGlow)"/>
+  <circle cx="270" cy="105" r="1.5" fill="#ffcc00" opacity="0.8"/>
+  <circle cx="240" cy="130" r="2" fill="#00ffff" opacity="0.6"/>
+  <circle cx="265" cy="95" r="1.5" fill="#ffffff" opacity="0.7"/>
+  
+</svg>

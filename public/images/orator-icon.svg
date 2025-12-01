@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="200" height="300">
+  <defs>
+    <!-- Glow filters -->
+    <filter id="greenGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="outerGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="signalGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Gradients -->
+    <radialGradient id="emitterGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#00ff66;stop-opacity:0.6"/>
+      <stop offset="70%" style="stop-color:#00aa44;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#005522;stop-opacity:0.1"/>
+    </radialGradient>
+  </defs>
+  
+  <g filter="url(#outerGlow)">
+    <!-- BASE - Audio emitter/subwoofer dish -->
+    <ellipse cx="100" cy="270" rx="55" ry="15" fill="none" stroke="#00ff66" stroke-width="2" filter="url(#greenGlow)"/>
+    <ellipse cx="100" cy="270" rx="45" ry="12" fill="none" stroke="#00aa44" stroke-width="1.5" filter="url(#greenGlow)"/>
+    <ellipse cx="100" cy="270" rx="35" ry="9" fill="none" stroke="#00ff66" stroke-width="1" opacity="0.8"/>
+    <ellipse cx="100" cy="270" rx="25" ry="6" fill="none" stroke="#00ffcc" stroke-width="1.5" filter="url(#greenGlow)"/>
+    <ellipse cx="100" cy="270" rx="15" ry="4" fill="url(#emitterGrad)"/>
+    <ellipse cx="100" cy="270" rx="8" ry="2" fill="#00ff66" filter="url(#greenGlow)"/>
+    <ellipse cx="100" cy="270" rx="4" ry="1" fill="#ffffff" opacity="0.8"/>
+    
+    <!-- Base platform -->
+    <path d="M50,275 L60,285 L140,285 L150,275" fill="none" stroke="#00aa44" stroke-width="1.5"/>
+    <rect x="60" y="280" width="80" height="8" fill="#1a3322" stroke="#00ff66" stroke-width="0.5" opacity="0.6"/>
+    <circle cx="70" cy="284" r="2" fill="#ffdd00" filter="url(#goldGlow)"/>
+    <circle cx="100" cy="284" r="2" fill="#00ffcc" filter="url(#greenGlow)"/>
+    <circle cx="130" cy="284" r="2" fill="#ffdd00" filter="url(#goldGlow)"/>
+    
+    <!-- SHAFT - Sound waves traveling upward -->
+    <!-- Wave set 1 (bottom) -->
+    <path d="M70,250 Q100,240 130,250" fill="none" stroke="#00ff66" stroke-width="2" filter="url(#greenGlow)" opacity="0.9"/>
+    <path d="M75,245 Q100,237 125,245" fill="none" stroke="#00ffcc" stroke-width="1.5" opacity="0.7"/>
+    
+    <!-- Wave set 2 -->
+    <path d="M72,225 Q100,212 128,225" fill="none" stroke="#ffdd00" stroke-width="2" filter="url(#goldGlow)" opacity="0.85"/>
+    <path d="M78,220 Q100,210 122,220" fill="none" stroke="#ffee66" stroke-width="1" opacity="0.6"/>
+    
+    <!-- Wave set 3 -->
+    <path d="M74,200 Q100,185 126,200" fill="none" stroke="#00ff66" stroke-width="2" filter="url(#greenGlow)" opacity="0.8"/>
+    <path d="M80,195 Q100,183 120,195" fill="none" stroke="#00ffcc" stroke-width="1.5" opacity="0.6"/>
+    
+    <!-- Wave set 4 -->
+    <path d="M76,175 Q100,160 124,175" fill="none" stroke="#ffdd00" stroke-width="2" filter="url(#goldGlow)" opacity="0.75"/>
+    <path d="M82,170 Q100,158 118,170" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
+    
+    <!-- Wave set 5 -->
+    <path d="M78,150 Q100,135 122,150" fill="none" stroke="#00ff66" stroke-width="2" filter="url(#greenGlow)" opacity="0.7"/>
+    <path d="M84,145 Q100,133 116,145" fill="none" stroke="#00ffcc" stroke-width="1" opacity="0.5"/>
+    
+    <!-- Wave set 6 -->
+    <path d="M80,125 Q100,112 120,125" fill="none" stroke="#ffdd00" stroke-width="1.5" filter="url(#goldGlow)" opacity="0.65"/>
+    
+    <!-- Wave set 7 (top) -->
+    <path d="M82,102 Q100,90 118,102" fill="none" stroke="#00ff66" stroke-width="1.5" filter="url(#greenGlow)" opacity="0.6"/>
+    
+    <!-- Central energy column -->
+    <line x1="100" y1="265" x2="100" y2="85" stroke="#00ffcc" stroke-width="1" opacity="0.3" stroke-dasharray="4,4"/>
+    
+    <!-- Network signal particles -->
+    <circle cx="85" cy="230" r="2" fill="#ffffff" opacity="0.7"/>
+    <circle cx="115" cy="205" r="1.5" fill="#ffdd00" opacity="0.6"/>
+    <circle cx="90" cy="175" r="2" fill="#00ffcc" opacity="0.7"/>
+    <circle cx="110" cy="145" r="1.5" fill="#ffffff" opacity="0.6"/>
+    <circle cx="95" cy="115" r="2" fill="#ffdd00" opacity="0.7"/>
+    
+    <!-- CAPITAL - Broadcast antenna with speech bubble -->
+    <!-- Antenna mast -->
+    <rect x="96" y="50" width="8" height="40" fill="#2a4433" stroke="#00ff66" stroke-width="1"/>
+    <line x1="100" y1="50" x2="100" y2="90" stroke="#00ffcc" stroke-width="1" filter="url(#greenGlow)"/>
+    
+    <!-- Antenna crossbars -->
+    <line x1="80" y1="60" x2="120" y2="60" stroke="#00aa44" stroke-width="2"/>
+    <line x1="85" y1="70" x2="115" y2="70" stroke="#00aa44" stroke-width="1.5"/>
+    <line x1="90" y1="80" x2="110" y2="80" stroke="#00aa44" stroke-width="1"/>
+    
+    <!-- Glowing tips on crossbars -->
+    <circle cx="80" cy="60" r="3" fill="#00ff66" filter="url(#greenGlow)"/>
+    <circle cx="120" cy="60" r="3" fill="#00ff66" filter="url(#greenGlow)"/>
+    <circle cx="85" cy="70" r="2" fill="#ffdd00" filter="url(#goldGlow)"/>
+    <circle cx="115" cy="70" r="2" fill="#ffdd00" filter="url(#goldGlow)"/>
+    
+    <!-- Speech bubble integrated with antenna -->
+    <path d="M85,40 Q85,25 100,25 Q115,25 115,40 Q115,50 105,50 L100,58 L95,50 Q85,50 85,40 Z" 
+          fill="none" stroke="#00ffcc" stroke-width="2" filter="url(#greenGlow)"/>
+    <path d="M88,38 Q88,28 100,28 Q112,28 112,38 Q112,47 104,47 L100,52 L96,47 Q88,47 88,38 Z" 
+          fill="#00ff66" opacity="0.15"/>
+    
+    <!-- Signal lines inside bubble -->
+    <line x1="92" y1="35" x2="108" y2="35" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+    <line x1="94" y1="40" x2="106" y2="40" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
+    <line x1="96" y1="45" x2="104" y2="45" stroke="#ffffff" stroke-width="1" opacity="0.4"/>
+    
+    <!-- Broadcasting signal arcs -->
+    <!-- Left arcs -->
+    <path d="M70,35 Q60,40 65,55" fill="none" stroke="#ffdd00" stroke-width="2" filter="url(#goldGlow)" opacity="0.8"/>
+    <path d="M60,30 Q45,40 55,60" fill="none" stroke="#ffdd00" stroke-width="1.5" filter="url(#goldGlow)" opacity="0.6"/>
+    <path d="M50,25 Q30,40 45,65" fill="none" stroke="#ffee66" stroke-width="1" opacity="0.4"/>
+    
+    <!-- Right arcs -->
+    <path d="M130,35 Q140,40 135,55" fill="none" stroke="#ffdd00" stroke-width="2" filter="url(#goldGlow)" opacity="0.8"/>
+    <path d="M140,30 Q155,40 145,60" fill="none" stroke="#ffdd00" stroke-width="1.5" filter="url(#goldGlow)" opacity="0.6"/>
+    <path d="M150,25 Q170,40 155,65" fill="none" stroke="#ffee66" stroke-width="1" opacity="0.4"/>
+    
+    <!-- Top broadcast point -->
+    <circle cx="100" cy="20" r="5" fill="#ffffff" filter="url(#signalGlow)" opacity="0.9"/>
+    <circle cx="100" cy="20" r="3" fill="#ffdd00" filter="url(#goldGlow)"/>
+    <circle cx="100" cy="20" r="1.5" fill="#ffffff"/>
+    
+    <!-- Upward signal rays -->
+    <line x1="100" y1="15" x2="100" y2="5" stroke="#ffffff" stroke-width="1.5" filter="url(#signalGlow)" opacity="0.8"/>
+    <line x1="100" y1="15" x2="90" y2="5" stroke="#00ffcc" stroke-width="1" opacity="0.6"/>
+    <line x1="100" y1="15" x2="110" y2="5" stroke="#00ffcc" stroke-width="1" opacity="0.6"/>
+    
+    <!-- Ambient glow -->
+    <circle cx="100" cy="150" r="50" fill="#00ff66" opacity="0.04" filter="url(#greenGlow)"/>
+  </g>
+</svg>

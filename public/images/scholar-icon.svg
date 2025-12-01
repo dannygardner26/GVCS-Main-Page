@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="200" height="300">
+  <defs>
+    <!-- Glow filters -->
+    <filter id="purpleGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="magentaGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="outerGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="brightGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Gradients -->
+    <linearGradient id="violetGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#4a0080"/>
+      <stop offset="100%" style="stop-color:#8000ff"/>
+    </linearGradient>
+    <linearGradient id="magentaGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff00aa"/>
+      <stop offset="100%" style="stop-color:#ff66cc"/>
+    </linearGradient>
+    <linearGradient id="sapphireGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0044aa"/>
+      <stop offset="100%" style="stop-color:#0066ff"/>
+    </linearGradient>
+    <linearGradient id="helixGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#8000ff"/>
+      <stop offset="50%" style="stop-color:#ff00aa"/>
+      <stop offset="100%" style="stop-color:#00aaff"/>
+    </linearGradient>
+    <linearGradient id="lightBeam" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.1"/>
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.8"/>
+    </linearGradient>
+    <radialGradient id="discGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#8000ff;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#4a0080;stop-opacity:0.2"/>
+    </radialGradient>
+  </defs>
+  
+  <g filter="url(#outerGlow)">
+    <!-- BASE - Stack of data discs/server racks -->
+    <!-- Bottom disc -->
+    <ellipse cx="100" cy="275" rx="55" ry="12" fill="#1a0033" stroke="#8000ff" stroke-width="1.5" filter="url(#purpleGlow)"/>
+    <ellipse cx="100" cy="275" rx="45" ry="9" fill="none" stroke="#ff00aa" stroke-width="0.5" opacity="0.5"/>
+    <ellipse cx="100" cy="275" rx="35" ry="6" fill="url(#discGlow)" opacity="0.6"/>
+    
+    <!-- Middle disc -->
+    <ellipse cx="100" cy="260" rx="48" ry="10" fill="#2a0044" stroke="#8000ff" stroke-width="1.5" filter="url(#purpleGlow)"/>
+    <ellipse cx="100" cy="260" rx="38" ry="7" fill="none" stroke="#ff00aa" stroke-width="0.5" opacity="0.6"/>
+    <ellipse cx="100" cy="260" rx="25" ry="4" fill="#ff00aa" opacity="0.3"/>
+    
+    <!-- Top disc -->
+    <ellipse cx="100" cy="245" rx="42" ry="8" fill="#3a0055" stroke="#aa00ff" stroke-width="2" filter="url(#purpleGlow)"/>
+    <ellipse cx="100" cy="245" rx="30" ry="5" fill="none" stroke="#ff66cc" stroke-width="1"/>
+    <ellipse cx="100" cy="245" rx="15" ry="2.5" fill="#ffffff" opacity="0.4"/>
+    
+    <!-- Connecting pillars between discs -->
+    <rect x="55" y="250" width="4" height="20" fill="#4a0080" stroke="#aa00ff" stroke-width="0.5"/>
+    <rect x="141" y="250" width="4" height="20" fill="#4a0080" stroke="#aa00ff" stroke-width="0.5"/>
+    <rect x="60" y="237" width="3" height="20" fill="#4a0080" stroke="#aa00ff" stroke-width="0.5"/>
+    <rect x="137" y="237" width="3" height="20" fill="#4a0080" stroke="#aa00ff" stroke-width="0.5"/>
+    
+    <!-- Glowing data indicators on base -->
+    <circle cx="70" cy="260" r="2" fill="#00ffff" filter="url(#purpleGlow)"/>
+    <circle cx="130" cy="260" r="2" fill="#00ffff" filter="url(#purpleGlow)"/>
+    <circle cx="80" cy="275" r="1.5" fill="#ff00aa" opacity="0.8"/>
+    <circle cx="120" cy="275" r="1.5" fill="#ff00aa" opacity="0.8"/>
+    
+    <!-- SHAFT - DNA Double Helix made of light -->
+    <!-- Helix strand 1 -->
+    <path d="M85,235 
+             C70,220 130,200 115,185 
+             C100,170 70,155 85,140 
+             C100,125 130,110 115,95
+             C100,80 85,70 100,60" 
+          fill="none" stroke="#8000ff" stroke-width="3" filter="url(#purpleGlow)" opacity="0.9"/>
+    
+    <!-- Helix strand 2 -->
+    <path d="M115,235 
+             C130,220 70,200 85,185 
+             C100,170 130,155 115,140 
+             C100,125 70,110 85,95
+             C100,80 115,70 100,60" 
+          fill="none" stroke="#0066ff" stroke-width="3" filter="url(#purpleGlow)" opacity="0.9"/>
+    
+    <!-- Cross-connections (base pairs) -->
+    <line x1="85" y1="232" x2="115" y2="232" stroke="#ff00aa" stroke-width="1.5" filter="url(#magentaGlow)"/>
+    <line x1="78" y1="210" x2="122" y2="210" stroke="#ff66cc" stroke-width="1" opacity="0.8"/>
+    <line x1="115" y1="185" x2="85" y2="185" stroke="#ff00aa" stroke-width="1.5" filter="url(#magentaGlow)"/>
+    <line x1="78" y1="162" x2="122" y2="162" stroke="#ff66cc" stroke-width="1" opacity="0.8"/>
+    <line x1="85" y1="140" x2="115" y2="140" stroke="#ff00aa" stroke-width="1.5" filter="url(#magentaGlow)"/>
+    <line x1="122" y1="117" x2="78" y2="117" stroke="#ff66cc" stroke-width="1" opacity="0.8"/>
+    <line x1="115" y1="95" x2="85" y2="95" stroke="#ff00aa" stroke-width="1.5" filter="url(#magentaGlow)"/>
+    <line x1="78" y1="75" x2="122" y2="75" stroke="#ff66cc" stroke-width="1" opacity="0.7"/>
+    
+    <!-- Binary code particles floating upward -->
+    <text x="65" y="200" fill="#00ffff" font-size="6" opacity="0.6" font-family="monospace">01</text>
+    <text x="128" y="180" fill="#00ffff" font-size="5" opacity="0.5" font-family="monospace">10</text>
+    <text x="60" y="150" fill="#ff00aa" font-size="5" opacity="0.5" font-family="monospace">11</text>
+    <text x="132" y="130" fill="#00ffff" font-size="6" opacity="0.6" font-family="monospace">01</text>
+    <text x="65" y="110" fill="#ff66cc" font-size="5" opacity="0.4" font-family="monospace">00</text>
+    
+    <!-- CAPITAL - Holographic open book projecting light -->
+    <!-- Book base/spine -->
+    <path d="M100,55 L100,45" stroke="#ffffff" stroke-width="2" filter="url(#brightGlow)"/>
+    
+    <!-- Left page -->
+    <path d="M100,50 L70,40 L70,25 L100,35 Z" fill="none" stroke="#00aaff" stroke-width="1.5" filter="url(#purpleGlow)"/>
+    <path d="M100,50 L75,42 L75,30 L100,38" fill="#0066ff" opacity="0.2"/>
+    
+    <!-- Right page -->
+    <path d="M100,50 L130,40 L130,25 L100,35 Z" fill="none" stroke="#00aaff" stroke-width="1.5" filter="url(#purpleGlow)"/>
+    <path d="M100,50 L125,42 L125,30 L100,38" fill="#0066ff" opacity="0.2"/>
+    
+    <!-- Page lines (text representation) -->
+    <line x1="78" y1="35" x2="95" y2="42" stroke="#ffffff" stroke-width="0.5" opacity="0.4"/>
+    <line x1="80" y1="32" x2="93" y2="38" stroke="#ffffff" stroke-width="0.5" opacity="0.3"/>
+    <line x1="105" y1="42" x2="122" y2="35" stroke="#ffffff" stroke-width="0.5" opacity="0.4"/>
+    <line x1="107" y1="38" x2="120" y2="32" stroke="#ffffff" stroke-width="0.5" opacity="0.3"/>
+    
+    <!-- Light beam cone projecting upward -->
+    <polygon points="100,35 70,5 130,5" fill="url(#lightBeam)" opacity="0.3"/>
+    <polygon points="100,35 80,10 120,10" fill="#ffffff" opacity="0.15"/>
+    
+    <!-- Knowledge symbols in the light beam -->
+    <!-- Atom symbol -->
+    <ellipse cx="90" cy="18" rx="6" ry="2" fill="none" stroke="#ff00aa" stroke-width="0.8" transform="rotate(-30, 90, 18)" opacity="0.8"/>
+    <ellipse cx="90" cy="18" rx="6" ry="2" fill="none" stroke="#ff00aa" stroke-width="0.8" transform="rotate(30, 90, 18)" opacity="0.8"/>
+    <circle cx="90" cy="18" r="1.5" fill="#ffffff" filter="url(#brightGlow)"/>
+    
+    <!-- Galaxy spiral -->
+    <path d="M115,20 Q118,17 115,15 Q112,13 110,16 Q108,19 112,20" fill="none" stroke="#00aaff" stroke-width="0.8" opacity="0.8"/>
+    <circle cx="113" cy="17" r="1" fill="#ffffff" opacity="0.8"/>
+    
+    <!-- Pi symbol -->
+    <text x="97" y="14" fill="#ffffff" font-size="8" opacity="0.9" font-family="serif">π</text>
+    
+    <!-- Infinity symbol -->
+    <text x="102" y="25" fill="#ff66cc" font-size="7" opacity="0.7" font-family="serif">∞</text>
+    
+    <!-- Top bright point -->
+    <circle cx="100" cy="5" r="4" fill="#ffffff" filter="url(#brightGlow)" opacity="0.9"/>
+    <circle cx="100" cy="5" r="2" fill="#ffffff"/>
+    
+    <!-- Ambient glow -->
+    <circle cx="100" cy="150" r="50" fill="#8000ff" opacity="0.05" filter="url(#purpleGlow)"/>
+  </g>
+</svg>
