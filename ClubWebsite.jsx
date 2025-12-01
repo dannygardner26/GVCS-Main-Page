@@ -1084,6 +1084,7 @@ const EllisActivityCard = ({ type, title, description, guidelines }) => {
 };
 
 const EllisGenerator = ({ user, onLoginRequest }) => {
+    const { showNotification, showConfirm } = useNotification();
     const [mode, setMode] = useState('select'); // 'select', 'manual', 'wizard', 'ideas_selection', 'results'
     const [topic, setTopic] = useState('');
     const [level, setLevel] = useState('Beginner');
@@ -1175,7 +1176,7 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
 
         } catch (error) {
             console.error("AI Generation Error:", error);
-            alert("Failed to generate ideas. Please try again.");
+            showNotification("Failed to generate ideas. Please try again.", 'error');
         } finally {
             setIsGenerating(false);
         }
@@ -1303,7 +1304,7 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
 
         } catch (error) {
             console.error("AI Generation Error:", error);
-            alert("Failed to generate plan. Please try again.");
+            showNotification("Failed to generate plan. Please try again.", 'error');
         } finally {
             setIsGenerating(false);
         }
@@ -1329,7 +1330,7 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
             setMode('results');
         } catch (error) {
             console.error("AI Generation Error:", error);
-            alert("Failed to generate plan. Please try again.");
+            showNotification("Failed to generate plan. Please try again.", 'error');
         } finally {
             setIsGenerating(false);
         }
@@ -1369,7 +1370,7 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
             plan
         });
         localStorage.setItem('gvcs_saved_plans', JSON.stringify(savedPlans));
-        alert("Plan saved successfully!");
+        showNotification("Plan saved successfully!", 'success');
     };
 
     const addToMyCourses = async () => {
@@ -1414,7 +1415,7 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
                 .single();
 
             if (existingCourses) {
-                if (confirm("You already have this course. Replace it?")) {
+                showConfirm("You already have this course. Replace it?", async () => {
                     const { error: updateError } = await supabase
                         .from('user_courses')
                         .update({
@@ -1425,19 +1426,19 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
                         .eq('id', existingCourses.id);
 
                     if (updateError) throw updateError;
-                    alert("Course updated!");
-                }
+                    showNotification("Course updated!", 'success');
+                });
             } else {
                 const { error: insertError } = await supabase
                     .from('user_courses')
                     .insert([courseData]);
 
                 if (insertError) throw insertError;
-                alert("Course added to Dashboard!");
+                showNotification("Course added to Dashboard!", 'success');
             }
         } catch (error) {
             console.error('Error adding course:', error);
-            alert("Failed to add course. Please try again.");
+            showNotification("Failed to add course. Please try again.", 'error');
         }
     };
 
@@ -2303,6 +2304,7 @@ const AccountInfoSection = ({ user, profile, isEditing, onEdit, onSave, onCancel
 
 // Hackathon Project Wizard Component
 const HackathonProgramWizard = ({ user, onComplete, onCancel }) => {
+    const { showNotification, showConfirm } = useNotification();
     const [step, setStep] = useState(0);
     const [hackathonData, setHackathonData] = useState({
         hackathon_name: '',
@@ -2738,7 +2740,7 @@ This document will be used by each team member with their own AI coding assistan
 
     const handleStep2 = () => {
         if (!hackathonData.finalized_idea || hackathonData.finalized_idea.trim() === '') {
-            alert('Please paste your finalized idea before proceeding.');
+            showNotification('Please paste your finalized idea before proceeding.', 'error');
             return;
         }
         generateMasterDocumentPrompt();
@@ -2747,7 +2749,7 @@ This document will be used by each team member with their own AI coding assistan
 
     const handleStep3 = () => {
         if (!hackathonData.master_document || hackathonData.master_document.trim() === '') {
-            alert('Please paste your master document before proceeding.');
+            showNotification('Please paste your master document before proceeding.', 'error');
             return;
         }
         setStep(3);
@@ -3870,6 +3872,7 @@ const HackathonProgramView = ({ hackathon, user, onBack, onUpdate }) => {
 // Hackathons Section Component
 const HackathonsSection = ({ hackathons, user, onSelect, onRefresh }) => {
     const navigate = useNavigate();
+    const { showNotification, showConfirm } = useNotification();
 
     return (
         <div className="space-y-4">
@@ -3898,7 +3901,7 @@ const HackathonsSection = ({ hackathons, user, onSelect, onRefresh }) => {
                     {hackathons.map(hackathon => (
                         <div
                             key={hackathon.id}
-                            className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+                            className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer relative group"
                             onClick={() => onSelect(hackathon)}
                         >
                             <div className="flex justify-between items-center">
@@ -3917,7 +3920,39 @@ const HackathonsSection = ({ hackathons, user, onSelect, onRefresh }) => {
                                         <span className="text-xs text-gray-600">Step {hackathon.current_step + 1}/6</span>
                                     </div>
                                 </div>
-                                <Icons.ArrowRight className="w-6 h-6 text-gray-400" />
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={async (e) => {
+                                            e.stopPropagation();
+                                            showConfirm(
+                                                `Are you sure you want to delete "${hackathon.hackathon_name}"? This will remove all your planning progress.`,
+                                                async () => {
+                                                    try {
+                                                        const { error } = await supabase
+                                                            .from('hackathon_programs')
+                                                            .delete()
+                                                            .eq('id', hackathon.id)
+                                                            .eq('user_id', user.id);
+
+                                                        if (error) throw error;
+                                                        showNotification('Hackathon project deleted successfully!', 'success');
+                                                        onRefresh();
+                                                    } catch (error) {
+                                                        console.error('Error deleting hackathon:', error);
+                                                        showNotification('Failed to delete hackathon. Please try again.', 'error');
+                                                    }
+                                                }
+                                            );
+                                        }}
+                                        className="opacity-0 group-hover:opacity-100 transition-opacity p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg"
+                                        title="Delete hackathon"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                    <Icons.ArrowRight className="w-6 h-6 text-gray-400" />
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -4044,32 +4079,33 @@ const AdminPanel = ({ user, onBack }) => {
     const handleDeleteCourse = async (courseId, courseTitle, e) => {
         e.stopPropagation(); // Prevent opening the course when clicking delete
         
-        if (!confirm(`Are you sure you want to delete "${courseTitle}"? This will remove all your progress in this course.`)) {
-            return;
-        }
+        showConfirm(
+            `Are you sure you want to delete "${courseTitle}"? This will remove all your progress in this course.`,
+            async () => {
+                try {
+                    const { error } = await supabase
+                        .from('user_courses')
+                        .delete()
+                        .eq('id', courseId)
+                        .eq('user_id', user.id);
 
-        try {
-            const { error } = await supabase
-                .from('user_courses')
-                .delete()
-                .eq('id', courseId)
-                .eq('user_id', user.id);
+                    if (error) throw error;
 
-            if (error) throw error;
+                    // Remove from local state
+                    setCourses(courses.filter(c => c.id !== courseId));
+                    
+                    // If the deleted course was selected, clear selection
+                    if (selectedCourse && selectedCourse.id === courseId) {
+                        setSelectedCourse(null);
+                    }
 
-            // Remove from local state
-            setCourses(courses.filter(c => c.id !== courseId));
-            
-            // If the deleted course was selected, clear selection
-            if (selectedCourse && selectedCourse.id === courseId) {
-                setSelectedCourse(null);
+                    showNotification('Course deleted successfully!', 'success');
+                } catch (error) {
+                    console.error('Error deleting course:', error);
+                    showNotification('Failed to delete course. Please try again.', 'error');
+                }
             }
-
-            alert('Course deleted successfully!');
-        } catch (error) {
-            console.error('Error deleting course:', error);
-            alert('Failed to delete course. Please try again.');
-        }
+        );
     };
 
     if (loading) {
@@ -4300,6 +4336,7 @@ const AdminPanel = ({ user, onBack }) => {
 const Dashboard = ({ user }) => {
     const location = useLocation();
     const navigate = useNavigate();
+    const { showNotification, showConfirm } = useNotification();
     const [weeklyProgress, setWeeklyProgress] = useState(null);
     const [weeklyHistory, setWeeklyHistory] = useState([]);
     const [isWeeklyProgressExpanded, setIsWeeklyProgressExpanded] = useState(false);
@@ -4655,27 +4692,29 @@ const Dashboard = ({ user }) => {
                         <Icons.ArrowRight className="rotate-180" /> Back to Dashboard
                     </button>
                     <button
-                        onClick={async () => {
-                            if (!confirm(`Are you sure you want to delete "${selectedCourse.courseTitle}"? This will remove all your progress in this course.`)) {
-                                return;
-                            }
-                            try {
-                                const { error } = await supabase
-                                    .from('user_courses')
-                                    .delete()
-                                    .eq('id', selectedCourse.id)
-                                    .eq('user_id', user.id);
+                    onClick={async () => {
+                        showConfirm(
+                            `Are you sure you want to delete "${selectedCourse.courseTitle}"? This will remove all your progress in this course.`,
+                            async () => {
+                                try {
+                                    const { error } = await supabase
+                                        .from('user_courses')
+                                        .delete()
+                                        .eq('id', selectedCourse.id)
+                                        .eq('user_id', user.id);
 
-                                if (error) throw error;
+                                    if (error) throw error;
 
-                                setCourses(courses.filter(c => c.id !== selectedCourse.id));
-                                setSelectedCourse(null);
-                                alert('Course deleted successfully!');
-                            } catch (error) {
-                                console.error('Error deleting course:', error);
-                                alert('Failed to delete course. Please try again.');
+                                    setCourses(courses.filter(c => c.id !== selectedCourse.id));
+                                    setSelectedCourse(null);
+                                    showNotification('Course deleted successfully!', 'success');
+                                } catch (error) {
+                                    console.error('Error deleting course:', error);
+                                    showNotification('Failed to delete course. Please try again.', 'error');
+                                }
                             }
-                        }}
+                        );
+                    }}
                         className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -6572,6 +6611,7 @@ const InteractiveWeekView = ({ course, week, weekIndex, onBack, onUpdateCourse }
 const HackathonHubView = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { showNotification, showConfirm } = useNotification();
     const [user, setUser] = useState(null);
     const [isCreating, setIsCreating] = useState(false);
     const [registrations, setRegistrations] = useState({});
@@ -6876,7 +6916,7 @@ const HackathonHubView = () => {
             setRegistrations(regsByHackathon);
         } catch (error) {
             console.error('Error joining team:', error);
-            alert('Failed to join team.');
+            showNotification('Failed to join team.', 'error');
         }
     };
 
@@ -8597,6 +8637,7 @@ const Header = ({ user, onLoginClick, onLogout }) => {
 
 const ClubWebsite = () => {
     const navigate = useNavigate();
+    const { showNotification, showConfirm } = useNotification();
     const [user, setUser] = useState(null);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -8650,7 +8691,7 @@ const ClubWebsite = () => {
             setIsAdmin(true);
             navigate('/admin');
         } else if (code) {
-            alert("Incorrect Code");
+            showNotification("Incorrect Code", 'error');
         }
     };
 
@@ -8735,4 +8776,13 @@ const ClubWebsite = () => {
     );
 };
 
-export default ClubWebsite;
+// Wrap ClubWebsite with NotificationProvider
+const AppWithNotifications = () => {
+    return (
+        <NotificationProvider>
+            <ClubWebsite />
+        </NotificationProvider>
+    );
+};
+
+export default AppWithNotifications;
