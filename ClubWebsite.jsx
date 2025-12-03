@@ -156,7 +156,10 @@ const Icons = {
     ArrowRight: (props) => <svg {...props} className={`w-5 h-5 ${props.className || ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>,
     Link: (props) => <svg {...props} className={`w-5 h-5 ${props.className || ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>,
     GradCap: (props) => <svg {...props} className={`w-5 h-5 ${props.className || ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14v7"></path></svg>,
-    Shield: (props) => <svg {...props} className={`w-5 h-5 ${props.className || ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+    Shield: (props) => <svg {...props} className={`w-5 h-5 ${props.className || ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>,
+    HardHat: (props) => <svg {...props} className={`w-5 h-5 ${props.className || ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1a2 2 0 012-2m14 0V9a7 7 0 00-7-7v0a7 7 0 00-7 7v2m7-9v4"></path></svg>,
+    Speaker: (props) => <svg {...props} className={`w-5 h-5 ${props.className || ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>,
+    BookOpen: (props) => <svg {...props} className={`w-5 h-5 ${props.className || ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
 };
 
 // --- Data Layer ---
@@ -1944,6 +1947,166 @@ const EllisGenerator = ({ user, onLoginRequest }) => {
                     </p>
                 </button>
             </div>
+        </div>
+    );
+};
+
+// Article: Why Zuhaad Likes Rust
+const WhyZuhaadLikesRustArticle = () => {
+    const navigate = useNavigate();
+
+    return (
+        <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-16">
+                <div className="max-w-4xl mx-auto px-4">
+                    <button
+                        onClick={() => navigate('/')}
+                        className="mb-6 text-orange-200 hover:text-white flex items-center gap-2 text-sm"
+                    >
+                        <Icons.ArrowRight className="rotate-180 w-4 h-4" /> Back to Home
+                    </button>
+                    <span className="inline-block bg-white/20 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-4">
+                        Languages
+                    </span>
+                    <h1 className="text-4xl md:text-5xl font-black mb-4">Why Zuhaad Likes Rust</h1>
+                    <p className="text-xl text-orange-100 mb-6">Memory safety without garbage collection. Is it the future of systems programming?</p>
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-xl font-bold">Z</div>
+                        <div>
+                            <div className="font-bold">Zuhaad "zuzubear" Rathore</div>
+                            <div className="text-orange-200 text-sm">GVCS Member</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Article Content */}
+            <article className="max-w-4xl mx-auto px-4 py-12">
+                <div className="prose prose-lg max-w-none">
+                    <p className="text-xl text-gray-600 leading-relaxed mb-8">
+                        When I first heard about Rust, I was skeptical. Another systems programming language? We already have C and C++. But after diving deep into the language, I've come to appreciate why Rust is genuinely revolutionary.
+                    </p>
+
+                    <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">The Ownership Model: A Game Changer</h2>
+                    <p className="text-gray-700 leading-relaxed mb-6">
+                        Rust's ownership system is what sets it apart from every other language I've used. Instead of relying on garbage collection (like Java or Python) or manual memory management (like C), Rust uses a compile-time ownership model that guarantees memory safety without runtime overhead.
+                    </p>
+                    <div className="bg-gray-900 rounded-xl p-6 my-6 overflow-x-auto">
+                        <pre className="text-green-400 text-sm font-mono">
+{`fn main() {
+    let s1 = String::from("hello");
+    let s2 = s1; // s1 is moved to s2
+
+    // println!("{}", s1); // This would error!
+    println!("{}", s2); // This works
+}`}
+                        </pre>
+                    </div>
+                    <p className="text-gray-700 leading-relaxed mb-6">
+                        This might seem restrictive at first, but it eliminates entire categories of bugs: null pointer dereferences, use-after-free, double-free, and data races. The compiler catches these at build time, not at 3 AM in production.
+                    </p>
+
+                    <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">Zero-Cost Abstractions</h2>
+                    <p className="text-gray-700 leading-relaxed mb-6">
+                        Rust proves you don't have to choose between high-level ergonomics and low-level performance. Iterators, pattern matching, and generics all compile down to the same efficient machine code you'd write by hand in C.
+                    </p>
+                    <div className="bg-gray-900 rounded-xl p-6 my-6 overflow-x-auto">
+                        <pre className="text-green-400 text-sm font-mono">
+{`// This high-level code...
+let sum: i32 = (0..1000)
+    .filter(|n| n % 2 == 0)
+    .map(|n| n * n)
+    .sum();
+
+// ...compiles to the same assembly as hand-optimized loops`}
+                        </pre>
+                    </div>
+
+                    <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">Fearless Concurrency</h2>
+                    <p className="text-gray-700 leading-relaxed mb-6">
+                        Data races are impossible in safe Rust. The ownership system extends to threading: you can't accidentally share mutable state across threads. The compiler enforces thread safety at compile time.
+                    </p>
+                    <p className="text-gray-700 leading-relaxed mb-6">
+                        This isn't just theoretical. I've written concurrent code in Rust that would have taken me days to debug in C++, and it worked correctly on the first run because the compiler caught all my mistakes.
+                    </p>
+
+                    <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">The Ecosystem</h2>
+                    <p className="text-gray-700 leading-relaxed mb-6">
+                        Cargo is the best package manager I've ever used. Period. Dependency management, building, testing, documentation - it's all integrated beautifully. Compare that to CMake in C++ or Makefiles in C, and you'll never want to go back.
+                    </p>
+                    <ul className="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                        <li><strong>cargo build</strong> - Build your project</li>
+                        <li><strong>cargo test</strong> - Run all tests</li>
+                        <li><strong>cargo doc</strong> - Generate documentation</li>
+                        <li><strong>cargo clippy</strong> - Lint your code</li>
+                    </ul>
+
+                    <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">Where Rust Shines</h2>
+                    <p className="text-gray-700 leading-relaxed mb-6">
+                        Rust is being adopted where reliability matters most:
+                    </p>
+                    <ul className="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                        <li><strong>Operating Systems</strong> - Linux kernel now accepts Rust code</li>
+                        <li><strong>Browsers</strong> - Firefox's Servo engine, parts of Chrome</li>
+                        <li><strong>Cloud Infrastructure</strong> - AWS Firecracker, Cloudflare's edge</li>
+                        <li><strong>Cryptocurrency</strong> - Solana, Polkadot</li>
+                        <li><strong>Game Engines</strong> - Bevy, emerging alternatives to Unity</li>
+                    </ul>
+
+                    <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">Should You Learn Rust?</h2>
+                    <p className="text-gray-700 leading-relaxed mb-6">
+                        If you're interested in systems programming, performance-critical applications, or just want to become a better programmer, absolutely yes. Rust will change how you think about memory, ownership, and program correctness.
+                    </p>
+                    <p className="text-gray-700 leading-relaxed mb-6">
+                        The learning curve is real - expect to fight the borrow checker for a few weeks. But once it clicks, you'll wonder how you ever wrote systems code without it.
+                    </p>
+
+                    <div className="bg-orange-50 border-l-4 border-orange-500 p-6 my-8 rounded-r-lg">
+                        <p className="text-orange-800 font-medium">
+                            "Once you understand Rust's ownership model, you can code circles around everyone else. While they're debugging memory leaks and data races, you're shipping features."
+                        </p>
+                        <p className="text-orange-600 text-sm mt-2">- Zuhaad Rathore</p>
+                    </div>
+
+                    <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">Getting Started</h2>
+                    <p className="text-gray-700 leading-relaxed mb-6">
+                        Ready to try Rust? Here are my recommended resources:
+                    </p>
+                    <ul className="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                        <li><a href="https://doc.rust-lang.org/book/" className="text-orange-600 hover:underline" target="_blank" rel="noopener noreferrer">The Rust Book</a> - The official guide, excellent for beginners</li>
+                        <li><a href="https://rustlings.cool/" className="text-orange-600 hover:underline" target="_blank" rel="noopener noreferrer">Rustlings</a> - Small exercises to learn Rust by doing</li>
+                        <li><a href="https://exercism.org/tracks/rust" className="text-orange-600 hover:underline" target="_blank" rel="noopener noreferrer">Exercism Rust Track</a> - Practice problems with mentorship</li>
+                    </ul>
+                </div>
+
+                {/* Author Bio */}
+                <div className="mt-16 pt-8 border-t border-gray-200">
+                    <div className="flex items-start gap-6">
+                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
+                            Z
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-gray-900">Zuhaad "zuzubear" Rathore</h3>
+                            <p className="text-gray-600 mt-2">
+                                Zuhaad is a member of GVCS with a passion for systems programming and low-level optimization.
+                                When not fighting the borrow checker, he enjoys contributing to open source projects and
+                                exploring new programming paradigms.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Back Button */}
+                <div className="mt-12 text-center">
+                    <button
+                        onClick={() => navigate('/')}
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 text-white font-bold rounded-lg hover:bg-orange-700 transition-colors"
+                    >
+                        <Icons.ArrowRight className="rotate-180 w-4 h-4" /> Back to Home
+                    </button>
+                </div>
+            </article>
         </div>
     );
 };
@@ -7718,7 +7881,7 @@ const HomeView = () => {
                         </span>
                     </h1>
                     <p className="text-xl text-slate-200 max-w-2xl mx-auto mb-12 leading-relaxed drop-shadow-lg">
-                        A community of builders, scholars, and innovators. Home of <span className="font-bold text-white">The Code Academy</span>.
+                        A community of builders, students, and communicators. Home of <span className="font-bold text-white">The Code Academy</span>.
                     </p>
 
                     <div className="flex flex-col md:flex-row items-center justify-center gap-4">
@@ -7752,11 +7915,15 @@ const HomeView = () => {
                     </div>
                     <div className="grid md:grid-cols-3 gap-6">
                         {[
-                            { title: "Why we like Rust", tag: "Languages", desc: "Memory safety without garbage collection. Is it the future of systems programming?", color: "bg-orange-50 text-orange-700 border-orange-200" },
+                            { title: "Why Zuhaad Likes Rust", tag: "Languages", desc: "Memory safety without garbage collection. Is it the future of systems programming?", color: "bg-orange-50 text-orange-700 border-orange-200", link: "/articles/why-zuhaad-likes-rust" },
                             { title: "Intro to Svelte 5", tag: "Web", desc: "Rethinking reactivity. Less boilerplate, more performance.", color: "bg-red-50 text-red-700 border-red-200" },
                             { title: "Agentic AI Workflows", tag: "AI", desc: "Moving beyond chatbots to autonomous agents that can use tools.", color: "bg-purple-50 text-purple-700 border-purple-200" }
                         ].map((item, i) => (
-                            <div key={i} className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div
+                                key={i}
+                                className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                                onClick={() => item.link && navigate(item.link)}
+                            >
                                 <div className="flex justify-between items-start mb-4">
                                     <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded ${item.color} border`}>{item.tag}</span>
                                     <Icons.ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-600 transition-colors" />
@@ -7796,7 +7963,7 @@ const HomeView = () => {
                         {[
                             {
                                 title: "Builder",
-                                iconPath: "/images/builder-icon.svg",
+                                icon: Icons.HardHat,
                                 desc: "Architects of the digital world. We build apps, websites, and tools that solve real problems.",
                                 color: "from-cyan-500 to-orange-500",
                                 bgColor: "rgba(0, 255, 255, 0.15)",
@@ -7806,8 +7973,8 @@ const HomeView = () => {
                                 link: "/ellis"
                             },
                             {
-                                title: "Scholar",
-                                iconPath: "/images/scholar-icon.svg",
+                                title: "Student",
+                                icon: Icons.BookOpen,
                                 desc: "Seekers of deep knowledge. We study algorithms, theory, and the fundamental laws of computation.",
                                 color: "from-purple-600 to-pink-500",
                                 bgColor: "rgba(128, 0, 255, 0.15)",
@@ -7817,8 +7984,8 @@ const HomeView = () => {
                                 link: "/weekly"
                             },
                             {
-                                title: "Orator",
-                                iconPath: "/images/orator-icon.svg",
+                                title: "Communicator",
+                                icon: Icons.Speaker,
                                 desc: "Voices of clarity. We communicate complex ideas with precision and persuasion.",
                                 color: "from-green-500 to-yellow-400",
                                 bgColor: "rgba(0, 255, 102, 0.15)",
@@ -7898,18 +8065,15 @@ const HomeView = () => {
                                                     height: '180px'
                                                 }}
                                             >
-                                                <img 
-                                                    src={pillar.iconPath} 
-                                                    alt={`${pillar.title} icon`}
-                                                    className="select-none pointer-events-none"
-                                                    style={{
-                                                        display: 'block',
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        objectFit: 'contain',
-                                                        filter: 'none'
-                                                    }}
-                                                />
+                                                {pillar.icon && (
+                                                    <pillar.icon
+                                                        className="w-full h-full select-none pointer-events-none text-white"
+                                                        style={{
+                                                            display: 'block',
+                                                            filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))'
+                                                        }}
+                                                    />
+                                                )}
                                             </div>
                                         </div>
 
@@ -8908,6 +9072,7 @@ const ClubWebsite = () => {
                     <Route path="/my-plans" element={<MyPlans user={user} />} />
                     <Route path="/dashboard" element={<Dashboard user={user} />} />
                     <Route path="/resources" element={<ResourcesView />} />
+                    <Route path="/articles/why-zuhaad-likes-rust" element={<WhyZuhaadLikesRustArticle />} />
                     <Route path="/admin" element={
                         isAdmin ? <AdminMeetingView onExit={handleExitAdmin} /> : (
                             <div className="flex items-center justify-center h-full">
