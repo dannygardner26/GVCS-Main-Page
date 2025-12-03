@@ -422,20 +422,25 @@ const DailyProblemSidebar = () => {
 };
 
 const LoginModal = ({ isOpen, onClose, onLogin }) => {
+    const [mode, setMode] = useState('login'); // 'login' or 'register'
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [displayName, setDisplayName] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     if (!isOpen) return null;
 
     const handleDemoLogin = async () => {
         setLoading(true);
         setError('');
+        setSuccess('');
 
         try {
             const demoEmail = 'demo@gvcs.com';
-            const demoPassword = 'demo123456';
+            const demoPassword = 'demo123';
 
             // First, try to sign in
             let { data: authData, error: authError } = await supabase.auth.signInWithPassword({
@@ -525,7 +530,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
 
         try {
             const adminEmail = 'admin@gvcs.com';
-            const adminPassword = 'admin123456';
+            const adminPassword = 'admin123';
 
             // First, try to sign in
             let { data: authData, error: authError } = await supabase.auth.signInWithPassword({
@@ -614,6 +619,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         e.preventDefault();
         setLoading(true);
         setError('');
+        setSuccess('');
 
         try {
             const { data, error } = await supabase.auth.signInWithPassword({
@@ -637,46 +643,199 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         }
     };
 
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        setSuccess('');
+
+        // Validation
+        if (!displayName.trim()) {
+            setError('Please enter your name');
+            setLoading(false);
+            return;
+        }
+
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters');
+            setLoading(false);
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        name: displayName.trim(),
+                        isDemo: false
+                    },
+                    emailRedirectTo: window.location.origin
+                }
+            });
+
+            if (error) throw error;
+
+            // Check if email confirmation is required
+            if (data.user && !data.session) {
+                setSuccess('Account created! Please check your email to confirm your account before logging in.');
+                setMode('login');
+                setPassword('');
+                setConfirmPassword('');
+                setDisplayName('');
+            } else if (data.session) {
+                // Auto-logged in (email confirmation disabled)
+                onLogin({
+                    id: data.user.id,
+                    name: data.user.user_metadata?.name || displayName,
+                    email: data.user.email,
+                    isDemo: false
+                });
+                onClose();
+            }
+        } catch (err) {
+            if (err.message.includes('already registered')) {
+                setError('An account with this email already exists. Please sign in instead.');
+            } else {
+                setError(err.message || 'Failed to create account');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const switchMode = () => {
+        setMode(mode === 'login' ? 'register' : 'login');
+        setError('');
+        setSuccess('');
+        setPassword('');
+        setConfirmPassword('');
+    };
+
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] animate-fade-in">
-            <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100">
-                <h2 className="text-2xl font-bold text-gvcs-navy mb-2">Student Login</h2>
-                <p className="text-gray-500 mb-6">Access your saved plans and track progress.</p>
+            <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100 max-h-[90vh] overflow-y-auto">
+                <h2 className="text-2xl font-bold text-gvcs-navy mb-2">
+                    {mode === 'login' ? 'Student Login' : 'Create Account'}
+                </h2>
+                <p className="text-gray-500 mb-6">
+                    {mode === 'login'
+                        ? 'Access your saved plans and track progress.'
+                        : 'Join GVCS to save your progress and access all features.'}
+                </p>
 
-                <form onSubmit={handleEmailLogin} className="space-y-4">
-                    <input
-                        type="email"
-                        placeholder="Email Address"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
-                    />
+                {success && (
+                    <div className="text-green-600 text-sm bg-green-50 p-3 rounded mb-4">
+                        {success}
+                    </div>
+                )}
 
-                    {error && (
-                        <div className="text-red-600 text-sm bg-red-50 p-2 rounded">
-                            {error}
-                        </div>
-                    )}
+                {mode === 'login' ? (
+                    <form onSubmit={handleEmailLogin} className="space-y-4">
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                            required
+                        />
 
+                        {error && (
+                            <div className="text-red-600 text-sm bg-red-50 p-2 rounded">
+                                {error}
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full py-3 bg-gvcs-navy text-white rounded-lg font-bold hover:bg-blue-900 transition-colors disabled:opacity-50"
+                        >
+                            {loading ? 'Signing in...' : 'Sign In'}
+                        </button>
+                    </form>
+                ) : (
+                    <form onSubmit={handleRegister} className="space-y-4">
+                        <input
+                            type="text"
+                            placeholder="Your Name"
+                            value={displayName}
+                            onChange={(e) => setDisplayName(e.target.value)}
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                            required
+                        />
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password (min 6 characters)"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                            required
+                            minLength={6}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Confirm Password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                            required
+                        />
+
+                        {error && (
+                            <div className="text-red-600 text-sm bg-red-50 p-2 rounded">
+                                {error}
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full py-3 bg-gvcs-navy text-white rounded-lg font-bold hover:bg-blue-900 transition-colors disabled:opacity-50"
+                        >
+                            {loading ? 'Creating Account...' : 'Create Account'}
+                        </button>
+                    </form>
+                )}
+
+                <div className="text-center mt-4">
                     <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full py-3 bg-gvcs-navy text-white rounded-lg font-bold hover:bg-blue-900 transition-colors disabled:opacity-50"
+                        onClick={switchMode}
+                        className="text-sm text-blue-600 hover:text-blue-800 font-medium"
                     >
-                        {loading ? 'Signing in...' : 'Sign In'}
+                        {mode === 'login'
+                            ? "Don't have an account? Sign up"
+                            : 'Already have an account? Sign in'}
                     </button>
-                </form>
+                </div>
 
                 <div className="relative my-4">
                     <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200"></div></div>
-                    <div className="relative flex justify-center text-sm"><span className="px-2 bg-white text-gray-500">Or</span></div>
+                    <div className="relative flex justify-center text-sm"><span className="px-2 bg-white text-gray-500">Quick Access</span></div>
                 </div>
 
                 <button
@@ -1878,17 +2037,23 @@ const WeeklyActivitiesView = ({ user }) => {
             const problems = [];
             const weekStartDay = (currentWeek - 1) * 5 + 1;
             
-            // Daily LeetCode problems (5 per week, one per day)
-            for (let day = weekStartDay; day < weekStartDay + 5; day++) {
-                const leetcodeIndex = (day - 1) % LEETCODE_POOL.length;
-                const leetcodeProblem = LEETCODE_POOL[leetcodeIndex];
+            // 4 Weekly LeetCode problems (ordered by priority - complete in order)
+            const weeklyLeetcode = [
+                { title: "Same Tree", url: "https://leetcode.com/problems/same-tree/description/", difficulty: "Easy" },
+                { title: "Minimum Depth of Binary Tree", url: "https://leetcode.com/problems/minimum-depth-of-binary-tree/description/", difficulty: "Easy" },
+                { title: "Best Time to Buy and Sell Stock", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/", difficulty: "Easy" },
+                { title: "Linked List Cycle", url: "https://leetcode.com/problems/linked-list-cycle/description/", difficulty: "Easy" }
+            ];
+
+            weeklyLeetcode.forEach((leetcodeProblem, index) => {
                 problems.push({
                     type: 'leetcode',
                     title: leetcodeProblem.title,
                     url: leetcodeProblem.url,
-                    day: day
+                    difficulty: leetcodeProblem.difficulty,
+                    problemNumber: index + 1 // 1, 2, 3, 4 - indicates priority order
                 });
-            }
+            });
 
             // 3 Weekly USACO problems (all 3 for the week, not per day)
             const weekNum = Math.floor((weekStartDay - 1) / 5);
@@ -2078,18 +2243,22 @@ const WeeklyActivitiesView = ({ user }) => {
                 </div>
             ) : (
                 <div className="space-y-8">
-                    {/* LeetCode Section */}
+                    {/* LeetCode Section - 4 Ordered Problems */}
                     {leetcodeProblems.length > 0 && (
                         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                             <div className="bg-green-50 px-6 py-4 border-b border-green-100">
                                 <h3 className="text-xl font-bold text-green-800 flex items-center gap-2">
-                                    <Icons.Code className="w-6 h-6" /> LeetCode
+                                    <Icons.Code className="w-6 h-6" /> LeetCode (4 Weekly Problems)
                                 </h3>
+                                <p className="text-sm text-green-700 mt-1">Complete in order - everyone starts with Problem 1</p>
                             </div>
                             <div className="p-6">
                                 <div className="space-y-3">
                                     {leetcodeProblems.map((problem, i) => (
                                         <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-800 font-bold text-lg flex-shrink-0">
+                                                {problem.problemNumber || i + 1}
+                                            </div>
                                             <div className="flex-1">
                                                 <a
                                                     href={problem.url}
@@ -2099,7 +2268,7 @@ const WeeklyActivitiesView = ({ user }) => {
                                                 >
                                                     {problem.title}
                                                 </a>
-                                                <div className="text-sm text-gray-500 mt-1">Day {problem.day}</div>
+                                                <div className="text-sm text-gray-500 mt-1">Problem {problem.problemNumber || i + 1} of 4 • {problem.difficulty || 'Easy'}</div>
                                             </div>
                                             {getStatusIcon(problem)}
                                         </div>
@@ -4483,11 +4652,15 @@ const Dashboard = ({ user }) => {
                     const expectedUsaco = [];
                     const expectedCodeforces = [];
 
-                    // LeetCode: 5 problems (one per day)
-                    for (let day = weekStartDay; day < weekStartDay + 5; day++) {
-                        const leetcodeIndex = (day - 1) % LEETCODE_POOL.length;
-                        const leetcodeProblem = LEETCODE_POOL[leetcodeIndex];
-                        const existing = weekActivities.find(a => 
+                    // LeetCode: 4 ordered problems per week
+                    const weeklyLeetcodeProblems = [
+                        { title: "Same Tree", url: "https://leetcode.com/problems/same-tree/description/" },
+                        { title: "Minimum Depth of Binary Tree", url: "https://leetcode.com/problems/minimum-depth-of-binary-tree/description/" },
+                        { title: "Best Time to Buy and Sell Stock", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/" },
+                        { title: "Linked List Cycle", url: "https://leetcode.com/problems/linked-list-cycle/description/" }
+                    ];
+                    weeklyLeetcodeProblems.forEach((leetcodeProblem) => {
+                        const existing = weekActivities.find(a =>
                             a.problem_type === 'leetcode' && a.problem_title === leetcodeProblem.title
                         );
                         expectedLeetcode.push({
@@ -4495,7 +4668,7 @@ const Dashboard = ({ user }) => {
                             problem_url: leetcodeProblem.url,
                             status: existing?.status || 'not_attempted'
                         });
-                    }
+                    });
 
                     // USACO: 3 problems (weekly)
                     const weekNumIndex = Math.floor((weekStartDay - 1) / 5);
@@ -4916,7 +5089,7 @@ const Dashboard = ({ user }) => {
                         <h3 className="text-lg font-bold text-gvcs-navy">Weekly History</h3>
                         {weeklyHistory.map((week) => {
                             // Get expected counts for this week
-                            const expectedLeetcode = 5; // Daily LeetCode = 5 per week
+                            const expectedLeetcode = 4; // 4 ordered LeetCode problems per week
                             const expectedUsaco = 3; // 3 USACO per week
                             const expectedCodeforces = 5; // Daily Codeforces = 5 per week
                             const totalExpected = expectedLeetcode + expectedUsaco + expectedCodeforces;
@@ -4933,7 +5106,7 @@ const Dashboard = ({ user }) => {
                                     {/* LeetCode Progress Bar */}
                                     <div>
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-sm font-medium text-gray-700">LeetCode (5 problems)</span>
+                                            <span className="text-sm font-medium text-gray-700">LeetCode (4 problems)</span>
                                             <span className="text-xs text-gray-500">
                                                 {week.leetcode.filter(a => a.status === 'completed').length}/{expectedLeetcode}
                                             </span>
