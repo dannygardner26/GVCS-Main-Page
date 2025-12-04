@@ -1,12 +1,15 @@
 export const CURRICULUM_DATA = {
   // ============================================
-  // TIER 1: The Gatekeepers (Freshman Spring / Sophomore Fall)
+  // TIER 1: The Gatekeepers (Year 1 - Early Year 2)
+  // Non-negotiable pillars of CS education
   // ============================================
-  
-  "CS 102: Data Structures & Functional Utility": {
+
+  "CS 102: Data Structures & Algorithms": {
     "prereqs": ["AP Computer Science A"],
-    "description": "The universal follow-up to AP CSA. Shifts focus from syntax to efficiency and data organization.",
+    "nice_to_have": ["Precalculus"],
+    "description": "The universal follow-up to AP CSA. Master efficiency and data organization through Big-O analysis, fundamental data structures, and core algorithms. Anchored by MIT 6.006.",
     "tier": 1,
+    "mit_anchor": "6.006 Introduction to Algorithms",
     "weeks": [
       {
         "week": 1,
@@ -534,9 +537,11 @@ export const CURRICULUM_DATA = {
   },
 
   "Math 201: Discrete Mathematics for CS": {
-    "prereqs": ["Algebra II / Pre-Calculus"],
-    "description": "The mathematical language of computer science. Essential for proving code correctness and analyzing speed.",
+    "prereqs": ["Precalculus"],
+    "nice_to_have": ["AP Calculus AB", "AP Calculus BC"],
+    "description": "The mathematical language of computer science. Essential for proving code correctness and analyzing speed. Covers proofs, graphs, counting, recurrences, asymptotics, and discrete probability. Anchored by MIT 6.042J/6.1200J.",
     "tier": 1,
+    "mit_anchor": "6.042J / 6.1200J Mathematics for Computer Science",
     "weeks": [
       {
         "week": 1,
@@ -642,10 +647,11 @@ export const CURRICULUM_DATA = {
     }
   },
 
-  "Sys 201: Computer Systems (The Hardware/Software Interface)": {
+  "Sys 201: Computer Systems (Hardware/Software Interface)": {
     "prereqs": ["AP Computer Science A"],
-    "description": "Peeking under the hood. Move from Java's managed memory to C and Assembly, learning how hardware executes software.",
+    "description": "Peeking under the hood. Move from Java's managed memory to C and Assembly, learning how hardware executes software. Covers digital logic, processor design, and the hardware/software interface. Anchored by MIT 6.004 Computation Structures.",
     "tier": 1,
+    "mit_anchor": "6.004 Computation Structures",
     "weeks": [
       {
         "week": 1,
@@ -752,13 +758,16 @@ export const CURRICULUM_DATA = {
   },
 
   // ============================================
-  // TIER 2: The Core (Sophomore Spring / Junior Fall)
+  // TIER 2: The Core (Mid Year 2 - Early Year 3)
+  // Rigorous center of CS degree
   // ============================================
 
   "CS 301: Design & Analysis of Algorithms": {
-    "prereqs": ["CS 102: Data Structures & Functional Utility", "Math 201: Discrete Mathematics for CS"],
-    "description": "The primary filter for Big Tech interviews and the theoretical peak of the undergraduate core. Focuses on solving hard problems efficiently.",
+    "prereqs": ["CS 102: Data Structures & Algorithms", "Math 201: Discrete Mathematics for CS"],
+    "nice_to_have": ["AP Calculus AB", "AP Calculus BC"],
+    "description": "The primary filter for Big Tech interviews and the theoretical peak of the undergraduate core. Focuses on solving hard problems efficiently through graph algorithms, dynamic programming, and amortized analysis. Anchored by MIT 6.006 advanced topics.",
     "tier": 2,
+    "mit_anchor": "6.006 Introduction to Algorithms (advanced topics)",
     "weeks": [
       {
         "week": 1,
@@ -1209,9 +1218,11 @@ export const CURRICULUM_DATA = {
   },
 
   "Sys 301: Operating Systems (OS)": {
-    "prereqs": ["Sys 201: Computer Systems (The Hardware/Software Interface)", "CS 102: Data Structures & Functional Utility"],
-    "description": "Building the software that manages the hardware. Famous for massive C coding projects (building a kernel, file system, or shell).",
+    "prereqs": ["Sys 201: Computer Systems (Hardware/Software Interface)", "CS 102: Data Structures & Algorithms"],
+    "nice_to_have": ["Math 201: Discrete Mathematics for CS"],
+    "description": "Building the software that manages the hardware. Famous for massive C coding projects (building a kernel, file system, or shell). Covers processes, virtual memory, file systems, and concurrency. Anchored by MIT 6.828/6.1810 Operating System Engineering.",
     "tier": 2,
+    "mit_anchor": "6.828 / 6.1810 Operating System Engineering",
     "weeks": [
       {
         "week": 1,
@@ -1318,9 +1329,11 @@ export const CURRICULUM_DATA = {
   },
 
   "CS 302: Modern Software Engineering (Web Systems)": {
-    "prereqs": ["CS 102: Data Structures & Functional Utility"],
-    "description": "The 'Practical' core. Translating theory into shipped, scalable, maintainable products.",
+    "prereqs": ["CS 102: Data Structures & Algorithms"],
+    "nice_to_have": ["Sys 201: Computer Systems (Hardware/Software Interface)"],
+    "description": "The 'Practical' core. Translating theory into shipped, scalable, maintainable products. Covers modularity, interfaces, networking, security, and fault tolerance with modern web practices layered on top. Anchored by MIT 6.033 Computer System Engineering.",
     "tier": 2,
+    "mit_anchor": "6.033 Computer System Engineering",
     "weeks": [
       {
         "week": 1,
@@ -1427,14 +1440,17 @@ export const CURRICULUM_DATA = {
   },
 
   // ============================================
-  // TIER 3: Advanced Specializations
+  // TIER 3: Advanced Specializations (Late Year 2 - Year 3)
+  // Early specialization - not full senior-level grad stuff
   // ============================================
 
   // Artificial Intelligence & Machine Learning
   "AI 401: Intro to Machine Learning": {
-    "prereqs": ["CS 301: Design & Analysis of Algorithms", "Linear Algebra"],
-    "description": "Introduction to machine learning: regression, classification, neural networks, and backpropagation.",
+    "prereqs": ["CS 301: Design & Analysis of Algorithms", "Math 201: Discrete Mathematics for CS"],
+    "nice_to_have": ["Linear Algebra", "AP Statistics"],
+    "description": "Introduction to machine learning: regression, classification, neural networks, and backpropagation. Covers toned-down undergrad ML structure aligned with introductory MIT ML topics. Anchored by MIT 6.034 Artificial Intelligence introductory ML units.",
     "tier": 3,
+    "mit_anchor": "6.034 Artificial Intelligence (ML units)",
     "weeks": [
       {
         "week": 1,
@@ -1651,9 +1667,11 @@ export const CURRICULUM_DATA = {
 
   // Systems & Infrastructure
   "Sys 401: Database System Implementation": {
-    "prereqs": ["Sys 301: Operating Systems (OS)", "CS 102: Data Structures & Functional Utility"],
-    "description": "Building a database engine (not just using SQL). B+ Trees, buffer management, query optimization, ACID transactions, and WAL.",
+    "prereqs": ["CS 102: Data Structures & Algorithms", "Sys 301: Operating Systems (OS)"],
+    "nice_to_have": ["Math 201: Discrete Mathematics for CS"],
+    "description": "Building a database engine (not just using SQL). B+ Trees, buffer management, query optimization, ACID transactions, and WAL. Anchored by MIT 6.033 database/storage units.",
     "tier": 3,
+    "mit_anchor": "6.033 Computer System Engineering (database units)",
     "weeks": [
       {
         "week": 1,
@@ -1761,9 +1779,11 @@ export const CURRICULUM_DATA = {
 
   // Security & Cryptography
   "Sec 301: Network & Computer Security": {
-    "prereqs": ["Sys 201: Computer Systems (The Hardware/Software Interface)"],
-    "description": "The 'Hacker' course. Learn how systems break to understand how to defend them. Covers vulnerabilities, exploits, and defense mechanisms.",
+    "prereqs": ["Sys 201: Computer Systems (Hardware/Software Interface)"],
+    "nice_to_have": ["Sys 301: Operating Systems (OS)", "Math 201: Discrete Mathematics for CS"],
+    "description": "The 'Hacker' course. Learn how systems break to understand how to defend them. Covers threat models, vulnerabilities, basic crypto use, and secure design. Anchored by MIT 6.033 security/privacy units.",
     "tier": 3,
+    "mit_anchor": "6.033 Computer System Engineering (security units)",
     "weeks": [
       {
         "week": 1,
@@ -1812,8 +1832,10 @@ export const CURRICULUM_DATA = {
 
   "Math 302: Cryptography": {
     "prereqs": ["Math 201: Discrete Mathematics for CS"],
-    "description": "The math behind secrets. Learn how encryption works, from symmetric ciphers to public key cryptography and zero-knowledge proofs.",
+    "nice_to_have": ["Linear Algebra", "AP Calculus AB", "AP Calculus BC"],
+    "description": "The math behind secrets. Learn how encryption works, from symmetric ciphers to public key cryptography and zero-knowledge proofs. Leverages number theory and modular arithmetic from MIT's Mathematics for Computer Science.",
     "tier": 3,
+    "mit_anchor": "6.042J / 6.1200J Mathematics for Computer Science (cryptography sections)",
     "weeks": [
       {
         "week": 1,
@@ -1861,7 +1883,7 @@ export const CURRICULUM_DATA = {
   },
 
   "Sec 402: Reverse Engineering & Malware Analysis": {
-    "prereqs": ["Sys 201: Computer Systems (The Hardware/Software Interface)"],
+    "prereqs": ["Sys 201: Computer Systems (Hardware/Software Interface)"],
     "description": "Disassembling viruses to see how they work. Learn to use tools like Ghidra and IDA Pro to analyze malicious code safely.",
     "tier": 3,
     "weeks": [
@@ -1913,7 +1935,8 @@ export const CURRICULUM_DATA = {
 
   // Graphics & Game Development
   "CS 403: Computer Graphics (Real-Time Rendering)": {
-    "prereqs": ["CS 102: Data Structures & Functional Utility"],
+    "prereqs": ["CS 102: Data Structures & Algorithms"],
+    "nice_to_have": ["Linear Algebra", "Multivariable Calculus"],
     "description": "How to render millions of polygons onto the screen at 60 FPS. Learn the GPU pipeline, shaders, and 3D mathematics.",
     "tier": 3,
     "weeks": [
@@ -1963,7 +1986,8 @@ export const CURRICULUM_DATA = {
   },
 
   "CS 405: Game Engine Architecture": {
-    "prereqs": ["CS 102: Data Structures & Functional Utility"],
+    "prereqs": ["CS 102: Data Structures & Algorithms"],
+    "nice_to_have": ["Sys 201: Computer Systems (Hardware/Software Interface)", "CS 403: Computer Graphics (Real-Time Rendering)"],
     "description": "Building 'Unity' from scratch. Learn the game loop, physics engines, entity component systems, and memory management for games.",
     "tier": 3,
     "weeks": [
