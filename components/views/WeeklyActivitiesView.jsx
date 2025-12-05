@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../utils/supabase';
 import { Icons } from '../common/Icons';
 import { getSchoolDayNumber } from '../../utils/schoolDays';
+import { LEETCODE_POOL, USACO_POOL } from '../../ChallengeData';
 
 const WeeklyActivitiesView = ({ user }) => {
     const navigate = useNavigate();
@@ -13,8 +14,8 @@ const WeeklyActivitiesView = ({ user }) => {
     const currentYear = new Date().getFullYear();
 
     useEffect(() => {
+        fetchWeeklyProblems();
         if (user) {
-            fetchWeeklyProblems();
             fetchProblemStatuses();
         }
     }, [user]);
@@ -23,60 +24,33 @@ const WeeklyActivitiesView = ({ user }) => {
         setLoading(true);
         try {
             const problems = [];
-            const weekStartDay = (currentWeek - 1) * 5 + 1;
-            
-            // 4 Weekly LeetCode problems (ordered by priority - complete in order)
-            const weeklyLeetcode = [
-                { title: "Same Tree", url: "https://leetcode.com/problems/same-tree/description/", difficulty: "Easy" },
-                { title: "Minimum Depth of Binary Tree", url: "https://leetcode.com/problems/minimum-depth-of-binary-tree/description/", difficulty: "Easy" },
-                { title: "Best Time to Buy and Sell Stock", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/", difficulty: "Easy" },
-                { title: "Linked List Cycle", url: "https://leetcode.com/problems/linked-list-cycle/description/", difficulty: "Easy" }
-            ];
 
-            weeklyLeetcode.forEach((leetcodeProblem, index) => {
+            // 4 Weekly LeetCode problems (rotate through the pool based on week)
+            const leetcodeStartIndex = ((currentWeek - 1) * 4) % LEETCODE_POOL.length;
+            for (let i = 0; i < 4; i++) {
+                const leetcodeProblem = LEETCODE_POOL[(leetcodeStartIndex + i) % LEETCODE_POOL.length];
                 problems.push({
                     type: 'leetcode',
                     title: leetcodeProblem.title,
                     url: leetcodeProblem.url,
                     difficulty: leetcodeProblem.difficulty,
-                    problemNumber: index + 1 // 1, 2, 3, 4 - indicates priority order
+                    problemNumber: i + 1
                 });
-            });
+            }
 
-            // 3 Weekly USACO problems (all 3 for the week, not per day)
-            const weekNum = Math.floor((weekStartDay - 1) / 5);
-            const contestIndex = weekNum % USACO_POOL.length;
+            // 3 Weekly USACO problems (rotate through contests)
+            const contestIndex = (currentWeek - 1) % USACO_POOL.length;
             const contest = USACO_POOL[contestIndex];
             contest.problems.forEach((usacoProblem, index) => {
                 problems.push({
                     type: 'usaco',
                     title: usacoProblem.title,
                     url: usacoProblem.url,
-                    day: weekStartDay, // All 3 problems are for the week
-                    problemNumber: index + 1 // Problem 1, 2, or 3
+                    difficulty: usacoProblem.difficulty,
+                    problemNumber: index + 1,
+                    contest: contest.contest
                 });
             });
-
-            // Daily Codeforces problems (5 per week, one per day)
-            // Using a simple pattern - you can customize this with actual Codeforces problems
-            const codeforcesProblems = [
-                { title: 'Problem A', url: 'https://codeforces.com/problemset/problem/1926/A' },
-                { title: 'Problem B', url: 'https://codeforces.com/problemset/problem/1926/B' },
-                { title: 'Problem C', url: 'https://codeforces.com/problemset/problem/1926/C' },
-                { title: 'Problem D', url: 'https://codeforces.com/problemset/problem/1926/D' },
-                { title: 'Problem E', url: 'https://codeforces.com/problemset/problem/1926/E' }
-            ];
-            
-            for (let day = weekStartDay; day < weekStartDay + 5; day++) {
-                const codeforcesIndex = (day - weekStartDay) % codeforcesProblems.length;
-                const codeforcesProblem = codeforcesProblems[codeforcesIndex];
-                problems.push({
-                    type: 'codeforces',
-                    title: codeforcesProblem.title,
-                    url: codeforcesProblem.url,
-                    day: day
-                });
-            }
 
             setWeeklyProblems(problems);
         } catch (error) {
@@ -124,7 +98,7 @@ const WeeklyActivitiesView = ({ user }) => {
         if (!user?.id) return;
 
         const key = `${problem.type}_${problem.title}`;
-        
+
         // Optimistic update
         setProblemStatuses(prev => ({ ...prev, [key]: status }));
 
@@ -140,8 +114,8 @@ const WeeklyActivitiesView = ({ user }) => {
                     problem_url: problem.url,
                     status: status,
                     updated_at: new Date().toISOString()
-                }, { 
-                    onConflict: 'user_id, week_number, school_year, problem_type, problem_title' 
+                }, {
+                    onConflict: 'user_id, week_number, school_year, problem_type, problem_title'
                 });
 
             if (error) {
@@ -210,17 +184,24 @@ const WeeklyActivitiesView = ({ user }) => {
 
     const leetcodeProblems = weeklyProblems.filter(p => p.type === 'leetcode');
     const usacoProblems = weeklyProblems.filter(p => p.type === 'usaco');
-    const codeforcesProblems = weeklyProblems.filter(p => p.type === 'codeforces');
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             <div className="mb-6">
-                <button
-                    onClick={() => navigate('/dashboard')}
-                    className="mb-4 text-sm text-gray-500 hover:text-gvcs-navy flex items-center gap-1"
-                >
-                    <Icons.ArrowRight className="rotate-180" /> Back to Dashboard
-                </button>
+                <div className="flex justify-between items-start mb-4">
+                    <button
+                        onClick={() => navigate('/dashboard')}
+                        className="text-sm text-gray-500 hover:text-gvcs-navy flex items-center gap-1"
+                    >
+                        <Icons.ArrowRight className="rotate-180" /> Back to Dashboard
+                    </button>
+                    <button
+                        onClick={() => navigate('/dashboard?showHistory=true')}
+                        className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+                    >
+                        <Icons.Clock className="w-4 h-4" /> View All History
+                    </button>
+                </div>
                 <h2 className="text-3xl font-bold text-gvcs-navy mb-2">Weekly Activities</h2>
                 <p className="text-gray-600">Week {currentWeek} • Track your progress on this week's problems</p>
             </div>
@@ -231,21 +212,52 @@ const WeeklyActivitiesView = ({ user }) => {
                 </div>
             ) : (
                 <div className="space-y-8">
+                    {/* Daily LeetCode Section */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div className="bg-orange-50 px-6 py-4 border-b border-orange-100">
+                            <h3 className="text-xl font-bold text-orange-800 flex items-center gap-2">
+                                <Icons.Clock className="w-6 h-6" /> Daily LeetCode
+                            </h3>
+                            <p className="text-sm text-orange-700 mt-1">A new problem every day - complete for bonus practice!</p>
+                        </div>
+                        <div className="p-6">
+                            <a
+                                href="https://leetcodepotd.vercel.app/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-4 p-4 border border-orange-200 rounded-lg hover:bg-orange-50 transition-colors group"
+                            >
+                                <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 group-hover:bg-orange-200 transition-colors">
+                                    <Icons.Sparkles className="w-6 h-6" />
+                                </div>
+                                <div className="flex-1">
+                                    <span className="text-lg font-semibold text-gray-800 group-hover:text-orange-600 transition-colors">
+                                        Today's LeetCode Problem of the Day
+                                    </span>
+                                    <div className="text-sm text-gray-500 mt-1">Click to view today's challenge on LeetCode POTD</div>
+                                </div>
+                                <div className="text-orange-500 group-hover:translate-x-1 transition-transform">
+                                    <Icons.ArrowRight className="w-5 h-5" />
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
                     {/* LeetCode Section - 4 Ordered Problems */}
                     {leetcodeProblems.length > 0 && (
                         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                             <div className="bg-green-50 px-6 py-4 border-b border-green-100">
                                 <h3 className="text-xl font-bold text-green-800 flex items-center gap-2">
-                                    <Icons.Code className="w-6 h-6" /> LeetCode (4 Weekly Problems)
+                                    <Icons.Code className="w-6 h-6" /> Weekly LeetCode (4 Problems)
                                 </h3>
-                                <p className="text-sm text-green-700 mt-1">Complete in order - everyone starts with Problem 1</p>
+                                <p className="text-sm text-green-700 mt-1">Complete these 4 problems this week</p>
                             </div>
                             <div className="p-6">
                                 <div className="space-y-3">
                                     {leetcodeProblems.map((problem, i) => (
                                         <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                                             <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-800 font-bold text-lg flex-shrink-0">
-                                                {problem.problemNumber || i + 1}
+                                                {problem.problemNumber}
                                             </div>
                                             <div className="flex-1">
                                                 <a
@@ -256,7 +268,15 @@ const WeeklyActivitiesView = ({ user }) => {
                                                 >
                                                     {problem.title}
                                                 </a>
-                                                <div className="text-sm text-gray-500 mt-1">Problem {problem.problemNumber || i + 1} of 4 • {problem.difficulty || 'Easy'}</div>
+                                                <div className="text-sm text-gray-500 mt-1">
+                                                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                                        problem.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                                                        problem.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                                                        'bg-red-100 text-red-700'
+                                                    }`}>
+                                                        {problem.difficulty}
+                                                    </span>
+                                                </div>
                                             </div>
                                             {getStatusIcon(problem)}
                                         </div>
@@ -271,44 +291,19 @@ const WeeklyActivitiesView = ({ user }) => {
                         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                             <div className="bg-amber-50 px-6 py-4 border-b border-amber-100">
                                 <h3 className="text-xl font-bold text-amber-800 flex items-center gap-2">
-                                    <Icons.Brain className="w-6 h-6" /> USACO (3 Weekly Problems)
+                                    <Icons.Brain className="w-6 h-6" /> Weekly USACO (3 Problems)
                                 </h3>
+                                <p className="text-sm text-amber-700 mt-1">
+                                    {usacoProblems[0]?.contest && `From ${usacoProblems[0].contest} Contest`}
+                                </p>
                             </div>
                             <div className="p-6">
                                 <div className="space-y-3">
                                     {usacoProblems.map((problem, i) => (
                                         <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                                            <div className="flex-1">
-                                                <a
-                                                    href={problem.url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors"
-                                                >
-                                                    {problem.title}
-                                                </a>
-                                                <div className="text-sm text-gray-500 mt-1">Problem {problem.problemNumber || i + 1} of 3</div>
+                                            <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-800 font-bold text-lg flex-shrink-0">
+                                                {problem.problemNumber}
                                             </div>
-                                            {getStatusIcon(problem)}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Codeforces Section */}
-                    {codeforcesProblems.length > 0 && (
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                            <div className="bg-blue-50 px-6 py-4 border-b border-blue-100">
-                                <h3 className="text-xl font-bold text-blue-800 flex items-center gap-2">
-                                    <Icons.Sparkles className="w-6 h-6" /> Codeforces
-                                </h3>
-                            </div>
-                            <div className="p-6">
-                                <div className="space-y-3">
-                                    {codeforcesProblems.map((problem, i) => (
-                                        <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                                             <div className="flex-1">
                                                 <a
                                                     href={problem.url}
@@ -318,7 +313,11 @@ const WeeklyActivitiesView = ({ user }) => {
                                                 >
                                                     {problem.title}
                                                 </a>
-                                                <div className="text-sm text-gray-500 mt-1">Day {problem.day}</div>
+                                                <div className="text-sm text-gray-500 mt-1">
+                                                    <span className="px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-700">
+                                                        {problem.difficulty || 'Bronze'}
+                                                    </span>
+                                                </div>
                                             </div>
                                             {getStatusIcon(problem)}
                                         </div>
