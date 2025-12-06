@@ -100,7 +100,9 @@ const Dashboard = ({ user }) => {
                     progress: calculateCourseProgress(mergedWeeks),
                     description: globalCourse.description,
                     prereqs: globalCourse.prereqs || [],
-                    tier: globalCourse.tier
+                    tier: globalCourse.tier,
+                    ocw: globalCourse.ocw || null,
+                    mit_anchor: globalCourse.mit_anchor || null
                 };
             });
 
@@ -390,7 +392,43 @@ const Dashboard = ({ user }) => {
                         Delete Course
                     </button>
                 </div>
-                <h2 className="text-2xl font-bold text-gvcs-navy mb-6">{selectedCourse.courseTitle}</h2>
+                <h2 className="text-2xl font-bold text-gvcs-navy mb-2">{selectedCourse.courseTitle}</h2>
+
+                {/* MIT OCW Anchor Section */}
+                {selectedCourse.ocw && (
+                    <div className="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                        <div className="flex items-center gap-3">
+                            <div className="flex-1">
+                                <p className="text-xs text-gray-500 mb-0.5">Based on</p>
+                                <p className="text-sm font-medium text-gray-700">
+                                    MIT {selectedCourse.ocw.course_code}: {selectedCourse.ocw.course_name} ({selectedCourse.ocw.semester})
+                                </p>
+                            </div>
+                            <div className="flex gap-2">
+                                <a
+                                    href={selectedCourse.ocw.course_home}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-gray-600 hover:text-gray-900 underline"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    Course Home
+                                </a>
+                                {selectedCourse.ocw.playlist && (
+                                    <a
+                                        href={selectedCourse.ocw.playlist}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-sm text-gray-600 hover:text-gray-900 underline"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        Videos
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="space-y-4">
                     {selectedCourse.weeks.map((week, idx) => {
@@ -599,7 +637,14 @@ const Dashboard = ({ user }) => {
                                 >
                                     <div className="flex justify-between items-center">
                                         <div className="flex-1">
-                                            <h3 className="text-xl font-bold text-gvcs-navy mb-2">{course.courseTitle}</h3>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <h3 className="text-xl font-bold text-gvcs-navy">{course.courseTitle}</h3>
+                                                {course.ocw && (
+                                                    <span className="px-2 py-0.5 bg-gray-200 text-gray-600 text-xs font-medium rounded">
+                                                        MIT {course.ocw.course_code}
+                                                    </span>
+                                                )}
+                                            </div>
                                             <p className="text-sm text-gray-500 mb-3">
                                                 Added {new Date(course.addedDate).toLocaleDateString()} - {course.weeks.length} weeks
                                             </p>

@@ -129,6 +129,22 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
                         </ol>
                     </div>
                 )}
+
+                {/* Key Concepts to Cover */}
+                {week.deliverables?.communicator?.key_concepts && week.deliverables.communicator.key_concepts.length > 0 && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <h4 className="font-semibold text-blue-900 mb-3">📋 Key Concepts You Must Cover:</h4>
+                        <p className="text-sm text-blue-700 mb-3">Your presentation should address each of the following points:</p>
+                        <ul className="space-y-2">
+                            {week.deliverables.communicator.key_concepts.map((concept, i) => (
+                                <li key={i} className="flex items-start gap-2 text-sm text-blue-800">
+                                    <span className="text-blue-500 mt-0.5">•</span>
+                                    <span>{concept}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-4">

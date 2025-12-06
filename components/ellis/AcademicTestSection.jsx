@@ -9,6 +9,56 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
     const currentSubmission = week.submissions?.academic;
 
     const generateTestQuestions = (week) => {
+        // First check if week has questions defined in deliverables (from CurriculumData.js)
+        if (week.deliverables?.academic?.questions) {
+            const q = week.deliverables.academic.questions;
+            const allQuestions = [];
+
+            // Add MCQ questions
+            if (q.mcq && q.mcq.length > 0) {
+                q.mcq.forEach((mcq, idx) => {
+                    allQuestions.push({
+                        id: `mcq_${idx}`,
+                        question: mcq.question,
+                        type: 'mcq',
+                        options: mcq.options,
+                        correct: mcq.correct,
+                        points: mcq.points || 2
+                    });
+                });
+            }
+
+            // Add Fill-in-blank questions
+            if (q.fill_in_blank && q.fill_in_blank.length > 0) {
+                q.fill_in_blank.forEach((fib, idx) => {
+                    allQuestions.push({
+                        id: `fib_${idx}`,
+                        question: fib.question,
+                        type: 'fillblank',
+                        answer: fib.answer,
+                        points: fib.points || 3
+                    });
+                });
+            }
+
+            // Add Short Answer questions
+            if (q.short_answer && q.short_answer.length > 0) {
+                q.short_answer.forEach((saq, idx) => {
+                    allQuestions.push({
+                        id: `saq_${idx}`,
+                        question: saq.question,
+                        type: 'text',
+                        points: saq.points || 10
+                    });
+                });
+            }
+
+            if (allQuestions.length > 0) {
+                return allQuestions;
+            }
+        }
+
+        // Fallback: hardcoded questions for specific topics
         const questions = {
             "Asymptotic Analysis: Big-O Notation": {
                 mcq: [
@@ -16,12 +66,7 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     { id: 'q2', question: "What is the time complexity of accessing an element in an array by index?", type: 'mcq', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'], correct: 0, points: 2 },
                     { id: 'q3', question: "Which of the following best describes Big-O notation?", type: 'mcq', options: ['Exact runtime', 'Upper bound on growth rate', 'Lower bound on growth rate', 'Average case complexity'], correct: 1, points: 2 },
                     { id: 'q4', question: "What is the time complexity of binary search on a sorted array?", type: 'mcq', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n log n)'], correct: 2, points: 2 },
-                    { id: 'q5', question: "What is the space complexity of merge sort?", type: 'mcq', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n log n)'], correct: 1, points: 2 },
-                    { id: 'q6', question: "Which sorting algorithm has the best average time complexity?", type: 'mcq', options: ['Bubble sort', 'Insertion sort', 'Quick sort', 'Selection sort'], correct: 2, points: 2 },
-                    { id: 'q7', question: "What is the time complexity of finding an element in an unsorted array?", type: 'mcq', options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'], correct: 2, points: 2 },
-                    { id: 'q8', question: "Which data structure allows O(1) average time complexity for insert, delete, and search?", type: 'mcq', options: ['Array', 'Linked List', 'Hash Table', 'Binary Search Tree'], correct: 2, points: 2 },
-                    { id: 'q9', question: "What is the time complexity of the following operation: finding the maximum element in an unsorted array?", type: 'mcq', options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'], correct: 2, points: 2 },
-                    { id: 'q10', question: "Which notation describes the tight bound (both upper and lower bound)?", type: 'mcq', options: ['Big-O', 'Big-Ω (Omega)', 'Big-Θ (Theta)', 'Little-o'], correct: 2, points: 2 }
+                    { id: 'q5', question: "What is the space complexity of merge sort?", type: 'mcq', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n log n)'], correct: 1, points: 2 }
                 ],
                 fillblank: [
                     { id: 'q11', question: "The time complexity of binary search is O(___).", type: 'fillblank', points: 3 },
@@ -30,28 +75,6 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                 saq: [
                     { id: 'q13', question: "Explain the difference between Big-O, Big-Θ (Theta), and Big-Ω (Omega) notation. Provide an example for each.", type: 'text', points: 15 },
                     { id: 'q14', question: "Analyze the time complexity of binary search. Show your work step-by-step and explain why it is O(log n).", type: 'text', points: 15 }
-                ]
-            },
-            "Linear Structures: Dynamic Arrays and Linked Lists": {
-                mcq: [
-                    { id: 'q1', question: "What is the time complexity of inserting an element at the beginning of a dynamic array?", type: 'mcq', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'], correct: 1, points: 2 },
-                    { id: 'q2', question: "What is the time complexity of inserting an element at the beginning of a linked list?", type: 'mcq', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'], correct: 0, points: 2 },
-                    { id: 'q3', question: "What is the amortized time complexity of appending to a dynamic array?", type: 'mcq', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n log n)'], correct: 0, points: 2 },
-                    { id: 'q4', question: "Which data structure uses contiguous memory allocation?", type: 'mcq', options: ['Linked List', 'Dynamic Array', 'Both', 'Neither'], correct: 1, points: 2 },
-                    { id: 'q5', question: "What happens when a dynamic array needs to grow beyond its current capacity?", type: 'mcq', options: ['It fails', 'It automatically resizes', 'It overwrites existing elements', 'It uses linked list internally'], correct: 1, points: 2 },
-                    { id: 'q6', question: "What is the time complexity of accessing an element by index in a linked list?", type: 'mcq', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'], correct: 1, points: 2 },
-                    { id: 'q7', question: "Which operation is more efficient in a dynamic array compared to a linked list?", type: 'mcq', options: ['Insertion at beginning', 'Random access by index', 'Deletion at beginning', 'All of the above'], correct: 1, points: 2 },
-                    { id: 'q8', question: "What is the typical resizing strategy for dynamic arrays?", type: 'mcq', options: ['Add 1 element', 'Double the size', 'Triple the size', 'Add 10 elements'], correct: 1, points: 2 },
-                    { id: 'q9', question: "Which data structure has better cache locality?", type: 'mcq', options: ['Linked List', 'Dynamic Array', 'Both are equal', 'Depends on implementation'], correct: 1, points: 2 },
-                    { id: 'q10', question: "What is the space overhead per element in a linked list (assuming pointers)?", type: 'mcq', options: ['O(1)', 'O(n)', 'O(log n)', 'Depends on data size'], correct: 0, points: 2 }
-                ],
-                fillblank: [
-                    { id: 'q11', question: "Inserting an element at the beginning of a dynamic array has time complexity O(___).", type: 'fillblank', points: 2 },
-                    { id: 'q12', question: "The amortized time complexity of appending to a dynamic array is O(___).", type: 'fillblank', points: 2 }
-                ],
-                saq: [
-                    { id: 'q13', question: "Describe the resizing strategy for dynamic arrays. What happens when the array needs to grow? What is the amortized time complexity?", type: 'text', points: 15 },
-                    { id: 'q14', question: "Compare the space complexity of arrays vs linked lists. Include overhead in your analysis. When would you choose a dynamic array over a linked list?", type: 'text', points: 15 }
                 ]
             }
         };

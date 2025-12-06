@@ -7,531 +7,1192 @@ export const CURRICULUM_DATA = {
   "CS 102: Data Structures & Algorithms": {
     "prereqs": ["AP Computer Science A"],
     "nice_to_have": ["Precalculus"],
-    "description": "The universal follow-up to AP CSA. Master efficiency and data organization through Big-O analysis, fundamental data structures, and core algorithms. Anchored by MIT 6.006.",
+    "description": "The universal follow-up to AP CSA. Master efficiency and data organization through Big-O analysis, fundamental data structures, and core algorithms. Follows MIT 6.006 Introduction to Algorithms.",
     "tier": 1,
     "mit_anchor": "6.006 Introduction to Algorithms",
+    "ocw": {
+      "course_code": "6.006",
+      "course_name": "Introduction to Algorithms",
+      "semester": "Spring 2020",
+      "course_home": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
+      "playlist": "https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY"
+    },
     "weeks": [
       {
         "week": 1,
-        "topic": "Asymptotic Analysis: Big-O Notation",
-        "description": "Formal Big-O analysis of time and space complexity. Learn to analyze algorithm efficiency.",
+        "topic": "Algorithms and Computation",
+        "description": "Introduction to algorithms, computational problems, and the word RAM model of computation. Learn what makes a good algorithm.",
+        "mit_lecture": { "number": 1, "title": "Algorithms and Computation", "url": "https://www.youtube.com/watch?v=ZA-tUyM_y7s" },
         "resources": [
-          { "title": "Big-O Notation Explained", "url": "https://www.youtube.com/watch?v=__vX2sjlpXU", "type": "Video" },
-          { "title": "Big-O Notation Tutorial", "url": "https://www.youtube.com/watch?v=Mo4vesaut8g", "type": "Video" },
-          { "title": "Understanding Big-O Notation", "url": "https://www.youtube.com/watch?v=kS_gr2_-ws8", "type": "Video" },
-          { "title": "Big-O Cheat Sheet", "url": "https://www.bigocheatsheet.com/", "type": "Article" },
-          { "title": "Introduction to Algorithms (CLRS) - Chapter 3: Growth of Functions (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture2.pdf", "type": "PDF" }
+          { "title": "MIT 6.006 Lecture 1: Algorithms and Computation", "url": "https://www.youtube.com/watch?v=ZA-tUyM_y7s", "type": "Video" },
+          { "title": "Big-O Cheat Sheet", "url": "https://www.bigocheatsheet.com/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Big-O Analysis Template",
-            "description": "Complete a template file containing 4 partially implemented algorithms. Your task is to: (1) Implement the missing code sections marked with TODO comments, (2) Analyze and document the time complexity of each algorithm using Big-O notation, (3) Test each implementation with provided test cases, (4) Submit your completed file with all code working and complexity analysis included.",
+            "title": "Algorithm Correctness & Efficiency Lab",
+            "description": "Download a starter project containing 4 algorithm stubs. Implement each algorithm, prove correctness with loop invariants, and analyze time/space complexity.",
+            "languages": ["java", "cpp"],
+            "template_files": {
+              "java": {
+                "filename": "Week1_AlgorithmLab.java",
+                "content": "/**\n * Week 1: Algorithms and Computation Lab\n * MIT 6.006 - Introduction to Algorithms\n * \n * In this lab, you will implement fundamental algorithms and analyze their\n * correctness and efficiency using the concepts from Lecture 1.\n * \n * Learning Objectives:\n * - Understand what makes an algorithm correct (loop invariants)\n * - Analyze time complexity using the Word RAM model\n * - Compare algorithm efficiency across different input sizes\n */\n\nimport java.util.Arrays;\n\npublic class Week1_AlgorithmLab {\n    \n    /**\n     * PROBLEM 1: Find Maximum Element\n     * \n     * Given an array of integers, find and return the maximum value.\n     * \n     * TODO:\n     * 1. Implement the algorithm\n     * 2. Write the loop invariant in comments above the loop\n     * 3. Document time complexity: O(?)\n     * 4. Document space complexity: O(?)\n     * \n     * @param arr - non-empty array of integers\n     * @return the maximum value in the array\n     */\n    public static int findMax(int[] arr) {\n        // Loop Invariant: ???\n        // Your implementation here\n        return 0; // TODO: Replace\n    }\n    \n    /**\n     * PROBLEM 2: Linear Search\n     * \n     * Search for a target value in an unsorted array.\n     * Return the index if found, -1 otherwise.\n     * \n     * TODO:\n     * 1. Implement the algorithm\n     * 2. Write the loop invariant\n     * 3. Analyze: What is the best case? Worst case? Average case?\n     * 4. Time complexity: O(?)\n     * 5. Space complexity: O(?)\n     * \n     * @param arr - array of integers\n     * @param target - value to search for\n     * @return index of target, or -1 if not found\n     */\n    public static int linearSearch(int[] arr, int target) {\n        // Loop Invariant: ???\n        // Your implementation here\n        return -1; // TODO: Replace\n    }\n    \n    /**\n     * PROBLEM 3: Binary Search (Iterative)\n     * \n     * Search for a target value in a SORTED array using binary search.\n     * Return the index if found, -1 otherwise.\n     * \n     * TODO:\n     * 1. Implement the algorithm\n     * 2. Write the loop invariant (this one is tricky!)\n     * 3. Why does this require a sorted array?\n     * 4. Time complexity: O(?)\n     * 5. Space complexity: O(?)\n     * \n     * @param arr - SORTED array of integers\n     * @param target - value to search for\n     * @return index of target, or -1 if not found\n     */\n    public static int binarySearch(int[] arr, int target) {\n        // Loop Invariant: ???\n        // Your implementation here\n        return -1; // TODO: Replace\n    }\n    \n    /**\n     * PROBLEM 4: Verify Sorted Array\n     * \n     * Given an array, verify that it is sorted in non-decreasing order.\n     * This is a verification algorithm - we're checking a property.\n     * \n     * TODO:\n     * 1. Implement the algorithm\n     * 2. What is the loop invariant?\n     * 3. Can we do better than O(n)? Why or why not?\n     * 4. Time complexity: O(?)\n     * 5. Space complexity: O(?)\n     * \n     * @param arr - array of integers\n     * @return true if sorted in non-decreasing order, false otherwise\n     */\n    public static boolean isSorted(int[] arr) {\n        // Loop Invariant: ???\n        // Your implementation here\n        return false; // TODO: Replace\n    }\n    \n    /**\n     * BONUS PROBLEM: Two Sum\n     * \n     * Given an array and a target sum, find two distinct indices i and j\n     * such that arr[i] + arr[j] == target. Return the indices as an array [i, j].\n     * If no such pair exists, return null.\n     * \n     * TODO:\n     * 1. Implement a brute force O(n²) solution first\n     * 2. Think: Can we do better? (Hint: What if we could look up values in O(1)?)\n     * 3. Time complexity of your solution: O(?)\n     * 4. Space complexity of your solution: O(?)\n     * \n     * @param arr - array of integers\n     * @param target - target sum\n     * @return array of two indices, or null if not found\n     */\n    public static int[] twoSum(int[] arr, int target) {\n        // Your implementation here\n        return null; // TODO: Replace\n    }\n    \n    // ==================== TEST CASES ====================\n    public static void main(String[] args) {\n        System.out.println(\"=== Week 1: Algorithm Lab Tests ===\");\n        System.out.println();\n        \n        // Test findMax\n        System.out.println(\"--- Testing findMax ---\");\n        int[] test1 = {3, 1, 4, 1, 5, 9, 2, 6};\n        System.out.println(\"findMax([3,1,4,1,5,9,2,6]) = \" + findMax(test1) + \" (expected: 9)\");\n        System.out.println(\"findMax([42]) = \" + findMax(new int[]{42}) + \" (expected: 42)\");\n        System.out.println(\"findMax([-5,-2,-8,-1]) = \" + findMax(new int[]{-5,-2,-8,-1}) + \" (expected: -1)\");\n        System.out.println();\n        \n        // Test linearSearch\n        System.out.println(\"--- Testing linearSearch ---\");\n        int[] test2 = {10, 20, 30, 40, 50};\n        System.out.println(\"linearSearch([10,20,30,40,50], 30) = \" + linearSearch(test2, 30) + \" (expected: 2)\");\n        System.out.println(\"linearSearch([10,20,30,40,50], 35) = \" + linearSearch(test2, 35) + \" (expected: -1)\");\n        System.out.println(\"linearSearch([10,20,30,40,50], 10) = \" + linearSearch(test2, 10) + \" (expected: 0)\");\n        System.out.println();\n        \n        // Test binarySearch\n        System.out.println(\"--- Testing binarySearch ---\");\n        int[] test3 = {1, 3, 5, 7, 9, 11, 13};\n        System.out.println(\"binarySearch([1,3,5,7,9,11,13], 7) = \" + binarySearch(test3, 7) + \" (expected: 3)\");\n        System.out.println(\"binarySearch([1,3,5,7,9,11,13], 1) = \" + binarySearch(test3, 1) + \" (expected: 0)\");\n        System.out.println(\"binarySearch([1,3,5,7,9,11,13], 13) = \" + binarySearch(test3, 13) + \" (expected: 6)\");\n        System.out.println(\"binarySearch([1,3,5,7,9,11,13], 6) = \" + binarySearch(test3, 6) + \" (expected: -1)\");\n        System.out.println();\n        \n        // Test isSorted\n        System.out.println(\"--- Testing isSorted ---\");\n        System.out.println(\"isSorted([1,2,3,4,5]) = \" + isSorted(new int[]{1,2,3,4,5}) + \" (expected: true)\");\n        System.out.println(\"isSorted([1,2,2,3,4]) = \" + isSorted(new int[]{1,2,2,3,4}) + \" (expected: true)\");\n        System.out.println(\"isSorted([5,4,3,2,1]) = \" + isSorted(new int[]{5,4,3,2,1}) + \" (expected: false)\");\n        System.out.println(\"isSorted([1]) = \" + isSorted(new int[]{1}) + \" (expected: true)\");\n        System.out.println();\n        \n        // Test twoSum (Bonus)\n        System.out.println(\"--- Testing twoSum (Bonus) ---\");\n        int[] result = twoSum(new int[]{2, 7, 11, 15}, 9);\n        System.out.println(\"twoSum([2,7,11,15], 9) = \" + (result != null ? Arrays.toString(result) : \"null\") + \" (expected: [0,1])\");\n        result = twoSum(new int[]{3, 2, 4}, 6);\n        System.out.println(\"twoSum([3,2,4], 6) = \" + (result != null ? Arrays.toString(result) : \"null\") + \" (expected: [1,2])\");\n        result = twoSum(new int[]{1, 2, 3}, 10);\n        System.out.println(\"twoSum([1,2,3], 10) = \" + (result != null ? Arrays.toString(result) : \"null\") + \" (expected: null)\");\n        \n        System.out.println();\n        System.out.println(\"=== Lab Complete ===\");\n        System.out.println(\"Don't forget to document your loop invariants and complexity analysis!\");\n    }\n}"
+              },
+              "cpp": {
+                "filename": "Week1_AlgorithmLab.cpp",
+                "content": "/**\n * Week 1: Algorithms and Computation Lab\n * MIT 6.006 - Introduction to Algorithms\n * \n * In this lab, you will implement fundamental algorithms and analyze their\n * correctness and efficiency using the concepts from Lecture 1.\n * \n * Learning Objectives:\n * - Understand what makes an algorithm correct (loop invariants)\n * - Analyze time complexity using the Word RAM model\n * - Compare algorithm efficiency across different input sizes\n * \n * Compile: g++ -std=c++17 -o lab Week1_AlgorithmLab.cpp\n * Run: ./lab\n */\n\n#include <iostream>\n#include <vector>\n#include <climits>\nusing namespace std;\n\n/**\n * PROBLEM 1: Find Maximum Element\n * \n * Given a vector of integers, find and return the maximum value.\n * \n * TODO:\n * 1. Implement the algorithm\n * 2. Write the loop invariant in comments above the loop\n * 3. Document time complexity: O(?)\n * 4. Document space complexity: O(?)\n */\nint findMax(const vector<int>& arr) {\n    // Loop Invariant: ???\n    // Your implementation here\n    return 0; // TODO: Replace\n}\n\n/**\n * PROBLEM 2: Linear Search\n * \n * Search for a target value in an unsorted vector.\n * Return the index if found, -1 otherwise.\n * \n * TODO:\n * 1. Implement the algorithm\n * 2. Write the loop invariant\n * 3. Analyze: What is the best case? Worst case? Average case?\n * 4. Time complexity: O(?)\n * 5. Space complexity: O(?)\n */\nint linearSearch(const vector<int>& arr, int target) {\n    // Loop Invariant: ???\n    // Your implementation here\n    return -1; // TODO: Replace\n}\n\n/**\n * PROBLEM 3: Binary Search (Iterative)\n * \n * Search for a target value in a SORTED vector using binary search.\n * Return the index if found, -1 otherwise.\n * \n * TODO:\n * 1. Implement the algorithm\n * 2. Write the loop invariant (this one is tricky!)\n * 3. Why does this require a sorted array?\n * 4. Time complexity: O(?)\n * 5. Space complexity: O(?)\n */\nint binarySearch(const vector<int>& arr, int target) {\n    // Loop Invariant: ???\n    // Your implementation here\n    return -1; // TODO: Replace\n}\n\n/**\n * PROBLEM 4: Verify Sorted Array\n * \n * Given a vector, verify that it is sorted in non-decreasing order.\n * \n * TODO:\n * 1. Implement the algorithm\n * 2. What is the loop invariant?\n * 3. Can we do better than O(n)? Why or why not?\n * 4. Time complexity: O(?)\n * 5. Space complexity: O(?)\n */\nbool isSorted(const vector<int>& arr) {\n    // Loop Invariant: ???\n    // Your implementation here\n    return false; // TODO: Replace\n}\n\n/**\n * BONUS PROBLEM: Two Sum\n * \n * Given a vector and a target sum, find two distinct indices i and j\n * such that arr[i] + arr[j] == target. Return the indices as a pair.\n * If no such pair exists, return {-1, -1}.\n * \n * TODO:\n * 1. Implement a brute force O(n²) solution first\n * 2. Think: Can we do better? (Hint: What if we could look up values in O(1)?)\n * 3. Time complexity of your solution: O(?)\n * 4. Space complexity of your solution: O(?)\n */\npair<int, int> twoSum(const vector<int>& arr, int target) {\n    // Your implementation here\n    return {-1, -1}; // TODO: Replace\n}\n\n// ==================== TEST CASES ====================\nint main() {\n    cout << \"=== Week 1: Algorithm Lab Tests ===\" << endl << endl;\n    \n    // Test findMax\n    cout << \"--- Testing findMax ---\" << endl;\n    cout << \"findMax({3,1,4,1,5,9,2,6}) = \" << findMax({3,1,4,1,5,9,2,6}) << \" (expected: 9)\" << endl;\n    cout << \"findMax({42}) = \" << findMax({42}) << \" (expected: 42)\" << endl;\n    cout << \"findMax({-5,-2,-8,-1}) = \" << findMax({-5,-2,-8,-1}) << \" (expected: -1)\" << endl << endl;\n    \n    // Test linearSearch\n    cout << \"--- Testing linearSearch ---\" << endl;\n    vector<int> test2 = {10, 20, 30, 40, 50};\n    cout << \"linearSearch({10,20,30,40,50}, 30) = \" << linearSearch(test2, 30) << \" (expected: 2)\" << endl;\n    cout << \"linearSearch({10,20,30,40,50}, 35) = \" << linearSearch(test2, 35) << \" (expected: -1)\" << endl;\n    cout << \"linearSearch({10,20,30,40,50}, 10) = \" << linearSearch(test2, 10) << \" (expected: 0)\" << endl << endl;\n    \n    // Test binarySearch\n    cout << \"--- Testing binarySearch ---\" << endl;\n    vector<int> test3 = {1, 3, 5, 7, 9, 11, 13};\n    cout << \"binarySearch({1,3,5,7,9,11,13}, 7) = \" << binarySearch(test3, 7) << \" (expected: 3)\" << endl;\n    cout << \"binarySearch({1,3,5,7,9,11,13}, 1) = \" << binarySearch(test3, 1) << \" (expected: 0)\" << endl;\n    cout << \"binarySearch({1,3,5,7,9,11,13}, 13) = \" << binarySearch(test3, 13) << \" (expected: 6)\" << endl;\n    cout << \"binarySearch({1,3,5,7,9,11,13}, 6) = \" << binarySearch(test3, 6) << \" (expected: -1)\" << endl << endl;\n    \n    // Test isSorted\n    cout << \"--- Testing isSorted ---\" << endl;\n    cout << \"isSorted({1,2,3,4,5}) = \" << (isSorted({1,2,3,4,5}) ? \"true\" : \"false\") << \" (expected: true)\" << endl;\n    cout << \"isSorted({1,2,2,3,4}) = \" << (isSorted({1,2,2,3,4}) ? \"true\" : \"false\") << \" (expected: true)\" << endl;\n    cout << \"isSorted({5,4,3,2,1}) = \" << (isSorted({5,4,3,2,1}) ? \"true\" : \"false\") << \" (expected: false)\" << endl;\n    cout << \"isSorted({1}) = \" << (isSorted({1}) ? \"true\" : \"false\") << \" (expected: true)\" << endl << endl;\n    \n    // Test twoSum (Bonus)\n    cout << \"--- Testing twoSum (Bonus) ---\" << endl;\n    auto result = twoSum({2, 7, 11, 15}, 9);\n    cout << \"twoSum({2,7,11,15}, 9) = [\" << result.first << \",\" << result.second << \"] (expected: [0,1])\" << endl;\n    result = twoSum({3, 2, 4}, 6);\n    cout << \"twoSum({3,2,4}, 6) = [\" << result.first << \",\" << result.second << \"] (expected: [1,2])\" << endl;\n    result = twoSum({1, 2, 3}, 10);\n    cout << \"twoSum({1,2,3}, 10) = [\" << result.first << \",\" << result.second << \"] (expected: [-1,-1])\" << endl;\n    \n    cout << endl << \"=== Lab Complete ===\" << endl;\n    cout << \"Don't forget to document your loop invariants and complexity analysis!\" << endl;\n    \n    return 0;\n}"
+              }
+            },
             "guidelines": [
-              "Step 1: Download the template file 'BigO_Analysis.java' from the download button below",
-              "Step 2: Open the file in your IDE. You will find 4 functions with TODO comments: findMax(), linearSearch(), bubbleSort(), and binarySearch()",
-              "Step 3: Implement each function according to the comments. For findMax(), return the maximum value in an array. For linearSearch(), find the index of a target value. For bubbleSort(), sort an array using bubble sort. For binarySearch(), find a target in a sorted array.",
-              "Step 4: Above each completed function, add a comment block explaining: (a) Time complexity in Big-O notation, (b) Space complexity, (c) Best case, average case, and worst case scenarios",
-              "Step 5: Run the provided test cases (included in the template) to verify your implementations work correctly",
-              "Step 6: Ensure your code compiles without errors and all test cases pass",
-              "Step 7: Submit your completed file. Your submission will be graded on: correctness (40%), complexity analysis accuracy (30%), code quality (20%), and test results (10%)"
+              "Download the starter file in your preferred language (Java or C++)",
+              "Open in your IDE (VS Code, IntelliJ, CLion, etc.)",
+              "Implement all 4 required functions (findMax, linearSearch, binarySearch, isSorted)",
+              "For EACH function, write a clear loop invariant comment explaining why the algorithm is correct",
+              "Document time and space complexity in Big-O notation for each function",
+              "Run the included test cases to verify your implementations",
+              "BONUS: Implement twoSum and analyze whether O(n) is achievable",
+              "Submit your completed file with all invariants and complexity analysis"
             ],
-            "template_file": {
-              "filename": "BigO_Analysis.java",
-              "content": "public class BigO_Analysis {\n    \n    // TODO: Implement this function to find the maximum value in an array\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int findMax(int[] arr) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // TODO: Implement linear search to find the index of target value\n    // Return -1 if not found\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int linearSearch(int[] arr, int target) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // TODO: Implement bubble sort algorithm\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static void bubbleSort(int[] arr) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement binary search (assumes array is sorted)\n    // Return -1 if not found\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int binarySearch(int[] arr, int target) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // Test cases - uncomment to test your implementations\n    public static void main(String[] args) {\n        int[] test1 = {3, 1, 4, 1, 5, 9, 2, 6};\n        System.out.println(\"findMax test: \" + (findMax(test1) == 9 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test2 = {1, 2, 3, 4, 5};\n        System.out.println(\"linearSearch test: \" + (linearSearch(test2, 3) == 2 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test3 = {5, 2, 8, 1, 9};\n        bubbleSort(test3);\n        System.out.println(\"bubbleSort test: \" + (test3[0] == 1 && test3[4] == 9 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test4 = {1, 3, 5, 7, 9};\n        System.out.println(\"binarySearch test: \" + (binarySearch(test4, 5) == 2 ? \"PASS\" : \"FAIL\"));\n    }\n}"
+            "grading": {
+              "implementation_correctness": 40,
+              "loop_invariants": 25,
+              "complexity_analysis": 25,
+              "code_quality": 10
             }
           },
           "academic": {
-            "title": "Big-O Notation Assessment",
-            "description": "Complete a comprehensive written assessment demonstrating mastery of asymptotic analysis. You will: (1) Analyze 10 code snippets to determine their time and space complexity, (2) Prove 3 Big-O bounds using formal mathematical definitions, (3) Compare algorithms within the same complexity class, (4) Analyze best, average, and worst case scenarios. Submit a PDF document with all solutions showing step-by-step work and clear mathematical reasoning.",
-            "guidelines": [
-              "Part 1 - Code Analysis (40 points): Analyze 10 provided code snippets. For each snippet: (a) Identify all loops and nested structures, (b) Count operations in terms of input size n, (c) Determine time complexity in Big-O notation, (d) Determine space complexity, (e) Provide 2-3 sentence justification for your answer",
-              "Part 2 - Formal Proofs (30 points): Prove 3 Big-O bounds using the formal definition: f(n) = O(g(n)) if there exist positive constants c and n₀ such that f(n) ≤ c·g(n) for all n ≥ n₀. Show: (a) Your choice of c and n₀, (b) Algebraic manipulation proving the inequality, (c) Clear conclusion",
-              "Part 3 - Algorithm Comparison (15 points): Compare 3 sorting algorithms (e.g., Merge Sort, Quick Sort, Heap Sort) all in O(n log n). Explain: (a) When each performs best, (b) Space requirements, (c) Stability, (d) Practical considerations",
-              "Part 4 - Case Analysis (15 points): For 2 algorithms with varying performance, analyze: (a) Best case scenario with example input, (b) Average case with expected input, (c) Worst case scenario with adversarial input, (d) Time complexity for each case",
-              "Format Requirements: Submit as a single PDF document. Use clear headings for each part. Show all work - partial credit will be given for correct reasoning even if final answer is wrong. Include your name and date on the first page",
-              "Grading: Correctness (60%), Mathematical rigor (25%), Clarity of explanation (15%)"
-            ]
+            "title": "Algorithms & Computation Assessment",
+            "description": "Test your understanding of computational problems, algorithm correctness, efficiency analysis, and the Word RAM model covered in MIT 6.006 Lecture 1.",
+            "format": {
+              "mcq": 6,
+              "fill_in_blank": 4,
+              "short_answer": 3,
+              "total_points": 50,
+              "time_limit": "40 minutes",
+              "attempts": 2
+            },
+            "questions": {
+              "mcq": [
+                {
+                  "id": "w1_mcq1",
+                  "question": "Which of the following best describes the relationship between a problem and an algorithm?",
+                  "options": [
+                    "A problem is a specific solution, an algorithm is a general description",
+                    "A problem describes a desired input-output relationship, an algorithm is a procedure to achieve it",
+                    "A problem and an algorithm are the same thing",
+                    "An algorithm defines the problem space"
+                  ],
+                  "correct": 1,
+                  "points": 3
+                },
+                {
+                  "id": "w1_mcq2",
+                  "question": "In the Word RAM model, which operation is NOT considered O(1)?",
+                  "options": [
+                    "Adding two w-bit integers",
+                    "Accessing an array element by index",
+                    "Sorting an array of n elements",
+                    "Comparing two integers"
+                  ],
+                  "correct": 2,
+                  "points": 3
+                },
+                {
+                  "id": "w1_mcq3",
+                  "question": "What does it mean for an algorithm to be 'correct'?",
+                  "options": [
+                    "It runs without errors",
+                    "It terminates and produces the correct output for all valid inputs",
+                    "It runs in polynomial time",
+                    "It uses minimal memory"
+                  ],
+                  "correct": 1,
+                  "points": 3
+                },
+                {
+                  "id": "w1_mcq4",
+                  "question": "Which growth rate is the slowest for large n?",
+                  "options": [
+                    "O(n log n)",
+                    "O(n²)",
+                    "O(2ⁿ)",
+                    "O(n³)"
+                  ],
+                  "correct": 0,
+                  "points": 3
+                },
+                {
+                  "id": "w1_mcq5",
+                  "question": "If algorithm A runs in O(n) time and algorithm B runs in O(n²) time, for n = 1,000,000, approximately how many times faster is A than B?",
+                  "options": [
+                    "2 times faster",
+                    "1,000 times faster",
+                    "1,000,000 times faster",
+                    "They are roughly the same"
+                  ],
+                  "correct": 2,
+                  "points": 3
+                },
+                {
+                  "id": "w1_mcq6",
+                  "question": "A loop invariant must satisfy which three properties?",
+                  "options": [
+                    "Speed, correctness, efficiency",
+                    "Initialization, maintenance, termination",
+                    "Input, process, output",
+                    "Best case, average case, worst case"
+                  ],
+                  "correct": 1,
+                  "points": 3
+                }
+              ],
+              "fill_in_blank": [
+                {
+                  "id": "w1_fib1",
+                  "question": "In asymptotic notation, O(n²) grows _______ than O(n log n) as n approaches infinity.",
+                  "answer": "faster",
+                  "accept": ["faster", "quicker", "more quickly"],
+                  "points": 3
+                },
+                {
+                  "id": "w1_fib2",
+                  "question": "The Word RAM model assumes that basic arithmetic operations on w-bit words take _______ time.",
+                  "answer": "constant",
+                  "accept": ["constant", "O(1)", "unit"],
+                  "points": 3
+                },
+                {
+                  "id": "w1_fib3",
+                  "question": "Binary search requires the input array to be _______ in order to work correctly.",
+                  "answer": "sorted",
+                  "accept": ["sorted", "ordered"],
+                  "points": 3
+                },
+                {
+                  "id": "w1_fib4",
+                  "question": "The time complexity of linear search in the worst case is _______.",
+                  "answer": "O(n)",
+                  "accept": ["O(n)", "linear", "Θ(n)"],
+                  "points": 3
+                }
+              ],
+              "short_answer": [
+                {
+                  "id": "w1_sa1",
+                  "question": "Explain what a loop invariant is and why it is useful for proving algorithm correctness. Give an example using a simple search or max-finding algorithm.",
+                  "points": 10,
+                  "rubric": [
+                    "Definition of loop invariant (2 pts)",
+                    "Explanation of initialization property (2 pts)",
+                    "Explanation of maintenance property (2 pts)",
+                    "Explanation of termination property (2 pts)",
+                    "Correct example with invariant stated (2 pts)"
+                  ]
+                },
+                {
+                  "id": "w1_sa2",
+                  "question": "Why do we use the Word RAM model for algorithm analysis instead of counting exact CPU cycles? What are the key assumptions of this model?",
+                  "points": 8,
+                  "rubric": [
+                    "Explains abstraction benefit - machine independence (2 pts)",
+                    "Mentions w-bit word assumption (2 pts)",
+                    "Lists O(1) operations: arithmetic, comparison, memory access (2 pts)",
+                    "Mentions memory size assumption (2 pts)"
+                  ]
+                },
+                {
+                  "id": "w1_sa3",
+                  "question": "Compare linear search and binary search. For each, state the time complexity and explain when you would choose one over the other.",
+                  "points": 8,
+                  "rubric": [
+                    "Linear search: O(n) time (1 pt)",
+                    "Binary search: O(log n) time (1 pt)",
+                    "Linear works on unsorted arrays (2 pts)",
+                    "Binary requires sorted array (2 pts)",
+                    "Trade-off discussion: sorting cost vs search frequency (2 pts)"
+                  ]
+                }
+              ]
+            }
           },
           "communicator": {
-            "title": "Big-O Notation Teaching Presentation",
-            "description": "Create and deliver a 10-15 minute educational presentation teaching Big-O notation to fellow students. Your presentation must: (1) Explain what Big-O notation is and why it matters in software development, (2) Cover 5 common complexity classes with real code examples, (3) Demonstrate how to analyze code step-by-step, (4) Use visual graphs showing how different complexities scale, (5) Connect theory to real-world impact. Submit your slides (PDF or PowerPoint) and either a video recording or deliver live to the class.",
-            "guidelines": [
-              "Slide Structure (Required): (1) Title slide with your name, (2) Introduction: What is Big-O? (2-3 slides), (3) Why it matters: Real-world examples (2 slides), (4) Complexity classes: O(1), O(log n), O(n), O(n log n), O(n²) with code examples (5-6 slides), (5) How to analyze: Step-by-step walkthrough of 2 code examples (3-4 slides), (6) Visual comparison: Graph showing growth rates (1-2 slides), (7) Conclusion: Key takeaways (1 slide)",
-              "Content Requirements: For each complexity class, include: (a) Definition in simple terms, (b) At least one code example, (c) Real-world use case (e.g., O(log n) for binary search in phone contacts), (d) Visual representation (graph or chart)",
-              "Code Examples: Include 2-3 complete code examples that you analyze step-by-step. Show: (a) The code, (b) Line-by-line complexity analysis, (c) Final Big-O result, (d) Explanation of why",
-              "Visual Aids: Create or use a graph showing how O(1), O(log n), O(n), O(n log n), and O(n²) grow as input size increases. Use different colors for each line. Include axis labels and a legend",
-              "Delivery: Speak clearly and at an appropriate pace. Use transitions between slides. Engage the audience with questions or examples. If recording, ensure good audio quality and visible slides",
-              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time with your instructor",
-              "Grading Criteria: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
+            "title": "Introduction to Algorithms Presentation",
+            "description": "Create and deliver a 12-15 minute presentation explaining key concepts from MIT 6.006 Lecture 1. You must demonstrate understanding of each concept listed below.",
+            "format": {
+              "duration": "12-15 minutes",
+              "slides": "10-15 slides recommended",
+              "delivery": "Live presentation or recorded video"
+            },
+            "key_concepts": [
+              "Define what a computational problem is and how it differs from an algorithm",
+              "Explain why the same problem can have multiple algorithms with different efficiencies",
+              "Describe what it means for an algorithm to be 'correct' (termination + correct output)",
+              "Explain the purpose of asymptotic analysis - why we ignore constants and lower-order terms",
+              "Demonstrate how to count operations in a simple loop to derive time complexity",
+              "Compare the growth rates of O(1), O(log n), O(n), O(n log n), and O(n²) with a visual graph",
+              "Explain the Word RAM model: what operations cost O(1) and why we use this abstraction",
+              "Define a loop invariant and explain why it helps prove algorithm correctness",
+              "Walk through proving correctness of a simple algorithm (e.g., finding max) using initialization, maintenance, and termination",
+              "Explain the difference between best-case, worst-case, and average-case analysis with an example"
+            ],
+            "grading": {
+              "concept_coverage": 40,
+              "clarity_of_explanation": 25,
+              "visual_aids": 20,
+              "delivery": 15
+            },
+            "submission": {
+              "slides": "PDF or PPTX format",
+              "video": "MP4, YouTube link, or schedule live presentation"
+            }
           }
         }
       },
       {
         "week": 2,
-        "topic": "Linear Structures: Dynamic Arrays and Linked Lists",
-        "description": "Implement dynamic arrays with resize logic, and singly/doubly linked lists. Compare tradeoffs.",
+        "topic": "Data Structures and Dynamic Arrays",
+        "description": "Introduction to data structures, interfaces vs implementations. Deep dive into dynamic arrays with amortized analysis.",
+        "mit_lecture": { "number": 2, "title": "Data Structures and Dynamic Arrays", "url": "https://www.youtube.com/watch?v=CHhwJjR0mZA" },
         "resources": [
-          { "title": "Dynamic Arrays Explained", "url": "https://www.youtube.com/watch?v=8hly31xKli0", "type": "Video" },
-          { "title": "Linked Lists Tutorial", "url": "https://www.youtube.com/watch?v=WwfhLC16bis", "type": "Video" },
-          { "title": "Arrays vs Linked Lists", "url": "https://www.youtube.com/watch?v=lC-yYCOnN8Q", "type": "Video" },
-          { "title": "Linked Lists Article", "url": "https://www.geeksforgeeks.org/data-structures/linked-list/", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 2: Data Structures and Dynamic Arrays", "url": "https://www.youtube.com/watch?v=CHhwJjR0mZA", "type": "Video" },
+          { "title": "Dynamic Arrays Article", "url": "https://www.geeksforgeeks.org/how-do-dynamic-arrays-work/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Dynamic Array and Linked List Template",
-            "description": "Complete a template file implementing two fundamental data structures: a DynamicArray class and a LinkedList class. Your task is to: (1) Implement all methods marked with TODO comments for both classes, (2) Ensure proper memory management (resizing for arrays, node management for lists), (3) Add time complexity comments for each method, (4) Pass all provided test cases, (5) Submit your working implementation. This project demonstrates understanding of linear data structures and their tradeoffs.",
+            "title": "Dynamic Array Implementation Lab",
+            "description": "Download the starter project and implement a complete dynamic array data structure with automatic resizing, insert, delete, and access operations.",
+            "languages": ["java", "cpp"],
+            "template_files": {
+              "java": {
+                "filename": "Week2_DynamicArray.java",
+                "content": "/**\n * Week 2: Data Structures and Dynamic Arrays Lab\n * MIT 6.006 - Introduction to Algorithms\n * \n * In this lab, you will implement a dynamic array (similar to ArrayList/Vector)\n * that automatically resizes when capacity is exceeded.\n * \n * Learning Objectives:\n * - Understand the difference between interface and implementation\n * - Implement dynamic resizing with table doubling\n * - Analyze amortized cost of append operations\n * - Compare time complexity of different operations\n */\n\nimport java.util.Arrays;\n\npublic class Week2_DynamicArray<T> {\n    private Object[] data;\n    private int size;      // Number of elements currently stored\n    private int capacity;  // Total capacity of the array\n    \n    private static final int INITIAL_CAPACITY = 4;\n    \n    /**\n     * Constructor: Initialize empty dynamic array\n     * \n     * TODO: Initialize data array with INITIAL_CAPACITY\n     * Time Complexity: O(?)\n     * Space Complexity: O(?)\n     */\n    public Week2_DynamicArray() {\n        // Your implementation here\n    }\n    \n    /**\n     * Get the number of elements in the array\n     * Time Complexity: O(?)\n     */\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n    \n    /**\n     * Check if the array is empty\n     * Time Complexity: O(?)\n     */\n    public boolean isEmpty() {\n        // Your implementation here\n        return true;\n    }\n    \n    /**\n     * Get element at index i\n     * \n     * TODO: Return element at index, throw exception if out of bounds\n     * Time Complexity: O(?)\n     * \n     * @throws IndexOutOfBoundsException if i < 0 or i >= size\n     */\n    @SuppressWarnings(\"unchecked\")\n    public T get(int i) {\n        // Your implementation here\n        return null;\n    }\n    \n    /**\n     * Set element at index i to value x\n     * \n     * TODO: Replace element at index, throw exception if out of bounds\n     * Time Complexity: O(?)\n     * \n     * @throws IndexOutOfBoundsException if i < 0 or i >= size\n     */\n    public void set(int i, T x) {\n        // Your implementation here\n    }\n    \n    /**\n     * PRIVATE HELPER: Resize the internal array to new capacity\n     * \n     * TODO: \n     * 1. Create new array with newCapacity\n     * 2. Copy all elements from old array to new array\n     * 3. Update data and capacity\n     * \n     * Time Complexity: O(?)\n     * Space Complexity: O(?)\n     */\n    private void resize(int newCapacity) {\n        // Your implementation here\n    }\n    \n    /**\n     * Append element x to the end of the array\n     * \n     * TODO:\n     * 1. If size == capacity, call resize(capacity * 2) [TABLE DOUBLING]\n     * 2. Add element at index size\n     * 3. Increment size\n     * \n     * Time Complexity: O(?) worst case, O(?) amortized\n     * \n     * IMPORTANT: Explain WHY amortized cost is O(1) in your comments!\n     */\n    public void append(T x) {\n        // Your implementation here\n    }\n    \n    /**\n     * Remove and return the last element\n     * \n     * TODO:\n     * 1. If empty, throw exception\n     * 2. Get last element\n     * 3. Decrement size\n     * 4. OPTIONAL: If size < capacity/4, resize to capacity/2 (prevents memory waste)\n     * \n     * Time Complexity: O(?)\n     * \n     * @throws RuntimeException if array is empty\n     */\n    @SuppressWarnings(\"unchecked\")\n    public T pop() {\n        // Your implementation here\n        return null;\n    }\n    \n    /**\n     * Insert element x at index i, shifting elements right\n     * \n     * TODO:\n     * 1. Check bounds (0 <= i <= size)\n     * 2. Resize if necessary\n     * 3. Shift elements from i to size-1 one position right\n     * 4. Insert x at index i\n     * 5. Increment size\n     * \n     * Time Complexity: O(?)\n     */\n    public void insertAt(int i, T x) {\n        // Your implementation here\n    }\n    \n    /**\n     * Remove element at index i, shifting elements left\n     * \n     * TODO:\n     * 1. Check bounds\n     * 2. Save element at i\n     * 3. Shift elements from i+1 to size-1 one position left\n     * 4. Decrement size\n     * 5. Return removed element\n     * \n     * Time Complexity: O(?)\n     */\n    @SuppressWarnings(\"unchecked\")\n    public T removeAt(int i) {\n        // Your implementation here\n        return null;\n    }\n    \n    /**\n     * Return current capacity (for testing purposes)\n     */\n    public int getCapacity() {\n        return capacity;\n    }\n    \n    @Override\n    public String toString() {\n        StringBuilder sb = new StringBuilder(\"[\");\n        for (int i = 0; i < size; i++) {\n            sb.append(data[i]);\n            if (i < size - 1) sb.append(\", \");\n        }\n        sb.append(\"] (size=\").append(size).append(\", capacity=\").append(capacity).append(\")\");\n        return sb.toString();\n    }\n    \n    // ==================== TEST CASES ====================\n    public static void main(String[] args) {\n        System.out.println(\"=== Week 2: Dynamic Array Lab Tests ===\");\n        System.out.println();\n        \n        Week2_DynamicArray<Integer> arr = new Week2_DynamicArray<>();\n        \n        // Test initial state\n        System.out.println(\"--- Initial State ---\");\n        System.out.println(\"isEmpty(): \" + arr.isEmpty() + \" (expected: true)\");\n        System.out.println(\"size(): \" + arr.size() + \" (expected: 0)\");\n        System.out.println();\n        \n        // Test append and automatic resizing\n        System.out.println(\"--- Testing append with automatic resizing ---\");\n        for (int i = 1; i <= 10; i++) {\n            arr.append(i * 10);\n            System.out.println(\"After append(\" + (i*10) + \"): \" + arr);\n        }\n        System.out.println();\n        \n        // Test get and set\n        System.out.println(\"--- Testing get and set ---\");\n        System.out.println(\"get(0): \" + arr.get(0) + \" (expected: 10)\");\n        System.out.println(\"get(4): \" + arr.get(4) + \" (expected: 50)\");\n        arr.set(4, 999);\n        System.out.println(\"After set(4, 999): get(4) = \" + arr.get(4) + \" (expected: 999)\");\n        arr.set(4, 50); // Reset\n        System.out.println();\n        \n        // Test pop\n        System.out.println(\"--- Testing pop ---\");\n        System.out.println(\"pop(): \" + arr.pop() + \" (expected: 100)\");\n        System.out.println(\"pop(): \" + arr.pop() + \" (expected: 90)\");\n        System.out.println(\"After pops: \" + arr);\n        System.out.println();\n        \n        // Test insertAt\n        System.out.println(\"--- Testing insertAt ---\");\n        arr.insertAt(0, 5);  // Insert at beginning\n        System.out.println(\"After insertAt(0, 5): \" + arr);\n        arr.insertAt(4, 45); // Insert in middle\n        System.out.println(\"After insertAt(4, 45): \" + arr);\n        System.out.println();\n        \n        // Test removeAt\n        System.out.println(\"--- Testing removeAt ---\");\n        System.out.println(\"removeAt(0): \" + arr.removeAt(0) + \" (expected: 5)\");\n        System.out.println(\"After removeAt(0): \" + arr);\n        System.out.println();\n        \n        System.out.println(\"=== Lab Complete ===\");\n        System.out.println(\"Don't forget to analyze amortized complexity of append!\");\n    }\n}"
+              },
+              "cpp": {
+                "filename": "Week2_DynamicArray.cpp",
+                "content": "/**\n * Week 2: Data Structures and Dynamic Arrays Lab\n * MIT 6.006 - Introduction to Algorithms\n * \n * Implement a dynamic array (similar to std::vector) with automatic resizing.\n * \n * Compile: g++ -std=c++17 -o lab Week2_DynamicArray.cpp\n * Run: ./lab\n */\n\n#include <iostream>\n#include <stdexcept>\nusing namespace std;\n\ntemplate <typename T>\nclass DynamicArray {\nprivate:\n    T* data;\n    int _size;\n    int _capacity;\n    static const int INITIAL_CAPACITY = 4;\n    \n    /**\n     * PRIVATE HELPER: Resize internal array to newCapacity\n     * Time Complexity: O(?)\n     */\n    void resize(int newCapacity) {\n        // TODO: Implement\n    }\n    \npublic:\n    /**\n     * Constructor: Initialize empty dynamic array\n     * Time Complexity: O(?)\n     */\n    DynamicArray() {\n        // TODO: Implement\n        data = nullptr;\n        _size = 0;\n        _capacity = 0;\n    }\n    \n    /**\n     * Destructor: Free memory\n     */\n    ~DynamicArray() {\n        delete[] data;\n    }\n    \n    int size() const { return _size; }\n    bool isEmpty() const { return _size == 0; }\n    int capacity() const { return _capacity; }\n    \n    /**\n     * Get element at index i\n     * Time Complexity: O(?)\n     */\n    T get(int i) const {\n        // TODO: Implement with bounds checking\n        return T();\n    }\n    \n    /**\n     * Set element at index i\n     * Time Complexity: O(?)\n     */\n    void set(int i, T x) {\n        // TODO: Implement with bounds checking\n    }\n    \n    /**\n     * Append element to end (with table doubling)\n     * Time Complexity: O(?) worst case, O(?) amortized\n     */\n    void append(T x) {\n        // TODO: Implement with automatic resizing\n    }\n    \n    /**\n     * Remove and return last element\n     * Time Complexity: O(?)\n     */\n    T pop() {\n        // TODO: Implement\n        return T();\n    }\n    \n    /**\n     * Insert at index i, shifting elements right\n     * Time Complexity: O(?)\n     */\n    void insertAt(int i, T x) {\n        // TODO: Implement\n    }\n    \n    /**\n     * Remove at index i, shifting elements left\n     * Time Complexity: O(?)\n     */\n    T removeAt(int i) {\n        // TODO: Implement\n        return T();\n    }\n    \n    void print() const {\n        cout << \"[\";\n        for (int i = 0; i < _size; i++) {\n            cout << data[i];\n            if (i < _size - 1) cout << \", \";\n        }\n        cout << \"] (size=\" << _size << \", capacity=\" << _capacity << \")\" << endl;\n    }\n};\n\nint main() {\n    cout << \"=== Week 2: Dynamic Array Lab Tests ===\" << endl << endl;\n    \n    DynamicArray<int> arr;\n    \n    cout << \"--- Testing append with automatic resizing ---\" << endl;\n    for (int i = 1; i <= 10; i++) {\n        arr.append(i * 10);\n        cout << \"After append(\" << i*10 << \"): \";\n        arr.print();\n    }\n    \n    cout << endl << \"--- Testing get/set ---\" << endl;\n    cout << \"get(0): \" << arr.get(0) << \" (expected: 10)\" << endl;\n    cout << \"get(4): \" << arr.get(4) << \" (expected: 50)\" << endl;\n    \n    cout << endl << \"--- Testing pop ---\" << endl;\n    cout << \"pop(): \" << arr.pop() << \" (expected: 100)\" << endl;\n    arr.print();\n    \n    cout << endl << \"=== Lab Complete ===\" << endl;\n    return 0;\n}"
+              }
+            },
             "guidelines": [
-              "Step 1: Download 'DynamicArray_LinkedList.java' template file from the download button",
-              "Step 2: Implement DynamicArray class methods: (a) resize() - double capacity when full, (b) add(int index, T item) - insert at position with bounds checking, (c) remove(int index) - remove element and shift, (d) get(int index) - retrieve element, (e) size() - return current size",
-              "Step 3: Implement LinkedList class methods: (a) addFirst(T item) - add to head, (b) addLast(T item) - add to tail, (c) remove(T item) - find and remove first occurrence, (d) get(int index) - traverse to index and return, (e) Helper: findNode(T item) - locate node containing item",
-              "Step 4: For each implemented method, add a comment above it stating: (a) Time complexity in Big-O, (b) Space complexity if applicable, (c) Example: '// O(1) amortized time, O(1) space' for addLast()",
-              "Step 5: Run the test suite included in the template. All 15 test cases must pass. Fix any failing tests before submission",
-              "Step 6: Verify edge cases: empty list/array, single element, adding/removing at boundaries (index 0, last index)",
-              "Step 7: Code quality: Use meaningful variable names, add brief comments for complex logic, ensure no memory leaks (properly handle node references in LinkedList)",
-              "Step 8: Submit your completed file. Grading: Correctness (50%), Time complexity analysis (25%), Code quality (15%), Test results (10%)"
+              "Download the starter file in Java or C++",
+              "Implement all TODO methods following the specifications",
+              "Document time complexity for EVERY method",
+              "Explain in comments WHY append() has O(1) amortized cost despite O(n) worst case",
+              "Run all test cases to verify correctness",
+              "Consider edge cases: empty array, single element, resizing triggers"
             ],
-            "template_file": {
-              "filename": "DynamicArray_LinkedList.java",
-              "content": "public class DynamicArray<T> {\n    private T[] array;\n    private int size;\n    private int capacity;\n    \n    // TODO: Implement constructor that initializes array with initial capacity of 10\n    public DynamicArray() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement resize method that doubles the capacity when array is full\n    // Time Complexity: ???\n    private void resize() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement add method to insert item at given index\n    // Time Complexity: ???\n    public void add(int index, T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement remove method to remove item at given index\n    // Time Complexity: ???\n    public T remove(int index) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement get method to retrieve item at given index\n    // Time Complexity: ???\n    public T get(int index) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\nclass Node<T> {\n    T data;\n    Node<T> next;\n    \n    Node(T data) {\n        this.data = data;\n        this.next = null;\n    }\n}\n\npublic class LinkedList<T> {\n    private Node<T> head;\n    private int size;\n    \n    // TODO: Implement constructor\n    public LinkedList() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addFirst method\n    // Time Complexity: ???\n    public void addFirst(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addLast method\n    // Time Complexity: ???\n    public void addLast(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement helper method to find node containing item\n    // Time Complexity: ???\n    private Node<T> findNode(T item) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement remove method\n    // Time Complexity: ???\n    public boolean remove(T item) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement get method\n    // Time Complexity: ???\n    public T get(int index) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Test cases - uncomment to test\nclass TestCases {\n    public static void main(String[] args) {\n        // Test DynamicArray\n        DynamicArray<Integer> arr = new DynamicArray<>();\n        arr.add(0, 10);\n        arr.add(1, 20);\n        System.out.println(\"DynamicArray test 1: \" + (arr.get(0) == 10 ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"DynamicArray test 2: \" + (arr.size() == 2 ? \"PASS\" : \"FAIL\"));\n        \n        // Test LinkedList\n        LinkedList<Integer> list = new LinkedList<>();\n        list.addFirst(5);\n        list.addLast(15);\n        System.out.println(\"LinkedList test 1: \" + (list.get(0) == 5 ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"LinkedList test 2: \" + (list.size() == 2 ? \"PASS\" : \"FAIL\"));\n    }\n}"
+            "grading": {
+              "implementation_correctness": 40,
+              "amortized_analysis_explanation": 25,
+              "complexity_documentation": 20,
+              "code_quality": 15
             }
           },
           "academic": {
-            "title": "Linear Data Structures Assessment",
-            "description": "Complete a written test covering: (1) Time complexity analysis for dynamic arrays vs linked lists (insertion, deletion, access), (2) Space complexity comparison, (3) When to use arrays vs linked lists, (4) Implementation details (resizing strategy, memory allocation), (5) Tradeoffs between singly vs doubly linked lists. Submit detailed solutions with complexity analysis.",
-            "guidelines": [
-              "Analyze time complexity for all operations (access, insert, delete) for both structures",
-              "Compare space complexity: arrays vs linked lists (including overhead)",
-              "Explain when to use arrays vs linked lists with specific use cases",
-              "Describe dynamic array resizing strategies (doubling, geometric growth)",
-              "Compare singly vs doubly linked lists: advantages and disadvantages",
-              "All solutions must include Big-O notation with justification"
-            ]
+            "title": "Data Structures & Amortized Analysis Assessment",
+            "description": "Test your understanding of data structure interfaces, dynamic arrays, and amortized analysis from MIT 6.006 Lecture 2.",
+            "format": {
+              "mcq": 6,
+              "fill_in_blank": 4,
+              "short_answer": 3,
+              "total_points": 50,
+              "time_limit": "40 minutes",
+              "attempts": 2
+            },
+            "questions": {
+              "mcq": [
+                {
+                  "id": "w2_mcq1",
+                  "question": "What is the key difference between a data structure interface and its implementation?",
+                  "options": [
+                    "An interface is faster than an implementation",
+                    "An interface defines WHAT operations are supported; implementation defines HOW",
+                    "An interface is written in pseudocode, implementation in real code",
+                    "There is no difference"
+                  ],
+                  "correct": 1,
+                  "points": 3
+                },
+                {
+                  "id": "w2_mcq2",
+                  "question": "In a dynamic array using table doubling, what is the amortized cost of append()?",
+                  "options": [
+                    "O(n)",
+                    "O(log n)",
+                    "O(1)",
+                    "O(n²)"
+                  ],
+                  "correct": 2,
+                  "points": 3
+                },
+                {
+                  "id": "w2_mcq3",
+                  "question": "If a dynamic array has size 8 and capacity 8, what happens when we append one more element?",
+                  "options": [
+                    "The element is rejected",
+                    "A new array of capacity 16 is allocated and elements are copied",
+                    "A new array of capacity 9 is allocated",
+                    "The element overwrites the first element"
+                  ],
+                  "correct": 1,
+                  "points": 3
+                },
+                {
+                  "id": "w2_mcq4",
+                  "question": "What is the worst-case time complexity of get(i) in a dynamic array?",
+                  "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n²)"
+                  ],
+                  "correct": 0,
+                  "points": 3
+                },
+                {
+                  "id": "w2_mcq5",
+                  "question": "Why do we double the capacity rather than adding a fixed amount (e.g., +10)?",
+                  "options": [
+                    "Doubling uses less memory",
+                    "Doubling ensures O(1) amortized append; fixed increment gives O(n) amortized",
+                    "Doubling is simpler to implement",
+                    "There is no advantage to doubling"
+                  ],
+                  "correct": 1,
+                  "points": 3
+                },
+                {
+                  "id": "w2_mcq6",
+                  "question": "What is the time complexity of inserting an element at the BEGINNING of a dynamic array?",
+                  "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(1) amortized"
+                  ],
+                  "correct": 2,
+                  "points": 3
+                }
+              ],
+              "fill_in_blank": [
+                {
+                  "id": "w2_fib1",
+                  "question": "In table doubling, when we resize from capacity n to 2n and copy n elements, the cost is _______ but this happens only once every n appends.",
+                  "answer": "O(n)",
+                  "accept": ["O(n)", "linear", "n"],
+                  "points": 3
+                },
+                {
+                  "id": "w2_fib2",
+                  "question": "The Sequence interface supports operations like get(i), set(i,x), insert(i,x), and _______ at index i.",
+                  "answer": "delete",
+                  "accept": ["delete", "remove", "delete(i)", "remove(i)"],
+                  "points": 3
+                },
+                {
+                  "id": "w2_fib3",
+                  "question": "Amortized analysis gives the average cost per operation over a _______ of operations.",
+                  "answer": "sequence",
+                  "accept": ["sequence", "series", "sequence of operations"],
+                  "points": 3
+                },
+                {
+                  "id": "w2_fib4",
+                  "question": "A static array has fixed _______, while a dynamic array can grow automatically.",
+                  "answer": "size",
+                  "accept": ["size", "capacity", "length"],
+                  "points": 3
+                }
+              ],
+              "short_answer": [
+                {
+                  "id": "w2_sa1",
+                  "question": "Prove that append() in a dynamic array with table doubling has O(1) amortized cost. Use the accounting method or aggregate analysis.",
+                  "points": 12,
+                  "rubric": [
+                    "Identifies that resize copies n elements every n appends (3 pts)",
+                    "Shows total cost of n appends is O(n) (3 pts)",
+                    "Concludes amortized cost = O(n)/n = O(1) (3 pts)",
+                    "Clear mathematical reasoning (3 pts)"
+                  ]
+                },
+                {
+                  "id": "w2_sa2",
+                  "question": "Compare a static array vs a linked list for implementing the Sequence interface. Give the time complexity of get(i), insert_first(x), and insert_last(x) for each.",
+                  "points": 8,
+                  "rubric": [
+                    "Static array: get O(1), insert_first O(n), insert_last O(1) amortized (3 pts)",
+                    "Linked list: get O(n), insert_first O(1), insert_last O(1) with tail pointer (3 pts)",
+                    "Discussion of trade-offs (2 pts)"
+                  ]
+                },
+                {
+                  "id": "w2_sa3",
+                  "question": "Why is the distinction between 'interface' and 'implementation' important in algorithm design? Give an example.",
+                  "points": 6,
+                  "rubric": [
+                    "Explains interface defines operations abstractly (2 pts)",
+                    "Explains same interface can have multiple implementations (2 pts)",
+                    "Good example (e.g., Stack interface with array vs linked list implementation) (2 pts)"
+                  ]
+                }
+              ]
+            }
           },
           "communicator": {
-            "title": "Arrays vs Linked Lists Presentation",
-            "description": "Create a 10-15 minute presentation comparing dynamic arrays and linked lists. Include: (1) How each data structure works internally, (2) Time complexity comparison for common operations, (3) Memory layout and space efficiency, (4) When to choose arrays vs linked lists, (5) Real-world examples of each in use. Use visual diagrams and code examples.",
-            "guidelines": [
-              "10-15 minute presentation with visual diagrams",
-              "Explain internal structure of both arrays and linked lists with memory diagrams",
-              "Create comparison table showing time complexity for all operations",
-              "Discuss memory layout: contiguous (arrays) vs scattered (linked lists)",
-              "Provide 3-5 real-world scenarios and recommend which structure to use",
-              "Use code examples to demonstrate key concepts",
-              "Clear explanations and engaging delivery"
-            ]
+            "title": "Data Structures & Dynamic Arrays Presentation",
+            "description": "Create and deliver a 12-15 minute presentation explaining key concepts from MIT 6.006 Lecture 2. Cover all concepts listed below.",
+            "format": {
+              "duration": "12-15 minutes",
+              "slides": "10-15 slides recommended",
+              "delivery": "Live presentation or recorded video"
+            },
+            "key_concepts": [
+              "Explain the difference between a data structure interface and its implementation",
+              "Describe the Sequence interface operations: get(i), set(i,x), insert(i,x), delete(i)",
+              "Show how a static array stores elements contiguously in memory",
+              "Explain why static arrays have O(1) access but O(n) insert at arbitrary position",
+              "Demonstrate the table doubling strategy: when and how resizing occurs",
+              "Walk through an example of 8 consecutive appends showing when resizes happen",
+              "Explain what amortized analysis means and why it differs from worst-case analysis",
+              "Prove or demonstrate why append has O(1) amortized cost with table doubling",
+              "Compare dynamic arrays vs linked lists: trade-offs for different operations",
+              "Discuss real-world examples of dynamic arrays (ArrayList in Java, vector in C++, list in Python)"
+            ],
+            "grading": {
+              "concept_coverage": 40,
+              "clarity_of_explanation": 25,
+              "visual_aids": 20,
+              "delivery": 15
+            },
+            "submission": {
+              "slides": "PDF or PPTX format",
+              "video": "MP4, YouTube link, or schedule live presentation"
+            }
           }
         }
       },
       {
         "week": 3,
-        "topic": "Stacks, Queues, and Deques",
-        "description": "Implement stacks, queues, and double-ended queues. Learn common use cases and applications.",
+        "topic": "Sets and Sorting",
+        "description": "Set interface and implementations. Introduction to sorting: permutation sort, selection sort, insertion sort, and merge sort.",
+        "mit_lecture": { "number": 3, "title": "Sets and Sorting", "url": "https://www.youtube.com/watch?v=oS9aPzUNG-s" },
         "resources": [
-          { "title": "Stacks and Queues Explained", "url": "https://www.youtube.com/watch?v=wjI1WNcIntg", "type": "Video" },
-          { "title": "Stack Data Structure", "url": "https://www.youtube.com/watch?v=I37kGX-nZEI", "type": "Video" },
-          { "title": "Queue Data Structure", "url": "https://www.youtube.com/watch?v=XuCbpw6Bj1U", "type": "Video" },
-          { "title": "Stack and Queue Tutorial", "url": "https://www.programiz.com/dsa/stack", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 3: Sets and Sorting", "url": "https://www.youtube.com/watch?v=oS9aPzUNG-s", "type": "Video" },
+          { "title": "Sorting Algorithms Visualized", "url": "https://visualgo.net/en/sorting", "type": "Interactive" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Stack, Queue, and Deque Template",
-            "description": "Complete a template file implementing three fundamental linear data structures: Stack, Queue, and Deque. Your task is to: (1) Implement all methods marked with TODO comments for all three classes, (2) Build a balanced parentheses checker using the Stack, (3) Build a task scheduler using the Queue, (4) Add time complexity comments for each method, (5) Pass all provided test cases, (6) Submit your working implementation. This project demonstrates understanding of LIFO, FIFO, and double-ended queue operations.",
+            "title": "Sorting Algorithms Implementation Lab",
+            "description": "Download the starter project and implement three sorting algorithms: selection sort, insertion sort, and merge sort. Analyze and compare their performance.",
+            "languages": ["java", "cpp"],
+            "template_files": {
+              "java": {
+                "filename": "Week3_Sorting.java",
+                "content": "/**\n * Week 3: Sets and Sorting Lab\n * MIT 6.006 - Introduction to Algorithms\n * \n * In this lab, you will implement and analyze three sorting algorithms:\n * - Selection Sort (O(n²))\n * - Insertion Sort (O(n²) worst, O(n) best)\n * - Merge Sort (O(n log n))\n * \n * Learning Objectives:\n * - Understand the Set interface and how sorting relates to it\n * - Implement comparison-based sorting algorithms\n * - Analyze and compare time complexity across different inputs\n * - Understand stability in sorting algorithms\n */\n\nimport java.util.Arrays;\nimport java.util.Random;\n\npublic class Week3_Sorting {\n    \n    /**\n     * SELECTION SORT\n     * \n     * Algorithm:\n     * 1. Find the minimum element in unsorted portion\n     * 2. Swap it with the first unsorted element\n     * 3. Repeat for remaining unsorted portion\n     * \n     * TODO: Implement selection sort\n     * Time Complexity: O(?) for ALL cases (best, average, worst)\n     * Space Complexity: O(?)\n     * Stable: Yes/No?\n     */\n    public static void selectionSort(int[] arr) {\n        // Your implementation here\n    }\n    \n    /**\n     * INSERTION SORT\n     * \n     * Algorithm:\n     * 1. Start with second element\n     * 2. Compare with elements to the left, shift larger elements right\n     * 3. Insert current element in correct position\n     * 4. Repeat for all elements\n     * \n     * TODO: Implement insertion sort\n     * Time Complexity: O(?) best case, O(?) worst case\n     * Space Complexity: O(?)\n     * Stable: Yes/No?\n     * \n     * QUESTION: When does insertion sort achieve O(n)? Why?\n     */\n    public static void insertionSort(int[] arr) {\n        // Your implementation here\n    }\n    \n    /**\n     * MERGE SORT (Recursive)\n     * \n     * Algorithm (Divide and Conquer):\n     * 1. Divide array into two halves\n     * 2. Recursively sort each half\n     * 3. Merge the sorted halves\n     * \n     * TODO: Implement merge sort\n     * Time Complexity: O(?) for ALL cases\n     * Space Complexity: O(?)\n     * Stable: Yes/No?\n     * \n     * QUESTION: Write the recurrence relation T(n) = ?\n     */\n    public static void mergeSort(int[] arr) {\n        if (arr.length <= 1) return;\n        mergeSort(arr, 0, arr.length - 1);\n    }\n    \n    private static void mergeSort(int[] arr, int left, int right) {\n        // TODO: Implement recursive merge sort\n        // Base case: if left >= right, return\n        // Recursive case:\n        //   1. Find mid = (left + right) / 2\n        //   2. mergeSort(arr, left, mid)\n        //   3. mergeSort(arr, mid+1, right)\n        //   4. merge(arr, left, mid, right)\n    }\n    \n    /**\n     * MERGE helper function\n     * \n     * Merges two sorted subarrays: arr[left..mid] and arr[mid+1..right]\n     * \n     * TODO: Implement the merge function\n     * Time Complexity: O(?)\n     * Space Complexity: O(?)\n     */\n    private static void merge(int[] arr, int left, int mid, int right) {\n        // TODO: Implement merge\n        // 1. Create temp arrays for left and right halves\n        // 2. Copy data to temp arrays\n        // 3. Merge temp arrays back into arr[left..right]\n    }\n    \n    /**\n     * BONUS: In-Place Merge Sort\n     * Can you implement merge sort with O(1) extra space?\n     * (This is tricky and not required, but good practice!)\n     */\n    \n    // ==================== HELPER METHODS ====================\n    \n    public static int[] copyArray(int[] arr) {\n        return Arrays.copyOf(arr, arr.length);\n    }\n    \n    public static boolean isSorted(int[] arr) {\n        for (int i = 0; i < arr.length - 1; i++) {\n            if (arr[i] > arr[i + 1]) return false;\n        }\n        return true;\n    }\n    \n    public static int[] generateRandom(int n) {\n        Random rand = new Random(42); // Fixed seed for reproducibility\n        int[] arr = new int[n];\n        for (int i = 0; i < n; i++) {\n            arr[i] = rand.nextInt(1000);\n        }\n        return arr;\n    }\n    \n    public static int[] generateSorted(int n) {\n        int[] arr = new int[n];\n        for (int i = 0; i < n; i++) arr[i] = i;\n        return arr;\n    }\n    \n    public static int[] generateReversed(int n) {\n        int[] arr = new int[n];\n        for (int i = 0; i < n; i++) arr[i] = n - i;\n        return arr;\n    }\n    \n    // ==================== TEST CASES ====================\n    public static void main(String[] args) {\n        System.out.println(\"=== Week 3: Sorting Algorithms Lab ===\");\n        System.out.println();\n        \n        // Basic correctness tests\n        System.out.println(\"--- Correctness Tests ---\");\n        \n        int[] test1 = {64, 34, 25, 12, 22, 11, 90};\n        int[] arr1 = copyArray(test1);\n        selectionSort(arr1);\n        System.out.println(\"Selection Sort: \" + Arrays.toString(arr1));\n        System.out.println(\"Sorted correctly: \" + isSorted(arr1));\n        \n        int[] arr2 = copyArray(test1);\n        insertionSort(arr2);\n        System.out.println(\"Insertion Sort: \" + Arrays.toString(arr2));\n        System.out.println(\"Sorted correctly: \" + isSorted(arr2));\n        \n        int[] arr3 = copyArray(test1);\n        mergeSort(arr3);\n        System.out.println(\"Merge Sort: \" + Arrays.toString(arr3));\n        System.out.println(\"Sorted correctly: \" + isSorted(arr3));\n        \n        System.out.println();\n        \n        // Performance comparison\n        System.out.println(\"--- Performance Comparison (n=1000) ---\");\n        int n = 1000;\n        \n        // Test on random array\n        int[] random = generateRandom(n);\n        \n        int[] r1 = copyArray(random);\n        long start = System.nanoTime();\n        selectionSort(r1);\n        long selectionTime = System.nanoTime() - start;\n        \n        int[] r2 = copyArray(random);\n        start = System.nanoTime();\n        insertionSort(r2);\n        long insertionTimeRandom = System.nanoTime() - start;\n        \n        int[] r3 = copyArray(random);\n        start = System.nanoTime();\n        mergeSort(r3);\n        long mergeTime = System.nanoTime() - start;\n        \n        System.out.println(\"Random array:\");\n        System.out.println(\"  Selection: \" + selectionTime/1000000.0 + \" ms\");\n        System.out.println(\"  Insertion: \" + insertionTimeRandom/1000000.0 + \" ms\");\n        System.out.println(\"  Merge:     \" + mergeTime/1000000.0 + \" ms\");\n        \n        // Test on already sorted (best case for insertion sort)\n        int[] sorted = generateSorted(n);\n        int[] s1 = copyArray(sorted);\n        start = System.nanoTime();\n        insertionSort(s1);\n        long insertionTimeSorted = System.nanoTime() - start;\n        \n        System.out.println(\"\\nAlready sorted array (Insertion Sort best case):\");\n        System.out.println(\"  Insertion: \" + insertionTimeSorted/1000000.0 + \" ms\");\n        \n        // Test on reverse sorted (worst case for insertion sort)\n        int[] reversed = generateReversed(n);\n        int[] rev1 = copyArray(reversed);\n        start = System.nanoTime();\n        insertionSort(rev1);\n        long insertionTimeReversed = System.nanoTime() - start;\n        \n        System.out.println(\"\\nReverse sorted array (Insertion Sort worst case):\");\n        System.out.println(\"  Insertion: \" + insertionTimeReversed/1000000.0 + \" ms\");\n        \n        System.out.println();\n        System.out.println(\"=== Lab Complete ===\");\n        System.out.println(\"Answer in comments: Why is merge sort always O(n log n)?\");\n        System.out.println(\"Answer in comments: When would you choose insertion sort over merge sort?\");\n    }\n}"
+              },
+              "cpp": {
+                "filename": "Week3_Sorting.cpp",
+                "content": "/**\n * Week 3: Sets and Sorting Lab\n * MIT 6.006 - Introduction to Algorithms\n * \n * Implement Selection Sort, Insertion Sort, and Merge Sort.\n * \n * Compile: g++ -std=c++17 -o lab Week3_Sorting.cpp\n * Run: ./lab\n */\n\n#include <iostream>\n#include <vector>\n#include <algorithm>\n#include <chrono>\n#include <random>\nusing namespace std;\n\n/**\n * SELECTION SORT\n * Time Complexity: O(?) all cases\n * Space Complexity: O(?)\n * Stable: Yes/No?\n */\nvoid selectionSort(vector<int>& arr) {\n    // TODO: Implement\n}\n\n/**\n * INSERTION SORT\n * Time Complexity: O(?) best, O(?) worst\n * Space Complexity: O(?)\n * Stable: Yes/No?\n */\nvoid insertionSort(vector<int>& arr) {\n    // TODO: Implement\n}\n\n/**\n * MERGE helper function\n * Time Complexity: O(?)\n */\nvoid merge(vector<int>& arr, int left, int mid, int right) {\n    // TODO: Implement\n}\n\n/**\n * MERGE SORT\n * Time Complexity: O(?) all cases\n * Space Complexity: O(?)\n * Stable: Yes/No?\n * Recurrence: T(n) = ?\n */\nvoid mergeSort(vector<int>& arr, int left, int right) {\n    // TODO: Implement\n}\n\nvoid mergeSort(vector<int>& arr) {\n    if (arr.size() <= 1) return;\n    mergeSort(arr, 0, arr.size() - 1);\n}\n\nbool isSorted(const vector<int>& arr) {\n    for (size_t i = 0; i < arr.size() - 1; i++) {\n        if (arr[i] > arr[i + 1]) return false;\n    }\n    return true;\n}\n\nint main() {\n    cout << \"=== Week 3: Sorting Lab ===\" << endl << endl;\n    \n    vector<int> test = {64, 34, 25, 12, 22, 11, 90};\n    \n    vector<int> arr1 = test;\n    selectionSort(arr1);\n    cout << \"Selection Sort sorted: \" << (isSorted(arr1) ? \"YES\" : \"NO\") << endl;\n    \n    vector<int> arr2 = test;\n    insertionSort(arr2);\n    cout << \"Insertion Sort sorted: \" << (isSorted(arr2) ? \"YES\" : \"NO\") << endl;\n    \n    vector<int> arr3 = test;\n    mergeSort(arr3);\n    cout << \"Merge Sort sorted: \" << (isSorted(arr3) ? \"YES\" : \"NO\") << endl;\n    \n    cout << endl << \"=== Lab Complete ===\" << endl;\n    return 0;\n}"
+              }
+            },
             "guidelines": [
-              "Step 1: Download 'Stack_Queue_Deque.java' template file from the download button",
-              "Step 2: Implement Stack class methods: (a) push(T item) - add to top, (b) pop() - remove and return top element, (c) peek() - return top without removing, (d) isEmpty() - check if empty, (e) size() - return number of elements",
-              "Step 3: Implement Queue class methods: (a) enqueue(T item) - add to rear, (b) dequeue() - remove and return front element, (c) front() - return front without removing, (d) isEmpty() - check if empty, (e) size() - return number of elements",
-              "Step 4: Implement Deque class methods: (a) addFirst(T item) - add to front, (b) addLast(T item) - add to rear, (c) removeFirst() - remove and return front, (d) removeLast() - remove and return rear, (e) isEmpty() and size()",
-              "Step 5: Implement BalancedParenthesesChecker class using your Stack: (a) isBalanced(String expression) - returns true if parentheses are balanced, (b) Handle '(', ')', '[', ']', '{', '}' characters, (c) Use stack to track opening brackets",
-              "Step 6: Implement TaskScheduler class using your Queue: (a) scheduleTask(String task) - add task to queue, (b) executeNext() - remove and return next task, (c) hasTasks() - check if tasks remain",
-              "Step 7: For each implemented method, add a comment above it stating time complexity in Big-O notation",
-              "Step 8: Run the test suite included in the template. All test cases must pass. Fix any failing tests before submission",
-              "Step 9: Submit your completed file. Grading: Correctness (50%), Time complexity analysis (25%), Code quality (15%), Test results (10%)"
+              "Download the starter file in Java or C++",
+              "Implement all three sorting algorithms: selection sort, insertion sort, merge sort",
+              "Document time complexity (best, average, worst case) for each algorithm",
+              "Document space complexity and whether each sort is stable",
+              "Write the recurrence relation for merge sort: T(n) = 2T(n/2) + O(n)",
+              "Run the performance tests and observe the differences",
+              "Answer in comments: When does insertion sort outperform merge sort?"
             ],
-            "template_file": {
-              "filename": "Stack_Queue_Deque.java",
-              "content": "import java.util.LinkedList;\n\n// Stack Implementation (LIFO - Last In First Out)\npublic class Stack<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Stack() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement push method to add item to top\n    // Time Complexity: ???\n    public void push(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement pop method to remove and return top item\n    // Time Complexity: ???\n    public T pop() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement peek method to return top without removing\n    // Time Complexity: ???\n    public T peek() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: ???\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Queue Implementation (FIFO - First In First Out)\npublic class Queue<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Queue() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement enqueue method to add item to rear\n    // Time Complexity: ???\n    public void enqueue(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement dequeue method to remove and return front item\n    // Time Complexity: ???\n    public T dequeue() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement front method to return front without removing\n    // Time Complexity: ???\n    public T front() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: ???\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Deque Implementation (Double-Ended Queue)\npublic class Deque<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Deque() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addFirst method\n    // Time Complexity: ???\n    public void addFirst(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addLast method\n    // Time Complexity: ???\n    public void addLast(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement removeFirst method\n    // Time Complexity: ???\n    public T removeFirst() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement removeLast method\n    // Time Complexity: ???\n    public T removeLast() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: ???\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Balanced Parentheses Checker using Stack\nclass BalancedParenthesesChecker {\n    // TODO: Implement isBalanced method using your Stack\n    // Time Complexity: ???\n    public static boolean isBalanced(String expression) {\n        // Your implementation here\n        // Hint: Use a Stack to track opening brackets\n        // When you see '(', '[', '{' -> push to stack\n        // When you see ')', ']', '}' -> pop from stack and check if it matches\n        return false;\n    }\n}\n\n// Task Scheduler using Queue\nclass TaskScheduler {\n    private Queue<String> taskQueue;\n    \n    // TODO: Implement constructor\n    public TaskScheduler() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement scheduleTask method\n    // Time Complexity: ???\n    public void scheduleTask(String task) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement executeNext method\n    // Time Complexity: ???\n    public String executeNext() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement hasTasks method\n    // Time Complexity: ???\n    public boolean hasTasks() {\n        // Your implementation here\n        return false;\n    }\n}\n\n// Test cases - uncomment to test\nclass TestCases {\n    public static void main(String[] args) {\n        // Test Stack\n        Stack<Integer> stack = new Stack<>();\n        stack.push(1);\n        stack.push(2);\n        System.out.println(\\\"Stack test 1: \\\" + (stack.pop() == 2 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Stack test 2: \\\" + (stack.peek() == 1 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Queue\n        Queue<String> queue = new Queue<>();\n        queue.enqueue(\\\"first\\\");\n        queue.enqueue(\\\"second\\\");\n        System.out.println(\\\"Queue test 1: \\\" + (queue.dequeue().equals(\\\"first\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Queue test 2: \\\" + (queue.front().equals(\\\"second\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Deque\n        Deque<Character> deque = new Deque<>();\n        deque.addFirst('a');\n        deque.addLast('b');\n        System.out.println(\\\"Deque test 1: \\\" + (deque.removeFirst() == 'a' ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Deque test 2: \\\" + (deque.removeLast() == 'b' ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Balanced Parentheses\n        System.out.println(\\\"Parentheses test 1: \\\" + (BalancedParenthesesChecker.isBalanced(\\\"()\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Parentheses test 2: \\\" + (BalancedParenthesesChecker.isBalanced(\\\"([{}])\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Parentheses test 3: \\\" + (!BalancedParenthesesChecker.isBalanced(\\\"([)]\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Task Scheduler\n        TaskScheduler scheduler = new TaskScheduler();\n        scheduler.scheduleTask(\\\"Task 1\\\");\n        scheduler.scheduleTask(\\\"Task 2\\\");\n        System.out.println(\\\"Scheduler test 1: \\\" + (scheduler.executeNext().equals(\\\"Task 1\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Scheduler test 2: \\\" + (scheduler.hasTasks() ? \\\"PASS\\\" : \\\"FAIL\\\"));\n    }\n}"
+            "grading": {
+              "implementation_correctness": 40,
+              "complexity_analysis": 30,
+              "stability_analysis": 15,
+              "code_quality": 15
             }
           },
           "academic": {
-            "title": "Stacks, Queues, and Deques Assessment",
-            "description": "Complete a written test covering: (1) Time complexity analysis for all operations, (2) Implementation choices (array vs linked list), (3) Applications of stacks (parsing, recursion), (4) Applications of queues (BFS, scheduling), (5) When to use deque vs stack/queue, (6) Solving problems using these structures. Submit detailed solutions.",
-            "guidelines": [
-              "Analyze time complexity for push, pop, enqueue, dequeue operations",
-              "Compare array-based vs linked list-based implementations",
-              "Explain how stacks are used in recursion and parsing",
-              "Explain how queues are used in BFS and scheduling algorithms",
-              "Solve 3 problems using stacks (e.g., next greater element, histogram)",
-              "Solve 2 problems using queues (e.g., level-order traversal, sliding window)",
-              "All solutions must show step-by-step execution"
-            ]
+            "title": "Sets and Sorting Assessment",
+            "description": "Test your understanding of the Set interface, sorting algorithms, and their analysis from MIT 6.006 Lecture 3.",
+            "format": {
+              "mcq": 6,
+              "fill_in_blank": 4,
+              "short_answer": 3,
+              "total_points": 50,
+              "time_limit": "40 minutes",
+              "attempts": 2
+            },
+            "questions": {
+              "mcq": [
+                {
+                  "id": "w3_mcq1",
+                  "question": "What is the time complexity of merge sort in ALL cases (best, average, worst)?",
+                  "options": [
+                    "O(n)",
+                    "O(n log n)",
+                    "O(n²)",
+                    "O(log n)"
+                  ],
+                  "correct": 1,
+                  "points": 3
+                },
+                {
+                  "id": "w3_mcq2",
+                  "question": "Which sorting algorithm has O(n) best-case time complexity?",
+                  "options": [
+                    "Selection Sort",
+                    "Merge Sort",
+                    "Insertion Sort",
+                    "All of the above"
+                  ],
+                  "correct": 2,
+                  "points": 3
+                },
+                {
+                  "id": "w3_mcq3",
+                  "question": "What is the space complexity of merge sort?",
+                  "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n²)"
+                  ],
+                  "correct": 2,
+                  "points": 3
+                },
+                {
+                  "id": "w3_mcq4",
+                  "question": "A sorting algorithm is 'stable' if:",
+                  "options": [
+                    "It always completes without crashing",
+                    "It uses O(1) extra space",
+                    "Equal elements maintain their relative order after sorting",
+                    "It runs in O(n log n) time"
+                  ],
+                  "correct": 2,
+                  "points": 3
+                },
+                {
+                  "id": "w3_mcq5",
+                  "question": "The recurrence relation for merge sort is T(n) = 2T(n/2) + O(n). What does the O(n) term represent?",
+                  "options": [
+                    "The time to divide the array",
+                    "The time to merge two sorted halves",
+                    "The time for the base case",
+                    "The time for recursive calls"
+                  ],
+                  "correct": 1,
+                  "points": 3
+                },
+                {
+                  "id": "w3_mcq6",
+                  "question": "Which Set interface operation does sorting help optimize?",
+                  "options": [
+                    "insert(x)",
+                    "delete(x)",
+                    "find(x) using binary search",
+                    "All operations become O(1)"
+                  ],
+                  "correct": 2,
+                  "points": 3
+                }
+              ],
+              "fill_in_blank": [
+                {
+                  "id": "w3_fib1",
+                  "question": "Selection sort always performs _______ comparisons regardless of input order.",
+                  "answer": "O(n²)",
+                  "accept": ["O(n²)", "n²", "n^2", "quadratic"],
+                  "points": 3
+                },
+                {
+                  "id": "w3_fib2",
+                  "question": "Insertion sort achieves O(n) time when the input is already _______.",
+                  "answer": "sorted",
+                  "accept": ["sorted", "in order", "ordered"],
+                  "points": 3
+                },
+                {
+                  "id": "w3_fib3",
+                  "question": "Merge sort uses the _______ algorithmic paradigm.",
+                  "answer": "divide and conquer",
+                  "accept": ["divide and conquer", "divide-and-conquer", "D&C"],
+                  "points": 3
+                },
+                {
+                  "id": "w3_fib4",
+                  "question": "The Set interface supports operations: find(k), insert(x), delete(k), and _______ which returns the next larger key.",
+                  "answer": "find_next",
+                  "accept": ["find_next", "successor", "find_next(k)"],
+                  "points": 3
+                }
+              ],
+              "short_answer": [
+                {
+                  "id": "w3_sa1",
+                  "question": "Solve the merge sort recurrence T(n) = 2T(n/2) + cn using the recursion tree method. Show your work and derive the O(n log n) result.",
+                  "points": 12,
+                  "rubric": [
+                    "Draws recursion tree correctly (3 pts)",
+                    "Identifies tree has log n levels (2 pts)",
+                    "Shows each level does O(n) work total (3 pts)",
+                    "Concludes T(n) = O(n log n) (2 pts)",
+                    "Clear reasoning (2 pts)"
+                  ]
+                },
+                {
+                  "id": "w3_sa2",
+                  "question": "Compare insertion sort and merge sort. When would you choose insertion sort over merge sort? Consider time complexity, space complexity, and practical factors.",
+                  "points": 8,
+                  "rubric": [
+                    "Identifies insertion sort is O(n) for nearly sorted data (2 pts)",
+                    "Identifies merge sort has O(n) space overhead (2 pts)",
+                    "Mentions insertion sort is better for small arrays (2 pts)",
+                    "Discusses cache efficiency or implementation simplicity (2 pts)"
+                  ]
+                },
+                {
+                  "id": "w3_sa3",
+                  "question": "Why is stability important in sorting? Give a real-world example where using an unstable sort would produce incorrect results.",
+                  "points": 6,
+                  "rubric": [
+                    "Defines stability correctly (2 pts)",
+                    "Gives valid real-world example (2 pts)",
+                    "Explains why instability causes problem in example (2 pts)"
+                  ]
+                }
+              ]
+            }
           },
           "communicator": {
-            "title": "Stacks and Queues Presentation",
-            "description": "Create a 10-15 minute presentation explaining stacks, queues, and deques. Include: (1) What each structure is and how it works, (2) LIFO vs FIFO principles, (3) Common applications with examples, (4) Implementation details, (5) Real-world use cases (browser back button, printer queue, etc.). Use visual demonstrations and code examples.",
-            "guidelines": [
-              "10-15 minute presentation with visual demonstrations",
-              "Explain LIFO (Last In First Out) for stacks and FIFO (First In First Out) for queues",
-              "Demonstrate at least 3 stack applications with live examples",
-              "Demonstrate at least 3 queue applications with live examples",
-              "Show implementation code and explain key operations",
-              "Discuss real-world examples: browser history, task scheduling, etc.",
-              "Engaging visuals and clear explanations"
-            ]
+            "title": "Sets and Sorting Algorithms Presentation",
+            "description": "Create and deliver a 12-15 minute presentation explaining key concepts from MIT 6.006 Lecture 3. Cover all concepts listed below.",
+            "format": {
+              "duration": "12-15 minutes",
+              "slides": "10-15 slides recommended",
+              "delivery": "Live presentation or recorded video"
+            },
+            "key_concepts": [
+              "Define the Set interface and its core operations: find(k), insert(x), delete(k), find_min(), find_max(), find_next(k)",
+              "Explain how sorting a set enables O(log n) search via binary search",
+              "Demonstrate selection sort step-by-step on a small example array",
+              "Explain why selection sort is always O(n²) regardless of input",
+              "Demonstrate insertion sort step-by-step on a small example",
+              "Explain why insertion sort is O(n) on already-sorted input",
+              "Explain the divide-and-conquer paradigm used by merge sort",
+              "Walk through merge sort recursion on a small array, showing the divide and merge steps",
+              "Derive the merge sort recurrence T(n) = 2T(n/2) + O(n) and solve it to get O(n log n)",
+              "Define what it means for a sort to be 'stable' and explain why it matters",
+              "Compare selection sort, insertion sort, and merge sort: when to use each"
+            ],
+            "grading": {
+              "concept_coverage": 40,
+              "clarity_of_explanation": 25,
+              "visual_aids": 20,
+              "delivery": 15
+            },
+            "submission": {
+              "slides": "PDF or PPTX format",
+              "video": "MP4, YouTube link, or schedule live presentation"
+            }
           }
         }
       },
       {
         "week": 4,
-        "topic": "Hash-Based Structures: HashMaps and HashSets",
-        "description": "Understand hashing, collision resolution (chaining vs probing), and load factors.",
+        "topic": "Hashing",
+        "description": "Hash functions, hash tables, chaining, and open addressing. Universal hashing and load factors.",
+        "mit_lecture": { "number": 4, "title": "Hashing", "url": "https://www.youtube.com/watch?v=Nu8YGneFCWE" },
         "resources": [
-          { "title": "Hash Tables Explained", "url": "https://www.youtube.com/watch?v=shs0KM3wKv8", "type": "Video" },
-          { "title": "Hash Tables Tutorial", "url": "https://www.youtube.com/watch?v=2Ti5yvumFTU", "type": "Video" },
-          { "title": "Hash Maps and Hash Sets", "url": "https://www.youtube.com/watch?v=U79Bo8c0rLk", "type": "Video" },
+          { "title": "MIT 6.006 Lecture 4: Hashing", "url": "https://www.youtube.com/watch?v=Nu8YGneFCWE", "type": "Video" },
           { "title": "Hash Table Implementation", "url": "https://www.geeksforgeeks.org/implementing-our-own-hash-table-with-separate-chaining-in-java/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Hash Map Template",
-            "description": "Complete a template file implementing a HashMap class with collision resolution using chaining. Your task is to: (1) Implement a hash function for string keys, (2) Implement put(), get(), and remove() methods with collision handling, (3) Implement automatic resizing when load factor exceeds threshold, (4) Add time complexity comments for each method, (5) Pass all provided test cases, (6) Submit your working implementation. This project demonstrates understanding of hashing, collision resolution, and hash table performance.",
-            "guidelines": [
-              "Step 1: Download 'HashMap.java' template file from the download button",
-              "Step 2: Implement hash function: hash(String key) - use polynomial hashing: h = (h * 31 + char) % capacity. This distributes keys evenly across buckets",
-              "Step 3: Implement put(K key, V value) method: (a) Calculate hash index, (b) If bucket is empty, create new chain, (c) If key exists in chain, update value, (d) If key doesn't exist, add new entry to chain, (e) Check load factor and resize if needed",
-              "Step 4: Implement get(K key) method: (a) Calculate hash index, (b) Search through the chain at that index, (c) Return value if key found, null otherwise",
-              "Step 5: Implement remove(K key) method: (a) Calculate hash index, (b) Search chain for key, (c) Remove entry from chain if found, (d) Return removed value or null",
-              "Step 6: Implement resize() method: (a) Create new array with double capacity, (b) Rehash all existing entries into new array, (c) Update capacity and threshold",
-              "Step 7: For each implemented method, add a comment above it stating: (a) Time complexity in Big-O (average and worst case), (b) Space complexity if applicable",
-              "Step 8: Run the test suite included in the template. All test cases must pass. Test with various key types and collision scenarios",
-              "Step 9: Verify edge cases: empty map, single entry, many collisions, resizing triggers",
-              "Step 10: Submit your completed file. Grading: Correctness (50%), Hash function quality (15%), Collision handling (15%), Time complexity analysis (10%), Test results (10%)"
-            ],
-            "template_file": {
-              "filename": "HashMap.java",
-              "content": "import java.util.LinkedList;\n\n// Entry class to store key-value pairs\nclass Entry<K, V> {\n    K key;\n    V value;\n    \n    Entry(K key, V value) {\n        this.key = key;\n        this.value = value;\n    }\n}\n\n// HashMap Implementation with Chaining Collision Resolution\npublic class HashMap<K, V> {\n    private LinkedList<Entry<K, V>>[] buckets;\n    private int capacity;\n    private int size;\n    private static final double LOAD_FACTOR_THRESHOLD = 0.75;\n    \n    // TODO: Implement constructor that initializes buckets array with initial capacity of 16\n    @SuppressWarnings(\"unchecked\")\n    public HashMap() {\n        // Your implementation here\n        // Initialize buckets as array of LinkedLists\n        // Set initial capacity to 16\n        // Initialize size to 0\n    }\n    \n    // TODO: Implement hash function using polynomial hashing\n    // Formula: h = (h * 31 + char) % capacity\n    // Time Complexity: O(k) where k is length of key\n    private int hash(K key) {\n        // Your implementation here\n        // Convert key to string, then apply polynomial hash\n        return 0;\n    }\n    \n    // TODO: Implement put method to insert or update key-value pair\n    // Time Complexity: O(1) average, O(n) worst case (all keys hash to same bucket)\n    public void put(K key, V value) {\n        // Your implementation here\n        // 1. Calculate hash index\n        // 2. Get the chain (LinkedList) at that index\n        // 3. If chain is null, create new LinkedList\n        // 4. Search chain for existing key - if found, update value\n        // 5. If not found, add new Entry to chain\n        // 6. Increment size\n        // 7. Check if resize needed (size / capacity > LOAD_FACTOR_THRESHOLD)\n    }\n    \n    // TODO: Implement get method to retrieve value by key\n    // Time Complexity: O(1) average, O(n) worst case\n    public V get(K key) {\n        // Your implementation here\n        // 1. Calculate hash index\n        // 2. Get the chain at that index\n        // 3. Search chain for key\n        // 4. Return value if found, null otherwise\n        return null;\n    }\n    \n    // TODO: Implement remove method to delete key-value pair\n    // Time Complexity: O(1) average, O(n) worst case\n    public V remove(K key) {\n        // Your implementation here\n        // 1. Calculate hash index\n        // 2. Get the chain at that index\n        // 3. Search chain for key\n        // 4. Remove entry if found, decrement size\n        // 5. Return removed value or null\n        return null;\n    }\n    \n    // TODO: Implement resize method to double capacity and rehash all entries\n    // Time Complexity: O(n) where n is number of entries\n    @SuppressWarnings(\"unchecked\")\n    private void resize() {\n        // Your implementation here\n        // 1. Save old buckets array\n        // 2. Double the capacity\n        // 3. Create new buckets array with new capacity\n        // 4. Rehash all entries from old array to new array\n        // 5. Update capacity\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: O(1)\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: O(1)\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement containsKey method\n    // Time Complexity: O(1) average, O(n) worst case\n    public boolean containsKey(K key) {\n        // Your implementation here\n        return false;\n    }\n}\n\n// Test cases - uncomment to test\nclass TestCases {\n    public static void main(String[] args) {\n        HashMap<String, Integer> map = new HashMap<>();\n        \n        // Test put and get\n        map.put(\"apple\", 5);\n        map.put(\"banana\", 3);\n        System.out.println(\\\"HashMap test 1: \\\" + (map.get(\\\"apple\\\") == 5 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"HashMap test 2: \\\" + (map.get(\\\"banana\\\") == 3 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test update\n        map.put(\\\"apple\\\", 10);\n        System.out.println(\\\"HashMap test 3: \\\" + (map.get(\\\"apple\\\") == 10 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test remove\n        map.remove(\\\"banana\\\");\n        System.out.println(\\\"HashMap test 4: \\\" + (map.get(\\\"banana\\\") == null ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test containsKey\n        System.out.println(\\\"HashMap test 5: \\\" + (map.containsKey(\\\"apple\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"HashMap test 6: \\\" + (!map.containsKey(\\\"banana\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test size\n        System.out.println(\\\"HashMap test 7: \\\" + (map.size() == 1 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test collisions (keys that hash to same bucket)\n        map.put(\\\"cat\\\", 1);\n        map.put(\\\"dog\\\", 2);\n        map.put(\\\"bird\\\", 3);\n        System.out.println(\\\"HashMap test 8: \\\" + (map.size() == 4 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n    }\n}"
-            }
+            "title": "Hash Table Implementation",
+            "description": "Build a hash table with chaining collision resolution and automatic resizing.",
+            "guidelines": ["Implement polynomial hash function", "Handle collisions with chaining", "Resize when load factor > 0.75", "Support put, get, remove, containsKey"]
           },
           "academic": {
-            "title": "Hash Tables Assessment",
-            "description": "Complete a written test covering: (1) Hash function design and properties, (2) Collision resolution strategies (chaining, linear probing, quadratic probing), (3) Load factor and its impact on performance, (4) Time complexity analysis (average vs worst case), (5) Rehashing strategies, (6) When hash tables are optimal. Submit detailed solutions with proofs.",
-            "guidelines": [
-              "Design a hash function for strings and explain its properties",
-              "Compare collision resolution strategies: chaining vs open addressing",
-              "Analyze time complexity: average O(1) vs worst case O(n)",
-              "Explain how load factor affects performance with mathematical analysis",
-              "Describe rehashing strategies and when to trigger them",
-              "Solve problems using hash tables (e.g., two sum, group anagrams)",
-              "All solutions must include complexity analysis"
-            ]
+            "title": "Hashing Theory Assessment",
+            "description": "Written test on hash functions, collision resolution, and expected complexity analysis.",
+            "guidelines": ["Explain universal hashing", "Analyze expected chain length", "Compare chaining vs open addressing", "Prove expected O(1) operations"]
           },
           "communicator": {
-            "title": "Hash Tables Presentation",
-            "description": "Create a 10-15 minute presentation explaining hash tables. Include: (1) What is hashing and why it's fast, (2) How hash functions work, (3) Collision resolution strategies with examples, (4) Load factor and performance tradeoffs, (5) Real-world applications (dictionaries, caches, databases). Use visual diagrams and code examples.",
-            "guidelines": [
-              "10-15 minute presentation with visual diagrams",
-              "Explain hashing concept: mapping keys to array indices",
-              "Demonstrate hash function with examples (show collisions)",
-              "Visualize collision resolution: chaining vs probing with diagrams",
-              "Explain load factor impact with performance graphs",
-              "Discuss real-world applications: Python dict, Java HashMap, Redis",
-              "Use code examples to show hash table operations",
-              "Clear explanations and engaging delivery"
-            ]
+            "title": "Hashing Deep Dive Presentation",
+            "description": "10-minute presentation explaining how hash tables achieve O(1) average operations.",
+            "guidelines": ["Visualize hash function mapping", "Demonstrate collision scenarios", "Explain load factor impact", "Show real-world applications"]
           }
         }
       },
       {
         "week": 5,
-        "topic": "Trees: Binary Search Trees and Traversals",
-        "description": "Implement BSTs with insert, search, delete. Master in-order, pre-order, and post-order traversals.",
+        "topic": "Linear Sorting",
+        "description": "Breaking the O(n log n) barrier: counting sort, radix sort. When and why linear sorting is possible.",
+        "mit_lecture": { "number": 5, "title": "Linear Sorting", "url": "https://www.youtube.com/watch?v=yndgIDO0zQQ" },
         "resources": [
-          { "title": "Binary Search Trees", "url": "https://www.youtube.com/watch?v=H5JubkIy_p8", "type": "Video" },
-          { "title": "BST Implementation", "url": "https://www.youtube.com/watch?v=zIX3zQP0khM", "type": "Video" },
-          { "title": "Tree Traversals Explained", "url": "https://www.youtube.com/watch?v=1WxLM2hwL-U", "type": "Video" },
-          { "title": "Tree Traversals Article", "url": "https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 5: Linear Sorting", "url": "https://www.youtube.com/watch?v=yndgIDO0zQQ", "type": "Video" },
+          { "title": "Counting Sort Tutorial", "url": "https://www.programiz.com/dsa/counting-sort", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Binary Search Tree Template",
-            "description": "Download the template file with a partially implemented BST class. Fill in the missing methods for insert, search, delete, and all three traversal methods.",
-            "guidelines": [
-              "Download the template file provided",
-              "Complete insert(value) method: maintain BST property (left < node < right)",
-              "Complete search(value) method: return true if value exists, false otherwise",
-              "Complete delete(value) method: handle three cases (no children, one child, two children)",
-              "Complete inOrder(), preOrder(), postOrder() traversal methods",
-              "Complete findMin() helper method used in delete operation",
-              "Add comments explaining the BST property and time complexity of each method",
-              "Test with the provided test cases and submit your completed template file"
-            ]
+            "title": "Linear Sorting Algorithms",
+            "description": "Implement counting sort and radix sort. Benchmark against comparison sorts.",
+            "guidelines": ["Implement counting sort for integers", "Implement radix sort (LSD)", "Compare with merge sort on large inputs", "Analyze space-time tradeoffs"]
           },
           "academic": {
-            "title": "Binary Search Trees Assessment",
-            "description": "Complete a written test covering: (1) BST property and why it enables efficient search, (2) Time complexity analysis for all operations (best, average, worst case), (3) Step-by-step execution of insert, search, delete, (4) Traversal algorithms and their applications, (5) BST vs balanced trees tradeoffs, (6) Solving problems using BSTs. Submit detailed solutions.",
-            "guidelines": [
-              "Explain BST property and prove it enables O(log n) search in balanced case",
-              "Analyze time complexity: best O(log n), average O(log n), worst O(n)",
-              "Show step-by-step execution of insert, search, delete on given trees",
-              "Explain when to use each traversal (in-order for sorted output, pre-order for copying, etc.)",
-              "Compare BST vs balanced trees (AVL, Red-Black) with complexity analysis",
-              "Solve 3-4 problems using BSTs (e.g., range queries, kth smallest element)",
-              "All solutions must show tree structure at each step"
-            ]
+            "title": "Linear Sorting Analysis",
+            "description": "Written test on why comparison sorting has O(n log n) lower bound and when we can do better.",
+            "guidelines": ["Prove comparison sort lower bound", "Explain when linear sorting applies", "Analyze counting sort complexity", "Compare radix sort variants"]
           },
           "communicator": {
-            "title": "Binary Search Trees Presentation",
-            "description": "Create a 10-15 minute presentation explaining binary search trees. Include: (1) What is a BST and the ordering property, (2) How insert, search, and delete work, (3) Tree traversals with examples, (4) Time complexity and when BSTs are efficient, (5) Real-world applications (databases, file systems). Use tree diagrams and visual demonstrations.",
-            "guidelines": [
-              "10-15 minute presentation with tree diagrams",
-              "Explain BST ordering property with visual examples",
-              "Demonstrate insert, search, delete operations step-by-step",
-              "Show all three traversals on same tree with output",
-              "Explain time complexity with examples (balanced vs unbalanced)",
-              "Discuss real-world applications: database indexing, expression trees",
-              "Use interactive demonstrations or animations if possible",
-              "Clear explanations and engaging delivery"
-            ]
+            "title": "Breaking the Sorting Barrier",
+            "description": "10-minute presentation on how we can sort faster than O(n log n).",
+            "guidelines": ["Explain comparison sort limitation", "Demonstrate counting sort visually", "Show radix sort step-by-step", "Discuss practical applications"]
           }
         }
       },
       {
         "week": 6,
-        "topic": "Self-Balancing Trees: AVL or Red-Black",
-        "description": "Learn why self-balancing is needed. Implement AVL trees or study Red-Black tree rotations.",
+        "topic": "Binary Trees, Part 1",
+        "description": "Binary tree terminology, traversals (in-order, pre-order, post-order), and binary search tree operations.",
+        "mit_lecture": { "number": 6, "title": "Binary Trees, Part 1", "url": "https://www.youtube.com/watch?v=76dhtgZt38A" },
         "resources": [
-          { "title": "AVL Trees Explained", "url": "https://www.youtube.com/watch?v=jDM6_TnYIqE", "type": "Video" },
-          { "title": "AVL Tree Rotations", "url": "https://www.youtube.com/watch?v=vRwi_UcZjeE", "type": "Video" },
-          { "title": "Red-Black Trees Tutorial", "url": "https://www.youtube.com/watch?v=qvZGUFHWChY", "type": "Video" },
-          { "title": "Red-Black Trees Article", "url": "https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 6: Binary Trees, Part 1", "url": "https://www.youtube.com/watch?v=76dhtgZt38A", "type": "Video" },
+          { "title": "BST Visualization", "url": "https://visualgo.net/en/bst", "type": "Interactive" }
         ],
         "deliverables": {
           "builder": {
-            "title": "AVL Tree Template",
-            "description": "Download the template file with a partially implemented AVL tree class. Fill in the missing rotation methods and update the insert method to maintain balance.",
-            "guidelines": [
-              "Download the template file provided",
-              "Complete getHeight() and getBalanceFactor() helper methods",
-              "Complete rotateLeft() method: perform left rotation",
-              "Complete rotateRight() method: perform right rotation",
-              "Complete rotateLeftRight() and rotateRightLeft() methods (double rotations)",
-              "Update insert() method to check balance factor and perform rotations when needed",
-              "Add comments explaining when each rotation type is needed",
-              "Test with the provided test cases and submit your completed template file"
-            ]
+            "title": "Binary Search Tree Implementation",
+            "description": "Implement a BST with insert, search, delete, and all traversal methods.",
+            "guidelines": ["Implement BST with proper ordering", "Handle all delete cases", "Implement three traversal methods", "Add min/max/successor operations"]
           },
           "academic": {
-            "title": "Self-Balancing Trees Assessment",
-            "description": "Complete a written test covering: (1) Why self-balancing is needed (worst case BST), (2) AVL tree property and balance factor, (3) All rotation types and when to apply them, (4) Time complexity analysis (guaranteed O(log n)), (5) Comparison of AVL vs Red-Black trees, (6) Step-by-step insertion with rotations. Submit detailed solutions.",
-            "guidelines": [
-              "Explain why unbalanced BSTs degrade to O(n) and need balancing",
-              "Define AVL balance factor and height property",
-              "Describe all 4 rotation types: left, right, left-right, right-left",
-              "Prove AVL trees guarantee O(log n) height",
-              "Compare AVL vs Red-Black: balancing strictness, rotation frequency",
-              "Show step-by-step insertion with rotations on given sequence",
-              "All solutions must show tree structure and balance factors at each step"
-            ]
+            "title": "BST Analysis Assessment",
+            "description": "Written test on BST properties, operations, and complexity analysis.",
+            "guidelines": ["Prove BST property enables binary search", "Analyze height-dependent complexity", "Explain delete algorithm cases", "Compare traversal applications"]
           },
           "communicator": {
-            "title": "Self-Balancing Trees Presentation",
-            "description": "Create a 10-15 minute presentation explaining self-balancing trees. Include: (1) Problem with unbalanced BSTs, (2) How AVL trees maintain balance, (3) Rotation operations with examples, (4) Why guaranteed O(log n) matters, (5) AVL vs Red-Black comparison, (6) Real-world usage (Java TreeMap, C++ map). Use tree diagrams and animations.",
-            "guidelines": [
-              "10-15 minute presentation with tree diagrams and animations",
-              "Demonstrate problem: show worst-case unbalanced BST",
-              "Explain AVL balance factor and height property",
-              "Animate or step through rotation operations",
-              "Show before/after comparisons of tree height",
-              "Compare AVL vs Red-Black with use case recommendations",
-              "Discuss real-world implementations: Java TreeMap uses Red-Black",
-              "Clear explanations and engaging visuals"
-            ]
+            "title": "BST Operations Explained",
+            "description": "10-minute presentation demonstrating BST operations with visualizations.",
+            "guidelines": ["Show BST property visually", "Animate insert and search", "Demonstrate delete cases", "Compare to sorted arrays"]
           }
         }
       },
       {
         "week": 7,
-        "topic": "Binary Heaps and Priority Queues",
-        "description": "Implement min/max heaps and use them for priority queues. Heapify operations.",
+        "topic": "Binary Trees, Part 2: AVL",
+        "description": "Balanced binary search trees. AVL trees: rotations, balance factor, and maintaining O(log n) height.",
+        "mit_lecture": { "number": 7, "title": "Binary Trees, Part 2: AVL", "url": "https://www.youtube.com/watch?v=U1JYwHcFfso" },
         "resources": [
-          { "title": "Heaps and Priority Queues", "url": "https://www.youtube.com/watch?v=HqPJF2L5h9U", "type": "Video" },
-          { "title": "Binary Heap Implementation", "url": "https://www.programiz.com/dsa/heap-data-structure", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 7: Binary Trees, Part 2: AVL", "url": "https://www.youtube.com/watch?v=U1JYwHcFfso", "type": "Video" },
+          { "title": "AVL Tree Visualization", "url": "https://visualgo.net/en/bst", "type": "Interactive" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Heap and Priority Queue Template",
-            "description": "Download the template file with a partially implemented MinHeap class. Fill in the missing heap operations and use it to implement a simple priority queue.",
-            "guidelines": [
-              "Download the template file provided",
-              "Complete parent(), leftChild(), rightChild() helper methods for array indexing",
-              "Complete heapifyUp() method: bubble up element to maintain heap property",
-              "Complete heapifyDown() method: bubble down element to maintain heap property",
-              "Complete insert(value) method: add to end and heapify up",
-              "Complete extractMin() method: remove root, replace with last element, heapify down",
-              "Complete a simple PriorityQueue class using the MinHeap (template provided)",
-              "Add comments explaining the heap property and array representation",
-              "Test with the provided test cases and submit your completed template file"
-            ]
+            "title": "AVL Tree Implementation",
+            "description": "Implement an AVL tree with automatic balancing through rotations.",
+            "guidelines": ["Implement all four rotation types", "Track and update heights", "Balance after insert and delete", "Verify balance invariant maintained"]
           },
           "academic": {
-            "title": "Heaps and Priority Queues Assessment",
-            "description": "Complete a written test covering: (1) Heap property and array representation, (2) Time complexity analysis for all operations, (3) Heapify algorithms (bottom-up and top-down), (4) Building a heap from array (O(n) method), (5) Applications of priority queues, (6) Heap vs BST for priority operations. Submit detailed solutions.",
-            "guidelines": [
-              "Explain heap property (min-heap and max-heap) with examples",
-              "Show array representation of heap and parent/child index formulas",
-              "Analyze time complexity: insert O(log n), extract O(log n), build O(n)",
-              "Describe heapify-up and heapify-down algorithms step-by-step",
-              "Prove building heap from array is O(n) not O(n log n)",
-              "Compare heap vs BST for priority queue operations",
-              "Solve problems using heaps (e.g., find k largest elements, median maintenance)",
-              "All solutions must show heap structure at each step"
-            ]
+            "title": "AVL Tree Analysis",
+            "description": "Written test on AVL tree properties and rotation analysis.",
+            "guidelines": ["Prove AVL height is O(log n)", "Analyze rotation complexity", "Compare to unbalanced BST", "Explain when each rotation applies"]
           },
           "communicator": {
-            "title": "Heaps and Priority Queues Presentation",
-            "description": "Create a 10-15 minute presentation explaining binary heaps and priority queues. Include: (1) What is a heap and the heap property, (2) Array representation and indexing, (3) Heap operations (insert, extract, heapify), (4) Building a heap efficiently, (5) Applications (Dijkstra's algorithm, scheduling, heapsort). Use visual diagrams and code examples.",
-            "guidelines": [
-              "10-15 minute presentation with visual diagrams",
-              "Explain heap property with tree and array representations",
-              "Demonstrate parent/child index calculations",
-              "Animate or step through insert and extract operations",
-              "Show how to build heap from array efficiently",
-              "Discuss applications: Dijkstra's algorithm, task scheduling, heapsort",
-              "Use code examples to show key operations",
-              "Clear explanations and engaging delivery"
-            ]
+            "title": "Balancing Act: AVL Trees",
+            "description": "10-minute presentation on why balance matters and how AVL trees maintain it.",
+            "guidelines": ["Show worst-case unbalanced BST", "Animate rotation operations", "Demonstrate rebalancing process", "Compare AVL to Red-Black trees"]
           }
         }
       },
       {
         "week": 8,
-        "topic": "Intro to Graphs: Representation and Basic Traversals",
-        "description": "Learn adjacency matrix vs adjacency list. Implement BFS and DFS.",
+        "topic": "Binary Heaps",
+        "description": "Heap property, array representation, heapify operations, and priority queue implementation.",
+        "mit_lecture": { "number": 8, "title": "Binary Heaps", "url": "https://www.youtube.com/watch?v=Xnpo1atN-Iw" },
         "resources": [
-          { "title": "Graph Data Structure", "url": "https://www.youtube.com/watch?v=tWVWeAqZ0WU", "type": "Video" },
-          { "title": "Graph Representation", "url": "https://www.geeksforgeeks.org/graph-and-its-representations/", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 8: Binary Heaps", "url": "https://www.youtube.com/watch?v=Xnpo1atN-Iw", "type": "Video" },
+          { "title": "Heap Visualization", "url": "https://visualgo.net/en/heap", "type": "Interactive" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Graph Representation and Traversal Template",
-            "description": "Download the template file with a partially implemented Graph class using adjacency list representation. Fill in the missing BFS and DFS traversal methods.",
-            "guidelines": [
-              "Download the template file provided",
-              "Complete addEdge() method: add edges to the adjacency list",
-              "Complete BFS(start) method: use a queue to traverse level by level",
-              "Complete DFS(start) method: use recursion or a stack to traverse depth-first",
-              "Complete hasPath(start, end) method using BFS or DFS (template provided)",
-              "Add comments explaining the difference between BFS and DFS",
-              "Add comments explaining adjacency list representation",
-              "Test with the provided test graphs and submit your completed template file"
-            ]
+            "title": "Binary Heap & Priority Queue",
+            "description": "Implement a min-heap with insert, extract-min, and build-heap operations.",
+            "guidelines": ["Use array representation", "Implement heapify-up and heapify-down", "Build heap in O(n) time", "Create PriorityQueue wrapper class"]
           },
           "academic": {
-            "title": "Graph Traversals Assessment",
-            "description": "Complete a written test covering: (1) Adjacency matrix vs adjacency list tradeoffs, (2) Time and space complexity for BFS and DFS, (3) Step-by-step execution of BFS and DFS on given graphs, (4) Applications of BFS (shortest path, level-order) vs DFS (cycle detection, topological sort), (5) When to use each traversal. Submit detailed solutions.",
-            "guidelines": [
-              "Compare adjacency matrix vs list: space O(V²) vs O(V+E), query time O(1) vs O(degree)",
-              "Analyze time complexity: BFS O(V+E), DFS O(V+E) with justification",
-              "Show step-by-step BFS execution (queue state at each step)",
-              "Show step-by-step DFS execution (stack/recursion trace)",
-              "Explain when BFS finds shortest path (unweighted graphs)",
-              "Explain DFS applications: cycle detection, topological sort, maze solving",
-              "Solve problems using BFS (e.g., word ladder, islands) and DFS (e.g., path finding)",
-              "All solutions must show graph and traversal state at each step"
-            ]
+            "title": "Heap Analysis Assessment",
+            "description": "Written test on heap properties and build-heap complexity proof.",
+            "guidelines": ["Prove heap property maintenance", "Derive build-heap O(n) complexity", "Compare heap vs BST for priority queue", "Analyze heapsort"]
           },
           "communicator": {
-            "title": "Graph Traversals Presentation",
-            "description": "Create a 10-15 minute presentation explaining graphs and traversals. Include: (1) What are graphs and common terminology, (2) Adjacency matrix vs adjacency list representations, (3) How BFS works (queue-based, level-order), (4) How DFS works (stack-based, depth-first), (5) When to use BFS vs DFS, (6) Real-world applications (social networks, web crawling). Use graph diagrams and animations.",
-            "guidelines": [
-              "10-15 minute presentation with graph diagrams and animations",
-              "Explain graph terminology: vertices, edges, directed/undirected, weighted",
-              "Visualize adjacency matrix vs list with examples",
-              "Animate BFS traversal showing queue and visited nodes",
-              "Animate DFS traversal showing stack/recursion and visited nodes",
-              "Compare BFS vs DFS with use case recommendations",
-              "Discuss real-world applications: social networks (friends), web pages (links)",
-              "Use interactive demonstrations if possible",
-              "Clear explanations and engaging delivery"
-            ]
+            "title": "Heaps and Priority Queues",
+            "description": "10-minute presentation on heaps and their applications.",
+            "guidelines": ["Show tree and array representations", "Animate insert and extract", "Explain priority queue use cases", "Demonstrate heapsort"]
           }
         }
       },
       {
         "week": 9,
-        "topic": "Final Assessment: Data Structures Portfolio",
-        "description": "Complete one Ellis Activity demonstrating mastery of data structures.",
-        "resources": [],
+        "topic": "Breadth-First Search",
+        "description": "Graph representations, BFS algorithm, shortest paths in unweighted graphs, and applications.",
+        "mit_lecture": { "number": 9, "title": "Breadth-First Search", "url": "https://www.youtube.com/watch?v=oFVYVzlvk9c" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 9: Breadth-First Search", "url": "https://www.youtube.com/watch?v=oFVYVzlvk9c", "type": "Video" },
+          { "title": "BFS Visualization", "url": "https://visualgo.net/en/dfsbfs", "type": "Interactive" }
+        ],
         "deliverables": {
           "builder": {
-            "title": "Maze Generator and Pathfinding Solver",
-            "description": "Build an interactive maze generator and solver application. Generate random mazes using graph algorithms, then solve them using multiple pathfinding strategies (BFS, DFS, A*). Visualize the generation and solving process in real-time. This project naturally uses graphs, stacks, queues, heaps, and hash maps to create a cohesive, engaging application.",
-            "guidelines": [
-              "Maze Generation: Implement at least 2 algorithms (e.g., Randomized Depth-First Search, Kruskal's algorithm, Prim's algorithm) using graph data structures",
-              "Maze Representation: Use adjacency lists or matrices to represent the maze graph, and arrays/2D arrays for the visual grid",
-              "Pathfinding Solvers: Implement at least 3 solving algorithms:",
-              "  - BFS (using Queue) for shortest path in unweighted mazes",
-              "  - DFS (using Stack) for any valid path",
-              "  - A* Algorithm (using Priority Queue/Heap) for optimal pathfinding",
-              "Visualization: Create real-time visualizations showing:",
-              "  - Maze generation process (walls being removed)",
-              "  - Pathfinding algorithms exploring the maze",
-              "  - Final solution path highlighted",
-              "Interactive Features: Allow users to adjust maze size, generation algorithm, solving algorithm, and animation speed",
-              "Data Structure Usage: Clearly demonstrate use of:",
-              "  - Graphs (maze structure, adjacency representation)",
-              "  - Stacks (DFS, backtracking in generation)",
-              "  - Queues (BFS traversal)",
-              "  - Heaps/Priority Queues (A* algorithm)",
-              "  - Hash Maps (visited nodes tracking, path reconstruction)",
-              "  - Arrays (grid representation, coordinate storage)",
-              "Performance Analysis: Compare solving times and path lengths for different algorithms on various maze sizes",
-              "Documentation: Include README explaining algorithms, data structure choices, complexity analysis, and usage instructions",
-              "Bonus: Add features like maze difficulty levels, custom start/end points, or multiple solution paths"
-            ]
+            "title": "Graph BFS Implementation",
+            "description": "Implement graph class with BFS traversal and shortest path finding.",
+            "guidelines": ["Implement adjacency list representation", "Write BFS using queue", "Track distances and parents", "Reconstruct shortest paths"]
           },
           "academic": {
-            "title": "Comprehensive Data Structures Exam",
-            "description": "Complete a comprehensive written exam covering all course topics: (1) Design and analyze data structures for given problems, (2) Choose appropriate data structures for scenarios, (3) Time and space complexity analysis, (4) Compare different data structures, (5) Solve 5-7 complex problems requiring multiple structures. Submit detailed solutions with analysis.",
-            "guidelines": [
-              "Design data structures for 2-3 new problems not covered in class",
-              "Justify choice of data structure for given scenarios with complexity analysis",
-              "Complete time and space complexity analysis for all solutions",
-              "Compare different data structures for same problem (e.g., array vs linked list)",
-              "Solve 5-7 complex problems requiring multiple data structures",
-              "All solutions must be rigorous with clear reasoning and proofs",
-              "Demonstrate deep understanding of tradeoffs and design decisions"
-            ]
+            "title": "BFS Analysis Assessment",
+            "description": "Written test on BFS correctness and complexity.",
+            "guidelines": ["Prove BFS finds shortest paths", "Analyze O(V+E) complexity", "Compare adjacency list vs matrix", "Apply BFS to solve problems"]
           },
           "communicator": {
-            "title": "Data Structures Course Presentation",
-            "description": "Create a 20-30 minute comprehensive presentation summarizing the entire course. Include: (1) Overview of all data structures covered, (2) When to use each structure with examples, (3) Complexity analysis and tradeoffs, (4) Real-world applications, (5) Your favorite data structure and why, (6) Future learning directions. Use visual aids and live demonstrations.",
-            "guidelines": [
-              "20-30 minute comprehensive presentation",
-              "Overview of all data structures: linear, tree-based, hash-based, graph",
-              "Decision framework: when to use each structure with examples",
-              "Complexity comparison table for common operations",
-              "Real-world applications with specific examples for each structure",
-              "Deep dive into your favorite data structure: why, how it works, applications",
-              "Future learning directions: advanced structures, optimization techniques",
-              "Engaging visuals, clear structure, and confident delivery"
-            ]
+            "title": "BFS: Level by Level",
+            "description": "10-minute presentation on BFS algorithm and applications.",
+            "guidelines": ["Animate BFS traversal", "Show queue state at each step", "Demonstrate shortest path finding", "Discuss real-world applications"]
+          }
+        }
+      },
+      {
+        "week": 10,
+        "topic": "Depth-First Search",
+        "description": "DFS algorithm, edge classification, cycle detection, and topological sort.",
+        "mit_lecture": { "number": 10, "title": "Depth-First Search", "url": "https://www.youtube.com/watch?v=IBfWDYSffUU" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 10: Depth-First Search", "url": "https://www.youtube.com/watch?v=IBfWDYSffUU", "type": "Video" },
+          { "title": "DFS Visualization", "url": "https://visualgo.net/en/dfsbfs", "type": "Interactive" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "DFS and Topological Sort",
+            "description": "Implement DFS with cycle detection and topological sorting.",
+            "guidelines": ["Implement recursive and iterative DFS", "Classify edges (tree, back, forward, cross)", "Detect cycles using back edges", "Implement topological sort"]
+          },
+          "academic": {
+            "title": "DFS Analysis Assessment",
+            "description": "Written test on DFS properties and applications.",
+            "guidelines": ["Prove DFS edge classification", "Explain cycle detection algorithm", "Prove topological sort correctness", "Compare DFS vs BFS applications"]
+          },
+          "communicator": {
+            "title": "DFS: Going Deep",
+            "description": "10-minute presentation on DFS and its powerful applications.",
+            "guidelines": ["Animate DFS traversal", "Show edge classification", "Demonstrate cycle detection", "Explain topological sort use cases"]
+          }
+        }
+      },
+      {
+        "week": 11,
+        "topic": "Weighted Shortest Paths",
+        "description": "Introduction to weighted graphs, shortest path problem formulation, and relaxation framework.",
+        "mit_lecture": { "number": 11, "title": "Weighted Shortest Paths", "url": "https://www.youtube.com/watch?v=5cF5Bgv59Sc" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 11: Weighted Shortest Paths", "url": "https://www.youtube.com/watch?v=5cF5Bgv59Sc", "type": "Video" },
+          { "title": "Shortest Path Algorithms", "url": "https://www.geeksforgeeks.org/shortest-path-algorithms-a-complete-guide/", "type": "Article" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Weighted Graph Implementation",
+            "description": "Extend graph class to support weighted edges and implement relaxation.",
+            "guidelines": ["Add edge weights to graph", "Implement edge relaxation", "Track distances and predecessors", "Handle DAG shortest paths"]
+          },
+          "academic": {
+            "title": "Weighted Paths Analysis",
+            "description": "Written test on shortest path problem formulation and properties.",
+            "guidelines": ["Define shortest path problem formally", "Prove optimal substructure property", "Explain relaxation correctness", "Analyze DAG shortest paths"]
+          },
+          "communicator": {
+            "title": "Introduction to Weighted Graphs",
+            "description": "10-minute presentation on weighted shortest path problems.",
+            "guidelines": ["Visualize weighted graphs", "Explain real-world applications", "Introduce relaxation concept", "Preview upcoming algorithms"]
+          }
+        }
+      },
+      {
+        "week": 12,
+        "topic": "Bellman-Ford Algorithm",
+        "description": "Bellman-Ford algorithm for single-source shortest paths with negative weights. Detecting negative cycles.",
+        "mit_lecture": { "number": 12, "title": "Bellman-Ford", "url": "https://www.youtube.com/watch?v=f9cVS_URPc0" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 12: Bellman-Ford", "url": "https://www.youtube.com/watch?v=f9cVS_URPc0", "type": "Video" },
+          { "title": "Bellman-Ford Visualization", "url": "https://visualgo.net/en/sssp", "type": "Interactive" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Bellman-Ford Implementation",
+            "description": "Implement Bellman-Ford algorithm with negative cycle detection.",
+            "guidelines": ["Implement V-1 relaxation rounds", "Detect negative cycles with extra round", "Handle disconnected vertices", "Return shortest path distances"]
+          },
+          "academic": {
+            "title": "Bellman-Ford Analysis",
+            "description": "Written test on Bellman-Ford correctness and complexity.",
+            "guidelines": ["Prove algorithm correctness", "Analyze O(VE) complexity", "Explain negative cycle detection", "Compare to other shortest path algorithms"]
+          },
+          "communicator": {
+            "title": "Bellman-Ford Explained",
+            "description": "10-minute presentation on Bellman-Ford algorithm.",
+            "guidelines": ["Animate relaxation rounds", "Show negative weight handling", "Demonstrate cycle detection", "Discuss when to use Bellman-Ford"]
+          }
+        }
+      },
+      {
+        "week": 13,
+        "topic": "Dijkstra's Algorithm",
+        "description": "Dijkstra's algorithm for efficient single-source shortest paths with non-negative weights.",
+        "mit_lecture": { "number": 13, "title": "Dijkstra", "url": "https://www.youtube.com/watch?v=NSHizBK9JD8" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 13: Dijkstra", "url": "https://www.youtube.com/watch?v=NSHizBK9JD8", "type": "Video" },
+          { "title": "Dijkstra Visualization", "url": "https://visualgo.net/en/sssp", "type": "Interactive" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Dijkstra's Algorithm Implementation",
+            "description": "Implement Dijkstra's algorithm using a priority queue.",
+            "guidelines": ["Use min-heap priority queue", "Process vertices in order of distance", "Track predecessors for path reconstruction", "Handle disconnected components"]
+          },
+          "academic": {
+            "title": "Dijkstra Analysis",
+            "description": "Written test on Dijkstra's correctness and complexity.",
+            "guidelines": ["Prove greedy choice is optimal", "Analyze complexity with different heaps", "Explain non-negative weight requirement", "Compare Dijkstra vs Bellman-Ford"]
+          },
+          "communicator": {
+            "title": "Dijkstra's Algorithm Deep Dive",
+            "description": "10-minute presentation on Dijkstra's algorithm.",
+            "guidelines": ["Animate algorithm execution", "Show priority queue operations", "Explain why negative weights fail", "Discuss real-world applications (GPS)"]
+          }
+        }
+      },
+      {
+        "week": 14,
+        "topic": "APSP and Johnson's Algorithm",
+        "description": "All-pairs shortest paths. Johnson's algorithm combining Bellman-Ford and Dijkstra.",
+        "mit_lecture": { "number": 14, "title": "APSP and Johnson", "url": "https://www.youtube.com/watch?v=EmSmaW-ud6A" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 14: APSP and Johnson", "url": "https://www.youtube.com/watch?v=EmSmaW-ud6A", "type": "Video" },
+          { "title": "Johnson's Algorithm", "url": "https://www.geeksforgeeks.org/johnsons-algorithm/", "type": "Article" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Johnson's Algorithm Implementation",
+            "description": "Implement Johnson's algorithm for all-pairs shortest paths.",
+            "guidelines": ["Add auxiliary vertex and edges", "Run Bellman-Ford for reweighting", "Run Dijkstra from each vertex", "Reconstruct original distances"]
+          },
+          "academic": {
+            "title": "APSP Analysis",
+            "description": "Written test on all-pairs shortest paths algorithms.",
+            "guidelines": ["Compare Floyd-Warshall vs Johnson", "Prove reweighting preserves shortest paths", "Analyze Johnson's complexity", "Explain when to use each algorithm"]
+          },
+          "communicator": {
+            "title": "All-Pairs Shortest Paths",
+            "description": "10-minute presentation on APSP problem and solutions.",
+            "guidelines": ["Explain APSP problem", "Show reweighting technique", "Compare algorithm choices", "Discuss applications"]
+          }
+        }
+      },
+      {
+        "week": 15,
+        "topic": "Dynamic Programming, Part 1: SRTBOT",
+        "description": "Introduction to dynamic programming. SRTBOT framework: Subproblems, Relate, Topological order, Base cases, Original problem, Time.",
+        "mit_lecture": { "number": 15, "title": "Dynamic Programming, Part 1: SRTBOT", "url": "https://www.youtube.com/watch?v=r4-cftqTcdI" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 15: Dynamic Programming, Part 1", "url": "https://www.youtube.com/watch?v=r4-cftqTcdI", "type": "Video" },
+          { "title": "DP Tutorial", "url": "https://www.geeksforgeeks.org/dynamic-programming/", "type": "Article" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "DP Foundations: Fibonacci & DAG Paths",
+            "description": "Implement DP solutions for Fibonacci and DAG shortest paths.",
+            "guidelines": ["Implement memoized Fibonacci", "Implement bottom-up Fibonacci", "Solve DAG shortest paths with DP", "Apply SRTBOT framework"]
+          },
+          "academic": {
+            "title": "DP Framework Assessment",
+            "description": "Written test on SRTBOT framework and DP fundamentals.",
+            "guidelines": ["Apply SRTBOT to new problems", "Compare memoization vs tabulation", "Analyze DP time complexity", "Identify optimal substructure"]
+          },
+          "communicator": {
+            "title": "Introduction to Dynamic Programming",
+            "description": "10-minute presentation introducing DP concepts.",
+            "guidelines": ["Explain overlapping subproblems", "Walk through SRTBOT framework", "Show Fibonacci example", "Discuss DP mindset"]
+          }
+        }
+      },
+      {
+        "week": 16,
+        "topic": "Dynamic Programming, Part 2: LCS, LIS",
+        "description": "Classic DP problems: Longest Common Subsequence and Longest Increasing Subsequence.",
+        "mit_lecture": { "number": 16, "title": "Dynamic Programming, Part 2: LCS, LIS", "url": "https://www.youtube.com/watch?v=KLBCUx1is2c" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 16: Dynamic Programming, Part 2", "url": "https://www.youtube.com/watch?v=KLBCUx1is2c", "type": "Video" },
+          { "title": "LCS and LIS Explained", "url": "https://www.geeksforgeeks.org/longest-common-subsequence-dp-4/", "type": "Article" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "LCS and LIS Implementation",
+            "description": "Implement solutions for Longest Common Subsequence and Longest Increasing Subsequence.",
+            "guidelines": ["Implement LCS with 2D DP table", "Reconstruct the actual LCS", "Implement LIS in O(n²)", "Implement LIS in O(n log n) with binary search"]
+          },
+          "academic": {
+            "title": "Sequence DP Assessment",
+            "description": "Written test on LCS, LIS, and related problems.",
+            "guidelines": ["Derive LCS recurrence relation", "Prove LIS correctness", "Analyze space optimization", "Solve variations (edit distance)"]
+          },
+          "communicator": {
+            "title": "Sequence Problems with DP",
+            "description": "10-minute presentation on LCS and LIS problems.",
+            "guidelines": ["Visualize DP table filling", "Show backtracking for solution", "Explain applications (diff tools)", "Compare complexity approaches"]
+          }
+        }
+      },
+      {
+        "week": 17,
+        "topic": "Dynamic Programming, Part 3: APSP, Knapsack",
+        "description": "Floyd-Warshall for APSP and the 0/1 Knapsack problem.",
+        "mit_lecture": { "number": 17, "title": "Dynamic Programming, Part 3: APSP", "url": "https://www.youtube.com/watch?v=TDo3r5M1LNo" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 17: Dynamic Programming, Part 3", "url": "https://www.youtube.com/watch?v=TDo3r5M1LNo", "type": "Video" },
+          { "title": "Knapsack Problem", "url": "https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/", "type": "Article" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Floyd-Warshall and Knapsack",
+            "description": "Implement Floyd-Warshall APSP and 0/1 Knapsack solutions.",
+            "guidelines": ["Implement Floyd-Warshall with path reconstruction", "Implement 0/1 Knapsack with backtracking", "Optimize space usage", "Handle edge cases"]
+          },
+          "academic": {
+            "title": "Advanced DP Assessment",
+            "description": "Written test on Floyd-Warshall and Knapsack analysis.",
+            "guidelines": ["Prove Floyd-Warshall correctness", "Analyze pseudo-polynomial complexity", "Compare Knapsack variants", "Identify DP problem patterns"]
+          },
+          "communicator": {
+            "title": "DP for Graphs and Optimization",
+            "description": "10-minute presentation on Floyd-Warshall and Knapsack.",
+            "guidelines": ["Animate Floyd-Warshall", "Explain Knapsack state definition", "Show optimization decision making", "Discuss real-world applications"]
+          }
+        }
+      },
+      {
+        "week": 18,
+        "topic": "Dynamic Programming, Part 4: Piano Fingering",
+        "description": "Advanced DP application: optimal piano fingering as a complex optimization problem.",
+        "mit_lecture": { "number": 18, "title": "Dynamic Programming, Part 4: Piano", "url": "https://www.youtube.com/watch?v=i9OAOk0CUQE" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 18: Dynamic Programming, Part 4", "url": "https://www.youtube.com/watch?v=i9OAOk0CUQE", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Complex DP Application",
+            "description": "Implement a complex DP problem involving multiple constraints.",
+            "guidelines": ["Model problem with appropriate state", "Define transition function", "Handle multi-dimensional DP", "Optimize for time and space"]
+          },
+          "academic": {
+            "title": "DP Problem Modeling Assessment",
+            "description": "Written test on modeling complex problems with DP.",
+            "guidelines": ["Design state for novel problems", "Derive recurrence relations", "Prove solution optimality", "Analyze tradeoffs in state design"]
+          },
+          "communicator": {
+            "title": "DP Beyond the Basics",
+            "description": "10-minute presentation on advanced DP techniques.",
+            "guidelines": ["Show complex state design", "Explain constraint handling", "Demonstrate optimization process", "Discuss DP problem-solving strategies"]
+          }
+        }
+      },
+      {
+        "week": 19,
+        "topic": "Complexity",
+        "description": "Introduction to computational complexity: P, NP, NP-completeness, and reductions.",
+        "mit_lecture": { "number": 19, "title": "Complexity", "url": "https://www.youtube.com/watch?v=JbafQJx1CIA" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 19: Complexity", "url": "https://www.youtube.com/watch?v=JbafQJx1CIA", "type": "Video" },
+          { "title": "P vs NP Problem", "url": "https://www.geeksforgeeks.org/np-completeness-set-1/", "type": "Article" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "NP-Complete Problem Exploration",
+            "description": "Implement brute-force and approximation for an NP-complete problem.",
+            "guidelines": ["Implement brute-force for small instances", "Verify solutions efficiently", "Implement a greedy approximation", "Compare solution quality and time"]
+          },
+          "academic": {
+            "title": "Complexity Theory Assessment",
+            "description": "Written test on P, NP, and NP-completeness.",
+            "guidelines": ["Define P, NP, NP-hard, NP-complete", "Explain polynomial reductions", "Prove a problem is in NP", "Discuss implications of P=NP"]
+          },
+          "communicator": {
+            "title": "P vs NP Explained",
+            "description": "10-minute presentation on computational complexity.",
+            "guidelines": ["Explain the million-dollar problem", "Give examples of P and NP problems", "Illustrate reductions", "Discuss practical implications"]
+          }
+        }
+      },
+      {
+        "week": 20,
+        "topic": "Course Review",
+        "description": "Comprehensive review of all course topics: data structures, algorithms, and analysis techniques.",
+        "mit_lecture": { "number": 20, "title": "Course Review", "url": "https://www.youtube.com/watch?v=2NMtS1ecb3o" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 20: Course Review", "url": "https://www.youtube.com/watch?v=2NMtS1ecb3o", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Data Structures & Algorithms Library",
+            "description": "Build a comprehensive library containing all major data structures and algorithms from the course.",
+            "guidelines": ["Implement arrays, linked lists, stacks, queues", "Implement hash tables, BST, AVL, heaps", "Implement graph algorithms (BFS, DFS, Dijkstra)", "Include comprehensive tests and documentation"]
+          },
+          "academic": {
+            "title": "Comprehensive Final Assessment",
+            "description": "Written exam covering all course topics.",
+            "guidelines": ["Analyze complexity of algorithms", "Choose appropriate data structures", "Solve problems using DP", "Apply graph algorithms"]
+          },
+          "communicator": {
+            "title": "Course Summary Presentation",
+            "description": "20-minute presentation summarizing the entire course.",
+            "guidelines": ["Overview all data structures", "Compare algorithm paradigms", "Create decision flowchart", "Reflect on key insights"]
+          }
+        }
+      },
+      {
+        "week": 21,
+        "topic": "Algorithms—Next Steps",
+        "description": "Where to go from here: advanced topics, research directions, and practical applications.",
+        "mit_lecture": { "number": 21, "title": "Algorithms—Next Steps", "url": "https://www.youtube.com/watch?v=4nXw-f6NJ9s" },
+        "resources": [
+          { "title": "MIT 6.006 Lecture 21: Algorithms—Next Steps", "url": "https://www.youtube.com/watch?v=4nXw-f6NJ9s", "type": "Video" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Capstone Project: Algorithm Visualizer",
+            "description": "Build an interactive algorithm visualization tool showcasing multiple algorithms.",
+            "guidelines": ["Visualize at least 5 algorithms", "Allow user interaction (input, speed control)", "Show step-by-step execution", "Compare algorithm performance"]
+          },
+          "academic": {
+            "title": "Advanced Topics Research Paper",
+            "description": "Write a research summary on an advanced algorithms topic.",
+            "guidelines": ["Choose an advanced topic (approximation, randomized, etc.)", "Research current state of the art", "Summarize key techniques", "Discuss open problems"]
+          },
+          "communicator": {
+            "title": "Teaching Algorithms Workshop",
+            "description": "Design and deliver a 30-minute workshop teaching one algorithm topic.",
+            "guidelines": ["Choose a topic from the course", "Create engaging materials", "Include hands-on exercises", "Assess participant understanding"]
           }
         }
       }
     ],
     "ellis_activities": {
       "builder": {
-        "title": "Data Structures Library",
-        "description": "Implement a complete library of data structures: dynamic array, linked list, stack, queue, hash map, BST, and heap with full documentation."
+        "title": "Complete Algorithms Library",
+        "description": "Implement a production-quality library of all data structures and algorithms covered in MIT 6.006."
       },
       "academic": {
-        "title": "Data Structures Problem Set",
-        "description": "Complete 20-25 problems from LeetCode/Codeforces covering all major data structures and their operations."
+        "title": "Algorithm Problem Marathon",
+        "description": "Complete 50+ problems from LeetCode covering all topics from the course."
       },
       "communicator": {
-        "title": "Data Structures Tutorial Series",
-        "description": "Create a video or written tutorial series explaining 3-4 data structures with visualizations and code examples."
+        "title": "Algorithm Tutorial Series",
+        "description": "Create a complete video series teaching all 21 lectures with visualizations and examples."
       }
     }
   },
@@ -542,6 +1203,13 @@ export const CURRICULUM_DATA = {
     "description": "The mathematical language of computer science. Essential for proving code correctness and analyzing speed. Covers proofs, graphs, counting, recurrences, asymptotics, and discrete probability. Anchored by MIT 6.042J/6.1200J.",
     "tier": 1,
     "mit_anchor": "6.042J / 6.1200J Mathematics for Computer Science",
+    "ocw": {
+      "course_code": "6.042J",
+      "course_name": "Mathematics for Computer Science",
+      "semester": "Fall 2010",
+      "course_home": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/",
+      "playlist": null
+    },
     "weeks": [
       {
         "week": 1,
@@ -652,6 +1320,13 @@ export const CURRICULUM_DATA = {
     "description": "Peeking under the hood. Move from Java's managed memory to C and Assembly, learning how hardware executes software. Covers digital logic, processor design, and the hardware/software interface. Anchored by MIT 6.004 Computation Structures.",
     "tier": 1,
     "mit_anchor": "6.004 Computation Structures",
+    "ocw": {
+      "course_code": "6.004",
+      "course_name": "Computation Structures",
+      "semester": "Spring 2017",
+      "course_home": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/",
+      "playlist": "https://www.youtube.com/playlist?list=PLUl4u3cNGP62WVs95MNq3dQBqY2vGOtQ2"
+    },
     "weeks": [
       {
         "week": 1,
@@ -765,9 +1440,16 @@ export const CURRICULUM_DATA = {
   "CS 301: Design & Analysis of Algorithms": {
     "prereqs": ["CS 102: Data Structures & Algorithms", "Math 201: Discrete Mathematics for CS"],
     "nice_to_have": ["AP Calculus AB", "AP Calculus BC"],
-    "description": "The primary filter for Big Tech interviews and the theoretical peak of the undergraduate core. Focuses on solving hard problems efficiently through graph algorithms, dynamic programming, and amortized analysis. Anchored by MIT 6.006 advanced topics.",
+    "description": "The primary filter for Big Tech interviews and the theoretical peak of the undergraduate core. Focuses on solving hard problems efficiently through graph algorithms, dynamic programming, and amortized analysis. Anchored by MIT 6.046J.",
     "tier": 2,
-    "mit_anchor": "6.006 Introduction to Algorithms (advanced topics)",
+    "mit_anchor": "6.046J Design and Analysis of Algorithms",
+    "ocw": {
+      "course_code": "6.046J",
+      "course_name": "Design and Analysis of Algorithms",
+      "semester": "Spring 2015",
+      "course_home": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/",
+      "playlist": "https://www.youtube.com/playlist?list=PLUl4u3cNGP6317WaSNfmCvGym2ucw3oGp"
+    },
     "weeks": [
       {
         "week": 1,
@@ -1220,9 +1902,16 @@ export const CURRICULUM_DATA = {
   "Sys 301: Operating Systems (OS)": {
     "prereqs": ["Sys 201: Computer Systems (Hardware/Software Interface)", "CS 102: Data Structures & Algorithms"],
     "nice_to_have": ["Math 201: Discrete Mathematics for CS"],
-    "description": "Building the software that manages the hardware. Famous for massive C coding projects (building a kernel, file system, or shell). Covers processes, virtual memory, file systems, and concurrency. Anchored by MIT 6.828/6.1810 Operating System Engineering.",
+    "description": "Building the software that manages the hardware. Famous for massive C coding projects (building a kernel, file system, or shell). Covers processes, virtual memory, file systems, and concurrency. Anchored by MIT 6.S081 Operating System Engineering.",
     "tier": 2,
-    "mit_anchor": "6.828 / 6.1810 Operating System Engineering",
+    "mit_anchor": "6.S081 Operating System Engineering",
+    "ocw": {
+      "course_code": "6.S081",
+      "course_name": "Operating System Engineering",
+      "semester": "Fall 2020",
+      "course_home": "https://pdos.csail.mit.edu/6.S081/2020/schedule.html",
+      "playlist": null
+    },
     "weeks": [
       {
         "week": 1,
@@ -1334,6 +2023,13 @@ export const CURRICULUM_DATA = {
     "description": "The 'Practical' core. Translating theory into shipped, scalable, maintainable products. Covers modularity, interfaces, networking, security, and fault tolerance with modern web practices layered on top. Anchored by MIT 6.033 Computer System Engineering.",
     "tier": 2,
     "mit_anchor": "6.033 Computer System Engineering",
+    "ocw": {
+      "course_code": "6.033",
+      "course_name": "Computer System Engineering",
+      "semester": "Spring 2018",
+      "course_home": "https://ocw.mit.edu/courses/6-033-computer-system-engineering-spring-2018/",
+      "playlist": null
+    },
     "weeks": [
       {
         "week": 1,
@@ -1448,9 +2144,16 @@ export const CURRICULUM_DATA = {
   "AI 401: Intro to Machine Learning": {
     "prereqs": ["CS 301: Design & Analysis of Algorithms", "Math 201: Discrete Mathematics for CS"],
     "nice_to_have": ["Linear Algebra", "AP Statistics"],
-    "description": "Introduction to machine learning: regression, classification, neural networks, and backpropagation. Covers toned-down undergrad ML structure aligned with introductory MIT ML topics. Anchored by MIT 6.034 Artificial Intelligence introductory ML units.",
+    "description": "Introduction to machine learning: regression, classification, neural networks, and backpropagation. Covers toned-down undergrad ML structure aligned with introductory MIT ML topics. Anchored by MIT 6.036 Introduction to Machine Learning.",
     "tier": 3,
-    "mit_anchor": "6.034 Artificial Intelligence (ML units)",
+    "mit_anchor": "6.036 Introduction to Machine Learning",
+    "ocw": {
+      "course_code": "6.036",
+      "course_name": "Introduction to Machine Learning",
+      "semester": "Fall 2020",
+      "course_home": "https://introml.mit.edu/",
+      "playlist": "https://www.youtube.com/playlist?list=PLxC_ffO4q_rW0bqQB80_vcQB09HOA3ClV"
+    },
     "weeks": [
       {
         "week": 1,
@@ -1781,9 +2484,16 @@ export const CURRICULUM_DATA = {
   "Sec 301: Network & Computer Security": {
     "prereqs": ["Sys 201: Computer Systems (Hardware/Software Interface)"],
     "nice_to_have": ["Sys 301: Operating Systems (OS)", "Math 201: Discrete Mathematics for CS"],
-    "description": "The 'Hacker' course. Learn how systems break to understand how to defend them. Covers threat models, vulnerabilities, basic crypto use, and secure design. Anchored by MIT 6.033 security/privacy units.",
+    "description": "The 'Hacker' course. Learn how systems break to understand how to defend them. Covers threat models, vulnerabilities, basic crypto use, and secure design. Anchored by MIT 6.858 Computer Systems Security.",
     "tier": 3,
-    "mit_anchor": "6.033 Computer System Engineering (security units)",
+    "mit_anchor": "6.858 Computer Systems Security",
+    "ocw": {
+      "course_code": "6.858",
+      "course_name": "Computer Systems Security",
+      "semester": "Spring 2022",
+      "course_home": "https://css.csail.mit.edu/6.858/2022/schedule.html",
+      "playlist": null
+    },
     "weeks": [
       {
         "week": 1,

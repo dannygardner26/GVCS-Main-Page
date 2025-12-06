@@ -8,7 +8,8 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const hasSubmission = week.submissions?.builder;
 
-    const isCS102DS = course?.title?.includes('CS 102') || course?.title?.includes('Data Structures');
+    // Check if this week has template files to download
+    const hasTemplateFiles = week.deliverables?.builder?.template_files || week.deliverables?.builder?.template_file;
 
     const rubric = [
         { criterion: "Functionality", maxPoints: 30, description: "Code works correctly and meets all requirements" },
@@ -126,7 +127,8 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
         );
     }
 
-    if (isCS102DS) {
+    // Show template-based UI if there are template files available
+    if (hasTemplateFiles) {
         const templateFileName = `${week.topic?.replace(/[^a-zA-Z0-9]/g, '_')}_template.java`;
 
         return (
@@ -145,7 +147,64 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     </div>
                 )}
 
-                {week.deliverables?.builder?.template_file && (
+                {/* Download buttons for template files (supports multiple languages) */}
+                {week.deliverables?.builder?.template_files && (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                        <h4 className="font-semibold text-gray-800 mb-3">Download Starter File</h4>
+                        <p className="text-sm text-gray-600 mb-4">Choose your preferred language:</p>
+                        <div className="flex flex-wrap gap-3">
+                            {week.deliverables.builder.template_files.java && (
+                                <button
+                                    onClick={() => {
+                                        const templateFile = week.deliverables.builder.template_files.java;
+                                        const blob = new Blob([templateFile.content], { type: 'text/plain' });
+                                        const url = URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = templateFile.filename;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                        URL.revokeObjectURL(url);
+                                    }}
+                                    className="flex-1 min-w-[140px] px-4 py-3 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 flex items-center justify-center gap-2"
+                                >
+                                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8.851 18.56s-.917.534.653.714c1.902.218 2.874.187 4.969-.211 0 0 .552.346 1.321.646-4.699 2.013-10.633-.118-6.943-1.149M8.276 15.933s-1.028.761.542.924c2.032.209 3.636.227 6.413-.308 0 0 .384.389.987.602-5.679 1.661-12.007.13-7.942-1.218M13.116 11.475c1.158 1.333-.304 2.533-.304 2.533s2.939-1.518 1.589-3.418c-1.261-1.772-2.228-2.652 3.007-5.688 0-.001-8.216 2.051-4.292 6.573"/>
+                                        <path d="M19.33 20.504s.679.559-.747.991c-2.712.822-11.288 1.069-13.669.033-.856-.373.75-.89 1.254-.998.527-.114.828-.093.828-.093-.953-.671-6.156 1.317-2.643 1.887 9.58 1.553 17.462-.7 14.977-1.82M9.292 13.21s-4.362 1.036-1.544 1.412c1.189.159 3.561.123 5.77-.062 1.806-.152 3.618-.477 3.618-.477s-.637.272-1.098.587c-4.429 1.165-12.986.623-10.522-.568 2.082-1.006 3.776-.892 3.776-.892M17.116 17.584c4.503-2.34 2.421-4.589.968-4.285-.355.074-.515.138-.515.138s.132-.207.385-.297c2.875-1.011 5.086 2.981-.928 4.562 0-.001.07-.062.09-.118"/>
+                                        <path d="M14.401 0s2.494 2.494-2.365 6.33c-3.896 3.077-.889 4.832 0 6.836-2.274-2.053-3.943-3.858-2.824-5.539 1.644-2.469 6.197-3.665 5.189-7.627"/>
+                                    </svg>
+                                    Java (.java)
+                                </button>
+                            )}
+                            {week.deliverables.builder.template_files.cpp && (
+                                <button
+                                    onClick={() => {
+                                        const templateFile = week.deliverables.builder.template_files.cpp;
+                                        const blob = new Blob([templateFile.content], { type: 'text/plain' });
+                                        const url = URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = templateFile.filename;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                        URL.revokeObjectURL(url);
+                                    }}
+                                    className="flex-1 min-w-[140px] px-4 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 flex items-center justify-center gap-2"
+                                >
+                                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M22.394 6c-.167-.29-.398-.543-.652-.69L12.926.22c-.509-.294-1.34-.294-1.848 0L2.26 5.31c-.508.293-.923 1.013-.923 1.6v10.18c0 .294.104.62.271.91.167.29.398.543.652.69l8.816 5.09c.508.293 1.34.293 1.848 0l8.816-5.09c.254-.147.485-.4.652-.69.167-.29.27-.616.27-.91V6.91c.003-.294-.1-.62-.268-.91zM12 19.11c-3.92 0-7.109-3.19-7.109-7.11 0-3.92 3.19-7.11 7.11-7.11a7.133 7.133 0 016.156 3.553l-3.076 1.78a3.567 3.567 0 00-3.08-1.78A3.56 3.56 0 008.444 12 3.56 3.56 0 0012 15.555a3.57 3.57 0 003.08-1.778l3.078 1.78A7.135 7.135 0 0112 19.11zm7.11-6.715h-.79v.79h-.79v-.79h-.79v-.79h.79v-.79h.79v.79h.79zm2.962 0h-.79v.79h-.79v-.79h-.79v-.79h.79v-.79h.79v.79h.79z"/>
+                                    </svg>
+                                    C++ (.cpp)
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {/* Legacy single template file support */}
+                {week.deliverables?.builder?.template_file && !week.deliverables?.builder?.template_files && (
                     <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
                         <button
                             onClick={() => {
