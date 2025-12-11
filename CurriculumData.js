@@ -162,28 +162,34 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Stacks, Queues, and Deques Assessment",
-            "description": "Complete a written test covering: (1) Time complexity analysis for all operations, (2) Implementation choices (array vs linked list), (3) Applications of stacks (parsing, recursion), (4) Applications of queues (BFS, scheduling), (5) When to use deque vs stack/queue, (6) Solving problems using these structures. Submit detailed solutions.",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering stacks, queues, and deques. Topics include time complexity, implementation choices, and applications.",
             "guidelines": [
-              "Analyze time complexity for push, pop, enqueue, dequeue operations",
-              "Compare array-based vs linked list-based implementations",
-              "Explain how stacks are used in recursion and parsing",
-              "Explain how queues are used in BFS and scheduling algorithms",
-              "Solve 3 problems using stacks (e.g., next greater element, histogram)",
-              "Solve 2 problems using queues (e.g., level-order traversal, sliding window)",
-              "All solutions must show step-by-step execution"
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze code snippets for time complexity, identify correct implementations, compare array vs linked list approaches",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain LIFO vs FIFO principles, describe stack/queue applications, compare implementations, solve problems",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete partial Stack/Queue/Deque implementations, fill in complexity annotations, complete method bodies",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Stacks and Queues Presentation",
-            "description": "Create a 10-15 minute presentation explaining stacks, queues, and deques. Include: (1) What each structure is and how it works, (2) LIFO vs FIFO principles, (3) Common applications with examples, (4) Implementation details, (5) Real-world use cases (browser back button, printer queue, etc.). Use visual demonstrations and code examples.",
+            "description": "Create a 10-15 minute presentation explaining stacks, queues, and deques. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "10-15 minute presentation with visual demonstrations",
-              "Explain LIFO (Last In First Out) for stacks and FIFO (First In First Out) for queues",
-              "Demonstrate at least 3 stack applications with live examples",
-              "Demonstrate at least 3 queue applications with live examples",
-              "Show implementation code and explain key operations",
-              "Discuss real-world examples: browser history, task scheduling, etc.",
-              "Engaging visuals and clear explanations"
+              "Slide Structure: (1) Title slide, (2) Introduction to stacks, queues, deques (2 slides), (3) LIFO vs FIFO principles with examples (2-3 slides), (4) Applications with real-world examples (3-4 slides), (5) Implementation details (2 slides), (6) Conclusion (1 slide)",
+              "Content Requirements: Explain LIFO/FIFO principles, demonstrate 3+ stack applications, demonstrate 3+ queue applications, show implementation code",
+              "Visual Aids: Diagrams showing operations, comparison tables, code examples, real-world use case visuals",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 3 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lecture 3: Sets and Sorting. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: key definitions, sorting algorithms, set operations, complexity analysis",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -218,29 +224,34 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Hash Tables Assessment",
-            "description": "Complete a written test covering: (1) Hash function design and properties, (2) Collision resolution strategies (chaining, linear probing, quadratic probing), (3) Load factor and its impact on performance, (4) Time complexity analysis (average vs worst case), (5) Rehashing strategies, (6) When hash tables are optimal. Submit detailed solutions with proofs.",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering hash tables, hash functions, collision resolution, and performance analysis.",
             "guidelines": [
-              "Design a hash function for strings and explain its properties",
-              "Compare collision resolution strategies: chaining vs open addressing",
-              "Analyze time complexity: average O(1) vs worst case O(n)",
-              "Explain how load factor affects performance with mathematical analysis",
-              "Describe rehashing strategies and when to trigger them",
-              "Solve problems using hash tables (e.g., two sum, group anagrams)",
-              "All solutions must include complexity analysis"
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze hash function properties, identify collision resolution strategies, compare performance characteristics",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Design hash functions, explain collision resolution strategies, analyze load factor impact, describe rehashing strategies",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete hash function implementations, fill in collision resolution code, complete rehashing logic",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Hash Tables Presentation",
-            "description": "Create a 10-15 minute presentation explaining hash tables. Include: (1) What is hashing and why it's fast, (2) How hash functions work, (3) Collision resolution strategies with examples, (4) Load factor and performance tradeoffs, (5) Real-world applications (dictionaries, caches, databases). Use visual diagrams and code examples.",
+            "description": "Create a 10-15 minute presentation explaining hash tables. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "10-15 minute presentation with visual diagrams",
-              "Explain hashing concept: mapping keys to array indices",
-              "Demonstrate hash function with examples (show collisions)",
-              "Visualize collision resolution: chaining vs probing with diagrams",
-              "Explain load factor impact with performance graphs",
-              "Discuss real-world applications: Python dict, Java HashMap, Redis",
-              "Use code examples to show hash table operations",
-              "Clear explanations and engaging delivery"
+              "Slide Structure: (1) Title slide, (2) Introduction to hashing (2 slides), (3) Hash functions with examples (2-3 slides), (4) Collision resolution strategies (3-4 slides), (5) Load factor and performance (2 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
+              "Content Requirements: Explain hashing concept, demonstrate hash functions with collision examples, visualize collision resolution strategies, explain load factor impact",
+              "Visual Aids: Diagrams showing hash table structure, collision resolution visualizations, performance graphs, code examples",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 4 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lecture 4: Hashing. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: hash functions, collision resolution, load factor, performance analysis",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -269,29 +280,34 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Binary Search Trees Assessment",
-            "description": "Complete a written test covering: (1) BST property and why it enables efficient search, (2) Time complexity analysis for all operations (best, average, worst case), (3) Step-by-step execution of insert, search, delete, (4) Traversal algorithms and their applications, (5) BST vs balanced trees tradeoffs, (6) Solving problems using BSTs. Submit detailed solutions.",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering binary search trees, traversals, and operations.",
             "guidelines": [
-              "Explain BST property and prove it enables O(log n) search in balanced case",
-              "Analyze time complexity: best O(log n), average O(log n), worst O(n)",
-              "Show step-by-step execution of insert, search, delete on given trees",
-              "Explain when to use each traversal (in-order for sorted output, pre-order for copying, etc.)",
-              "Compare BST vs balanced trees (AVL, Red-Black) with complexity analysis",
-              "Solve 3-4 problems using BSTs (e.g., range queries, kth smallest element)",
-              "All solutions must show tree structure at each step"
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze BST operations, identify correct tree structures, compare complexity classes",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain BST property, analyze time complexity, describe traversal algorithms, compare BST vs balanced trees",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete BST insert/search/delete implementations, fill in traversal code, complete complexity annotations",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Binary Search Trees Presentation",
-            "description": "Create a 10-15 minute presentation explaining binary search trees. Include: (1) What is a BST and the ordering property, (2) How insert, search, and delete work, (3) Tree traversals with examples, (4) Time complexity and when BSTs are efficient, (5) Real-world applications (databases, file systems). Use tree diagrams and visual demonstrations.",
+            "description": "Create a 10-15 minute presentation explaining binary search trees. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "10-15 minute presentation with tree diagrams",
-              "Explain BST ordering property with visual examples",
-              "Demonstrate insert, search, delete operations step-by-step",
-              "Show all three traversals on same tree with output",
-              "Explain time complexity with examples (balanced vs unbalanced)",
-              "Discuss real-world applications: database indexing, expression trees",
-              "Use interactive demonstrations or animations if possible",
-              "Clear explanations and engaging delivery"
+              "Slide Structure: (1) Title slide, (2) Introduction to BSTs and ordering property (2 slides), (3) Insert, search, delete operations (3-4 slides), (4) Tree traversals with examples (2-3 slides), (5) Time complexity analysis (2 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
+              "Content Requirements: Explain BST ordering property, demonstrate operations step-by-step, show all three traversals, explain time complexity",
+              "Visual Aids: Tree diagrams showing operations, traversal examples, complexity graphs, code examples",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 6 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lecture 6: Binary Trees, Part 1. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: BST properties, operations, traversals, complexity analysis",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -320,29 +336,34 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Self-Balancing Trees Assessment",
-            "description": "Complete a written test covering: (1) Why self-balancing is needed (worst case BST), (2) AVL tree property and balance factor, (3) All rotation types and when to apply them, (4) Time complexity analysis (guaranteed O(log n)), (5) Comparison of AVL vs Red-Black trees, (6) Step-by-step insertion with rotations. Submit detailed solutions.",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering AVL trees, rotations, and self-balancing concepts.",
             "guidelines": [
-              "Explain why unbalanced BSTs degrade to O(n) and need balancing",
-              "Define AVL balance factor and height property",
-              "Describe all 4 rotation types: left, right, left-right, right-left",
-              "Prove AVL trees guarantee O(log n) height",
-              "Compare AVL vs Red-Black: balancing strictness, rotation frequency",
-              "Show step-by-step insertion with rotations on given sequence",
-              "All solutions must show tree structure and balance factors at each step"
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Identify rotation types, analyze balance factors, compare AVL vs Red-Black properties",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain why balancing is needed, describe rotation types, prove O(log n) guarantee, compare tree types",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete rotation method implementations, fill in balance factor calculations, complete insertion logic",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Self-Balancing Trees Presentation",
-            "description": "Create a 10-15 minute presentation explaining self-balancing trees. Include: (1) Problem with unbalanced BSTs, (2) How AVL trees maintain balance, (3) Rotation operations with examples, (4) Why guaranteed O(log n) matters, (5) AVL vs Red-Black comparison, (6) Real-world usage (Java TreeMap, C++ map). Use tree diagrams and animations.",
+            "description": "Create a 10-15 minute presentation explaining self-balancing trees. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "10-15 minute presentation with tree diagrams and animations",
-              "Demonstrate problem: show worst-case unbalanced BST",
-              "Explain AVL balance factor and height property",
-              "Animate or step through rotation operations",
-              "Show before/after comparisons of tree height",
-              "Compare AVL vs Red-Black with use case recommendations",
-              "Discuss real-world implementations: Java TreeMap uses Red-Black",
-              "Clear explanations and engaging visuals"
+              "Slide Structure: (1) Title slide, (2) Problem with unbalanced BSTs (2 slides), (3) AVL tree properties (2 slides), (4) Rotation operations with examples (3-4 slides), (5) AVL vs Red-Black comparison (2 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
+              "Content Requirements: Demonstrate unbalanced BST problem, explain AVL properties, show rotation operations, compare tree types",
+              "Visual Aids: Tree diagrams showing rotations, before/after comparisons, animations of balancing, code examples",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 7 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lecture 7: Binary Trees, Part 2: AVL. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: AVL properties, rotations, balancing, complexity guarantees",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -372,30 +393,34 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Heaps and Priority Queues Assessment",
-            "description": "Complete a written test covering: (1) Heap property and array representation, (2) Time complexity analysis for all operations, (3) Heapify algorithms (bottom-up and top-down), (4) Building a heap from array (O(n) method), (5) Applications of priority queues, (6) Heap vs BST for priority operations. Submit detailed solutions.",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering binary heaps, priority queues, and heap operations.",
             "guidelines": [
-              "Explain heap property (min-heap and max-heap) with examples",
-              "Show array representation of heap and parent/child index formulas",
-              "Analyze time complexity: insert O(log n), extract O(log n), build O(n)",
-              "Describe heapify-up and heapify-down algorithms step-by-step",
-              "Prove building heap from array is O(n) not O(n log n)",
-              "Compare heap vs BST for priority queue operations",
-              "Solve problems using heaps (e.g., find k largest elements, median maintenance)",
-              "All solutions must show heap structure at each step"
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze heap operations, identify correct array representations, compare heap vs BST",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain heap property, analyze time complexity, describe heapify algorithms, prove O(n) build time",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete heap insert/extract implementations, fill in heapify methods, complete array indexing calculations",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Heaps and Priority Queues Presentation",
-            "description": "Create a 10-15 minute presentation explaining binary heaps and priority queues. Include: (1) What is a heap and the heap property, (2) Array representation and indexing, (3) Heap operations (insert, extract, heapify), (4) Building a heap efficiently, (5) Applications (Dijkstra's algorithm, scheduling, heapsort). Use visual diagrams and code examples.",
+            "description": "Create a 10-15 minute presentation explaining binary heaps and priority queues. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "10-15 minute presentation with visual diagrams",
-              "Explain heap property with tree and array representations",
-              "Demonstrate parent/child index calculations",
-              "Animate or step through insert and extract operations",
-              "Show how to build heap from array efficiently",
-              "Discuss applications: Dijkstra's algorithm, task scheduling, heapsort",
-              "Use code examples to show key operations",
-              "Clear explanations and engaging delivery"
+              "Slide Structure: (1) Title slide, (2) Introduction to heaps and heap property (2 slides), (3) Array representation and indexing (2 slides), (4) Heap operations (3-4 slides), (5) Building heaps efficiently (2 slides), (6) Applications (2 slides), (7) Conclusion (1 slide)",
+              "Content Requirements: Explain heap property, demonstrate array representation, show operations step-by-step, discuss applications",
+              "Visual Aids: Tree and array representations, operation animations, index calculation examples, code examples",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 8 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lecture 8: Binary Heaps. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: heap property, array representation, operations, heapify algorithms",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -424,31 +449,34 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Graph Traversals Assessment",
-            "description": "Complete a written test covering: (1) Adjacency matrix vs adjacency list tradeoffs, (2) Time and space complexity for BFS and DFS, (3) Step-by-step execution of BFS and DFS on given graphs, (4) Applications of BFS (shortest path, level-order) vs DFS (cycle detection, topological sort), (5) When to use each traversal. Submit detailed solutions.",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering graph representations, BFS, and DFS.",
             "guidelines": [
-              "Compare adjacency matrix vs list: space O(V²) vs O(V+E), query time O(1) vs O(degree)",
-              "Analyze time complexity: BFS O(V+E), DFS O(V+E) with justification",
-              "Show step-by-step BFS execution (queue state at each step)",
-              "Show step-by-step DFS execution (stack/recursion trace)",
-              "Explain when BFS finds shortest path (unweighted graphs)",
-              "Explain DFS applications: cycle detection, topological sort, maze solving",
-              "Solve problems using BFS (e.g., word ladder, islands) and DFS (e.g., path finding)",
-              "All solutions must show graph and traversal state at each step"
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Compare adjacency matrix vs list, analyze BFS/DFS complexity, identify correct traversal order",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain graph representations, analyze time/space complexity, describe BFS/DFS applications, compare traversal strategies",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete BFS/DFS implementations, fill in adjacency list construction, complete traversal code",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Graph Traversals Presentation",
-            "description": "Create a 10-15 minute presentation explaining graphs and traversals. Include: (1) What are graphs and common terminology, (2) Adjacency matrix vs adjacency list representations, (3) How BFS works (queue-based, level-order), (4) How DFS works (stack-based, depth-first), (5) When to use BFS vs DFS, (6) Real-world applications (social networks, web crawling). Use graph diagrams and animations.",
+            "description": "Create a 10-15 minute presentation explaining graphs and traversals. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "10-15 minute presentation with graph diagrams and animations",
-              "Explain graph terminology: vertices, edges, directed/undirected, weighted",
-              "Visualize adjacency matrix vs list with examples",
-              "Animate BFS traversal showing queue and visited nodes",
-              "Animate DFS traversal showing stack/recursion and visited nodes",
-              "Compare BFS vs DFS with use case recommendations",
-              "Discuss real-world applications: social networks (friends), web pages (links)",
-              "Use interactive demonstrations if possible",
-              "Clear explanations and engaging delivery"
+              "Slide Structure: (1) Title slide, (2) Introduction to graphs and terminology (2 slides), (3) Adjacency matrix vs list (2-3 slides), (4) BFS algorithm (3-4 slides), (5) DFS algorithm (3-4 slides), (6) BFS vs DFS comparison (2 slides), (7) Real-world applications (2 slides), (8) Conclusion (1 slide)",
+              "Content Requirements: Explain graph concepts, visualize representations, demonstrate BFS/DFS step-by-step, compare traversal strategies",
+              "Visual Aids: Graph diagrams, adjacency representations, traversal animations, queue/stack visualizations, code examples",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 9 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lecture 9: Breadth-First Search. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: graph representations, BFS algorithm, queue-based traversal, applications",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -487,30 +515,36 @@ export const CURRICULUM_DATA = {
             ]
           },
           "academic": {
-            "title": "Comprehensive Data Structures Exam",
-            "description": "Complete a comprehensive written exam covering all course topics: (1) Design and analyze data structures for given problems, (2) Choose appropriate data structures for scenarios, (3) Time and space complexity analysis, (4) Compare different data structures, (5) Solve 5-7 complex problems requiring multiple structures. Submit detailed solutions with analysis.",
+            "title": "Comprehensive Data Structures Final Exam",
+            "description": "Complete a comprehensive online final exam with MCQ, SAQ, and fill-in-the-blank questions covering all course topics from weeks 1-8.",
             "guidelines": [
-              "Design data structures for 2-3 new problems not covered in class",
-              "Justify choice of data structure for given scenarios with complexity analysis",
-              "Complete time and space complexity analysis for all solutions",
-              "Compare different data structures for same problem (e.g., array vs linked list)",
-              "Solve 5-7 complex problems requiring multiple data structures",
-              "All solutions must be rigorous with clear reasoning and proofs",
-              "Demonstrate deep understanding of tradeoffs and design decisions"
+              "Part 1 - Multiple Choice Questions (50 points, 20 questions): Cover all topics - Big-O, arrays, linked lists, stacks, queues, hash tables, trees, heaps, graphs",
+              "Part 2 - Short Answer Questions (35 points, 7 questions): Design data structures for problems, justify choices, analyze complexity, compare structures",
+              "Part 3 - Fill-in-the-Blank (15 points, 5 questions): Complete implementations across multiple data structures, fill in complexity annotations",
+              "Time Limit: 120 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (50%), SAQ graded on correctness, reasoning, and clarity (35%), Fill-in-the-blank graded on correctness (15%)"
             ]
           },
           "communicator": {
             "title": "Data Structures Course Presentation",
-            "description": "Create a 20-30 minute comprehensive presentation summarizing the entire course. Include: (1) Overview of all data structures covered, (2) When to use each structure with examples, (3) Complexity analysis and tradeoffs, (4) Real-world applications, (5) Your favorite data structure and why, (6) Future learning directions. Use visual aids and live demonstrations.",
+            "description": "Create a 20-30 minute comprehensive presentation summarizing the entire course. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "20-30 minute comprehensive presentation",
-              "Overview of all data structures: linear, tree-based, hash-based, graph",
-              "Decision framework: when to use each structure with examples",
-              "Complexity comparison table for common operations",
-              "Real-world applications with specific examples for each structure",
-              "Deep dive into your favorite data structure: why, how it works, applications",
-              "Future learning directions: advanced structures, optimization techniques",
-              "Engaging visuals, clear structure, and confident delivery"
+              "Slide Structure: (1) Title slide, (2) Course overview (2 slides), (3) All data structures covered with examples (8-10 slides), (4) Decision framework: when to use each (3-4 slides), (5) Complexity comparison (2 slides), (6) Real-world applications (3-4 slides), (7) Favorite data structure deep dive (3-4 slides), (8) Future learning (2 slides), (9) Conclusion (1 slide)",
+              "Content Requirements: Overview all structures, provide decision framework, show complexity comparisons, discuss applications, deep dive into favorite",
+              "Visual Aids: Structure diagrams, comparison tables, complexity graphs, application examples, code demonstrations",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy and comprehensiveness (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Course Notes Portfolio Submission",
+            "description": "Submit a compilation of your best lecture notes from the course (select 3-4 weeks). This demonstrates your note-taking skills and understanding across the semester.",
+            "guidelines": [
+              "Select 3-4 weeks of your best lecture notes to include in the portfolio",
+              "Format: Submit as single PDF document (8-16 pages total)",
+              "Include a brief reflection (1 page) on your note-taking process and how it helped your learning",
+              "Grading Rubric: Note quality across selected weeks (50%), Completeness and accuracy (30%), Organization and presentation (20%)",
+              "Submission: Upload notes portfolio PDF through course platform"
             ]
           }
         }
@@ -544,10 +578,57 @@ export const CURRICULUM_DATA = {
         "topic": "Propositional Logic and Truth Tables",
         "description": "Learn propositions, logical connectives (AND, OR, NOT, IMPLIES), truth tables, and logical equivalences.",
         "resources": [
-          { "title": "Propositional Logic", "url": "https://www.youtube.com/watch?v=FMh8qNV3PHk", "type": "Video" },
-          { "title": "Truth Tables Tutorial", "url": "https://www.mathsisfun.com/sets/logic-truth-tables.html", "type": "Article" }
+          { "title": "MIT 6.042J Lecture 1: Introduction and Proofs", "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/resources/lecture-1-introduction-and-proofs/", "type": "Video" }
         ],
-        "deliverable": "Create truth tables for 10 compound propositions. Identify logically equivalent pairs."
+        "deliverables": {
+          "builder": {
+            "title": "Truth Table Generator Template",
+            "description": "Download and complete a template file that generates truth tables for compound propositions. Implement the logic evaluation functions.",
+            "guidelines": [
+              "Step 1: Download the template file 'TruthTableGenerator.java'",
+              "Step 2: Implement functions to evaluate logical connectives (AND, OR, NOT, IMPLIES)",
+              "Step 3: Implement truth table generation for compound propositions",
+              "Step 4: Test with provided examples and submit your completed file",
+              "Grading: Correctness (50%), Code quality (25%), Test results (25%)"
+            ],
+            "template_file": {
+              "filename": "TruthTableGenerator.java",
+              "content": "public class TruthTableGenerator {\n    // TODO: Implement logical AND operation\n    public static boolean and(boolean p, boolean q) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement logical OR operation\n    public static boolean or(boolean p, boolean q) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement logical NOT operation\n    public static boolean not(boolean p) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement logical IMPLIES operation (p -> q)\n    public static boolean implies(boolean p, boolean q) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Generate truth table for compound proposition\n    public static void generateTruthTable(String expression) {\n        // Your implementation here\n    }\n}"
+            }
+          },
+          "academic": {
+            "title": "Propositional Logic Assessment",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering propositional logic, truth tables, and logical equivalences.",
+            "guidelines": [
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Evaluate truth values, identify logical equivalences, analyze compound propositions",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Construct truth tables, prove logical equivalences, translate English to logic",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete truth table rows, fill in logical connective evaluations, complete equivalence proofs",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+            ]
+          },
+          "communicator": {
+            "title": "Propositional Logic Teaching Presentation",
+            "description": "Create a 10-15 minute presentation teaching propositional logic to fellow students. Submit your slides and either a video recording or deliver live.",
+            "guidelines": [
+              "Slide Structure: (1) Title slide, (2) Introduction to propositions (2 slides), (3) Logical connectives with examples (3-4 slides), (4) Truth tables (2-3 slides), (5) Logical equivalences (2 slides), (6) Applications (2 slides), (7) Conclusion (1 slide)",
+              "Content Requirements: Explain all connectives, demonstrate truth tables, show logical equivalences, provide examples",
+              "Visual Aids: Truth table diagrams, logical expression trees, equivalence examples",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 1 Notes Submission",
+            "description": "Submit your notes from MIT 6.042J Lecture 1: Introduction and Proofs. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: propositions, logical connectives, truth tables, proof techniques",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
+            ]
+          }
+        }
       },
       {
         "week": 2,
