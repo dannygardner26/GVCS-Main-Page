@@ -6,34 +6,30 @@ export const CURRICULUM_DATA = {
 
   "CS 102: Data Structures & Algorithms": {
     "prereqs": ["AP Computer Science A"],
-    "nice_to_have": ["Precalculus"],
+    "nice_to_have": ["Precalculus", "Math 201: Discrete Mathematics for CS"],
     "description": "The universal follow-up to AP CSA. Master efficiency and data organization through Big-O analysis, fundamental data structures, and core algorithms. Anchored by MIT 6.006.",
     "tier": 1,
-    "mit_anchor": "6.006 Introduction to Algorithms",
+    "mit_anchor": "6.006 Introduction to Algorithms (Spring 2020)",
     "weeks": [
       {
         "week": 1,
         "topic": "Asymptotic Analysis: Big-O Notation",
         "description": "Formal Big-O analysis of time and space complexity. Learn to analyze algorithm efficiency.",
         "resources": [
-          { "title": "Big-O Notation Explained", "url": "https://www.youtube.com/watch?v=__vX2sjlpXU", "type": "Video" },
-          { "title": "Big-O Notation Tutorial", "url": "https://www.youtube.com/watch?v=Mo4vesaut8g", "type": "Video" },
-          { "title": "Understanding Big-O Notation", "url": "https://www.youtube.com/watch?v=kS_gr2_-ws8", "type": "Video" },
-          { "title": "Big-O Cheat Sheet", "url": "https://www.bigocheatsheet.com/", "type": "Article" },
-          { "title": "Introduction to Algorithms (CLRS) - Chapter 3: Growth of Functions (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture2.pdf", "type": "PDF" }
+          { "title": "MIT 6.006 Lecture 1: Algorithms and Computation", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-1-algorithms-and-computation/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
             "title": "Big-O Analysis Template",
-            "description": "Complete a template file containing 4 partially implemented algorithms. Your task is to: (1) Implement the missing code sections marked with TODO comments, (2) Analyze and document the time complexity of each algorithm using Big-O notation, (3) Test each implementation with provided test cases, (4) Submit your completed file with all code working and complexity analysis included.",
+            "description": "Download and complete the template file containing 4 partially implemented algorithms. Implement the missing code sections marked with TODO comments, analyze time complexity, and submit your completed file.",
             "guidelines": [
               "Step 1: Download the template file 'BigO_Analysis.java' from the download button below",
               "Step 2: Open the file in your IDE. You will find 4 functions with TODO comments: findMax(), linearSearch(), bubbleSort(), and binarySearch()",
-              "Step 3: Implement each function according to the comments. For findMax(), return the maximum value in an array. For linearSearch(), find the index of a target value. For bubbleSort(), sort an array using bubble sort. For binarySearch(), find a target in a sorted array.",
+              "Step 3: Implement each function according to the comments",
               "Step 4: Above each completed function, add a comment block explaining: (a) Time complexity in Big-O notation, (b) Space complexity, (c) Best case, average case, and worst case scenarios",
               "Step 5: Run the provided test cases (included in the template) to verify your implementations work correctly",
               "Step 6: Ensure your code compiles without errors and all test cases pass",
-              "Step 7: Submit your completed file. Your submission will be graded on: correctness (40%), complexity analysis accuracy (30%), code quality (20%), and test results (10%)"
+              "Step 7: Submit your completed file. Grading: Correctness (40%), Complexity analysis accuracy (30%), Code quality (20%), Test results (10%)"
             ],
             "template_file": {
               "filename": "BigO_Analysis.java",
@@ -42,27 +38,37 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Big-O Notation Assessment",
-            "description": "Complete a comprehensive written assessment demonstrating mastery of asymptotic analysis. You will: (1) Analyze 10 code snippets to determine their time and space complexity, (2) Prove 3 Big-O bounds using formal mathematical definitions, (3) Compare algorithms within the same complexity class, (4) Analyze best, average, and worst case scenarios. Submit a PDF document with all solutions showing step-by-step work and clear mathematical reasoning.",
+            "description": "Complete an online assessment with multiple question types covering asymptotic analysis. The assessment includes: (1) Multiple Choice Questions (MCQ) analyzing code snippets for time/space complexity, (2) Short Answer Questions (SAQ) explaining Big-O concepts and proving bounds, (3) Fill-in-the-Blank questions completing data structure implementations with complexity annotations.",
             "guidelines": [
-              "Part 1 - Code Analysis (40 points): Analyze 10 provided code snippets. For each snippet: (a) Identify all loops and nested structures, (b) Count operations in terms of input size n, (c) Determine time complexity in Big-O notation, (d) Determine space complexity, (e) Provide 2-3 sentence justification for your answer",
-              "Part 2 - Formal Proofs (30 points): Prove 3 Big-O bounds using the formal definition: f(n) = O(g(n)) if there exist positive constants c and n₀ such that f(n) ≤ c·g(n) for all n ≥ n₀. Show: (a) Your choice of c and n₀, (b) Algebraic manipulation proving the inequality, (c) Clear conclusion",
-              "Part 3 - Algorithm Comparison (15 points): Compare 3 sorting algorithms (e.g., Merge Sort, Quick Sort, Heap Sort) all in O(n log n). Explain: (a) When each performs best, (b) Space requirements, (c) Stability, (d) Practical considerations",
-              "Part 4 - Case Analysis (15 points): For 2 algorithms with varying performance, analyze: (a) Best case scenario with example input, (b) Average case with expected input, (c) Worst case scenario with adversarial input, (d) Time complexity for each case",
-              "Format Requirements: Submit as a single PDF document. Use clear headings for each part. Show all work - partial credit will be given for correct reasoning even if final answer is wrong. Include your name and date on the first page",
-              "Grading: Correctness (60%), Mathematical rigor (25%), Clarity of explanation (15%)"
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze code snippets and select the correct time/space complexity. Questions cover: loop analysis, nested structures, recursive functions, and algorithm comparison",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Provide written explanations for: (a) Defining Big-O notation formally, (b) Proving 2 Big-O bounds with mathematical reasoning, (c) Comparing algorithms within the same complexity class, (d) Explaining best/average/worst case scenarios",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete partial code implementations by filling in: (a) Missing complexity annotations (Big-O notation), (b) Algorithm implementations with TODO comments, (c) Complexity analysis comments for given functions",
+              "Time Limit: 90 minutes. Submit all answers through the online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Big-O Notation Teaching Presentation",
-            "description": "Create and deliver a 10-15 minute educational presentation teaching Big-O notation to fellow students. Your presentation must: (1) Explain what Big-O notation is and why it matters in software development, (2) Cover 5 common complexity classes with real code examples, (3) Demonstrate how to analyze code step-by-step, (4) Use visual graphs showing how different complexities scale, (5) Connect theory to real-world impact. Submit your slides (PDF or PowerPoint) and either a video recording or deliver live to the class.",
+            "description": "Create and deliver a 10-15 minute educational presentation teaching Big-O notation to fellow students. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
               "Slide Structure (Required): (1) Title slide with your name, (2) Introduction: What is Big-O? (2-3 slides), (3) Why it matters: Real-world examples (2 slides), (4) Complexity classes: O(1), O(log n), O(n), O(n log n), O(n²) with code examples (5-6 slides), (5) How to analyze: Step-by-step walkthrough of 2 code examples (3-4 slides), (6) Visual comparison: Graph showing growth rates (1-2 slides), (7) Conclusion: Key takeaways (1 slide)",
-              "Content Requirements: For each complexity class, include: (a) Definition in simple terms, (b) At least one code example, (c) Real-world use case (e.g., O(log n) for binary search in phone contacts), (d) Visual representation (graph or chart)",
-              "Code Examples: Include 2-3 complete code examples that you analyze step-by-step. Show: (a) The code, (b) Line-by-line complexity analysis, (c) Final Big-O result, (d) Explanation of why",
-              "Visual Aids: Create or use a graph showing how O(1), O(log n), O(n), O(n log n), and O(n²) grow as input size increases. Use different colors for each line. Include axis labels and a legend",
-              "Delivery: Speak clearly and at an appropriate pace. Use transitions between slides. Engage the audience with questions or examples. If recording, ensure good audio quality and visible slides",
-              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time with your instructor",
-              "Grading Criteria: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+              "Content Requirements: For each complexity class, include: (a) Definition in simple terms, (b) At least one code example, (c) Real-world use case, (d) Visual representation (graph or chart)",
+              "Code Examples: Include 2-3 complete code examples that you analyze step-by-step",
+              "Visual Aids: Create or use a graph showing how different complexities scale with input size",
+              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 1 Notes Submission",
+            "description": "Submit your handwritten or typed notes from MIT 6.006 Lecture 1: Algorithms and Computation. Your notes will be assessed for completeness, accuracy, and identification of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes while watching the lecture video",
+              "Include: (a) Key definitions and concepts, (b) Important examples and algorithms discussed, (c) Complexity analysis covered, (d) Any questions or insights you had",
+              "Format: Submit as PDF (scanned handwritten notes or typed document)",
+              "Length: 2-4 pages expected for a complete lecture",
+              "Grading Rubric: Completeness (40% - all major topics covered), Accuracy (30% - correct understanding of concepts), Organization (20% - clear structure and headings), Critical thinking (10% - questions, insights, connections)",
+              "Submission: Upload your notes PDF through the course platform"
             ]
           }
         }
@@ -72,10 +78,7 @@ export const CURRICULUM_DATA = {
         "topic": "Linear Structures: Dynamic Arrays and Linked Lists",
         "description": "Implement dynamic arrays with resize logic, and singly/doubly linked lists. Compare tradeoffs.",
         "resources": [
-          { "title": "Dynamic Arrays Explained", "url": "https://www.youtube.com/watch?v=8hly31xKli0", "type": "Video" },
-          { "title": "Linked Lists Tutorial", "url": "https://www.youtube.com/watch?v=WwfhLC16bis", "type": "Video" },
-          { "title": "Arrays vs Linked Lists", "url": "https://www.youtube.com/watch?v=lC-yYCOnN8Q", "type": "Video" },
-          { "title": "Linked Lists Article", "url": "https://www.geeksforgeeks.org/data-structures/linked-list/", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 2: Data Structures and Dynamic Arrays", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-2-data-structures-and-dynamic-arrays/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
@@ -98,27 +101,34 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Linear Data Structures Assessment",
-            "description": "Complete a written test covering: (1) Time complexity analysis for dynamic arrays vs linked lists (insertion, deletion, access), (2) Space complexity comparison, (3) When to use arrays vs linked lists, (4) Implementation details (resizing strategy, memory allocation), (5) Tradeoffs between singly vs doubly linked lists. Submit detailed solutions with complexity analysis.",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering dynamic arrays and linked lists. Topics include time/space complexity analysis, implementation details, and tradeoffs.",
             "guidelines": [
-              "Analyze time complexity for all operations (access, insert, delete) for both structures",
-              "Compare space complexity: arrays vs linked lists (including overhead)",
-              "Explain when to use arrays vs linked lists with specific use cases",
-              "Describe dynamic array resizing strategies (doubling, geometric growth)",
-              "Compare singly vs doubly linked lists: advantages and disadvantages",
-              "All solutions must include Big-O notation with justification"
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze code snippets for time/space complexity, compare array vs linked list operations, identify correct implementation strategies",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain when to use arrays vs linked lists, describe resizing strategies, compare singly vs doubly linked lists, analyze tradeoffs",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete partial implementations of DynamicArray and LinkedList methods, fill in complexity annotations, complete resize() logic",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Arrays vs Linked Lists Presentation",
-            "description": "Create a 10-15 minute presentation comparing dynamic arrays and linked lists. Include: (1) How each data structure works internally, (2) Time complexity comparison for common operations, (3) Memory layout and space efficiency, (4) When to choose arrays vs linked lists, (5) Real-world examples of each in use. Use visual diagrams and code examples.",
+            "description": "Create a 10-15 minute presentation comparing dynamic arrays and linked lists. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "10-15 minute presentation with visual diagrams",
-              "Explain internal structure of both arrays and linked lists with memory diagrams",
-              "Create comparison table showing time complexity for all operations",
-              "Discuss memory layout: contiguous (arrays) vs scattered (linked lists)",
-              "Provide 3-5 real-world scenarios and recommend which structure to use",
-              "Use code examples to demonstrate key concepts",
-              "Clear explanations and engaging delivery"
+              "Slide Structure: (1) Title slide, (2) Introduction to both structures (2 slides), (3) Internal structure and memory layout with diagrams (3-4 slides), (4) Time complexity comparison table (1-2 slides), (5) When to use each with real-world examples (2-3 slides), (6) Conclusion (1 slide)",
+              "Content Requirements: Explain internal structure with memory diagrams, create comparison table for all operations, discuss memory layout differences, provide 3-5 real-world scenarios",
+              "Visual Aids: Memory diagrams showing contiguous vs scattered storage, comparison tables, code examples",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 2 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lecture 2: Data Structures and Dynamic Arrays. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: key definitions, dynamic array implementation details, amortized analysis, linked list concepts",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -128,10 +138,7 @@ export const CURRICULUM_DATA = {
         "topic": "Stacks, Queues, and Deques",
         "description": "Implement stacks, queues, and double-ended queues. Learn common use cases and applications.",
         "resources": [
-          { "title": "Stacks and Queues Explained", "url": "https://www.youtube.com/watch?v=wjI1WNcIntg", "type": "Video" },
-          { "title": "Stack Data Structure", "url": "https://www.youtube.com/watch?v=I37kGX-nZEI", "type": "Video" },
-          { "title": "Queue Data Structure", "url": "https://www.youtube.com/watch?v=XuCbpw6Bj1U", "type": "Video" },
-          { "title": "Stack and Queue Tutorial", "url": "https://www.programiz.com/dsa/stack", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 3: Sets and Sorting", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-3-sets-and-sorting/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
@@ -186,10 +193,7 @@ export const CURRICULUM_DATA = {
         "topic": "Hash-Based Structures: HashMaps and HashSets",
         "description": "Understand hashing, collision resolution (chaining vs probing), and load factors.",
         "resources": [
-          { "title": "Hash Tables Explained", "url": "https://www.youtube.com/watch?v=shs0KM3wKv8", "type": "Video" },
-          { "title": "Hash Tables Tutorial", "url": "https://www.youtube.com/watch?v=2Ti5yvumFTU", "type": "Video" },
-          { "title": "Hash Maps and Hash Sets", "url": "https://www.youtube.com/watch?v=U79Bo8c0rLk", "type": "Video" },
-          { "title": "Hash Table Implementation", "url": "https://www.geeksforgeeks.org/implementing-our-own-hash-table-with-separate-chaining-in-java/", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 4: Hashing", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-4-hashing/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
@@ -246,10 +250,7 @@ export const CURRICULUM_DATA = {
         "topic": "Trees: Binary Search Trees and Traversals",
         "description": "Implement BSTs with insert, search, delete. Master in-order, pre-order, and post-order traversals.",
         "resources": [
-          { "title": "Binary Search Trees", "url": "https://www.youtube.com/watch?v=H5JubkIy_p8", "type": "Video" },
-          { "title": "BST Implementation", "url": "https://www.youtube.com/watch?v=zIX3zQP0khM", "type": "Video" },
-          { "title": "Tree Traversals Explained", "url": "https://www.youtube.com/watch?v=1WxLM2hwL-U", "type": "Video" },
-          { "title": "Tree Traversals Article", "url": "https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 6: Binary Trees, Part 1", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-6-binary-trees-part-1/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
@@ -300,10 +301,7 @@ export const CURRICULUM_DATA = {
         "topic": "Self-Balancing Trees: AVL or Red-Black",
         "description": "Learn why self-balancing is needed. Implement AVL trees or study Red-Black tree rotations.",
         "resources": [
-          { "title": "AVL Trees Explained", "url": "https://www.youtube.com/watch?v=jDM6_TnYIqE", "type": "Video" },
-          { "title": "AVL Tree Rotations", "url": "https://www.youtube.com/watch?v=vRwi_UcZjeE", "type": "Video" },
-          { "title": "Red-Black Trees Tutorial", "url": "https://www.youtube.com/watch?v=qvZGUFHWChY", "type": "Video" },
-          { "title": "Red-Black Trees Article", "url": "https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 7: Binary Trees, Part 2: AVL", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-7-binary-trees-part-2-avl/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
@@ -354,8 +352,7 @@ export const CURRICULUM_DATA = {
         "topic": "Binary Heaps and Priority Queues",
         "description": "Implement min/max heaps and use them for priority queues. Heapify operations.",
         "resources": [
-          { "title": "Heaps and Priority Queues", "url": "https://www.youtube.com/watch?v=HqPJF2L5h9U", "type": "Video" },
-          { "title": "Binary Heap Implementation", "url": "https://www.programiz.com/dsa/heap-data-structure", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 8: Binary Heaps", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-8-binary-heaps/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
@@ -408,8 +405,7 @@ export const CURRICULUM_DATA = {
         "topic": "Intro to Graphs: Representation and Basic Traversals",
         "description": "Learn adjacency matrix vs adjacency list. Implement BFS and DFS.",
         "resources": [
-          { "title": "Graph Data Structure", "url": "https://www.youtube.com/watch?v=tWVWeAqZ0WU", "type": "Video" },
-          { "title": "Graph Representation", "url": "https://www.geeksforgeeks.org/graph-and-its-representations/", "type": "Article" }
+          { "title": "MIT 6.006 Lecture 9: Breadth-First Search", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-9-breadth-first-search/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
