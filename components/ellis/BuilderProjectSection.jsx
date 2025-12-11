@@ -11,11 +11,9 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
     const isCS102DS = course?.title?.includes('CS 102') || course?.title?.includes('Data Structures');
 
     const rubric = [
-        { criterion: "Functionality", maxPoints: 30, description: "Code works correctly and meets all requirements" },
-        { criterion: "Code Quality", maxPoints: 20, description: "Clean, readable, well-documented code" },
-        { criterion: "Testing", maxPoints: 20, description: "Comprehensive test cases and edge cases covered" },
-        { criterion: "Documentation", maxPoints: 15, description: "README, comments, and usage instructions" },
-        { criterion: "Creativity/Extra Features", maxPoints: 15, description: "Additional features beyond requirements" }
+        { criterion: "Functionality", maxPoints: 40, description: "Code works correctly and meets all requirements" },
+        { criterion: "Code Quality", maxPoints: 30, description: "Clean, readable, well-structured code" },
+        { criterion: "Testing", maxPoints: 30, description: "Comprehensive test cases and edge cases covered" }
     ];
 
     const handleSubmit = async (e) => {
@@ -126,15 +124,63 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
         );
     }
 
-    if (isCS102DS) {
-        const templateFileName = `${week.topic?.replace(/[^a-zA-Z0-9]/g, '_')}_template.java`;
+    // Download function that works for all courses
+    const downloadTemplateFile = (language = null) => {
+        const builder = week.deliverables?.builder;
+        if (!builder) return;
+        
+        let fileContent = null;
+        let fileName = null;
+        
+        // Check for template_files (plural) with java/cpp options
+        if (builder.template_files) {
+            if (language && builder.template_files[language]) {
+                const fileInfo = builder.template_files[language];
+                fileContent = fileInfo.content;
+                fileName = fileInfo.filename;
+            } else if (language === null && builder.template_files.java) {
+                // Default to Java if no language specified
+                const fileInfo = builder.template_files.java;
+                fileContent = fileInfo.content;
+                fileName = fileInfo.filename;
+            }
+        }
+        // Check for template_file (singular) - older format
+        else if (builder.template_file) {
+            fileContent = builder.template_file.content;
+            fileName = builder.template_file.filename;
+        }
+        
+        if (!fileContent || !fileName) {
+            alert('Template file not available for download.');
+            return;
+        }
+        
+        try {
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error downloading file:', error);
+            alert(`Error downloading file.`);
+        }
+    };
+    
+    // Check if we have template files to download
+    const hasTemplateFiles = week.deliverables?.builder?.template_files || week.deliverables?.builder?.template_file;
+    const hasMultipleLanguages = week.deliverables?.builder?.template_files?.java && week.deliverables?.builder?.template_files?.cpp;
 
-        return (
-            <div className="space-y-6">
-                <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-2">{week.deliverables?.builder?.title || 'Complete the Template'}</h3>
-                    <p className="text-sm text-gray-600 mb-4">{week.deliverables?.builder?.description || 'Download the template file and fill in the missing code sections.'}</p>
-                </div>
+    return (
+        <div className="space-y-6">
+            <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-2">{week.deliverables?.builder?.title || 'Builder Project'}</h3>
+                <p className="text-sm text-gray-600 mb-4">{week.deliverables?.builder?.description || 'Complete this project to demonstrate your building skills.'}</p>
 
                 {week.deliverables?.builder?.guidelines && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
@@ -145,56 +191,42 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     </div>
                 )}
 
-                {week.deliverables?.builder?.template_file && (
+                {hasTemplateFiles && (
                     <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
-                        <button
-                            onClick={() => {
-                                const templateFile = week.deliverables.builder.template_file;
-                                const templateContent = templateFile.content || '';
-                                const fileName = templateFile.filename || templateFileName;
-                                const blob = new Blob([templateContent], { type: 'text/plain' });
-                                const url = URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.href = url;
-                                a.download = fileName;
-                                document.body.appendChild(a);
-                                a.click();
-                                document.body.removeChild(a);
-                                URL.revokeObjectURL(url);
-                            }}
-                            className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 flex items-center justify-center gap-2"
-                        >
-                            <Icons.Link className="w-5 h-5" />
-                            Download Template File
-                        </button>
-                    </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Completed Template File</label>
-                        <input type="file" ref={fileInputRef} accept=".java,.py,.cpp,.c" className="w-full p-2 border border-gray-300 rounded-lg" required />
-                    </div>
-                    <button type="submit" disabled={isSubmitting} className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50">
-                        {isSubmitting ? 'Submitting...' : 'Submit Completed Template'}
-                    </button>
-                </form>
-            </div>
-        );
-    }
-
-    return (
-        <div className="space-y-6">
-            <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-2">{week.deliverables?.builder?.title || 'Builder Project'}</h3>
-                <p className="text-sm text-gray-600 mb-4">{week.deliverables?.builder?.description || 'Complete this project to demonstrate your building skills.'}</p>
-
-                {week.deliverables?.builder?.guidelines && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                        <h4 className="font-semibold text-blue-900 mb-2">Guidelines:</h4>
-                        <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-                            {week.deliverables.builder.guidelines.map((g, i) => (<li key={i}>{g}</li>))}
-                        </ul>
+                        <h4 className="font-semibold text-gray-700 mb-3">Download Starter File:</h4>
+                        {hasMultipleLanguages ? (
+                            <>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {week.deliverables.builder.template_files.java && (
+                                        <button
+                                            onClick={() => downloadTemplateFile('java')}
+                                            className="px-4 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 flex items-center justify-center gap-2"
+                                        >
+                                            <Icons.Link className="w-5 h-5" />
+                                            Download Java
+                                        </button>
+                                    )}
+                                    {week.deliverables.builder.template_files.cpp && (
+                                        <button
+                                            onClick={() => downloadTemplateFile('cpp')}
+                                            className="px-4 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 flex items-center justify-center gap-2"
+                                        >
+                                            <Icons.Link className="w-5 h-5" />
+                                            Download C++
+                                        </button>
+                                    )}
+                                </div>
+                                <p className="text-xs text-gray-500 mt-2">Choose your preferred language. Both files contain the same starter code structure.</p>
+                            </>
+                        ) : (
+                            <button
+                                onClick={() => downloadTemplateFile()}
+                                className="px-4 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 flex items-center justify-center gap-2"
+                            >
+                                <Icons.Link className="w-5 h-5" />
+                                Download Template File
+                            </button>
+                        )}
                     </div>
                 )}
             </div>

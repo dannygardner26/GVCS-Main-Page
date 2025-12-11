@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Icons } from '../common/Icons';
+import LectureNotesSection from '../ellis/LectureNotesSection';
 
 const InteractiveWeekView = ({ course, week, weekIndex, onBack, onUpdateCourse }) => {
     const [selectedActivityType, setSelectedActivityType] = useState(week.selectedActivity);
@@ -65,12 +66,23 @@ const InteractiveWeekView = ({ course, week, weekIndex, onBack, onUpdateCourse }
             <h2 className="text-2xl font-bold text-gvcs-navy mb-2">Week {week.week}: {week.topic}</h2>
             <p className="text-gray-600 mb-6">{week.description}</p>
 
+            {/* Lecture Notes Checker */}
+            {week.deliverables?.lecture_notes && (
+                <LectureNotesSection
+                    week={week}
+                    weekIndex={weekIndex}
+                    course={course}
+                />
+            )}
+
             {/* Activity Selection */}
             {!selectedActivityType ? (
                 <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
                     <h3 className="font-bold text-gray-800 mb-4">Choose Your Ellis Activity</h3>
-                    <div className="grid md:grid-cols-3 gap-4">
-                        {week.deliverables && Object.entries(week.deliverables).map(([type, data]) => (
+                    <div className="grid md:grid-cols-4 gap-4">
+                        {week.deliverables && Object.entries(week.deliverables)
+                            .filter(([type]) => type !== 'lecture_notes') // Exclude lecture_notes from main selection
+                            .map(([type, data]) => (
                             <button
                                 key={type}
                                 onClick={() => handleActivitySelect(type)}

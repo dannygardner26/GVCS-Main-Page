@@ -165,7 +165,7 @@ CREATE TRIGGER update_weekly_activities_updated_at
 CREATE TABLE IF NOT EXISTS user_profiles (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
-    display_name TEXT,
+    display_name TEXT NOT NULL,
     bio TEXT,
     grade_level TEXT,
     graduation_year INTEGER,
@@ -204,15 +204,31 @@ CREATE TRIGGER update_user_profiles_updated_at
     EXECUTE FUNCTION update_updated_at_column();
 
 -- Add user_problem_statuses table for tracking daily challenge problem statuses
-CREATE TABLE IF NOT EXISTS user_problem_statuses (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    problem_url TEXT NOT NULL,
-    status TEXT NOT NULL CHECK (status IN ('attempted', 'solved', 'dnf')),
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE(user_id, problem_url)
-);
+-- Handle migration if table exists with old structure
+DO $$
+BEGIN
+    -- If table exists with problem_id column, rename it to problem_url
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'user_problem_statuses' 
+        AND column_name = 'problem_id'
+    ) THEN
+        ALTER TABLE user_problem_statuses RENAME COLUMN problem_id TO problem_url;
+    END IF;
+    
+    -- If table doesn't exist, create it
+    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'user_problem_statuses') THEN
+        CREATE TABLE user_problem_statuses (
+            id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+            user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+            problem_url TEXT NOT NULL,
+            status TEXT NOT NULL CHECK (status IN ('attempted', 'solved', 'dnf')),
+            created_at TIMESTAMPTZ DEFAULT NOW(),
+            updated_at TIMESTAMPTZ DEFAULT NOW(),
+            UNIQUE(user_id, problem_url)
+        );
+    END IF;
+END $$;
 
 CREATE INDEX IF NOT EXISTS idx_user_problem_statuses_user_id ON user_problem_statuses(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_problem_statuses_problem_url ON user_problem_statuses(problem_url);
@@ -260,6 +276,16 @@ CREATE POLICY "Admins can view all courses"
         (auth.jwt() ->> 'email')::text = 'admin@gvcs.com'
     );
 
+-- Ellis (Teacher) can view all courses (all students' independent study work)
+DROP POLICY IF EXISTS "Ellis can view all courses" ON user_courses;
+CREATE POLICY "Ellis can view all courses"
+    ON user_courses FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'ellis@gvsd.org' OR
+        (auth.jwt() -> 'user_metadata' ->> 'isTeacher')::boolean = true OR
+        (auth.jwt() -> 'user_metadata' ->> 'role')::text = 'teacher'
+    );
+
 -- Admin can view all hackathons
 DROP POLICY IF EXISTS "Admins can view all hackathons" ON hackathon_programs;
 CREATE POLICY "Admins can view all hackathons"
@@ -273,7 +299,9 @@ DROP POLICY IF EXISTS "Admins can view all profiles" ON user_profiles;
 CREATE POLICY "Admins can view all profiles"
     ON user_profiles FOR SELECT
     USING (
-        (auth.jwt() ->> 'email')::text = 'admin@gvcs.com'
+        (auth.jwt() ->> 'email')::text = 'admin@gvcs.com' OR
+        (auth.jwt() ->> 'email')::text = 'ellis@gvsd.org' OR
+        (auth.jwt() -> 'user_metadata' ->> 'isTeacher')::boolean = true
     );
 
 -- Admin can view all problem statuses
@@ -376,6 +404,197 @@ CREATE POLICY "Users can update their own registrations"
 CREATE POLICY "Users can delete their own registrations"
     ON hackathon_registrations FOR DELETE
     USING (auth.uid() = user_id);
+
+-- ===========================================
+-- User Tags System (Many-to-Many)
+-- ===========================================
+CREATE TABLE IF NOT EXISTS user_tags (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    tag TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user_id, tag)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_tags_user_id ON user_tags(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_tags_tag ON user_tags(tag);
+
+ALTER TABLE user_tags ENABLE ROW LEVEL SECURITY;
+
+-- Users can view their own tags
+CREATE POLICY "Users can view their own tags"
+    ON user_tags FOR SELECT
+    USING (auth.uid() = user_id);
+
+-- Admins and Ellis can view all tags
+CREATE POLICY "Admins can view all tags"
+    ON user_tags FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'admin@gvcs.com' OR
+        (auth.jwt() ->> 'email')::text = 'ellis@gvsd.org' OR
+        (auth.jwt() -> 'user_metadata' ->> 'isTeacher')::boolean = true
+    );
+
+-- Admins and Ellis can manage all tags
+CREATE POLICY "Admins can manage all tags"
+    ON user_tags FOR ALL
+    USING (
+        (auth.jwt() ->> 'email')::text = 'admin@gvcs.com' OR
+        (auth.jwt() ->> 'email')::text = 'ellis@gvsd.org' OR
+        (auth.jwt() -> 'user_metadata' ->> 'isTeacher')::boolean = true
+    );
+
+-- ===========================================
+-- User Sessions (Time Tracking)
+-- ===========================================
+CREATE TABLE IF NOT EXISTS user_sessions (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    session_start TIMESTAMPTZ NOT NULL,
+    session_end TIMESTAMPTZ,
+    duration_minutes INTEGER,
+    page_path TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_sessions_user_id ON user_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_sessions_session_start ON user_sessions(session_start);
+
+ALTER TABLE user_sessions ENABLE ROW LEVEL SECURITY;
+
+-- Users can view their own sessions
+CREATE POLICY "Users can view their own sessions"
+    ON user_sessions FOR SELECT
+    USING (auth.uid() = user_id);
+
+-- Users can insert their own sessions
+CREATE POLICY "Users can insert their own sessions"
+    ON user_sessions FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+
+-- Users can update their own sessions
+CREATE POLICY "Users can update their own sessions"
+    ON user_sessions FOR UPDATE
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- Admins and Ellis can view all sessions
+CREATE POLICY "Admins can view all sessions"
+    ON user_sessions FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'admin@gvcs.com' OR
+        (auth.jwt() ->> 'email')::text = 'ellis@gvsd.org' OR
+        (auth.jwt() -> 'user_metadata' ->> 'isTeacher')::boolean = true
+    );
+
+-- ===========================================
+-- Test Attempts (Multiple Attempts Tracking)
+-- ===========================================
+CREATE TABLE IF NOT EXISTS test_attempts (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    course_id TEXT NOT NULL,
+    week INTEGER NOT NULL,
+    answers JSONB NOT NULL,
+    score INTEGER,
+    total_points INTEGER,
+    percentage INTEGER,
+    submitted_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_test_attempts_user_id ON test_attempts(user_id);
+CREATE INDEX IF NOT EXISTS idx_test_attempts_course_week ON test_attempts(course_id, week);
+
+ALTER TABLE test_attempts ENABLE ROW LEVEL SECURITY;
+
+-- Users can view their own test attempts
+CREATE POLICY "Users can view their own test attempts"
+    ON test_attempts FOR SELECT
+    USING (auth.uid() = user_id);
+
+-- Users can insert their own test attempts
+CREATE POLICY "Users can insert their own test attempts"
+    ON test_attempts FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+
+-- Ellis can view all test attempts
+CREATE POLICY "Ellis can view all test attempts"
+    ON test_attempts FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'ellis@gvsd.org' OR
+        (auth.jwt() -> 'user_metadata' ->> 'isTeacher')::boolean = true
+    );
+
+-- ===========================================
+-- Cheating Flags
+-- ===========================================
+CREATE TABLE IF NOT EXISTS cheating_flags (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    course_id TEXT NOT NULL,
+    week INTEGER NOT NULL,
+    activity_type TEXT NOT NULL CHECK (activity_type IN ('academic', 'builder', 'communicator', 'lecture_notes')),
+    flag_type TEXT NOT NULL CHECK (flag_type IN ('copy_paste', 'tab_switch', 'suspicious_timing', 'pattern_detection')),
+    details JSONB,
+    severity TEXT DEFAULT 'low' CHECK (severity IN ('low', 'medium', 'high')),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_cheating_flags_user_id ON cheating_flags(user_id);
+CREATE INDEX IF NOT EXISTS idx_cheating_flags_course_week ON cheating_flags(course_id, week);
+
+ALTER TABLE cheating_flags ENABLE ROW LEVEL SECURITY;
+
+-- Only Ellis can view cheating flags
+CREATE POLICY "Ellis can view all cheating flags"
+    ON cheating_flags FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'ellis@gvsd.org' OR
+        (auth.jwt() -> 'user_metadata' ->> 'isTeacher')::boolean = true
+    );
+
+-- System can insert flags (via service role or function)
+CREATE POLICY "System can insert cheating flags"
+    ON cheating_flags FOR INSERT
+    WITH CHECK (true);
+
+-- ===========================================
+-- Presentation Analyses (Cached AI Results)
+-- ===========================================
+CREATE TABLE IF NOT EXISTS presentation_analyses (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    course_id TEXT NOT NULL,
+    week INTEGER NOT NULL,
+    presentation_link TEXT NOT NULL,
+    analysis JSONB NOT NULL,
+    grade_breakdown JSONB,
+    analyzed_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user_id, course_id, week)
+);
+
+CREATE INDEX IF NOT EXISTS idx_presentation_analyses_user_id ON presentation_analyses(user_id);
+CREATE INDEX IF NOT EXISTS idx_presentation_analyses_course_week ON presentation_analyses(course_id, week);
+
+ALTER TABLE presentation_analyses ENABLE ROW LEVEL SECURITY;
+
+-- Users can view their own analyses
+CREATE POLICY "Users can view their own presentation analyses"
+    ON presentation_analyses FOR SELECT
+    USING (auth.uid() = user_id);
+
+-- Ellis can view all analyses
+CREATE POLICY "Ellis can view all presentation analyses"
+    ON presentation_analyses FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'ellis@gvsd.org' OR
+        (auth.jwt() -> 'user_metadata' ->> 'isTeacher')::boolean = true
+    );
+
+-- System can insert/update analyses
+CREATE POLICY "System can manage presentation analyses"
+    ON presentation_analyses FOR ALL
+    WITH CHECK (true);
 
 -- ===========================================
 -- Default Accounts

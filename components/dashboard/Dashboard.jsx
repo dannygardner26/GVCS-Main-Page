@@ -28,6 +28,9 @@ const Dashboard = ({ user }) => {
     const [selectedHackathon, setSelectedHackathon] = useState(null);
     const [isEditingProfile, setIsEditingProfile] = useState(false);
     const [expandedWeek, setExpandedWeek] = useState(null);
+    
+    // Check if user is Ellis (teacher)
+    const isEllis = user?.email === 'ellis@gvsd.org' || user?.isTeacher;
 
     useEffect(() => {
         if (user) {
@@ -45,20 +48,51 @@ const Dashboard = ({ user }) => {
 
         setLoading(true);
         try {
-            // Fetch courses
-            const { data: coursesData, error: coursesError } = await supabase
-                .from('user_courses')
-                .select('*')
-                .eq('user_id', user.id)
-                .order('created_at', { ascending: false });
+            // Fetch courses - if Ellis (teacher), fetch all courses; otherwise just user's courses
+            const isEllis = user.email === 'ellis@gvsd.org' || user.isTeacher;
+            let coursesQuery;
+            
+            if (isEllis) {
+                // For Ellis, fetch all courses
+                coursesQuery = supabase
+                    .from('user_courses')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+            } else {
+                // For regular users, just fetch their own courses
+                coursesQuery = supabase
+                    .from('user_courses')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false });
+            }
+            
+            const { data: coursesData, error: coursesError } = await coursesQuery;
 
             if (coursesError) throw coursesError;
 
+            // If Ellis, fetch user profiles separately and match them
+            let userProfilesMap = {};
+            if (isEllis && coursesData && coursesData.length > 0) {
+                const userIds = [...new Set(coursesData.map(c => c.user_id))];
+                const { data: profilesData, error: profilesError } = await supabase
+                    .from('user_profiles')
+                    .select('user_id, display_name')
+                    .in('user_id', userIds);
+                
+                if (!profilesError && profilesData) {
+                    profilesData.forEach(profile => {
+                        userProfilesMap[profile.user_id] = profile;
+                    });
+                }
+            }
+
             // Merge database user progress with global curriculum data
             const transformedCourses = (coursesData || []).map(course => {
-                const globalCourse = CURRICULUM_DATA[course.course_id];
+                const globalCourse = CURRICULUM_DATA[course.course_id] || {};
+                const userProfile = userProfilesMap[course.user_id];
 
-                if (!globalCourse) {
+                if (!globalCourse || Object.keys(globalCourse).length === 0) {
                     return {
                         id: course.id,
                         courseTitle: course.course_title,
@@ -68,7 +102,13 @@ const Dashboard = ({ user }) => {
                             ...week,
                             selectedActivity: week.selected_activity || week.selectedActivity || null
                         })),
-                        progress: calculateCourseProgress(course.weeks || [])
+                        progress: calculateCourseProgress(course.weeks || []),
+                        mit_anchor: null,
+                        // If Ellis is viewing, include student info
+                        ...(isEllis ? {
+                            studentName: userProfile?.display_name || 'Unknown Student',
+                            studentId: course.user_id
+                        } : {})
                     };
                 }
 
@@ -100,7 +140,13 @@ const Dashboard = ({ user }) => {
                     progress: calculateCourseProgress(mergedWeeks),
                     description: globalCourse.description,
                     prereqs: globalCourse.prereqs || [],
-                    tier: globalCourse.tier
+                    tier: globalCourse.tier,
+                    mit_anchor: globalCourse.mit_anchor || null,
+                    // If Ellis is viewing, include student info
+                    ...(isEllis ? {
+                        studentName: userProfilesMap[course.user_id]?.display_name || 'Unknown Student',
+                        studentId: course.user_id
+                    } : {})
                 };
             });
 
@@ -390,7 +436,17 @@ const Dashboard = ({ user }) => {
                         Delete Course
                     </button>
                 </div>
-                <h2 className="text-2xl font-bold text-gvcs-navy mb-6">{selectedCourse.courseTitle}</h2>
+                <div className="mb-6">
+                    <h2 className="text-2xl font-bold text-gvcs-navy mb-2">{selectedCourse.courseTitle}</h2>
+                    {selectedCourse.mit_anchor && (
+                        <p className="text-sm text-blue-600 font-medium">
+                            Based on: MIT {selectedCourse.mit_anchor}
+                        </p>
+                    )}
+                    {selectedCourse.description && (
+                        <p className="text-gray-600 mt-2">{selectedCourse.description}</p>
+                    )}
+                </div>
 
                 <div className="space-y-4">
                     {selectedCourse.weeks.map((week, idx) => {
@@ -600,6 +656,16 @@ const Dashboard = ({ user }) => {
                                     <div className="flex justify-between items-center">
                                         <div className="flex-1">
                                             <h3 className="text-xl font-bold text-gvcs-navy mb-2">{course.courseTitle}</h3>
+                                            {course.mit_anchor && (
+                                                <p className="text-xs text-blue-600 mb-1 font-medium">
+                                                    Based on: MIT {course.mit_anchor}
+                                                </p>
+                                            )}
+                                            {isEllis && course.studentName && (
+                                                <p className="text-xs text-gray-500 mb-1">
+                                                    Student: {course.studentName}
+                                                </p>
+                                            )}
                                             <p className="text-sm text-gray-500 mb-3">
                                                 Added {new Date(course.addedDate).toLocaleDateString()} - {course.weeks.length} weeks
                                             </p>

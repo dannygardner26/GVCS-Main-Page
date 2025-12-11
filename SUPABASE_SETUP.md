@@ -12,6 +12,7 @@ Create a `.env` file in the root directory:
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key-here
+VITE_GEMINI_API_KEY=your-gemini-api-key-here
 ```
 
 ## 3. Run Database Schema

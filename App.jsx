@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 // Context and utilities
 import { NotificationProvider, useNotification } from './components/context/NotificationContext';
 import { supabase } from './utils/supabase';
+import { startSession, updateSessionPage } from './utils/sessionTracker';
 
 // Layout components
 import Header from './components/common/Header';
@@ -26,32 +27,51 @@ import AdminMeetingView from './components/dashboard/AdminMeetingView';
 import EllisGenerator from './components/ellis/EllisGenerator';
 
 // Admin components
-import AdminPanel from './components/admin/AdminPanel';
+import AdminPanel from './components/admin/AdminPanelNew';
 
 // Article components
 import WhyZuhaadLikesRustArticle from './components/articles/WhyZuhaadLikesRustArticle';
 
 const App = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { showNotification } = useNotification();
     const [user, setUser] = useState(null);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+
+    // Track session on route changes
+    useEffect(() => {
+        if (user) {
+            updateSessionPage(location.pathname);
+        }
+    }, [location.pathname, user]);
+
+    // Helper function to determine user roles
+    const getUserRoles = (user) => {
+        const isEllis = user.email === 'ellis@gvsd.org' ||
+            user.user_metadata?.isTeacher === true ||
+            user.user_metadata?.role === 'teacher';
+        const isAdminUser = user.email === 'admin@gvcs.com' ||
+            user.user_metadata?.isAdmin === true ||
+            user.user_metadata?.role === 'admin' ||
+            isEllis; // Ellis has admin permissions
+        return { isEllis, isAdminUser };
+    };
 
     // Check for existing session on mount
     useEffect(() => {
         const checkSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session?.user) {
-                const isAdminUser = session.user.email === 'admin@gvcs.com' ||
-                    session.user.user_metadata?.isAdmin === true ||
-                    session.user.user_metadata?.role === 'admin';
+                const { isEllis, isAdminUser } = getUserRoles(session.user);
                 setUser({
                     id: session.user.id,
                     name: session.user.user_metadata?.name || session.user.email,
                     email: session.user.email,
                     isDemo: session.user.user_metadata?.isDemo || false,
-                    isAdmin: isAdminUser
+                    isAdmin: isAdminUser,
+                    isTeacher: isEllis
                 });
                 setIsAdmin(isAdminUser);
             }
@@ -61,15 +81,14 @@ const App = () => {
         // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             if (session?.user) {
-                const isAdminUser = session.user.email === 'admin@gvcs.com' ||
-                    session.user.user_metadata?.isAdmin === true ||
-                    session.user.user_metadata?.role === 'admin';
+                const { isEllis, isAdminUser } = getUserRoles(session.user);
                 setUser({
                     id: session.user.id,
                     name: session.user.user_metadata?.name || session.user.email,
                     email: session.user.email,
                     isDemo: session.user.user_metadata?.isDemo || false,
-                    isAdmin: isAdminUser
+                    isAdmin: isAdminUser,
+                    isTeacher: isEllis
                 });
                 setIsAdmin(isAdminUser);
             } else {
@@ -133,7 +152,7 @@ const App = () => {
                     <Route path="/resources" element={<ResourcesView />} />
                     <Route path="/articles/why-zuhaad-likes-rust" element={<WhyZuhaadLikesRustArticle />} />
                     <Route path="/admin" element={
-                        isAdmin ? <AdminMeetingView onExit={handleExitAdmin} /> : (
+                        isAdmin ? <AdminPanel user={user} onBack={() => navigate('/')} /> : (
                             <div className="flex items-center justify-center h-full">
                                 <div className="text-center">
                                     <h2 className="text-xl font-bold text-red-600">Access Denied</h2>

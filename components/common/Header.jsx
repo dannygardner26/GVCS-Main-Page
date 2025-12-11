@@ -6,6 +6,10 @@ const Header = ({ user, onLoginClick, onLogout }) => {
     const location = useLocation();
 
     const isActive = (path) => location.pathname === path;
+    
+    // Check if user is admin or Ellis (teacher)
+    const isAdmin = user?.email === 'admin@gvcs.com' || user?.isAdmin === true || 
+                    user?.email === 'ellis@gvsd.org' || user?.isTeacher === true;
 
     return (
         <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
@@ -42,7 +46,8 @@ const Header = ({ user, onLoginClick, onLogout }) => {
                         { name: 'Curriculum', path: '/ellis' },
                         { name: 'Hackathons', path: '/hackathons' },
                         { name: 'Careers', path: '/careers' },
-                        { name: 'Resources', path: '/resources' }
+                        { name: 'Resources', path: '/resources' },
+                        ...(isAdmin ? [{ name: 'Admin', path: '/admin' }] : [])
                     ].map(item => (
                         <button
                             key={item.path}

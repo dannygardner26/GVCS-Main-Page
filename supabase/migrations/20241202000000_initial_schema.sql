@@ -260,6 +260,16 @@ CREATE POLICY "Admins can view all courses"
         (auth.jwt() ->> 'email')::text = 'admin@gvcs.com'
     );
 
+-- Ellis (Teacher) can view all courses (all students' independent study work)
+DROP POLICY IF EXISTS "Ellis can view all courses" ON user_courses;
+CREATE POLICY "Ellis can view all courses"
+    ON user_courses FOR SELECT
+    USING (
+        (auth.jwt() ->> 'email')::text = 'ellis@gvsd.org' OR
+        (auth.jwt() -> 'user_metadata' ->> 'isTeacher')::boolean = true OR
+        (auth.jwt() -> 'user_metadata' ->> 'role')::text = 'teacher'
+    );
+
 -- Admin can view all hackathons
 DROP POLICY IF EXISTS "Admins can view all hackathons" ON hackathon_programs;
 CREATE POLICY "Admins can view all hackathons"

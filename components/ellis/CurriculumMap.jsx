@@ -57,6 +57,16 @@ const CurriculumMap = ({ courses, onSelect }) => {
                         {course.title}
                     </h3>
 
+                    {/* MIT Course Anchor */}
+                    {fullCourseData.mit_anchor && (
+                        <div className="mb-2">
+                            <div className="text-xs text-gray-500 mb-1">Based on:</div>
+                            <div className="text-xs text-blue-400 font-medium">
+                                MIT {fullCourseData.mit_anchor}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Description */}
                     {description && (
                         <p className="text-sm text-gray-400 mb-4 line-clamp-2">

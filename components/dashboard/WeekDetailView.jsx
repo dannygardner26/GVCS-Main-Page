@@ -3,6 +3,7 @@ import { Icons } from '../common/Icons';
 import AcademicTestSection from '../ellis/AcademicTestSection';
 import BuilderProjectSection from '../ellis/BuilderProjectSection';
 import CommunicatorPresentationSection from '../ellis/CommunicatorPresentationSection';
+import LectureNotesSection from '../ellis/LectureNotesSection';
 
 // Learning Resources Section
 export const LearningResourcesSection = ({ week }) => {
@@ -51,7 +52,7 @@ export const LearningResourcesSection = ({ week }) => {
 
 // Week Detail View Component
 const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
-    const [activeSection, setActiveSection] = useState('learning'); // 'learning', 'academic', 'builder', 'communicator'
+    const [activeSection, setActiveSection] = useState('learning'); // 'learning', 'academic', 'builder', 'communicator', 'lecture_notes'
 
     return (
         <div className="border-t border-gray-200">
@@ -102,6 +103,20 @@ const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
                         <span className="ml-2 w-2 h-2 bg-green-500 rounded-full inline-block"></span>
                     )}
                 </button>
+                {week.deliverables?.lecture_notes && (
+                    <button
+                        onClick={() => setActiveSection('lecture_notes')}
+                        className={`px-4 py-3 text-sm font-semibold transition-colors relative ${activeSection === 'lecture_notes'
+                                ? 'text-green-600 border-b-2 border-green-600 bg-white'
+                                : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                    >
+                        📝 Lecture Notes
+                        {week.submissions?.lecture_notes && (
+                            <span className="ml-2 w-2 h-2 bg-green-500 rounded-full inline-block"></span>
+                        )}
+                    </button>
+                )}
             </div>
 
             {/* Section Content */}
@@ -130,6 +145,15 @@ const WeekDetailView = ({ week, weekIndex, course, onUpdateCourse }) => {
 
                 {activeSection === 'communicator' && (
                     <CommunicatorPresentationSection
+                        week={week}
+                        weekIndex={weekIndex}
+                        course={course}
+                        onUpdateCourse={onUpdateCourse}
+                    />
+                )}
+
+                {activeSection === 'lecture_notes' && week.deliverables?.lecture_notes && (
+                    <LectureNotesSection
                         week={week}
                         weekIndex={weekIndex}
                         course={course}

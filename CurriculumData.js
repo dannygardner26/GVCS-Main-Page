@@ -427,44 +427,56 @@ export const CURRICULUM_DATA = {
       },
       {
         "week": 8,
-        "topic": "Intro to Graphs: Representation and Basic Traversals",
-        "description": "Learn adjacency matrix vs adjacency list. Implement BFS and DFS.",
+        "topic": "Graph Traversals: Breadth-First Search (BFS)",
+        "description": "Learn graph representations and implement breadth-first search for level-order traversal and shortest path finding in unweighted graphs.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 9: Breadth-First Search", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-9-breadth-first-search/", "type": "Video" }
+          { "title": "MIT 6.006 Lecture 9: Breadth-First Search", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-9-breadth-first-search/", "type": "Video" },
+          { "title": "Lecture 9 Notes: BFS", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec9/", "type": "PDF" },
+          { "title": "Recitation 9 Notes", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_r09/", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Graph Representation and Traversal Template",
-            "description": "Download the template file with a partially implemented Graph class using adjacency list representation. Fill in the missing BFS and DFS traversal methods.",
+            "title": "BFS Implementation Starter",
+            "description": "Download the starter file with a partially implemented Graph class. Complete the BFS traversal method and shortest path finding.",
             "guidelines": [
-              "Download the template file provided",
-              "Complete addEdge() method: add edges to the adjacency list",
-              "Complete BFS(start) method: use a queue to traverse level by level",
-              "Complete DFS(start) method: use recursion or a stack to traverse depth-first",
-              "Complete hasPath(start, end) method using BFS or DFS (template provided)",
-              "Add comments explaining the difference between BFS and DFS",
-              "Add comments explaining adjacency list representation",
-              "Test with the provided test graphs and submit your completed template file"
-            ]
+              "Download the starter file (Java or C++)",
+              "Complete the Graph class constructor: initialize adjacency list representation",
+              "Complete addEdge() method: add undirected edges to the graph",
+              "Complete BFS(start) method: implement breadth-first search using a queue, return list of visited nodes in order",
+              "Complete shortestPath(start, end) method: use BFS to find shortest path, return list of nodes in path",
+              "Complete getLevels(start) method: return a map/dictionary of each node to its level (distance from start)",
+              "Add time complexity comments for each method",
+              "Test with provided test cases and submit your completed file"
+            ],
+            "template_files": {
+              "java": {
+                "filename": "BFSGraph.java",
+                "content": "import java.util.*;\n\npublic class BFSGraph {\n    private Map<Integer, List<Integer>> adjList;\n    private int numVertices;\n    \n    // TODO: Implement constructor that initializes adjacency list\n    public BFSGraph(int numVertices) {\n        // Your implementation here\n        // Initialize adjList as HashMap\n        // Initialize numVertices\n    }\n    \n    // TODO: Implement addEdge method to add undirected edge\n    // Time Complexity: ???\n    public void addEdge(int u, int v) {\n        // Your implementation here\n        // Add v to u's adjacency list\n        // Add u to v's adjacency list (undirected graph)\n    }\n    \n    // TODO: Implement BFS traversal starting from 'start' vertex\n    // Return list of visited nodes in BFS order\n    // Time Complexity: ???\n    public List<Integer> BFS(int start) {\n        // Your implementation here\n        // Use a Queue for BFS\n        // Track visited nodes\n        // Return list of nodes in order visited\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement shortestPath method using BFS\n    // Return list of nodes representing shortest path from start to end\n    // Return empty list if no path exists\n    // Time Complexity: ???\n    public List<Integer> shortestPath(int start, int end) {\n        // Your implementation here\n        // Use BFS to find shortest path\n        // Track predecessors to reconstruct path\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement getLevels method\n    // Return a map where key is node and value is its level (distance from start)\n    // Level 0 = start node, Level 1 = nodes 1 edge away, etc.\n    // Time Complexity: ???\n    public Map<Integer, Integer> getLevels(int start) {\n        // Your implementation here\n        // Use BFS to assign levels\n        return new HashMap<>();\n    }\n    \n    // Test cases - uncomment to test\n    public static void main(String[] args) {\n        BFSGraph graph = new BFSGraph(5);\n        graph.addEdge(0, 1);\n        graph.addEdge(0, 2);\n        graph.addEdge(1, 3);\n        graph.addEdge(2, 4);\n        \n        List<Integer> bfsOrder = graph.BFS(0);\n        System.out.println(\"BFS from 0: \" + bfsOrder);\n        \n        List<Integer> path = graph.shortestPath(0, 4);\n        System.out.println(\"Shortest path from 0 to 4: \" + path);\n        \n        Map<Integer, Integer> levels = graph.getLevels(0);\n        System.out.println(\"Levels from 0: \" + levels);\n    }\n}"
+              },
+              "cpp": {
+                "filename": "BFSGraph.cpp",
+                "content": "#include <iostream>\n#include <vector>\n#include <queue>\n#include <unordered_map>\n#include <unordered_set>\nusing namespace std;\n\nclass BFSGraph {\nprivate:\n    unordered_map<int, vector<int>> adjList;\n    int numVertices;\n    \npublic:\n    // TODO: Implement constructor that initializes adjacency list\n    BFSGraph(int numVertices) {\n        // Your implementation here\n        // Initialize numVertices\n        // adjList will be automatically initialized\n    }\n    \n    // TODO: Implement addEdge method to add undirected edge\n    // Time Complexity: ???\n    void addEdge(int u, int v) {\n        // Your implementation here\n        // Add v to u's adjacency list\n        // Add u to v's adjacency list (undirected graph)\n    }\n    \n    // TODO: Implement BFS traversal starting from 'start' vertex\n    // Return vector of visited nodes in BFS order\n    // Time Complexity: ???\n    vector<int> BFS(int start) {\n        // Your implementation here\n        // Use a queue for BFS\n        // Track visited nodes\n        // Return vector of nodes in order visited\n        return vector<int>();\n    }\n    \n    // TODO: Implement shortestPath method using BFS\n    // Return vector of nodes representing shortest path from start to end\n    // Return empty vector if no path exists\n    // Time Complexity: ???\n    vector<int> shortestPath(int start, int end) {\n        // Your implementation here\n        // Use BFS to find shortest path\n        // Track predecessors to reconstruct path\n        return vector<int>();\n    }\n    \n    // TODO: Implement getLevels method\n    // Return a map where key is node and value is its level (distance from start)\n    // Level 0 = start node, Level 1 = nodes 1 edge away, etc.\n    // Time Complexity: ???\n    unordered_map<int, int> getLevels(int start) {\n        // Your implementation here\n        // Use BFS to assign levels\n        return unordered_map<int, int>();\n    }\n};\n\n// Test cases - uncomment to test\nint main() {\n    BFSGraph graph(5);\n    graph.addEdge(0, 1);\n    graph.addEdge(0, 2);\n    graph.addEdge(1, 3);\n    graph.addEdge(2, 4);\n    \n    vector<int> bfsOrder = graph.BFS(0);\n    cout << \"BFS from 0: \";\n    for (int node : bfsOrder) cout << node << \" \";\n    cout << endl;\n    \n    vector<int> path = graph.shortestPath(0, 4);\n    cout << \"Shortest path from 0 to 4: \";\n    for (int node : path) cout << node << \" \";\n    cout << endl;\n    \n    return 0;\n}"
+              }
+            }
           },
           "academic": {
-            "title": "Graph Traversals Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering graph representations, BFS, and DFS.",
+            "title": "BFS Assessment",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering graph representations and BFS algorithm.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Compare adjacency matrix vs list, analyze BFS/DFS complexity, identify correct traversal order",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain graph representations, analyze time/space complexity, describe BFS/DFS applications, compare traversal strategies",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete BFS/DFS implementations, fill in adjacency list construction, complete traversal code",
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Compare adjacency matrix vs list, analyze BFS complexity, identify correct BFS traversal order",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain graph representations, analyze BFS time/space complexity, describe BFS applications, explain why BFS finds shortest path",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete BFS implementation code, fill in adjacency list construction, complete queue operations",
               "Time Limit: 90 minutes. Submit through online assessment platform",
               "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
-            "title": "Graph Traversals Presentation",
-            "description": "Create a 10-15 minute presentation explaining graphs and traversals. Submit your slides and either a video recording or deliver live.",
+            "title": "BFS Presentation",
+            "description": "Create a 10-15 minute presentation explaining breadth-first search. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to graphs and terminology (2 slides), (3) Adjacency matrix vs list (2-3 slides), (4) BFS algorithm (3-4 slides), (5) DFS algorithm (3-4 slides), (6) BFS vs DFS comparison (2 slides), (7) Real-world applications (2 slides), (8) Conclusion (1 slide)",
-              "Content Requirements: Explain graph concepts, visualize representations, demonstrate BFS/DFS step-by-step, compare traversal strategies",
-              "Visual Aids: Graph diagrams, adjacency representations, traversal animations, queue/stack visualizations, code examples",
+              "Slide Structure: (1) Title slide, (2) Introduction to graphs and terminology (2 slides), (3) Adjacency matrix vs list (2-3 slides), (4) BFS algorithm step-by-step (3-4 slides), (5) Why BFS finds shortest path (2 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
+              "Content Requirements: Explain graph concepts, visualize adjacency representations, demonstrate BFS step-by-step with queue visualization, explain shortest path property",
+              "Visual Aids: Graph diagrams, adjacency representations, BFS traversal animations showing queue state, code examples",
               "Submission: Upload presentation file and either video recording or schedule live presentation",
               "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
             ]
@@ -473,7 +485,7 @@ export const CURRICULUM_DATA = {
             "title": "Lecture 9 Notes Submission",
             "description": "Submit your notes from MIT 6.006 Lecture 9: Breadth-First Search. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
             "guidelines": [
-              "Take comprehensive notes covering: graph representations, BFS algorithm, queue-based traversal, applications",
+              "Take comprehensive notes covering: graph representations, BFS algorithm, queue-based traversal, shortest path applications",
               "Format: Submit as PDF (2-4 pages expected)",
               "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
               "Submission: Upload notes PDF through course platform"
@@ -483,57 +495,333 @@ export const CURRICULUM_DATA = {
       },
       {
         "week": 9,
-        "topic": "Final Assessment: Data Structures Portfolio",
-        "description": "Complete one Ellis Activity demonstrating mastery of data structures.",
-        "resources": [],
+        "topic": "Graph Traversals: Depth-First Search (DFS)",
+        "description": "Master depth-first search for graph traversal, cycle detection, and topological sorting. Understand recursive and iterative implementations.",
+        "resources": [
+          { "title": "MIT 6.006 Lecture 10: Depth-First Search", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-10-depth-first-search/", "type": "Video" },
+          { "title": "Lecture 10 Notes: DFS", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec10/", "type": "PDF" },
+          { "title": "Recitation 10 Notes", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_r10/", "type": "PDF" }
+        ],
         "deliverables": {
           "builder": {
-            "title": "Maze Generator and Pathfinding Solver",
-            "description": "Build an interactive maze generator and solver application. Generate random mazes using graph algorithms, then solve them using multiple pathfinding strategies (BFS, DFS, A*). Visualize the generation and solving process in real-time. This project naturally uses graphs, stacks, queues, heaps, and hash maps to create a cohesive, engaging application.",
+            "title": "DFS Implementation Starter",
+            "description": "Download the starter file with a partially implemented Graph class. Complete the DFS traversal methods and cycle detection.",
             "guidelines": [
-              "Maze Generation: Implement at least 2 algorithms (e.g., Randomized Depth-First Search, Kruskal's algorithm, Prim's algorithm) using graph data structures",
-              "Maze Representation: Use adjacency lists or matrices to represent the maze graph, and arrays/2D arrays for the visual grid",
-              "Pathfinding Solvers: Implement at least 3 solving algorithms:",
-              "  - BFS (using Queue) for shortest path in unweighted mazes",
-              "  - DFS (using Stack) for any valid path",
-              "  - A* Algorithm (using Priority Queue/Heap) for optimal pathfinding",
-              "Visualization: Create real-time visualizations showing:",
-              "  - Maze generation process (walls being removed)",
-              "  - Pathfinding algorithms exploring the maze",
-              "  - Final solution path highlighted",
-              "Interactive Features: Allow users to adjust maze size, generation algorithm, solving algorithm, and animation speed",
-              "Data Structure Usage: Clearly demonstrate use of:",
-              "  - Graphs (maze structure, adjacency representation)",
-              "  - Stacks (DFS, backtracking in generation)",
-              "  - Queues (BFS traversal)",
-              "  - Heaps/Priority Queues (A* algorithm)",
-              "  - Hash Maps (visited nodes tracking, path reconstruction)",
-              "  - Arrays (grid representation, coordinate storage)",
-              "Performance Analysis: Compare solving times and path lengths for different algorithms on various maze sizes",
-              "Documentation: Include README explaining algorithms, data structure choices, complexity analysis, and usage instructions",
-              "Bonus: Add features like maze difficulty levels, custom start/end points, or multiple solution paths"
-            ]
+              "Download the starter file (Java or C++)",
+              "Complete DFS_recursive(start) method: implement recursive depth-first search, return list of visited nodes",
+              "Complete DFS_iterative(start) method: implement iterative DFS using a stack, return list of visited nodes",
+              "Complete hasCycle() method: detect if the graph contains a cycle using DFS",
+              "Complete topologicalSort() method: return topological ordering for directed acyclic graphs (if applicable)",
+              "Complete findConnectedComponents() method: find all connected components in an undirected graph",
+              "Add time complexity comments for each method",
+              "Test with provided test cases and submit your completed file"
+            ],
+            "template_files": {
+              "java": {
+                "filename": "DFSGraph.java",
+                "path": "templates/cs102/week9/DFSGraph.java"
+              },
+              "cpp": {
+                "filename": "DFSGraph.cpp",
+                "path": "templates/cs102/week9/DFSGraph.cpp"
+              }
+            }
           },
           "academic": {
-            "title": "Comprehensive Data Structures Final Exam",
-            "description": "Complete a comprehensive online final exam with MCQ, SAQ, and fill-in-the-blank questions covering all course topics from weeks 1-8.",
+            "title": "DFS Assessment",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering DFS algorithm and its applications.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (50 points, 20 questions): Cover all topics - Big-O, arrays, linked lists, stacks, queues, hash tables, trees, heaps, graphs",
-              "Part 2 - Short Answer Questions (35 points, 7 questions): Design data structures for problems, justify choices, analyze complexity, compare structures",
-              "Part 3 - Fill-in-the-Blank (15 points, 5 questions): Complete implementations across multiple data structures, fill in complexity annotations",
-              "Time Limit: 120 minutes. Submit through online assessment platform",
-              "Grading: MCQ auto-graded (50%), SAQ graded on correctness, reasoning, and clarity (35%), Fill-in-the-blank graded on correctness (15%)"
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze DFS complexity, identify correct DFS traversal order, compare recursive vs iterative DFS",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain DFS algorithm, analyze time/space complexity, describe DFS applications (cycle detection, topological sort), compare BFS vs DFS",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete DFS implementation code, fill in cycle detection logic, complete stack-based DFS",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
-            "title": "Data Structures Course Presentation",
-            "description": "Create a 20-30 minute comprehensive presentation summarizing the entire course. Submit your slides and either a video recording or deliver live.",
+            "title": "DFS Presentation",
+            "description": "Create a 10-15 minute presentation explaining depth-first search. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Course overview (2 slides), (3) All data structures covered with examples (8-10 slides), (4) Decision framework: when to use each (3-4 slides), (5) Complexity comparison (2 slides), (6) Real-world applications (3-4 slides), (7) Favorite data structure deep dive (3-4 slides), (8) Future learning (2 slides), (9) Conclusion (1 slide)",
-              "Content Requirements: Overview all structures, provide decision framework, show complexity comparisons, discuss applications, deep dive into favorite",
-              "Visual Aids: Structure diagrams, comparison tables, complexity graphs, application examples, code demonstrations",
+              "Slide Structure: (1) Title slide, (2) Introduction to DFS (2 slides), (3) Recursive DFS algorithm (3-4 slides), (4) Iterative DFS with stack (2-3 slides), (5) DFS applications: cycle detection, topological sort (3-4 slides), (6) BFS vs DFS comparison (2 slides), (7) Real-world applications (2 slides), (8) Conclusion (1 slide)",
+              "Content Requirements: Explain DFS concept, demonstrate recursive and iterative implementations, show applications with examples, compare with BFS",
+              "Visual Aids: Graph diagrams, DFS traversal animations showing stack/recursion, cycle detection examples, code examples",
               "Submission: Upload presentation file and either video recording or schedule live presentation",
-              "Grading Rubric: Content accuracy and comprehensiveness (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 10 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lecture 10: Depth-First Search. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: DFS algorithm, recursive vs iterative implementations, cycle detection, topological sorting",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
+            ]
+          }
+        }
+      },
+      {
+        "week": 10,
+        "topic": "Shortest Paths: Weighted Graphs and Introduction",
+        "description": "Introduction to weighted graphs and shortest path problems. Learn about edge weights, path costs, and the need for different algorithms.",
+        "resources": [
+          { "title": "MIT 6.006 Lecture 11: Weighted Shortest Paths", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-11-weighted-shortest-paths/", "type": "Video" },
+          { "title": "Lecture 11 Notes: Weighted Shortest Paths", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec11/", "type": "PDF" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Weighted Graph Starter",
+            "description": "Download the starter file with a partially implemented WeightedGraph class. Complete methods for handling weighted edges and basic path cost calculations.",
+            "guidelines": [
+              "Download the starter file (Java or C++)",
+              "Complete the WeightedGraph class constructor: initialize adjacency list with edge weights",
+              "Complete addWeightedEdge(u, v, weight) method: add directed weighted edge",
+              "Complete getWeight(u, v) method: return weight of edge from u to v, or infinity if no edge",
+              "Complete calculatePathCost(path) method: given a list of nodes representing a path, calculate total cost",
+              "Complete getAllNeighbors(node) method: return all neighbors with their edge weights",
+              "Add time complexity comments for each method",
+              "Test with provided test cases and submit your completed file"
+            ],
+            "template_files": {
+              "java": {
+                "filename": "WeightedGraph.java",
+                "path": "templates/cs102/week10/WeightedGraph.java"
+              },
+              "cpp": {
+                "filename": "WeightedGraph.cpp",
+                "path": "templates/cs102/week10/WeightedGraph.cpp"
+              }
+            }
+          },
+          "academic": {
+            "title": "Weighted Graphs Assessment",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering weighted graphs and shortest path concepts.",
+            "guidelines": [
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Understand edge weights, path costs, identify when BFS fails for weighted graphs",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain weighted graphs, analyze why BFS doesn't work, describe shortest path problem variations",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete weighted graph representation code, fill in path cost calculations",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+            ]
+          },
+          "communicator": {
+            "title": "Weighted Graphs Presentation",
+            "description": "Create a 10-15 minute presentation explaining weighted graphs and shortest path problems. Submit your slides and either a video recording or deliver live.",
+            "guidelines": [
+              "Slide Structure: (1) Title slide, (2) Introduction to weighted graphs (2 slides), (3) Path costs and edge weights (2 slides), (4) Why BFS fails for weighted graphs (2-3 slides), (5) Shortest path problem variations (2-3 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
+              "Content Requirements: Explain weighted graphs, demonstrate why BFS doesn't work, show real-world examples (GPS, network routing)",
+              "Visual Aids: Weighted graph diagrams, path cost examples, BFS failure demonstration, application examples",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 11 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lecture 11: Weighted Shortest Paths. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: weighted graphs, path costs, why BFS fails, shortest path problem variations",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
+            ]
+          }
+        }
+      },
+      {
+        "week": 11,
+        "topic": "Shortest Paths: Dijkstra's Algorithm",
+        "description": "Master Dijkstra's algorithm for finding shortest paths in graphs with non-negative edge weights. Understand priority queue usage and correctness proof.",
+        "resources": [
+          { "title": "MIT 6.006 Lecture 13: Dijkstra's Algorithm", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-13-dijkstra/", "type": "Video" },
+          { "title": "Lecture 13 Notes: Dijkstra", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec13/", "type": "PDF" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Dijkstra's Algorithm Starter",
+            "description": "Download the starter file with a partially implemented Dijkstra's algorithm. Complete the core algorithm using a priority queue.",
+            "guidelines": [
+              "Download the starter file (Java or C++)",
+              "Complete dijkstra(start) method: implement Dijkstra's algorithm, return shortest distances to all nodes",
+              "Complete shortestPath(start, end) method: use Dijkstra's to find shortest path, return list of nodes",
+              "Complete reconstructPath(predecessors, start, end) method: reconstruct path from predecessor array",
+              "Implement priority queue operations (or use built-in PriorityQueue/priority_queue)",
+              "Handle edge cases: unreachable nodes, disconnected graphs",
+              "Add time complexity comments (O((V+E)log V) with binary heap)",
+              "Test with provided test cases and submit your completed file"
+            ],
+            "template_files": {
+              "java": {
+                "filename": "Dijkstra.java",
+                "path": "templates/cs102/week11/Dijkstra.java"
+              },
+              "cpp": {
+                "filename": "Dijkstra.cpp",
+                "path": "templates/cs102/week11/Dijkstra.cpp"
+              }
+            }
+          },
+          "academic": {
+            "title": "Dijkstra's Algorithm Assessment",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering Dijkstra's algorithm.",
+            "guidelines": [
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze Dijkstra's complexity, identify correct algorithm steps, understand priority queue usage",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain Dijkstra's algorithm, prove correctness, analyze time complexity, compare with BFS",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete Dijkstra's implementation code, fill in priority queue operations, complete relaxation step",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+            ]
+          },
+          "communicator": {
+            "title": "Dijkstra's Algorithm Presentation",
+            "description": "Create a 10-15 minute presentation explaining Dijkstra's algorithm. Submit your slides and either a video recording or deliver live.",
+            "guidelines": [
+              "Slide Structure: (1) Title slide, (2) Problem statement: shortest path in weighted graphs (2 slides), (3) Dijkstra's algorithm step-by-step (4-5 slides), (4) Priority queue usage (2 slides), (5) Correctness intuition (2 slides), (6) Time complexity analysis (2 slides), (7) Real-world applications (2 slides), (8) Conclusion (1 slide)",
+              "Content Requirements: Explain algorithm step-by-step, demonstrate with example, show priority queue operations, discuss applications",
+              "Visual Aids: Graph diagrams, algorithm execution animations, priority queue visualizations, code examples, application examples (GPS)",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lecture 13 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lecture 13: Dijkstra's Algorithm. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: Dijkstra's algorithm, priority queue usage, correctness proof, time complexity",
+              "Format: Submit as PDF (2-4 pages expected)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
+            ]
+          }
+        }
+      },
+      {
+        "week": 12,
+        "topic": "Dynamic Programming Fundamentals",
+        "description": "Introduction to dynamic programming paradigm. Learn recursive subproblems, memoization, and solve classic DP problems like Fibonacci, LCS, and LIS.",
+        "resources": [
+          { "title": "MIT 6.006 Lecture 15: Dynamic Programming, Part 1", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-15-dynamic-programming-part-1-srtbot-fib-dags-bowling/", "type": "Video" },
+          { "title": "MIT 6.006 Lecture 16: Dynamic Programming, Part 2", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-16-dynamic-programming-part-2-lcs-lis-coins/", "type": "Video" },
+          { "title": "Lecture 15 Notes: DP Part 1", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec15/", "type": "PDF" },
+          { "title": "Lecture 16 Notes: DP Part 2", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec16/", "type": "PDF" }
+        ],
+        "deliverables": {
+          "builder": {
+            "title": "Dynamic Programming Starter",
+            "description": "Download the starter file with partially implemented DP solutions. Complete memoization and bottom-up implementations for classic problems.",
+            "guidelines": [
+              "Download the starter file (Java or C++)",
+              "Complete fibonacci_memoized(n) method: implement memoized Fibonacci using a hash map/dictionary",
+              "Complete fibonacci_bottomup(n) method: implement bottom-up Fibonacci using array",
+              "Complete longestCommonSubsequence(s1, s2) method: implement LCS using 2D DP table",
+              "Complete longestIncreasingSubsequence(arr) method: implement LIS using DP",
+              "Compare time/space complexity of memoized vs bottom-up approaches",
+              "Add comments explaining the DP pattern for each problem",
+              "Test with provided test cases and submit your completed file"
+            ],
+            "template_files": {
+              "java": {
+                "filename": "DynamicProgramming.java",
+                "path": "templates/cs102/week12/DynamicProgramming.java"
+              },
+              "cpp": {
+                "filename": "DynamicProgramming.cpp",
+                "path": "templates/cs102/week12/DynamicProgramming.cpp"
+              }
+            }
+          },
+          "academic": {
+            "title": "Dynamic Programming Assessment",
+            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering dynamic programming concepts and problems.",
+            "guidelines": [
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Identify DP problems, analyze memoization vs tabulation, understand subproblem structure",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain DP paradigm, design DP solutions, analyze time/space complexity, compare with greedy algorithms",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete DP implementation code, fill in memoization logic, complete state transitions",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+            ]
+          },
+          "communicator": {
+            "title": "Dynamic Programming Presentation",
+            "description": "Create a 10-15 minute presentation explaining dynamic programming. Submit your slides and either a video recording or deliver live.",
+            "guidelines": [
+              "Slide Structure: (1) Title slide, (2) Introduction to DP paradigm (2 slides), (3) Memoization vs tabulation (2-3 slides), (4) Classic DP problems: Fibonacci, LCS, LIS (4-5 slides), (5) DP pattern recognition (2 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
+              "Content Requirements: Explain DP concept, demonstrate memoization and tabulation, solve 2-3 classic problems step-by-step",
+              "Visual Aids: Recursion trees, memoization tables, DP table fillings, code examples",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
+            ]
+          },
+          "lecture_notes": {
+            "title": "Lectures 15-16 Notes Submission",
+            "description": "Submit your notes from MIT 6.006 Lectures 15-16: Dynamic Programming. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
+            "guidelines": [
+              "Take comprehensive notes covering: DP paradigm, memoization, tabulation, classic DP problems (Fibonacci, LCS, LIS)",
+              "Format: Submit as PDF (3-5 pages expected for two lectures)",
+              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
+              "Submission: Upload notes PDF through course platform"
+            ]
+          }
+        }
+      },
+      {
+        "week": 13,
+        "topic": "Final Assessment: Course Summary and Reflection",
+        "description": "Complete summarizing Ellis Activities that demonstrate your understanding of the entire course and reflect on your learning journey.",
+        "resources": [],
+        "deliverables": {
+          "builder": {
+            "title": "Interactive Data Structures Playground",
+            "description": "Build a fun, interactive application that demonstrates multiple data structures and algorithms from the course. Create an engaging visualization tool that lets users explore and interact with different data structures.",
+            "guidelines": [
+              "Choose one of these fun project ideas (or propose your own):",
+              "  - Interactive Sorting Visualizer: Visualize different sorting algorithms (bubble, merge, quick sort) with real-time animations",
+              "  - Binary Tree Visualizer: Build and traverse binary trees interactively, show different traversal orders",
+              "  - Graph Pathfinding Visualizer: Interactive graph where users can add nodes/edges and see BFS/DFS/Dijkstra in action",
+              "  - Hash Table Explorer: Visualize hash collisions, rehashing, and search operations",
+              "  - Stack/Queue Simulator: Interactive demonstration of stack and queue operations with visual feedback",
+              "Requirements:",
+              "  - Use at least 3 different data structures from the course",
+              "  - Implement at least 2 algorithms we covered",
+              "  - Include real-time visualizations/animations",
+              "  - Make it interactive and engaging (user can input data, control speed, etc.)",
+              "  - Include complexity analysis in documentation",
+              "  - Clean, well-documented code",
+              "Submission: Upload your project files or provide GitHub repository link"
+            ],
+            "template_files": {
+              "java": {
+                "filename": "FinalProject_Starter.java",
+                "path": "templates/cs102/week13/FinalProject_Starter.java"
+              },
+              "cpp": {
+                "filename": "FinalProject_Starter.cpp",
+                "path": "templates/cs102/week13/FinalProject_Starter.cpp"
+              }
+            }
+          },
+          "academic": {
+            "title": "Course Summary Assessment",
+            "description": "Complete a summary assessment covering key concepts from throughout the entire course. Same format and length as weekly assessments, but questions span all 12 weeks.",
+            "guidelines": [
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Cover topics from all weeks - Big-O, arrays, linked lists, stacks, queues, hash tables, trees, heaps, graphs, BFS, DFS, Dijkstra, dynamic programming",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Synthesize concepts across weeks, compare data structures, analyze when to use different algorithms, explain key algorithmic paradigms",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete implementations across different data structures and algorithms from the course",
+              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+            ]
+          },
+          "communicator": {
+            "title": "Course Reflection Presentation",
+            "description": "Create a 15-20 minute presentation reflecting on your learning journey through the course. Discuss what you learned each week, your thoughts, challenges, and growth.",
+            "guidelines": [
+              "Slide Structure: (1) Title slide with your name, (2) Course overview and your initial expectations (2 slides), (3) Week-by-week reflection (12 slides - one per week):",
+              "  - For each week: What you learned, what was challenging, what you found interesting, key takeaways",
+              "(4) Favorite topics and why (2-3 slides), (5) Most challenging concepts and how you overcame them (2 slides), (6) How you'll apply this knowledge (2 slides), (7) Future learning goals (1 slide), (8) Conclusion and final thoughts (1 slide)",
+              "Content Requirements: Be honest and reflective. Share both successes and struggles. Show your growth throughout the course",
+              "Visual Aids: Use diagrams, code snippets, or examples from your work. Include screenshots of projects if relevant",
+              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Grading Rubric: Reflection depth and honesty (30%), Coverage of all weeks (25%), Clarity of communication (20%), Visual aids (15%), Delivery/presentation skills (10%)"
             ]
           },
           "lecture_notes": {

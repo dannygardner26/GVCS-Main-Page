@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../utils/supabase';
+import { logCheatingFlagWithContext } from '../../utils/cheatingDetection';
 
 const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
     const [testAnswers, setTestAnswers] = useState({});
@@ -6,7 +8,15 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
     const [quizStarted, setQuizStarted] = useState(false);
     const [showHistory, setShowHistory] = useState(false);
     const [testHistory, setTestHistory] = useState(week.submissions?.academic?.history || []);
+    const [testStartTime, setTestStartTime] = useState(null);
     const currentSubmission = week.submissions?.academic;
+
+    // Track test start time
+    useEffect(() => {
+        if (quizStarted && !testStartTime) {
+            setTestStartTime(Date.now());
+        }
+    }, [quizStarted, testStartTime]);
 
     const generateTestQuestions = (week) => {
         const questions = {
@@ -72,37 +82,114 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
     const mcqQuestions = questions.filter(q => q.type === 'mcq');
     const saqQuestions = questions.filter(q => q.type === 'text');
 
+    // Calculate score from answers
+    const calculateScore = (answers, questions) => {
+        let score = 0;
+        questions.forEach(q => {
+            if (q.type === 'mcq') {
+                if (answers[q.id] === q.correct) {
+                    score += q.points;
+                }
+            } else if (q.type === 'fillblank') {
+                // Simple keyword matching for fill-in-the-blank
+                const answer = (answers[q.id] || '').toLowerCase().trim();
+                const correctAnswers = q.correctAnswers || [q.correctAnswer?.toLowerCase().trim()].filter(Boolean);
+                if (correctAnswers.some(correct => answer.includes(correct) || correct.includes(answer))) {
+                    score += q.points;
+                }
+            } else {
+                // SAQ - give partial credit (will need manual grading, but auto-give 50% for now)
+                if (answers[q.id] && answers[q.id].length > 20) {
+                    score += Math.floor(q.points * 0.5);
+                }
+            }
+        });
+        return score;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        const score = Math.floor(Math.random() * 20) + 80;
+        const questions = generateTestQuestions(week);
+        const score = calculateScore(testAnswers, questions);
+        const percentage = Math.round((score / totalPoints) * 100);
+        const grade = percentage >= 90 ? 'A' : percentage >= 80 ? 'B' : percentage >= 70 ? 'C' : 'D';
 
         const submission = {
             answers: testAnswers,
             submittedDate: new Date().toISOString(),
             score: score,
             totalPoints: totalPoints,
-            grade: score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : 'D'
+            percentage: percentage,
+            grade: grade
         };
+
+        // Save to test_attempts table
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                await supabase
+                    .from('test_attempts')
+                    .insert({
+                        user_id: user.id,
+                        course_id: course.courseId || course.course_id,
+                        week: week.week,
+                        answers: testAnswers,
+                        score: score,
+                        total_points: totalPoints,
+                        percentage: percentage
+                    });
+            }
+        } catch (error) {
+            console.error('Error saving test attempt:', error);
+        }
+
+        // Track time spent (if available)
+        if (testStartTime) {
+            const timeSpent = Date.now() - testStartTime;
+            // Log suspicious timing if too fast
+            if (timeSpent < 60000) { // Less than 1 minute for entire test
+                logCheatingFlagWithContext(
+                    course.courseId || course.course_id,
+                    week.week,
+                    'academic',
+                    'suspicious_timing',
+                    { time_spent_ms: timeSpent, total_questions: questions.length },
+                    'high'
+                );
+            }
+        }
 
         const updated = { ...course };
         if (!updated.weeks[weekIndex].submissions) {
             updated.weeks[weekIndex].submissions = { builder: null, academic: null, communicator: null };
         }
 
+        // Keep only the highest score in submissions.academic
+        const currentBest = updated.weeks[weekIndex].submissions.academic;
         const newHistory = [...testHistory, submission];
-        updated.weeks[weekIndex].submissions.academic = {
-            ...submission,
-            history: newHistory
-        };
+        
+        if (!currentBest || score > (currentBest.score || 0)) {
+            updated.weeks[weekIndex].submissions.academic = {
+                ...submission,
+                history: newHistory
+            };
+        } else {
+            // Update history but keep best score
+            updated.weeks[weekIndex].submissions.academic = {
+                ...currentBest,
+                history: newHistory
+            };
+        }
 
         setTestHistory(newHistory);
         onUpdateCourse(updated);
         setIsSubmitting(false);
         setQuizStarted(false);
         setTestAnswers({});
-        alert(`Test submitted! Score: ${score}/${totalPoints} (${submission.grade})`);
+        setTestStartTime(null);
+        alert(`Test submitted! Score: ${score}/${totalPoints} (${grade}). Note: Only your highest score counts, but all attempts are saved for review.`);
     };
 
     if (currentSubmission && !quizStarted && !showHistory) {
@@ -117,6 +204,15 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                     </div>
                     <p className="text-sm text-green-600">
                         Submitted {new Date(currentSubmission.submittedDate).toISOString().split('T')[0]}
+                    </p>
+                </div>
+
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                    <p className="text-sm text-yellow-800">
+                        <strong>Current Best Score:</strong> {currentSubmission.score}/{currentSubmission.totalPoints} ({currentSubmission.grade})
+                    </p>
+                    <p className="text-xs text-yellow-700 mt-1">
+                        You can retake this test to improve your score. Only your highest score counts.
                     </p>
                 </div>
 
@@ -199,6 +295,11 @@ const AcademicTestSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             <h3 className="text-lg font-bold text-gray-800 mb-2">{week.deliverables?.academic?.title || 'Academic Assessment'}</h3>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <p className="text-sm text-blue-800">
+                        <strong>Note:</strong> You can take this test multiple times. Only your <strong>highest score</strong> will count toward your grade, but all attempts are saved for review.
+                    </p>
+                </div>
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
                     <p className="text-sm text-gray-600"><strong>Total Points:</strong> {totalPoints}</p>
                 </div>

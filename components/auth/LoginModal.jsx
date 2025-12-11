@@ -87,6 +87,20 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
 
             // If we have a session, log in
             if (authData?.session || authData?.user) {
+                // Ensure profile exists in user_profiles table
+                const { error: profileError } = await supabase
+                    .from('user_profiles')
+                    .upsert({
+                        user_id: authData.user.id,
+                        display_name: authData.user.user_metadata?.name || "Demo Student",
+                        grade_level: '10th',
+                        graduation_year: 2027
+                    }, { onConflict: 'user_id' });
+
+                if (profileError) {
+                    console.error('Error creating/updating demo profile:', profileError);
+                }
+
                 onLogin({
                     id: authData.user.id,
                     name: authData.user.user_metadata?.name || "Demo Student",
@@ -100,6 +114,113 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         } catch (err) {
             console.error('Demo login error:', err);
             setError(err.message || 'Failed to login with demo account. Make sure email confirmation is disabled in Supabase settings.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleEllisLogin = async () => {
+        setLoading(true);
+        setError('');
+
+        try {
+            const ellisEmail = 'ellis@gvsd.org';
+            const ellisPassword = 'Ellis123';
+
+            // First, try to sign in
+            let { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+                email: ellisEmail,
+                password: ellisPassword
+            });
+
+            // If sign in fails, try to create the account
+            if (authError) {
+                // Try to sign up
+                const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                    email: ellisEmail,
+                    password: ellisPassword,
+                    options: {
+                        data: {
+                            name: 'Ellis',
+                            isTeacher: true,
+                            isAdmin: true,
+                            role: 'teacher'
+                        },
+                        emailRedirectTo: window.location.origin
+                    }
+                });
+
+                if (signUpError && !signUpError.message.includes('already registered')) {
+                    throw signUpError;
+                }
+
+                // If email confirmation is required and we don't have a session,
+                // we need to handle this. For Ellis account, we'll use a workaround:
+                // Try to sign in immediately after signup (some Supabase configs allow this)
+                if (signUpData.user && !signUpData.session) {
+                    // Wait a moment and try signing in
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    const { data: retryData, error: retryError } = await supabase.auth.signInWithPassword({
+                        email: ellisEmail,
+                        password: ellisPassword
+                    });
+
+                    if (retryError) {
+                        // If still failing due to email confirmation, show helpful message
+                        if (retryError.message.includes('Email not confirmed') || retryError.message.includes('confirm')) {
+                            setError('Email confirmation is required. Please disable "Enable email confirmations" in Supabase Dashboard → Authentication → Settings, or check your email to confirm the account.');
+                            setLoading(false);
+                            return;
+                        }
+                        throw retryError;
+                    }
+
+                    authData = retryData;
+                } else if (signUpData.session) {
+                    authData = signUpData;
+                } else {
+                    // Try one more time to sign in
+                    const { data: finalData, error: finalError } = await supabase.auth.signInWithPassword({
+                        email: ellisEmail,
+                        password: ellisPassword
+                    });
+
+                    if (finalError) throw finalError;
+                    authData = finalData;
+                }
+            }
+
+            // If we have a session, log in
+            if (authData?.session || authData?.user) {
+                // Ensure profile exists in user_profiles table
+                const { error: profileError } = await supabase
+                    .from('user_profiles')
+                    .upsert({
+                        user_id: authData.user.id,
+                        display_name: authData.user.user_metadata?.name || "Ellis",
+                        grade_level: null,
+                        graduation_year: null
+                    }, { onConflict: 'user_id' });
+
+                if (profileError) {
+                    console.error('Error creating/updating Ellis profile:', profileError);
+                }
+
+                onLogin({
+                    id: authData.user.id,
+                    name: authData.user.user_metadata?.name || "Ellis",
+                    email: authData.user.email,
+                    isAdmin: true,
+                    isTeacher: true
+                });
+                onClose();
+            } else {
+                throw new Error('Failed to create session');
+            }
+        } catch (err) {
+            console.error('Ellis login error:', err);
+            setError(err.message || 'Failed to login with Ellis account. Make sure email confirmation is disabled in Supabase settings.');
         } finally {
             setLoading(false);
         }
@@ -425,6 +546,14 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
                     className="w-full py-3 bg-green-50 text-green-700 border border-green-200 rounded-lg font-bold hover:bg-green-100 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                     <Icons.Sparkles /> Try Demo Account
+                </button>
+
+                <button
+                    onClick={handleEllisLogin}
+                    disabled={loading}
+                    className="w-full mt-3 py-3 bg-orange-50 text-orange-700 border border-orange-200 rounded-lg font-bold hover:bg-orange-100 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                    <Icons.Sparkles /> Login as Ellis (Teacher)
                 </button>
 
                 <button
