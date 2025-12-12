@@ -265,3 +265,4 @@ Provide your analysis:`;
 
 export default LectureNotesSection;
 
+

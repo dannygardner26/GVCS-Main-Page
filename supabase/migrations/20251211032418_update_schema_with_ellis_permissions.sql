@@ -21,3 +21,4 @@ CREATE POLICY "Ellis can view all courses"
         (auth.jwt() -> 'user_metadata' ->> 'role')::text = 'teacher'
     );
 
+

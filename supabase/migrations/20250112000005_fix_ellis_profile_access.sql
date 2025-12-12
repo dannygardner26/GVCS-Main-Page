@@ -9,3 +9,4 @@ CREATE POLICY "Admins can view all profiles"
         (auth.jwt() -> 'user_metadata' ->> 'isTeacher')::boolean = true
     );
 
+
