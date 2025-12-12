@@ -23,3 +23,4 @@
 
 SELECT 1; -- Dummy statement to make this a valid migration
 
+
