@@ -6,69 +6,108 @@ export const CURRICULUM_DATA = {
 
   "CS 102: Data Structures & Algorithms": {
     "prereqs": ["AP Computer Science A"],
-    "nice_to_have": ["Precalculus", "Math 201: Discrete Mathematics for CS"],
+    "nice_to_have": ["Precalculus"],
     "description": "The universal follow-up to AP CSA. Master efficiency and data organization through Big-O analysis, fundamental data structures, and core algorithms. Anchored by MIT 6.006.",
     "tier": 1,
-    "mit_anchor": "6.006 Introduction to Algorithms (Spring 2020)",
+    "mit_anchor": "6.006 Introduction to Algorithms",
     "weeks": [
       {
         "week": 1,
         "topic": "Asymptotic Analysis: Big-O Notation",
         "description": "Formal Big-O analysis of time and space complexity. Learn to analyze algorithm efficiency.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 1: Algorithms and Computation", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-1-algorithms-and-computation/", "type": "Video" }
+          { "title": "Big-O Notation Explained", "url": "https://www.youtube.com/watch?v=__vX2sjlpXU", "type": "Video" },
+          { "title": "Big-O Notation Tutorial", "url": "https://www.youtube.com/watch?v=Mo4vesaut8g", "type": "Video" },
+          { "title": "Understanding Big-O Notation", "url": "https://www.youtube.com/watch?v=kS_gr2_-ws8", "type": "Video" },
+          { "title": "Big-O Cheat Sheet", "url": "https://www.bigocheatsheet.com/", "type": "Article" },
+          { "title": "Introduction to Algorithms (CLRS) - Chapter 3: Growth of Functions (PDF)", "url": "https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture2.pdf", "type": "PDF" }
         ],
         "deliverables": {
           "builder": {
             "title": "Big-O Analysis Template",
-            "description": "Download and complete the template file containing 4 partially implemented algorithms. Implement the missing code sections marked with TODO comments, analyze time complexity, and submit your completed file.",
+            "description": "Complete a template file containing 4 partially implemented algorithms. Your task is to: (1) Implement the missing code sections marked with TODO comments, (2) Analyze and document the time complexity of each algorithm using Big-O notation, (3) Test each implementation with provided test cases, (4) Submit your completed file with all code working and complexity analysis included.",
             "guidelines": [
-              "Step 1: Download the template file 'BigO_Analysis.java' from the download button below",
-              "Step 2: Open the file in your IDE. You will find 4 functions with TODO comments: findMax(), linearSearch(), bubbleSort(), and binarySearch()",
-              "Step 3: Implement each function according to the comments",
-              "Step 4: Above each completed function, add a comment block explaining: (a) Time complexity in Big-O notation, (b) Space complexity, (c) Best case, average case, and worst case scenarios",
-              "Step 5: Run the provided test cases (included in the template) to verify your implementations work correctly",
-              "Step 6: Ensure your code compiles without errors and all test cases pass",
-              "Step 7: Submit your completed file. Grading: Correctness (40%), Complexity analysis accuracy (30%), Code quality (20%), Test results (10%)"
+              "Implementation Requirements (Required):",
+              "  (1) Download the template file (Java or C++) from the download button below",
+              "  (2) Open the file in your IDE - you will find 4 functions with TODO comments:",
+              "    - findMax(): Find maximum value in array",
+              "    - linearSearch(): Search for target value in array",
+              "    - bubbleSort(): Sort array using bubble sort algorithm",
+              "    - binarySearch(): Search for target in sorted array",
+              "  (3) Implement each function according to the comments and specifications",
+              "  (4) Ensure your code compiles without errors",
+              "Code Documentation (Required):",
+              "  Above each completed function, add a comment block explaining:",
+              "    (a) Time complexity in Big-O notation",
+              "    (b) Space complexity",
+              "    (c) Best case, average case, and worst case scenarios",
+              "Testing Requirements (Required):",
+              "  (a) Run the provided test cases (included in the template) to verify your implementations work correctly",
+              "  (b) Ensure all test cases pass",
+              "  (c) Test edge cases (empty arrays, single elements, already sorted arrays, etc.)",
+              "Code Quality Requirements:",
+              "  (a) Use meaningful variable names (arr, target, left, right, etc.)",
+              "  (b) Follow consistent code style and formatting",
+              "  (c) Include appropriate comments for complex logic",
+              "  (d) Organize code logically"
             ],
-            "template_file": {
-              "filename": "BigO_Analysis.java",
-              "content": "public class BigO_Analysis {\n    \n    // TODO: Implement this function to find the maximum value in an array\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int findMax(int[] arr) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // TODO: Implement linear search to find the index of target value\n    // Return -1 if not found\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int linearSearch(int[] arr, int target) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // TODO: Implement bubble sort algorithm\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static void bubbleSort(int[] arr) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement binary search (assumes array is sorted)\n    // Return -1 if not found\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int binarySearch(int[] arr, int target) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // Test cases - uncomment to test your implementations\n    public static void main(String[] args) {\n        int[] test1 = {3, 1, 4, 1, 5, 9, 2, 6};\n        System.out.println(\"findMax test: \" + (findMax(test1) == 9 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test2 = {1, 2, 3, 4, 5};\n        System.out.println(\"linearSearch test: \" + (linearSearch(test2, 3) == 2 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test3 = {5, 2, 8, 1, 9};\n        bubbleSort(test3);\n        System.out.println(\"bubbleSort test: \" + (test3[0] == 1 && test3[4] == 9 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test4 = {1, 3, 5, 7, 9};\n        System.out.println(\"binarySearch test: \" + (binarySearch(test4, 5) == 2 ? \"PASS\" : \"FAIL\"));\n    }\n}"
+            "template_files": {
+              "java": {
+                "filename": "BigO_Analysis.java",
+                "content": "public class BigO_Analysis {\n    \n    // TODO: Implement this function to find the maximum value in an array\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int findMax(int[] arr) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // TODO: Implement linear search to find the index of target value\n    // Return -1 if not found\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int linearSearch(int[] arr, int target) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // TODO: Implement bubble sort algorithm\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static void bubbleSort(int[] arr) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement binary search (assumes array is sorted)\n    // Return -1 if not found\n    // Time Complexity: ???\n    // Space Complexity: ???\n    public static int binarySearch(int[] arr, int target) {\n        // Your implementation here\n        return -1;\n    }\n    \n    // Test cases - uncomment to test your implementations\n    public static void main(String[] args) {\n        int[] test1 = {3, 1, 4, 1, 5, 9, 2, 6};\n        System.out.println(\"findMax test: \" + (findMax(test1) == 9 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test2 = {1, 2, 3, 4, 5};\n        System.out.println(\"linearSearch test: \" + (linearSearch(test2, 3) == 2 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test3 = {5, 2, 8, 1, 9};\n        bubbleSort(test3);\n        System.out.println(\"bubbleSort test: \" + (test3[0] == 1 && test3[4] == 9 ? \"PASS\" : \"FAIL\"));\n        \n        int[] test4 = {1, 3, 5, 7, 9};\n        System.out.println(\"binarySearch test: \" + (binarySearch(test4, 5) == 2 ? \"PASS\" : \"FAIL\"));\n    }\n}"
+              },
+              "cpp": {
+                "filename": "BigO_Analysis.cpp",
+                "content": "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\n// TODO: Implement findMax\nint findMax(vector<int>& arr) {\n    // Your implementation here\n    return -1;\n}\n\n// TODO: Implement linearSearch\nint linearSearch(vector<int>& arr, int target) {\n    // Your implementation here\n    return -1;\n}\n\n// TODO: Implement bubbleSort\nvoid bubbleSort(vector<int>& arr) {\n    // Your implementation here\n}\n\n// TODO: Implement binarySearch\nint binarySearch(vector<int>& arr, int target) {\n    // Your implementation here\n    return -1;\n}\n\nint main() {\n    // Test cases\n    vector<int> test1 = {3, 1, 4, 1, 5, 9, 2, 6};\n    cout << \"findMax test: \" << (findMax(test1) == 9 ? \"PASS\" : \"FAIL\") << endl;\n    return 0;\n}"
+              }
             }
           },
           "academic": {
             "title": "Big-O Notation Assessment",
-            "description": "Complete an online assessment with multiple question types covering asymptotic analysis. The assessment includes: (1) Multiple Choice Questions (MCQ) analyzing code snippets for time/space complexity, (2) Short Answer Questions (SAQ) explaining Big-O concepts and proving bounds, (3) Fill-in-the-Blank questions completing data structure implementations with complexity annotations.",
+            "description": "Complete a comprehensive written assessment demonstrating mastery of asymptotic analysis. You will: (1) Analyze 10 code snippets to determine their time and space complexity, (2) Prove 3 Big-O bounds using formal mathematical definitions, (3) Compare algorithms within the same complexity class, (4) Analyze best, average, and worst case scenarios. Submit a PDF document with all solutions showing step-by-step work and clear mathematical reasoning.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze code snippets and select the correct time/space complexity. Questions cover: loop analysis, nested structures, recursive functions, and algorithm comparison",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Provide written explanations for: (a) Defining Big-O notation formally, (b) Proving 2 Big-O bounds with mathematical reasoning, (c) Comparing algorithms within the same complexity class, (d) Explaining best/average/worst case scenarios",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete partial code implementations by filling in: (a) Missing complexity annotations (Big-O notation), (b) Algorithm implementations with TODO comments, (c) Complexity analysis comments for given functions",
-              "Time Limit: 90 minutes. Submit all answers through the online assessment platform",
-              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+              "Part 1 - Code Analysis (40 points): Analyze 10 provided code snippets. For each snippet: (a) Identify all loops and nested structures, (b) Count operations in terms of input size n, (c) Determine time complexity in Big-O notation, (d) Determine space complexity, (e) Provide 2-3 sentence justification for your answer",
+              "Part 2 - Formal Proofs (30 points): Prove 3 Big-O bounds using the formal definition: f(n) = O(g(n)) if there exist positive constants c and n₀ such that f(n) ≤ c·g(n) for all n ≥ n₀. Show: (a) Your choice of c and n₀, (b) Algebraic manipulation proving the inequality, (c) Clear conclusion",
+              "Part 3 - Algorithm Comparison (15 points): Compare 3 sorting algorithms (e.g., Merge Sort, Quick Sort, Heap Sort) all in O(n log n). Explain: (a) When each performs best, (b) Space requirements, (c) Stability, (d) Practical considerations",
+              "Part 4 - Case Analysis (15 points): For 2 algorithms with varying performance, analyze: (a) Best case scenario with example input, (b) Average case with expected input, (c) Worst case scenario with adversarial input, (d) Time complexity for each case",
+              "Format Requirements: Submit as a single PDF document. Use clear headings for each part. Show all work - partial credit will be given for correct reasoning even if final answer is wrong. Include your name and date on the first page",
+              "Grading: Correctness (60%), Mathematical rigor (25%), Clarity of explanation (15%)"
             ]
           },
           "communicator": {
             "title": "Big-O Notation Teaching Presentation",
-            "description": "Create and deliver a 10-15 minute educational presentation teaching Big-O notation to fellow students. Submit your slides and either a video recording or deliver live.",
+            "description": "Create and deliver a 10-15 minute educational presentation teaching Big-O notation to fellow students. Your presentation must: (1) Explain what Big-O notation is and why it matters in software development, (2) Cover 5 common complexity classes with real code examples, (3) Demonstrate how to analyze code step-by-step, (4) Use visual graphs showing how different complexities scale, (5) Connect theory to real-world impact. Submit your slides (PDF or PowerPoint) and either a video recording or deliver live to the class.",
             "guidelines": [
-              "Slide Structure (Required): (1) Title slide with your name, (2) Introduction: What is Big-O? (2-3 slides), (3) Why it matters: Real-world examples (2 slides), (4) Complexity classes: O(1), O(log n), O(n), O(n log n), O(n²) with code examples (5-6 slides), (5) How to analyze: Step-by-step walkthrough of 2 code examples (3-4 slides), (6) Visual comparison: Graph showing growth rates (1-2 slides), (7) Conclusion: Key takeaways (1 slide)",
-              "Content Requirements: For each complexity class, include: (a) Definition in simple terms, (b) At least one code example, (c) Real-world use case, (d) Visual representation (graph or chart)",
-              "Code Examples: Include 2-3 complete code examples that you analyze step-by-step",
-              "Visual Aids: Create or use a graph showing how different complexities scale with input size",
-              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time",
-              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 1 Notes Submission",
-            "description": "Submit your handwritten or typed notes from MIT 6.006 Lecture 1: Algorithms and Computation. Your notes will be assessed for completeness, accuracy, and identification of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes while watching the lecture video",
-              "Include: (a) Key definitions and concepts, (b) Important examples and algorithms discussed, (c) Complexity analysis covered, (d) Any questions or insights you had",
-              "Format: Submit as PDF (scanned handwritten notes or typed document)",
-              "Length: 2-4 pages expected for a complete lecture",
-              "Grading Rubric: Completeness (40% - all major topics covered), Accuracy (30% - correct understanding of concepts), Organization (20% - clear structure and headings), Critical thinking (10% - questions, insights, connections)",
-              "Submission: Upload your notes PDF through the course platform"
+              "Slide Structure (Required):",
+              "  (1) Title slide with your name",
+              "  (2) Introduction: What is Big-O? (2-3 slides)",
+              "    - Define Big-O notation in simple terms",
+              "    - Explain why it matters in software development",
+              "  (3) Why it matters: Real-world examples (2 slides)",
+              "    - Show examples of slow vs fast algorithms",
+              "    - Connect to user experience and system performance",
+              "  (4) Complexity classes: O(1), O(log n), O(n), O(n log n), O(n²) with code examples (5-6 slides)",
+              "    - For each complexity class, include:",
+              "      (a) Definition in simple terms",
+              "      (b) At least one code example",
+              "      (c) Real-world use case",
+              "      (d) Visual representation (graph or chart)",
+              "  (5) How to analyze: Step-by-step walkthrough of 2 code examples (3-4 slides)",
+              "    - Show the code",
+              "    - Line-by-line complexity analysis",
+              "    - Final Big-O result",
+              "    - Explanation of why",
+              "  (6) Visual comparison: Graph showing growth rates (1-2 slides)",
+              "    - Graph showing how O(1), O(log n), O(n), O(n log n), and O(n²) grow",
+              "    - Use different colors for each line",
+              "    - Include axis labels and a legend",
+              "  (7) Conclusion: Key takeaways (1 slide)",
+              "Content Requirements: For each complexity class, include: (a) Definition in simple terms, (b) At least one code example, (c) Real-world use case (e.g., O(log n) for binary search in phone contacts), (d) Visual representation (graph or chart)",
+              "Code Examples: Include 2-3 complete code examples that you analyze step-by-step. Show: (a) The code, (b) Line-by-line complexity analysis, (c) Final Big-O result, (d) Explanation of why",
+              "Visual Aids: Create or use a graph showing how O(1), O(log n), O(n), O(n log n), and O(n²) grow as input size increases. Use different colors for each line. Include axis labels and a legend",
+              "Delivery: Speak clearly and at an appropriate pace. Use transitions between slides. Engage the audience with questions or examples. If recording, ensure good audio quality and visible slides",
+              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time with your instructor",
+              "Grading Criteria: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
             ]
           }
         }
@@ -78,57 +117,57 @@ export const CURRICULUM_DATA = {
         "topic": "Linear Structures: Dynamic Arrays and Linked Lists",
         "description": "Implement dynamic arrays with resize logic, and singly/doubly linked lists. Compare tradeoffs.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 2: Data Structures and Dynamic Arrays", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-2-data-structures-and-dynamic-arrays/", "type": "Video" }
+          { "title": "Dynamic Arrays Explained", "url": "https://www.youtube.com/watch?v=8hly31xKli0", "type": "Video" },
+          { "title": "Linked Lists Tutorial", "url": "https://www.youtube.com/watch?v=WwfhLC16bis", "type": "Video" },
+          { "title": "Arrays vs Linked Lists", "url": "https://www.youtube.com/watch?v=lC-yYCOnN8Q", "type": "Video" },
+          { "title": "Linked Lists Article", "url": "https://www.geeksforgeeks.org/data-structures/linked-list/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Dynamic Array and Linked List Template",
-            "description": "Complete a template file implementing two fundamental data structures: a DynamicArray class and a LinkedList class. Your task is to: (1) Implement all methods marked with TODO comments for both classes, (2) Ensure proper memory management (resizing for arrays, node management for lists), (3) Add time complexity comments for each method, (4) Pass all provided test cases, (5) Submit your working implementation. This project demonstrates understanding of linear data structures and their tradeoffs.",
+            "title": "Dynamic Array and Linked List Implementation",
+            "description": "Implement complete DynamicArray and LinkedList classes from scratch. Your implementation must include: (1) Full class implementations with all core methods, (2) Proper memory management (resizing for arrays, node management for lists), (3) Time complexity analysis for each method, (4) Comprehensive test suite. This project demonstrates understanding of linear data structures and their tradeoffs.",
             "guidelines": [
-              "Step 1: Download 'DynamicArray_LinkedList.java' template file from the download button",
-              "Step 2: Implement DynamicArray class methods: (a) resize() - double capacity when full, (b) add(int index, T item) - insert at position with bounds checking, (c) remove(int index) - remove element and shift, (d) get(int index) - retrieve element, (e) size() - return current size",
-              "Step 3: Implement LinkedList class methods: (a) addFirst(T item) - add to head, (b) addLast(T item) - add to tail, (c) remove(T item) - find and remove first occurrence, (d) get(int index) - traverse to index and return, (e) Helper: findNode(T item) - locate node containing item",
-              "Step 4: For each implemented method, add a comment above it stating: (a) Time complexity in Big-O, (b) Space complexity if applicable, (c) Example: '// O(1) amortized time, O(1) space' for addLast()",
-              "Step 5: Run the test suite included in the template. All 15 test cases must pass. Fix any failing tests before submission",
-              "Step 6: Verify edge cases: empty list/array, single element, adding/removing at boundaries (index 0, last index)",
-              "Step 7: Code quality: Use meaningful variable names, add brief comments for complex logic, ensure no memory leaks (properly handle node references in LinkedList)",
-              "Step 8: Submit your completed file. Grading: Correctness (50%), Time complexity analysis (25%), Code quality (15%), Test results (10%)"
+              "Implementation Requirements (Required): (1) Download the template file (Java or C++) from the download button below, (2) Implement a complete DynamicArray<T> generic class with all core methods, (3) Implement a complete LinkedList<T> generic class with all core methods, (4) Both classes must be fully functional and production-ready",
+              "DynamicArray Class (Required): (1) Implement constructor that initializes with default capacity (e.g., 10), (2) Implement resize() method that doubles capacity when array is full, (3) Implement add(int index, T item) method with bounds checking and element shifting, (4) Implement addLast(T item) method for appending, (5) Implement remove(int index) method that removes and shifts elements, (6) Implement get(int index) and set(int index, T item) methods, (7) Implement size() and isEmpty() methods, (8) Implement clear() method to reset array",
+              "LinkedList Class (Required): (1) Implement Node<T> inner class to store data and next pointer, (2) Implement constructor initializing head and size, (3) Implement addFirst(T item) method adding to head, (4) Implement addLast(T item) method adding to tail, (5) Implement add(int index, T item) method inserting at specific position, (6) Implement remove(T item) method finding and removing first occurrence, (7) Implement remove(int index) method removing at position, (8) Implement get(int index) method traversing to index, (9) Implement size() and isEmpty() methods, (10) Implement helper methods: findNode(T item), getNode(int index)",
+              "Complexity Analysis (Required): (1) Above each method, add comment block with: (a) Time complexity in Big-O notation, (b) Space complexity if applicable, (c) Best/average/worst case scenarios, (2) Example: '// O(1) amortized time, O(1) space' for addLast(), (3) Document why resize is O(n) but amortized O(1)",
+              "Code Quality Requirements: (a) Use meaningful variable names (capacity, size, head, tail, current), (b) Follow consistent code style and formatting, (c) Include comments for complex logic (resizing, node manipulation), (d) Handle edge cases properly (empty list, single element, boundaries), (e) Ensure no memory leaks (proper node cleanup in LinkedList)",
+              "Testing Requirements (Required): (a) Run the comprehensive test suite included in template (15+ test cases), (b) Test edge cases: empty structures, single element, adding/removing at boundaries, (c) Test with various data types (Integer, String, custom objects), (d) Verify all test cases pass, (e) Test memory efficiency (no leaks)"
             ],
-            "template_file": {
-              "filename": "DynamicArray_LinkedList.java",
-              "content": "public class DynamicArray<T> {\n    private T[] array;\n    private int size;\n    private int capacity;\n    \n    // TODO: Implement constructor that initializes array with initial capacity of 10\n    public DynamicArray() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement resize method that doubles the capacity when array is full\n    // Time Complexity: ???\n    private void resize() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement add method to insert item at given index\n    // Time Complexity: ???\n    public void add(int index, T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement remove method to remove item at given index\n    // Time Complexity: ???\n    public T remove(int index) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement get method to retrieve item at given index\n    // Time Complexity: ???\n    public T get(int index) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\nclass Node<T> {\n    T data;\n    Node<T> next;\n    \n    Node(T data) {\n        this.data = data;\n        this.next = null;\n    }\n}\n\npublic class LinkedList<T> {\n    private Node<T> head;\n    private int size;\n    \n    // TODO: Implement constructor\n    public LinkedList() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addFirst method\n    // Time Complexity: ???\n    public void addFirst(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addLast method\n    // Time Complexity: ???\n    public void addLast(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement helper method to find node containing item\n    // Time Complexity: ???\n    private Node<T> findNode(T item) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement remove method\n    // Time Complexity: ???\n    public boolean remove(T item) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement get method\n    // Time Complexity: ???\n    public T get(int index) {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Test cases - uncomment to test\nclass TestCases {\n    public static void main(String[] args) {\n        // Test DynamicArray\n        DynamicArray<Integer> arr = new DynamicArray<>();\n        arr.add(0, 10);\n        arr.add(1, 20);\n        System.out.println(\"DynamicArray test 1: \" + (arr.get(0) == 10 ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"DynamicArray test 2: \" + (arr.size() == 2 ? \"PASS\" : \"FAIL\"));\n        \n        // Test LinkedList\n        LinkedList<Integer> list = new LinkedList<>();\n        list.addFirst(5);\n        list.addLast(15);\n        System.out.println(\"LinkedList test 1: \" + (list.get(0) == 5 ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"LinkedList test 2: \" + (list.size() == 2 ? \"PASS\" : \"FAIL\"));\n    }\n}"
+            "template_files": {
+              "java": {
+                "filename": "DynamicArray_LinkedList.java",
+                "content": "import java.util.Arrays;\n\n// DynamicArray class with generic type support\npublic class DynamicArray<T> {\n    private T[] array;\n    private int size;\n    private int capacity;\n    private static final int DEFAULT_CAPACITY = 10;\n    \n    // TODO: Implement constructor that initializes array with initial capacity\n    @SuppressWarnings(\"unchecked\")\n    public DynamicArray() {\n        // Your implementation here\n        // Initialize capacity to DEFAULT_CAPACITY\n        // Create array of type T\n        // Set size to 0\n    }\n    \n    // TODO: Implement resize method that doubles the capacity when array is full\n    // Time Complexity: O(n) - must copy all elements\n    // Space Complexity: O(n) - new array allocation\n    @SuppressWarnings(\"unchecked\")\n    private void resize() {\n        // Your implementation here\n        // Double the capacity\n        // Create new array with new capacity\n        // Copy all elements from old array to new array\n        // Update array reference\n    }\n    \n    // TODO: Implement addLast method to append item to end\n    // Time Complexity: O(1) amortized (O(n) worst case when resizing)\n    // Space Complexity: O(1) amortized\n    public void addLast(T item) {\n        // Your implementation here\n        // Check if resize needed (size >= capacity)\n        // Add item at index 'size'\n        // Increment size\n    }\n    \n    // TODO: Implement add method to insert item at given index\n    // Time Complexity: O(n) - must shift elements\n    // Space Complexity: O(1)\n    public void add(int index, T item) {\n        // Your implementation here\n        // Check bounds (0 <= index <= size)\n        // Check if resize needed\n        // Shift elements from index to end right by one position\n        // Insert item at index\n        // Increment size\n    }\n    \n    // TODO: Implement remove method to remove item at given index\n    // Time Complexity: O(n) - must shift elements\n    // Space Complexity: O(1)\n    public T remove(int index) {\n        // Your implementation here\n        // Check bounds (0 <= index < size)\n        // Save element at index\n        // Shift elements from index+1 to end left by one position\n        // Decrement size\n        // Return removed element\n        return null;\n    }\n    \n    // TODO: Implement get method to retrieve item at given index\n    // Time Complexity: O(1)\n    // Space Complexity: O(1)\n    public T get(int index) {\n        // Your implementation here\n        // Check bounds\n        // Return element at index\n        return null;\n    }\n    \n    // TODO: Implement set method to update item at given index\n    // Time Complexity: O(1)\n    // Space Complexity: O(1)\n    public void set(int index, T item) {\n        // Your implementation here\n        // Check bounds\n        // Set element at index to item\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: O(1)\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: O(1)\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement clear method to reset array\n    // Time Complexity: O(1)\n    public void clear() {\n        // Your implementation here\n        // Reset size to 0\n        // Optionally reset array\n    }\n}\n\n// Node class for LinkedList\nclass Node<T> {\n    T data;\n    Node<T> next;\n    \n    Node(T data) {\n        this.data = data;\n        this.next = null;\n    }\n}\n\n// LinkedList class with generic type support\npublic class LinkedList<T> {\n    private Node<T> head;\n    private int size;\n    \n    // TODO: Implement constructor\n    public LinkedList() {\n        // Your implementation here\n        // Initialize head to null\n        // Initialize size to 0\n    }\n    \n    // TODO: Implement addFirst method\n    // Time Complexity: O(1)\n    // Space Complexity: O(1)\n    public void addFirst(T item) {\n        // Your implementation here\n        // Create new node with item\n        // Set new node's next to current head\n        // Update head to new node\n        // Increment size\n    }\n    \n    // TODO: Implement addLast method\n    // Time Complexity: O(n) - must traverse to end\n    // Space Complexity: O(1)\n    public void addLast(T item) {\n        // Your implementation here\n        // Create new node\n        // If list is empty, set head to new node\n        // Otherwise, traverse to last node and set its next to new node\n        // Increment size\n    }\n    \n    // TODO: Implement add method to insert at specific index\n    // Time Complexity: O(n) - must traverse to index\n    // Space Complexity: O(1)\n    public void add(int index, T item) {\n        // Your implementation here\n        // Check bounds (0 <= index <= size)\n        // If index is 0, use addFirst\n        // Otherwise, traverse to node at index-1\n        // Insert new node after that node\n        // Increment size\n    }\n    \n    // TODO: Implement helper method to find node containing item\n    // Time Complexity: O(n)\n    // Space Complexity: O(1)\n    private Node<T> findNode(T item) {\n        // Your implementation here\n        // Traverse list looking for node with matching data\n        // Return node if found, null otherwise\n        return null;\n    }\n    \n    // TODO: Implement remove method to remove first occurrence of item\n    // Time Complexity: O(n)\n    // Space Complexity: O(1)\n    public boolean remove(T item) {\n        // Your implementation here\n        // Handle empty list\n        // Handle removal of head\n        // Otherwise, find node and remove it\n        // Decrement size\n        // Return true if removed, false if not found\n        return false;\n    }\n    \n    // TODO: Implement remove method to remove at specific index\n    // Time Complexity: O(n)\n    // Space Complexity: O(1)\n    public T remove(int index) {\n        // Your implementation here\n        // Check bounds\n        // Handle removal of head\n        // Otherwise, traverse to node at index-1 and remove next node\n        // Decrement size\n        // Return removed data\n        return null;\n    }\n    \n    // TODO: Implement get method\n    // Time Complexity: O(n)\n    // Space Complexity: O(1)\n    public T get(int index) {\n        // Your implementation here\n        // Check bounds\n        // Traverse to node at index\n        // Return data\n        return null;\n    }\n    \n    // TODO: Implement getNode helper method\n    // Time Complexity: O(n)\n    private Node<T> getNode(int index) {\n        // Your implementation here\n        // Traverse to node at index\n        // Return node\n        return null;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: O(1)\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: O(1)\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n}\n\n// Comprehensive test cases\nclass TestCases {\n    public static void main(String[] args) {\n        System.out.println(\"=== Testing DynamicArray ===\");\n        DynamicArray<Integer> arr = new DynamicArray<>();\n        \n        // Test addLast and size\n        arr.addLast(10);\n        arr.addLast(20);\n        System.out.println(\"Test 1: \" + (arr.size() == 2 ? \"PASS\" : \"FAIL\"));\n        \n        // Test get\n        System.out.println(\"Test 2: \" + (arr.get(0) == 10 ? \"PASS\" : \"FAIL\"));\n        \n        // Test add at index\n        arr.add(1, 15);\n        System.out.println(\"Test 3: \" + (arr.get(1) == 15 ? \"PASS\" : \"FAIL\"));\n        \n        // Test remove\n        int removed = arr.remove(1);\n        System.out.println(\"Test 4: \" + (removed == 15 && arr.size() == 2 ? \"PASS\" : \"FAIL\"));\n        \n        System.out.println(\"\\n=== Testing LinkedList ===\");\n        LinkedList<Integer> list = new LinkedList<>();\n        \n        // Test addFirst\n        list.addFirst(5);\n        list.addFirst(3);\n        System.out.println(\"Test 5: \" + (list.get(0) == 3 ? \"PASS\" : \"FAIL\"));\n        \n        // Test addLast\n        list.addLast(7);\n        System.out.println(\"Test 6: \" + (list.get(2) == 7 ? \"PASS\" : \"FAIL\"));\n        \n        // Test size\n        System.out.println(\"Test 7: \" + (list.size() == 3 ? \"PASS\" : \"FAIL\"));\n        \n        // Test remove\n        boolean removed2 = list.remove(5);\n        System.out.println(\"Test 8: \" + (removed2 && list.size() == 2 ? \"PASS\" : \"FAIL\"));\n        \n        System.out.println(\"\\nAll tests completed!\");\n    }\n}"
+              },
+              "cpp": {
+                "filename": "DynamicArray_LinkedList.cpp",
+                "content": "#include <iostream>\n#include <vector>\n#include <stdexcept>\nusing namespace std;\n\ntemplate<typename T>\nclass DynamicArray {\nprivate:\n    T* array;\n    int size;\n    int capacity;\n    static const int DEFAULT_CAPACITY = 10;\n    \n    void resize() {\n        capacity *= 2;\n        T* newArray = new T[capacity];\n        for (int i = 0; i < size; i++) {\n            newArray[i] = array[i];\n        }\n        delete[] array;\n        array = newArray;\n    }\n    \npublic:\n    DynamicArray() : size(0), capacity(DEFAULT_CAPACITY) {\n        array = new T[capacity];\n    }\n    \n    void addLast(const T& item) {\n        if (size >= capacity) resize();\n        array[size++] = item;\n    }\n    \n    void add(int index, const T& item) {\n        if (index < 0 || index > size) throw out_of_range(\"Index out of range\");\n        if (size >= capacity) resize();\n        for (int i = size; i > index; i--) {\n            array[i] = array[i-1];\n        }\n        array[index] = item;\n        size++;\n    }\n    \n    T remove(int index) {\n        if (index < 0 || index >= size) throw out_of_range(\"Index out of range\");\n        T item = array[index];\n        for (int i = index; i < size - 1; i++) {\n            array[i] = array[i+1];\n        }\n        size--;\n        return item;\n    }\n    \n    T get(int index) const {\n        if (index < 0 || index >= size) throw out_of_range(\"Index out of range\");\n        return array[index];\n    }\n    \n    int getSize() const { return size; }\n    bool isEmpty() const { return size == 0; }\n    \n    ~DynamicArray() { delete[] array; }\n};\n\ntemplate<typename T>\nclass Node {\npublic:\n    T data;\n    Node<T>* next;\n    Node(const T& data) : data(data), next(nullptr) {}\n};\n\ntemplate<typename T>\nclass LinkedList {\nprivate:\n    Node<T>* head;\n    int size;\n    \npublic:\n    LinkedList() : head(nullptr), size(0) {}\n    \n    void addFirst(const T& item) {\n        Node<T>* newNode = new Node<T>(item);\n        newNode->next = head;\n        head = newNode;\n        size++;\n    }\n    \n    void addLast(const T& item) {\n        Node<T>* newNode = new Node<T>(item);\n        if (!head) {\n            head = newNode;\n        } else {\n            Node<T>* current = head;\n            while (current->next) current = current->next;\n            current->next = newNode;\n        }\n        size++;\n    }\n    \n    T get(int index) const {\n        if (index < 0 || index >= size) throw out_of_range(\"Index out of range\");\n        Node<T>* current = head;\n        for (int i = 0; i < index; i++) current = current->next;\n        return current->data;\n    }\n    \n    int getSize() const { return size; }\n    bool isEmpty() const { return size == 0; }\n};\n\nint main() {\n    // Test cases\n    DynamicArray<int> arr;\n    arr.addLast(10);\n    cout << \"DynamicArray test: \" << (arr.get(0) == 10 ? \"PASS\" : \"FAIL\") << endl;\n    \n    LinkedList<int> list;\n    list.addFirst(5);\n    cout << \"LinkedList test: \" << (list.get(0) == 5 ? \"PASS\" : \"FAIL\") << endl;\n    return 0;\n}"
+              }
             }
           },
           "academic": {
             "title": "Linear Data Structures Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering dynamic arrays and linked lists. Topics include time/space complexity analysis, implementation details, and tradeoffs.",
+            "description": "Complete a written test covering: (1) Time complexity analysis for dynamic arrays vs linked lists (insertion, deletion, access), (2) Space complexity comparison, (3) When to use arrays vs linked lists, (4) Implementation details (resizing strategy, memory allocation), (5) Tradeoffs between singly vs doubly linked lists. Submit detailed solutions with complexity analysis.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze code snippets for time/space complexity, compare array vs linked list operations, identify correct implementation strategies",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain when to use arrays vs linked lists, describe resizing strategies, compare singly vs doubly linked lists, analyze tradeoffs",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete partial implementations of DynamicArray and LinkedList methods, fill in complexity annotations, complete resize() logic",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
-              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+              "Analyze time complexity for all operations (access, insert, delete) for both structures",
+              "Compare space complexity: arrays vs linked lists (including overhead)",
+              "Explain when to use arrays vs linked lists with specific use cases",
+              "Describe dynamic array resizing strategies (doubling, geometric growth)",
+              "Compare singly vs doubly linked lists: advantages and disadvantages",
+              "All solutions must include Big-O notation with justification"
             ]
           },
           "communicator": {
             "title": "Arrays vs Linked Lists Presentation",
-            "description": "Create a 10-15 minute presentation comparing dynamic arrays and linked lists. Submit your slides and either a video recording or deliver live.",
+            "description": "Create a 10-15 minute presentation comparing dynamic arrays and linked lists. Include: (1) How each data structure works internally, (2) Time complexity comparison for common operations, (3) Memory layout and space efficiency, (4) When to choose arrays vs linked lists, (5) Real-world examples of each in use. Use visual diagrams and code examples.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to both structures (2 slides), (3) Internal structure and memory layout with diagrams (3-4 slides), (4) Time complexity comparison table (1-2 slides), (5) When to use each with real-world examples (2-3 slides), (6) Conclusion (1 slide)",
-              "Content Requirements: Explain internal structure with memory diagrams, create comparison table for all operations, discuss memory layout differences, provide 3-5 real-world scenarios",
-              "Visual Aids: Memory diagrams showing contiguous vs scattered storage, comparison tables, code examples",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
-              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 2 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lecture 2: Data Structures and Dynamic Arrays. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: key definitions, dynamic array implementation details, amortized analysis, linked list concepts",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
+              "10-15 minute presentation with visual diagrams",
+              "Explain internal structure of both arrays and linked lists with memory diagrams",
+              "Create comparison table showing time complexity for all operations",
+              "Discuss memory layout: contiguous (arrays) vs scattered (linked lists)",
+              "Provide 3-5 real-world scenarios and recommend which structure to use",
+              "Use code examples to demonstrate key concepts",
+              "Clear explanations and engaging delivery"
             ]
           }
         }
@@ -138,58 +177,61 @@ export const CURRICULUM_DATA = {
         "topic": "Stacks, Queues, and Deques",
         "description": "Implement stacks, queues, and double-ended queues. Learn common use cases and applications.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 3: Sets and Sorting", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-3-sets-and-sorting/", "type": "Video" }
+          { "title": "Stacks and Queues Explained", "url": "https://www.youtube.com/watch?v=wjI1WNcIntg", "type": "Video" },
+          { "title": "Stack Data Structure", "url": "https://www.youtube.com/watch?v=I37kGX-nZEI", "type": "Video" },
+          { "title": "Queue Data Structure", "url": "https://www.youtube.com/watch?v=XuCbpw6Bj1U", "type": "Video" },
+          { "title": "Stack and Queue Tutorial", "url": "https://www.programiz.com/dsa/stack", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Stack, Queue, and Deque Template",
-            "description": "Complete a template file implementing three fundamental linear data structures: Stack, Queue, and Deque. Your task is to: (1) Implement all methods marked with TODO comments for all three classes, (2) Build a balanced parentheses checker using the Stack, (3) Build a task scheduler using the Queue, (4) Add time complexity comments for each method, (5) Pass all provided test cases, (6) Submit your working implementation. This project demonstrates understanding of LIFO, FIFO, and double-ended queue operations.",
+            "title": "Stack, Queue, and Deque Implementation",
+            "description": "Implement complete Stack, Queue, and Deque classes from scratch, then use them to build practical applications. Your implementation must include: (1) Full class implementations with all core methods, (2) Balanced parentheses checker using Stack, (3) Task scheduler using Queue, (4) Time complexity analysis for each method. This project demonstrates understanding of LIFO, FIFO, and double-ended queue operations.",
             "guidelines": [
-              "Step 1: Download 'Stack_Queue_Deque.java' template file from the download button",
-              "Step 2: Implement Stack class methods: (a) push(T item) - add to top, (b) pop() - remove and return top element, (c) peek() - return top without removing, (d) isEmpty() - check if empty, (e) size() - return number of elements",
-              "Step 3: Implement Queue class methods: (a) enqueue(T item) - add to rear, (b) dequeue() - remove and return front element, (c) front() - return front without removing, (d) isEmpty() - check if empty, (e) size() - return number of elements",
-              "Step 4: Implement Deque class methods: (a) addFirst(T item) - add to front, (b) addLast(T item) - add to rear, (c) removeFirst() - remove and return front, (d) removeLast() - remove and return rear, (e) isEmpty() and size()",
-              "Step 5: Implement BalancedParenthesesChecker class using your Stack: (a) isBalanced(String expression) - returns true if parentheses are balanced, (b) Handle '(', ')', '[', ']', '{', '}' characters, (c) Use stack to track opening brackets",
-              "Step 6: Implement TaskScheduler class using your Queue: (a) scheduleTask(String task) - add task to queue, (b) executeNext() - remove and return next task, (c) hasTasks() - check if tasks remain",
-              "Step 7: For each implemented method, add a comment above it stating time complexity in Big-O notation",
-              "Step 8: Run the test suite included in the template. All test cases must pass. Fix any failing tests before submission",
-              "Step 9: Submit your completed file. Grading: Correctness (50%), Time complexity analysis (25%), Code quality (15%), Test results (10%)"
+              "Implementation Requirements (Required): (1) Download the template file (Java or C++) from the download button below, (2) Implement a complete Stack<T> generic class with all core methods, (3) Implement a complete Queue<T> generic class with all core methods, (4) Implement a complete Deque<T> generic class with all core methods, (5) All classes must be fully functional and production-ready",
+              "Stack Class (Required): (1) Implement constructor initializing internal data structure, (2) Implement push(T item) method adding to top, (3) Implement pop() method removing and returning top element, (4) Implement peek() method returning top without removing, (5) Implement isEmpty() and size() methods, (6) Handle stack underflow (throw exception or return null), (7) Add comments explaining LIFO principle",
+              "Queue Class (Required): (1) Implement constructor initializing internal data structure, (2) Implement enqueue(T item) method adding to rear, (3) Implement dequeue() method removing and returning front element, (4) Implement front() method returning front without removing, (5) Implement isEmpty() and size() methods, (6) Handle queue underflow, (7) Add comments explaining FIFO principle",
+              "Deque Class (Required): (1) Implement constructor, (2) Implement addFirst(T item) and addLast(T item) methods, (3) Implement removeFirst() and removeLast() methods, (4) Implement peekFirst() and peekLast() methods, (5) Implement isEmpty() and size() methods, (6) Handle underflow for all operations, (7) Add comments explaining double-ended operations",
+              "Balanced Parentheses Checker (Required): (1) Implement BalancedParenthesesChecker class using your Stack, (2) Implement isBalanced(String expression) method that returns true if parentheses are balanced, (3) Handle three types: '()', '[]', '{}', (4) Use stack to track opening brackets and match with closing brackets, (5) Return false for unmatched brackets or incorrect nesting, (6) Add comments explaining algorithm",
+              "Task Scheduler (Required): (1) Implement TaskScheduler class using your Queue, (2) Implement scheduleTask(String task) method adding task to queue, (3) Implement executeNext() method removing and returning next task, (4) Implement hasTasks() method checking if tasks remain, (5) Implement getQueueSize() method returning number of pending tasks, (6) Add comments explaining FIFO scheduling",
+              "Complexity Analysis (Required): (1) Above each method, add comment with time complexity in Big-O notation, (2) Document space complexity if applicable, (3) Explain why operations are O(1) for well-implemented structures",
+              "Code Quality Requirements: (a) Use meaningful variable names, (b) Include detailed comments explaining LIFO/FIFO principles, (c) Handle edge cases (empty structures, single element), (d) Proper error handling",
+              "Testing Requirements (Required): (a) Run comprehensive test suite (15+ test cases), (b) Test all operations on empty, single-element, and multi-element structures, (c) Test balanced parentheses checker with various expressions, (d) Test task scheduler with multiple tasks, (e) All test cases must pass"
             ],
-            "template_file": {
-              "filename": "Stack_Queue_Deque.java",
-              "content": "import java.util.LinkedList;\n\n// Stack Implementation (LIFO - Last In First Out)\npublic class Stack<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Stack() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement push method to add item to top\n    // Time Complexity: ???\n    public void push(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement pop method to remove and return top item\n    // Time Complexity: ???\n    public T pop() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement peek method to return top without removing\n    // Time Complexity: ???\n    public T peek() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: ???\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Queue Implementation (FIFO - First In First Out)\npublic class Queue<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Queue() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement enqueue method to add item to rear\n    // Time Complexity: ???\n    public void enqueue(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement dequeue method to remove and return front item\n    // Time Complexity: ???\n    public T dequeue() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement front method to return front without removing\n    // Time Complexity: ???\n    public T front() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: ???\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Deque Implementation (Double-Ended Queue)\npublic class Deque<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Deque() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addFirst method\n    // Time Complexity: ???\n    public void addFirst(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addLast method\n    // Time Complexity: ???\n    public void addLast(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement removeFirst method\n    // Time Complexity: ???\n    public T removeFirst() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement removeLast method\n    // Time Complexity: ???\n    public T removeLast() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: ???\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: ???\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Balanced Parentheses Checker using Stack\nclass BalancedParenthesesChecker {\n    // TODO: Implement isBalanced method using your Stack\n    // Time Complexity: ???\n    public static boolean isBalanced(String expression) {\n        // Your implementation here\n        // Hint: Use a Stack to track opening brackets\n        // When you see '(', '[', '{' -> push to stack\n        // When you see ')', ']', '}' -> pop from stack and check if it matches\n        return false;\n    }\n}\n\n// Task Scheduler using Queue\nclass TaskScheduler {\n    private Queue<String> taskQueue;\n    \n    // TODO: Implement constructor\n    public TaskScheduler() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement scheduleTask method\n    // Time Complexity: ???\n    public void scheduleTask(String task) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement executeNext method\n    // Time Complexity: ???\n    public String executeNext() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement hasTasks method\n    // Time Complexity: ???\n    public boolean hasTasks() {\n        // Your implementation here\n        return false;\n    }\n}\n\n// Test cases - uncomment to test\nclass TestCases {\n    public static void main(String[] args) {\n        // Test Stack\n        Stack<Integer> stack = new Stack<>();\n        stack.push(1);\n        stack.push(2);\n        System.out.println(\\\"Stack test 1: \\\" + (stack.pop() == 2 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Stack test 2: \\\" + (stack.peek() == 1 ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Queue\n        Queue<String> queue = new Queue<>();\n        queue.enqueue(\\\"first\\\");\n        queue.enqueue(\\\"second\\\");\n        System.out.println(\\\"Queue test 1: \\\" + (queue.dequeue().equals(\\\"first\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Queue test 2: \\\" + (queue.front().equals(\\\"second\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Deque\n        Deque<Character> deque = new Deque<>();\n        deque.addFirst('a');\n        deque.addLast('b');\n        System.out.println(\\\"Deque test 1: \\\" + (deque.removeFirst() == 'a' ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Deque test 2: \\\" + (deque.removeLast() == 'b' ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Balanced Parentheses\n        System.out.println(\\\"Parentheses test 1: \\\" + (BalancedParenthesesChecker.isBalanced(\\\"()\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Parentheses test 2: \\\" + (BalancedParenthesesChecker.isBalanced(\\\"([{}])\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Parentheses test 3: \\\" + (!BalancedParenthesesChecker.isBalanced(\\\"([)]\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        \n        // Test Task Scheduler\n        TaskScheduler scheduler = new TaskScheduler();\n        scheduler.scheduleTask(\\\"Task 1\\\");\n        scheduler.scheduleTask(\\\"Task 2\\\");\n        System.out.println(\\\"Scheduler test 1: \\\" + (scheduler.executeNext().equals(\\\"Task 1\\\") ? \\\"PASS\\\" : \\\"FAIL\\\"));\n        System.out.println(\\\"Scheduler test 2: \\\" + (scheduler.hasTasks() ? \\\"PASS\\\" : \\\"FAIL\\\"));\n    }\n}"
+            "template_files": {
+              "java": {
+                "filename": "Stack_Queue_Deque.java",
+                "content": "import java.util.LinkedList;\n\n// Stack Implementation (LIFO - Last In First Out)\npublic class Stack<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Stack() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement push method to add item to top\n    // Time Complexity: O(1)\n    public void push(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement pop method to remove and return top item\n    // Time Complexity: O(1)\n    public T pop() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement peek method to return top without removing\n    // Time Complexity: O(1)\n    public T peek() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: O(1)\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: O(1)\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Queue Implementation (FIFO - First In First Out)\npublic class Queue<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Queue() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement enqueue method to add item to rear\n    // Time Complexity: O(1)\n    public void enqueue(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement dequeue method to remove and return front item\n    // Time Complexity: O(1)\n    public T dequeue() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement front method to return front without removing\n    // Time Complexity: O(1)\n    public T front() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: O(1)\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: O(1)\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Deque Implementation (Double-Ended Queue)\npublic class Deque<T> {\n    private LinkedList<T> list;\n    \n    // TODO: Implement constructor\n    public Deque() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addFirst method\n    // Time Complexity: O(1)\n    public void addFirst(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addLast method\n    // Time Complexity: O(1)\n    public void addLast(T item) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement removeFirst method\n    // Time Complexity: O(1)\n    public T removeFirst() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement removeLast method\n    // Time Complexity: O(1)\n    public T removeLast() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement peekFirst method\n    // Time Complexity: O(1)\n    public T peekFirst() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement peekLast method\n    // Time Complexity: O(1)\n    public T peekLast() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement isEmpty method\n    // Time Complexity: O(1)\n    public boolean isEmpty() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement size method\n    // Time Complexity: O(1)\n    public int size() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Balanced Parentheses Checker using Stack\nclass BalancedParenthesesChecker {\n    // TODO: Implement isBalanced method using your Stack\n    // Time Complexity: O(n) where n is length of expression\n    public static boolean isBalanced(String expression) {\n        // Your implementation here\n        // Use a Stack to track opening brackets\n        // When you see '(', '[', '{' -> push to stack\n        // When you see ')', ']', '}' -> pop from stack and check if it matches\n        // Return true if stack is empty at end (all matched)\n        return false;\n    }\n}\n\n// Task Scheduler using Queue\nclass TaskScheduler {\n    private Queue<String> taskQueue;\n    \n    // TODO: Implement constructor\n    public TaskScheduler() {\n        // Your implementation here\n    }\n    \n    // TODO: Implement scheduleTask method\n    // Time Complexity: O(1)\n    public void scheduleTask(String task) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement executeNext method\n    // Time Complexity: O(1)\n    public String executeNext() {\n        // Your implementation here\n        return null;\n    }\n    \n    // TODO: Implement hasTasks method\n    // Time Complexity: O(1)\n    public boolean hasTasks() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement getQueueSize method\n    // Time Complexity: O(1)\n    public int getQueueSize() {\n        // Your implementation here\n        return 0;\n    }\n}\n\n// Comprehensive test cases\nclass TestCases {\n    public static void main(String[] args) {\n        System.out.println(\"=== Testing Stack ===\");\n        Stack<Integer> stack = new Stack<>();\n        stack.push(1);\n        stack.push(2);\n        System.out.println(\"Test 1: \" + (stack.pop() == 2 ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"Test 2: \" + (stack.peek() == 1 ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"Test 3: \" + (stack.size() == 1 ? \"PASS\" : \"FAIL\"));\n        \n        System.out.println(\"\\n=== Testing Queue ===\");\n        Queue<String> queue = new Queue<>();\n        queue.enqueue(\"first\");\n        queue.enqueue(\"second\");\n        System.out.println(\"Test 4: \" + (queue.dequeue().equals(\"first\") ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"Test 5: \" + (queue.front().equals(\"second\") ? \"PASS\" : \"FAIL\"));\n        \n        System.out.println(\"\\n=== Testing Deque ===\");\n        Deque<Character> deque = new Deque<>();\n        deque.addFirst('a');\n        deque.addLast('b');\n        System.out.println(\"Test 6: \" + (deque.removeFirst() == 'a' ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"Test 7: \" + (deque.removeLast() == 'b' ? \"PASS\" : \"FAIL\"));\n        \n        System.out.println(\"\\n=== Testing Balanced Parentheses ===\");\n        System.out.println(\"Test 8: \" + (BalancedParenthesesChecker.isBalanced(\"()\") ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"Test 9: \" + (BalancedParenthesesChecker.isBalanced(\"([{}])\") ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"Test 10: \" + (!BalancedParenthesesChecker.isBalanced(\"([)]\") ? \"PASS\" : \"FAIL\"));\n        \n        System.out.println(\"\\n=== Testing Task Scheduler ===\");\n        TaskScheduler scheduler = new TaskScheduler();\n        scheduler.scheduleTask(\"Task 1\");\n        scheduler.scheduleTask(\"Task 2\");\n        System.out.println(\"Test 11: \" + (scheduler.executeNext().equals(\"Task 1\") ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"Test 12: \" + (scheduler.hasTasks() ? \"PASS\" : \"FAIL\"));\n        \n        System.out.println(\"\\nAll tests completed!\");\n    }\n}"
+              },
+              "cpp": {
+                "filename": "Stack_Queue_Deque.cpp",
+                "content": "#include <iostream>\n#include <list>\n#include <string>\nusing namespace std;\n\ntemplate<typename T>\nclass Stack {\nprivate:\n    list<T> data;\npublic:\n    void push(const T& item) { /* TODO: O(1) */ }\n    T pop() { /* TODO: O(1) */ return T(); }\n    T peek() { /* TODO: O(1) */ return T(); }\n    bool isEmpty() { /* TODO: O(1) */ return false; }\n    int size() { /* TODO: O(1) */ return 0; }\n};\n\ntemplate<typename T>\nclass Queue {\nprivate:\n    list<T> data;\npublic:\n    void enqueue(const T& item) { /* TODO: O(1) */ }\n    T dequeue() { /* TODO: O(1) */ return T(); }\n    T front() { /* TODO: O(1) */ return T(); }\n    bool isEmpty() { /* TODO: O(1) */ return false; }\n    int size() { /* TODO: O(1) */ return 0; }\n};\n\ntemplate<typename T>\nclass Deque {\nprivate:\n    list<T> data;\npublic:\n    void addFirst(const T& item) { /* TODO: O(1) */ }\n    void addLast(const T& item) { /* TODO: O(1) */ }\n    T removeFirst() { /* TODO: O(1) */ return T(); }\n    T removeLast() { /* TODO: O(1) */ return T(); }\n    bool isEmpty() { /* TODO: O(1) */ return false; }\n    int size() { /* TODO: O(1) */ return 0; }\n};\n\nclass BalancedParenthesesChecker {\npublic:\n    static bool isBalanced(const string& expression) { /* TODO: O(n) */ return false; }\n};\n\nclass TaskScheduler {\nprivate:\n    Queue<string> taskQueue;\npublic:\n    void scheduleTask(const string& task) { /* TODO: O(1) */ }\n    string executeNext() { /* TODO: O(1) */ return \"\"; }\n    bool hasTasks() { /* TODO: O(1) */ return false; }\n};\n\nint main() {\n    // Test cases\n    return 0;\n}"
+              }
             }
           },
           "academic": {
             "title": "Stacks, Queues, and Deques Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering stacks, queues, and deques. Topics include time complexity, implementation choices, and applications.",
+            "description": "Complete a written test covering: (1) Time complexity analysis for all operations, (2) Implementation choices (array vs linked list), (3) Applications of stacks (parsing, recursion), (4) Applications of queues (BFS, scheduling), (5) When to use deque vs stack/queue, (6) Solving problems using these structures. Submit detailed solutions.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze code snippets for time complexity, identify correct implementations, compare array vs linked list approaches",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain LIFO vs FIFO principles, describe stack/queue applications, compare implementations, solve problems",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete partial Stack/Queue/Deque implementations, fill in complexity annotations, complete method bodies",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
-              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+              "Analyze time complexity for push, pop, enqueue, dequeue operations",
+              "Compare array-based vs linked list-based implementations",
+              "Explain how stacks are used in recursion and parsing",
+              "Explain how queues are used in BFS and scheduling algorithms",
+              "Solve 3 problems using stacks (e.g., next greater element, histogram)",
+              "Solve 2 problems using queues (e.g., level-order traversal, sliding window)",
+              "All solutions must show step-by-step execution"
             ]
           },
           "communicator": {
             "title": "Stacks and Queues Presentation",
-            "description": "Create a 10-15 minute presentation explaining stacks, queues, and deques. Submit your slides and either a video recording or deliver live.",
+            "description": "Create a 10-15 minute presentation explaining stacks, queues, and deques. Include: (1) What each structure is and how it works, (2) LIFO vs FIFO principles, (3) Common applications with examples, (4) Implementation details, (5) Real-world use cases (browser back button, printer queue, etc.). Use visual demonstrations and code examples.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to stacks, queues, deques (2 slides), (3) LIFO vs FIFO principles with examples (2-3 slides), (4) Applications with real-world examples (3-4 slides), (5) Implementation details (2 slides), (6) Conclusion (1 slide)",
-              "Content Requirements: Explain LIFO/FIFO principles, demonstrate 3+ stack applications, demonstrate 3+ queue applications, show implementation code",
-              "Visual Aids: Diagrams showing operations, comparison tables, code examples, real-world use case visuals",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
-              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 3 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lecture 3: Sets and Sorting. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: key definitions, sorting algorithms, set operations, complexity analysis",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
+              "10-15 minute presentation with visual demonstrations",
+              "Explain LIFO (Last In First Out) for stacks and FIFO (First In First Out) for queues",
+              "Demonstrate at least 3 stack applications with live examples",
+              "Demonstrate at least 3 queue applications with live examples",
+              "Show implementation code and explain key operations",
+              "Discuss real-world examples: browser history, task scheduling, etc.",
+              "Engaging visuals and clear explanations"
             ]
           }
         }
@@ -199,7 +241,10 @@ export const CURRICULUM_DATA = {
         "topic": "Hash-Based Structures: HashMaps and HashSets",
         "description": "Understand hashing, collision resolution (chaining vs probing), and load factors.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 4: Hashing", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-4-hashing/", "type": "Video" }
+          { "title": "Hash Tables Explained", "url": "https://www.youtube.com/watch?v=shs0KM3wKv8", "type": "Video" },
+          { "title": "Hash Tables Tutorial", "url": "https://www.youtube.com/watch?v=2Ti5yvumFTU", "type": "Video" },
+          { "title": "Hash Maps and Hash Sets", "url": "https://www.youtube.com/watch?v=U79Bo8c0rLk", "type": "Video" },
+          { "title": "Hash Table Implementation", "url": "https://www.geeksforgeeks.org/implementing-our-own-hash-table-with-separate-chaining-in-java/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
@@ -224,34 +269,29 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Hash Tables Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering hash tables, hash functions, collision resolution, and performance analysis.",
+            "description": "Complete a written test covering: (1) Hash function design and properties, (2) Collision resolution strategies (chaining, linear probing, quadratic probing), (3) Load factor and its impact on performance, (4) Time complexity analysis (average vs worst case), (5) Rehashing strategies, (6) When hash tables are optimal. Submit detailed solutions with proofs.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze hash function properties, identify collision resolution strategies, compare performance characteristics",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Design hash functions, explain collision resolution strategies, analyze load factor impact, describe rehashing strategies",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete hash function implementations, fill in collision resolution code, complete rehashing logic",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
-              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+              "Design a hash function for strings and explain its properties",
+              "Compare collision resolution strategies: chaining vs open addressing",
+              "Analyze time complexity: average O(1) vs worst case O(n)",
+              "Explain how load factor affects performance with mathematical analysis",
+              "Describe rehashing strategies and when to trigger them",
+              "Solve problems using hash tables (e.g., two sum, group anagrams)",
+              "All solutions must include complexity analysis"
             ]
           },
           "communicator": {
             "title": "Hash Tables Presentation",
-            "description": "Create a 10-15 minute presentation explaining hash tables. Submit your slides and either a video recording or deliver live.",
+            "description": "Create a 10-15 minute presentation explaining hash tables. Include: (1) What is hashing and why it's fast, (2) How hash functions work, (3) Collision resolution strategies with examples, (4) Load factor and performance tradeoffs, (5) Real-world applications (dictionaries, caches, databases). Use visual diagrams and code examples.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to hashing (2 slides), (3) Hash functions with examples (2-3 slides), (4) Collision resolution strategies (3-4 slides), (5) Load factor and performance (2 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
-              "Content Requirements: Explain hashing concept, demonstrate hash functions with collision examples, visualize collision resolution strategies, explain load factor impact",
-              "Visual Aids: Diagrams showing hash table structure, collision resolution visualizations, performance graphs, code examples",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
-              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 4 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lecture 4: Hashing. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: hash functions, collision resolution, load factor, performance analysis",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
+              "10-15 minute presentation with visual diagrams",
+              "Explain hashing concept: mapping keys to array indices",
+              "Demonstrate hash function with examples (show collisions)",
+              "Visualize collision resolution: chaining vs probing with diagrams",
+              "Explain load factor impact with performance graphs",
+              "Discuss real-world applications: Python dict, Java HashMap, Redis",
+              "Use code examples to show hash table operations",
+              "Clear explanations and engaging delivery"
             ]
           }
         }
@@ -261,7 +301,10 @@ export const CURRICULUM_DATA = {
         "topic": "Trees: Binary Search Trees and Traversals",
         "description": "Implement BSTs with insert, search, delete. Master in-order, pre-order, and post-order traversals.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 6: Binary Trees, Part 1", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-6-binary-trees-part-1/", "type": "Video" }
+          { "title": "Binary Search Trees", "url": "https://www.youtube.com/watch?v=H5JubkIy_p8", "type": "Video" },
+          { "title": "BST Implementation", "url": "https://www.youtube.com/watch?v=zIX3zQP0khM", "type": "Video" },
+          { "title": "Tree Traversals Explained", "url": "https://www.youtube.com/watch?v=1WxLM2hwL-U", "type": "Video" },
+          { "title": "Tree Traversals Article", "url": "https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
@@ -280,34 +323,29 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Binary Search Trees Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering binary search trees, traversals, and operations.",
+            "description": "Complete a written test covering: (1) BST property and why it enables efficient search, (2) Time complexity analysis for all operations (best, average, worst case), (3) Step-by-step execution of insert, search, delete, (4) Traversal algorithms and their applications, (5) BST vs balanced trees tradeoffs, (6) Solving problems using BSTs. Submit detailed solutions.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze BST operations, identify correct tree structures, compare complexity classes",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain BST property, analyze time complexity, describe traversal algorithms, compare BST vs balanced trees",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete BST insert/search/delete implementations, fill in traversal code, complete complexity annotations",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
-              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+              "Explain BST property and prove it enables O(log n) search in balanced case",
+              "Analyze time complexity: best O(log n), average O(log n), worst O(n)",
+              "Show step-by-step execution of insert, search, delete on given trees",
+              "Explain when to use each traversal (in-order for sorted output, pre-order for copying, etc.)",
+              "Compare BST vs balanced trees (AVL, Red-Black) with complexity analysis",
+              "Solve 3-4 problems using BSTs (e.g., range queries, kth smallest element)",
+              "All solutions must show tree structure at each step"
             ]
           },
           "communicator": {
             "title": "Binary Search Trees Presentation",
-            "description": "Create a 10-15 minute presentation explaining binary search trees. Submit your slides and either a video recording or deliver live.",
+            "description": "Create a 10-15 minute presentation explaining binary search trees. Include: (1) What is a BST and the ordering property, (2) How insert, search, and delete work, (3) Tree traversals with examples, (4) Time complexity and when BSTs are efficient, (5) Real-world applications (databases, file systems). Use tree diagrams and visual demonstrations.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to BSTs and ordering property (2 slides), (3) Insert, search, delete operations (3-4 slides), (4) Tree traversals with examples (2-3 slides), (5) Time complexity analysis (2 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
-              "Content Requirements: Explain BST ordering property, demonstrate operations step-by-step, show all three traversals, explain time complexity",
-              "Visual Aids: Tree diagrams showing operations, traversal examples, complexity graphs, code examples",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
-              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 6 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lecture 6: Binary Trees, Part 1. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: BST properties, operations, traversals, complexity analysis",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
+              "10-15 minute presentation with tree diagrams",
+              "Explain BST ordering property with visual examples",
+              "Demonstrate insert, search, delete operations step-by-step",
+              "Show all three traversals on same tree with output",
+              "Explain time complexity with examples (balanced vs unbalanced)",
+              "Discuss real-world applications: database indexing, expression trees",
+              "Use interactive demonstrations or animations if possible",
+              "Clear explanations and engaging delivery"
             ]
           }
         }
@@ -317,7 +355,10 @@ export const CURRICULUM_DATA = {
         "topic": "Self-Balancing Trees: AVL or Red-Black",
         "description": "Learn why self-balancing is needed. Implement AVL trees or study Red-Black tree rotations.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 7: Binary Trees, Part 2: AVL", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-7-binary-trees-part-2-avl/", "type": "Video" }
+          { "title": "AVL Trees Explained", "url": "https://www.youtube.com/watch?v=jDM6_TnYIqE", "type": "Video" },
+          { "title": "AVL Tree Rotations", "url": "https://www.youtube.com/watch?v=vRwi_UcZjeE", "type": "Video" },
+          { "title": "Red-Black Trees Tutorial", "url": "https://www.youtube.com/watch?v=qvZGUFHWChY", "type": "Video" },
+          { "title": "Red-Black Trees Article", "url": "https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
@@ -336,34 +377,29 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Self-Balancing Trees Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering AVL trees, rotations, and self-balancing concepts.",
+            "description": "Complete a written test covering: (1) Why self-balancing is needed (worst case BST), (2) AVL tree property and balance factor, (3) All rotation types and when to apply them, (4) Time complexity analysis (guaranteed O(log n)), (5) Comparison of AVL vs Red-Black trees, (6) Step-by-step insertion with rotations. Submit detailed solutions.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Identify rotation types, analyze balance factors, compare AVL vs Red-Black properties",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain why balancing is needed, describe rotation types, prove O(log n) guarantee, compare tree types",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete rotation method implementations, fill in balance factor calculations, complete insertion logic",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
-              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+              "Explain why unbalanced BSTs degrade to O(n) and need balancing",
+              "Define AVL balance factor and height property",
+              "Describe all 4 rotation types: left, right, left-right, right-left",
+              "Prove AVL trees guarantee O(log n) height",
+              "Compare AVL vs Red-Black: balancing strictness, rotation frequency",
+              "Show step-by-step insertion with rotations on given sequence",
+              "All solutions must show tree structure and balance factors at each step"
             ]
           },
           "communicator": {
             "title": "Self-Balancing Trees Presentation",
-            "description": "Create a 10-15 minute presentation explaining self-balancing trees. Submit your slides and either a video recording or deliver live.",
+            "description": "Create a 10-15 minute presentation explaining self-balancing trees. Include: (1) Problem with unbalanced BSTs, (2) How AVL trees maintain balance, (3) Rotation operations with examples, (4) Why guaranteed O(log n) matters, (5) AVL vs Red-Black comparison, (6) Real-world usage (Java TreeMap, C++ map). Use tree diagrams and animations.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Problem with unbalanced BSTs (2 slides), (3) AVL tree properties (2 slides), (4) Rotation operations with examples (3-4 slides), (5) AVL vs Red-Black comparison (2 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
-              "Content Requirements: Demonstrate unbalanced BST problem, explain AVL properties, show rotation operations, compare tree types",
-              "Visual Aids: Tree diagrams showing rotations, before/after comparisons, animations of balancing, code examples",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
-              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 7 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lecture 7: Binary Trees, Part 2: AVL. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: AVL properties, rotations, balancing, complexity guarantees",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
+              "10-15 minute presentation with tree diagrams and animations",
+              "Demonstrate problem: show worst-case unbalanced BST",
+              "Explain AVL balance factor and height property",
+              "Animate or step through rotation operations",
+              "Show before/after comparisons of tree height",
+              "Compare AVL vs Red-Black with use case recommendations",
+              "Discuss real-world implementations: Java TreeMap uses Red-Black",
+              "Clear explanations and engaging visuals"
             ]
           }
         }
@@ -373,7 +409,8 @@ export const CURRICULUM_DATA = {
         "topic": "Binary Heaps and Priority Queues",
         "description": "Implement min/max heaps and use them for priority queues. Heapify operations.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 8: Binary Heaps", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-8-binary-heaps/", "type": "Video" }
+          { "title": "Heaps and Priority Queues", "url": "https://www.youtube.com/watch?v=HqPJF2L5h9U", "type": "Video" },
+          { "title": "Binary Heap Implementation", "url": "https://www.programiz.com/dsa/heap-data-structure", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
@@ -393,34 +430,30 @@ export const CURRICULUM_DATA = {
           },
           "academic": {
             "title": "Heaps and Priority Queues Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering binary heaps, priority queues, and heap operations.",
+            "description": "Complete a written test covering: (1) Heap property and array representation, (2) Time complexity analysis for all operations, (3) Heapify algorithms (bottom-up and top-down), (4) Building a heap from array (O(n) method), (5) Applications of priority queues, (6) Heap vs BST for priority operations. Submit detailed solutions.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze heap operations, identify correct array representations, compare heap vs BST",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain heap property, analyze time complexity, describe heapify algorithms, prove O(n) build time",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete heap insert/extract implementations, fill in heapify methods, complete array indexing calculations",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
-              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+              "Explain heap property (min-heap and max-heap) with examples",
+              "Show array representation of heap and parent/child index formulas",
+              "Analyze time complexity: insert O(log n), extract O(log n), build O(n)",
+              "Describe heapify-up and heapify-down algorithms step-by-step",
+              "Prove building heap from array is O(n) not O(n log n)",
+              "Compare heap vs BST for priority queue operations",
+              "Solve problems using heaps (e.g., find k largest elements, median maintenance)",
+              "All solutions must show heap structure at each step"
             ]
           },
           "communicator": {
             "title": "Heaps and Priority Queues Presentation",
-            "description": "Create a 10-15 minute presentation explaining binary heaps and priority queues. Submit your slides and either a video recording or deliver live.",
+            "description": "Create a 10-15 minute presentation explaining binary heaps and priority queues. Include: (1) What is a heap and the heap property, (2) Array representation and indexing, (3) Heap operations (insert, extract, heapify), (4) Building a heap efficiently, (5) Applications (Dijkstra's algorithm, scheduling, heapsort). Use visual diagrams and code examples.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to heaps and heap property (2 slides), (3) Array representation and indexing (2 slides), (4) Heap operations (3-4 slides), (5) Building heaps efficiently (2 slides), (6) Applications (2 slides), (7) Conclusion (1 slide)",
-              "Content Requirements: Explain heap property, demonstrate array representation, show operations step-by-step, discuss applications",
-              "Visual Aids: Tree and array representations, operation animations, index calculation examples, code examples",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
-              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 8 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lecture 8: Binary Heaps. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: heap property, array representation, operations, heapify algorithms",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
+              "10-15 minute presentation with visual diagrams",
+              "Explain heap property with tree and array representations",
+              "Demonstrate parent/child index calculations",
+              "Animate or step through insert and extract operations",
+              "Show how to build heap from array efficiently",
+              "Discuss applications: Dijkstra's algorithm, task scheduling, heapsort",
+              "Use code examples to show key operations",
+              "Clear explanations and engaging delivery"
             ]
           }
         }
@@ -430,65 +463,53 @@ export const CURRICULUM_DATA = {
         "topic": "Graph Traversals: Breadth-First Search (BFS)",
         "description": "Learn graph representations and implement breadth-first search for level-order traversal and shortest path finding in unweighted graphs.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 9: Breadth-First Search", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-9-breadth-first-search/", "type": "Video" },
-          { "title": "Lecture 9 Notes: BFS", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec9/", "type": "PDF" },
-          { "title": "Recitation 9 Notes", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_r09/", "type": "PDF" }
+          { "title": "Graph Data Structure", "url": "https://www.youtube.com/watch?v=tWVWeAqZ0WU", "type": "Video" },
+          { "title": "Graph Representation", "url": "https://www.geeksforgeeks.org/graph-and-its-representations/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "BFS Implementation Starter",
-            "description": "Download the starter file with a partially implemented Graph class. Complete the BFS traversal method and shortest path finding.",
+            "title": "Graph Class with BFS Implementation",
+            "description": "Implement a complete Graph class using adjacency list representation with full BFS functionality. Your implementation must include: (1) Graph representation with adjacency lists, (2) Complete BFS traversal method, (3) Shortest path finder using BFS, (4) Level-order traversal, (5) Path reconstruction. This project demonstrates understanding of graph data structures and breadth-first search algorithm.",
             "guidelines": [
-              "Download the starter file (Java or C++)",
-              "Complete the Graph class constructor: initialize adjacency list representation",
-              "Complete addEdge() method: add undirected edges to the graph",
-              "Complete BFS(start) method: implement breadth-first search using a queue, return list of visited nodes in order",
-              "Complete shortestPath(start, end) method: use BFS to find shortest path, return list of nodes in path",
-              "Complete getLevels(start) method: return a map/dictionary of each node to its level (distance from start)",
-              "Add time complexity comments for each method",
-              "Test with provided test cases and submit your completed file"
+              "Implementation Requirements (Required): (1) Download the template file (Java or C++) from the download button below, (2) Implement a Graph class with adjacency list representation, (3) Implement addVertex(vertex) method to add vertices, (4) Implement addEdge(from, to) method for undirected graphs, (5) Implement addDirectedEdge(from, to) method for directed graphs",
+              "BFS Implementation (Required): (1) Implement BFS(start) method that returns list of vertices in BFS order, (2) Use a Queue data structure (you can use your Queue from Week 3 or Java's Queue), (3) Track visited vertices using a Set or boolean array, (4) Process vertices level by level (all vertices at distance 1, then distance 2, etc.), (5) Add comments explaining each step of the BFS algorithm",
+              "Shortest Path (Required): (1) Implement shortestPath(start, end) method using BFS, (2) Track parent/previous vertices to reconstruct path, (3) Return the shortest path as a list of vertices, (4) Return empty list if no path exists, (5) Handle both directed and undirected graphs",
+              "Additional Methods (Required): (1) Implement getLevel(vertex) method that returns the level (distance from start) of each vertex after BFS, (2) Implement getAllLevels(start) method that returns a map of level -> list of vertices at that level, (3) Implement hasPath(start, end) method using BFS",
+              "Code Quality Requirements: (a) Use meaningful variable names (queue, visited, parent, level), (b) Follow consistent code style, (c) Include detailed comments explaining BFS algorithm steps, (d) Handle edge cases (empty graph, disconnected vertices, self-loops)",
+              "Testing Requirements (Required): (a) Test with provided test cases covering various graph structures, (b) Test shortest path on graphs with multiple paths, (c) Test on disconnected graphs, (d) Verify level-order traversal correctness, (e) All test cases must pass"
             ],
             "template_files": {
               "java": {
-                "filename": "BFSGraph.java",
-                "content": "import java.util.*;\n\npublic class BFSGraph {\n    private Map<Integer, List<Integer>> adjList;\n    private int numVertices;\n    \n    // TODO: Implement constructor that initializes adjacency list\n    public BFSGraph(int numVertices) {\n        // Your implementation here\n        // Initialize adjList as HashMap\n        // Initialize numVertices\n    }\n    \n    // TODO: Implement addEdge method to add undirected edge\n    // Time Complexity: ???\n    public void addEdge(int u, int v) {\n        // Your implementation here\n        // Add v to u's adjacency list\n        // Add u to v's adjacency list (undirected graph)\n    }\n    \n    // TODO: Implement BFS traversal starting from 'start' vertex\n    // Return list of visited nodes in BFS order\n    // Time Complexity: ???\n    public List<Integer> BFS(int start) {\n        // Your implementation here\n        // Use a Queue for BFS\n        // Track visited nodes\n        // Return list of nodes in order visited\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement shortestPath method using BFS\n    // Return list of nodes representing shortest path from start to end\n    // Return empty list if no path exists\n    // Time Complexity: ???\n    public List<Integer> shortestPath(int start, int end) {\n        // Your implementation here\n        // Use BFS to find shortest path\n        // Track predecessors to reconstruct path\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement getLevels method\n    // Return a map where key is node and value is its level (distance from start)\n    // Level 0 = start node, Level 1 = nodes 1 edge away, etc.\n    // Time Complexity: ???\n    public Map<Integer, Integer> getLevels(int start) {\n        // Your implementation here\n        // Use BFS to assign levels\n        return new HashMap<>();\n    }\n    \n    // Test cases - uncomment to test\n    public static void main(String[] args) {\n        BFSGraph graph = new BFSGraph(5);\n        graph.addEdge(0, 1);\n        graph.addEdge(0, 2);\n        graph.addEdge(1, 3);\n        graph.addEdge(2, 4);\n        \n        List<Integer> bfsOrder = graph.BFS(0);\n        System.out.println(\"BFS from 0: \" + bfsOrder);\n        \n        List<Integer> path = graph.shortestPath(0, 4);\n        System.out.println(\"Shortest path from 0 to 4: \" + path);\n        \n        Map<Integer, Integer> levels = graph.getLevels(0);\n        System.out.println(\"Levels from 0: \" + levels);\n    }\n}"
+                "filename": "GraphBFS.java",
+                "content": "import java.util.*;\n\n// Graph class with adjacency list representation\npublic class Graph {\n    private Map<Integer, List<Integer>> adjacencyList;\n    private boolean directed;\n    \n    // TODO: Implement constructor\n    // Initialize adjacencyList as HashMap\n    // Set directed flag\n    public Graph(boolean directed) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addVertex method\n    // Time Complexity: ???\n    public void addVertex(int vertex) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addEdge for undirected graph\n    // Time Complexity: ???\n    public void addEdge(int from, int to) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addDirectedEdge for directed graph\n    // Time Complexity: ???\n    public void addDirectedEdge(int from, int to) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement BFS traversal\n    // Returns list of vertices in BFS order\n    // Time Complexity: ???\n    public List<Integer> BFS(int start) {\n        // Your implementation here\n        // Use Queue to process vertices level by level\n        // Track visited vertices\n        // Return list in BFS order\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement shortest path using BFS\n    // Returns shortest path from start to end as list of vertices\n    // Returns empty list if no path exists\n    // Time Complexity: ???\n    public List<Integer> shortestPath(int start, int end) {\n        // Your implementation here\n        // Use BFS to find shortest path\n        // Track parent vertices to reconstruct path\n        // Return path as list\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement getLevel method\n    // Returns level (distance from start) for each vertex after BFS\n    // Time Complexity: ???\n    public Map<Integer, Integer> getLevel(int start) {\n        // Your implementation here\n        // Perform BFS and track level of each vertex\n        // Return map: vertex -> level\n        return new HashMap<>();\n    }\n    \n    // TODO: Implement getAllLevels method\n    // Returns map of level -> list of vertices at that level\n    // Time Complexity: ???\n    public Map<Integer, List<Integer>> getAllLevels(int start) {\n        // Your implementation here\n        // Group vertices by their level\n        // Return map: level -> list of vertices\n        return new HashMap<>();\n    }\n    \n    // TODO: Implement hasPath method using BFS\n    // Returns true if path exists from start to end\n    // Time Complexity: ???\n    public boolean hasPath(int start, int end) {\n        // Your implementation here\n        return false;\n    }\n}\n\n// Test cases - uncomment to test\nclass TestCases {\n    public static void main(String[] args) {\n        Graph g = new Graph(false); // Undirected graph\n        g.addVertex(0);\n        g.addVertex(1);\n        g.addVertex(2);\n        g.addEdge(0, 1);\n        g.addEdge(1, 2);\n        \n        List<Integer> bfsOrder = g.BFS(0);\n        System.out.println(\"BFS test 1: \" + (bfsOrder.size() == 3 ? \"PASS\" : \"FAIL\"));\n        \n        List<Integer> path = g.shortestPath(0, 2);\n        System.out.println(\"Shortest path test 1: \" + (path.size() == 3 ? \"PASS\" : \"FAIL\"));\n        \n        boolean hasPath = g.hasPath(0, 2);\n        System.out.println(\"Has path test 1: \" + (hasPath ? \"PASS\" : \"FAIL\"));\n    }\n}"
               },
               "cpp": {
-                "filename": "BFSGraph.cpp",
-                "content": "#include <iostream>\n#include <vector>\n#include <queue>\n#include <unordered_map>\n#include <unordered_set>\nusing namespace std;\n\nclass BFSGraph {\nprivate:\n    unordered_map<int, vector<int>> adjList;\n    int numVertices;\n    \npublic:\n    // TODO: Implement constructor that initializes adjacency list\n    BFSGraph(int numVertices) {\n        // Your implementation here\n        // Initialize numVertices\n        // adjList will be automatically initialized\n    }\n    \n    // TODO: Implement addEdge method to add undirected edge\n    // Time Complexity: ???\n    void addEdge(int u, int v) {\n        // Your implementation here\n        // Add v to u's adjacency list\n        // Add u to v's adjacency list (undirected graph)\n    }\n    \n    // TODO: Implement BFS traversal starting from 'start' vertex\n    // Return vector of visited nodes in BFS order\n    // Time Complexity: ???\n    vector<int> BFS(int start) {\n        // Your implementation here\n        // Use a queue for BFS\n        // Track visited nodes\n        // Return vector of nodes in order visited\n        return vector<int>();\n    }\n    \n    // TODO: Implement shortestPath method using BFS\n    // Return vector of nodes representing shortest path from start to end\n    // Return empty vector if no path exists\n    // Time Complexity: ???\n    vector<int> shortestPath(int start, int end) {\n        // Your implementation here\n        // Use BFS to find shortest path\n        // Track predecessors to reconstruct path\n        return vector<int>();\n    }\n    \n    // TODO: Implement getLevels method\n    // Return a map where key is node and value is its level (distance from start)\n    // Level 0 = start node, Level 1 = nodes 1 edge away, etc.\n    // Time Complexity: ???\n    unordered_map<int, int> getLevels(int start) {\n        // Your implementation here\n        // Use BFS to assign levels\n        return unordered_map<int, int>();\n    }\n};\n\n// Test cases - uncomment to test\nint main() {\n    BFSGraph graph(5);\n    graph.addEdge(0, 1);\n    graph.addEdge(0, 2);\n    graph.addEdge(1, 3);\n    graph.addEdge(2, 4);\n    \n    vector<int> bfsOrder = graph.BFS(0);\n    cout << \"BFS from 0: \";\n    for (int node : bfsOrder) cout << node << \" \";\n    cout << endl;\n    \n    vector<int> path = graph.shortestPath(0, 4);\n    cout << \"Shortest path from 0 to 4: \";\n    for (int node : path) cout << node << \" \";\n    cout << endl;\n    \n    return 0;\n}"
+                "filename": "GraphBFS.cpp",
+                "content": "#include <iostream>\n#include <vector>\n#include <queue>\n#include <unordered_map>\n#include <unordered_set>\nusing namespace std;\n\nclass Graph {\nprivate:\n    unordered_map<int, vector<int>> adjacencyList;\n    bool directed;\n    \npublic:\n    // TODO: Implement constructor\n    Graph(bool isDirected) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addVertex method\n    void addVertex(int vertex) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addEdge for undirected graph\n    void addEdge(int from, int to) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement addDirectedEdge for directed graph\n    void addDirectedEdge(int from, int to) {\n        // Your implementation here\n    }\n    \n    // TODO: Implement BFS traversal\n    vector<int> BFS(int start) {\n        // Your implementation here\n        return vector<int>();\n    }\n    \n    // TODO: Implement shortest path using BFS\n    vector<int> shortestPath(int start, int end) {\n        // Your implementation here\n        return vector<int>();\n    }\n    \n    // TODO: Implement getLevel method\n    unordered_map<int, int> getLevel(int start) {\n        // Your implementation here\n        return unordered_map<int, int>();\n    }\n    \n    // TODO: Implement getAllLevels method\n    unordered_map<int, vector<int>> getAllLevels(int start) {\n        // Your implementation here\n        return unordered_map<int, vector<int>>();\n    }\n    \n    // TODO: Implement hasPath method\n    bool hasPath(int start, int end) {\n        // Your implementation here\n        return false;\n    }\n};\n\nint main() {\n    Graph g(false);\n    g.addVertex(0);\n    g.addVertex(1);\n    g.addVertex(2);\n    g.addEdge(0, 1);\n    g.addEdge(1, 2);\n    \n    vector<int> bfsOrder = g.BFS(0);\n    cout << \"BFS test: \" << (bfsOrder.size() == 3 ? \"PASS\" : \"FAIL\") << endl;\n    \n    return 0;\n}"
               }
             }
           },
           "academic": {
-            "title": "BFS Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering graph representations and BFS algorithm.",
+            "title": "Breadth-First Search Assessment",
+            "description": "Complete an online assessment with multiple question types covering BFS algorithm. The assessment includes: (1) Multiple Choice Questions analyzing BFS execution and complexity, (2) Short Answer Questions explaining BFS properties and applications, (3) Fill-in-the-Blank questions completing BFS implementations.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Compare adjacency matrix vs list, analyze BFS complexity, identify correct BFS traversal order",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain graph representations, analyze BFS time/space complexity, describe BFS applications, explain why BFS finds shortest path",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete BFS implementation code, fill in adjacency list construction, complete queue operations",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze BFS execution, time/space complexity, queue operations, and shortest path properties",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain BFS algorithm step-by-step, prove time complexity O(V+E), explain why BFS finds shortest path in unweighted graphs, compare BFS vs DFS, describe real-world applications",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete BFS implementation code, fill in queue operations, complete shortest path reconstruction, fill in level calculation",
+              "Time Limit: 90 minutes. Submit all answers through the online assessment platform",
               "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
-            "title": "BFS Presentation",
-            "description": "Create a 10-15 minute presentation explaining breadth-first search. Submit your slides and either a video recording or deliver live.",
+            "title": "Breadth-First Search Presentation",
+            "description": "Create and deliver a 10-15 minute educational presentation teaching BFS algorithm to fellow students. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to graphs and terminology (2 slides), (3) Adjacency matrix vs list (2-3 slides), (4) BFS algorithm step-by-step (3-4 slides), (5) Why BFS finds shortest path (2 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
-              "Content Requirements: Explain graph concepts, visualize adjacency representations, demonstrate BFS step-by-step with queue visualization, explain shortest path property",
-              "Visual Aids: Graph diagrams, adjacency representations, BFS traversal animations showing queue state, code examples",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Slide Structure (Required): (1) Title slide with your name, (2) Introduction: What is BFS? (2-3 slides), (3) How BFS works: Queue-based traversal (3-4 slides), (4) Step-by-step example: Walk through BFS on a graph (4-5 slides), (5) Shortest path application: Why BFS finds shortest paths (2-3 slides), (6) Real-world applications: Social networks, web crawling, etc. (2 slides), (7) Conclusion: Key takeaways (1 slide)",
+              "Content Requirements: Include: (a) Clear explanation of queue-based traversal, (b) Visual demonstration of BFS execution with queue state shown, (c) Proof/explanation of why BFS finds shortest paths, (d) Code example of BFS implementation, (e) Real-world use cases with examples",
+              "Visual Aids: Create animations or step-by-step diagrams showing: (a) Queue state at each step, (b) Visited vertices, (c) Level-by-level exploration, (d) Shortest path reconstruction",
+              "Code Examples: Include complete BFS implementation with comments explaining each step",
+              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time",
               "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 9 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lecture 9: Breadth-First Search. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: graph representations, BFS algorithm, queue-based traversal, shortest path applications",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -498,65 +519,55 @@ export const CURRICULUM_DATA = {
         "topic": "Graph Traversals: Depth-First Search (DFS)",
         "description": "Master depth-first search for graph traversal, cycle detection, and topological sorting. Understand recursive and iterative implementations.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 10: Depth-First Search", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-10-depth-first-search/", "type": "Video" },
-          { "title": "Lecture 10 Notes: DFS", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec10/", "type": "PDF" },
-          { "title": "Recitation 10 Notes", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_r10/", "type": "PDF" }
+          { "title": "Depth-First Search", "url": "https://www.youtube.com/watch?v=Urx87-NMm6c", "type": "Video" },
+          { "title": "DFS Implementation", "url": "https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/", "type": "Article" },
+          { "title": "DFS Applications", "url": "https://www.geeksforgeeks.org/applications-of-depth-first-search/", "type": "Article" }
         ],
         "deliverables": {
           "builder": {
-            "title": "DFS Implementation Starter",
-            "description": "Download the starter file with a partially implemented Graph class. Complete the DFS traversal methods and cycle detection.",
+            "title": "Graph Class with DFS Implementation",
+            "description": "Extend your Graph class from Week 8 with complete DFS functionality. Your implementation must include: (1) Recursive DFS traversal, (2) Iterative DFS using stack, (3) Cycle detection in directed and undirected graphs, (4) Topological sorting for DAGs, (5) Path finding using DFS. This project demonstrates understanding of depth-first search and its applications.",
             "guidelines": [
-              "Download the starter file (Java or C++)",
-              "Complete DFS_recursive(start) method: implement recursive depth-first search, return list of visited nodes",
-              "Complete DFS_iterative(start) method: implement iterative DFS using a stack, return list of visited nodes",
-              "Complete hasCycle() method: detect if the graph contains a cycle using DFS",
-              "Complete topologicalSort() method: return topological ordering for directed acyclic graphs (if applicable)",
-              "Complete findConnectedComponents() method: find all connected components in an undirected graph",
-              "Add time complexity comments for each method",
-              "Test with provided test cases and submit your completed file"
+              "Implementation Requirements (Required): (1) Use your Graph class from Week 8 or download the extended template, (2) Implement recursive DFS(start) method that returns list of vertices in DFS order, (3) Implement iterative DFS(start) method using a Stack, (4) Track visited vertices and discovery/finish times",
+              "Cycle Detection (Required): (1) Implement hasCycle() method for undirected graphs using DFS, (2) Implement hasCycleDirected() method for directed graphs (detect back edges), (3) Return true if cycle exists, false otherwise, (4) Add comments explaining cycle detection logic",
+              "Topological Sort (Required): (1) Implement topologicalSort() method for directed acyclic graphs (DAGs), (2) Use DFS with finish times, (3) Return vertices in topological order, (4) Handle graphs with cycles (return empty list or throw exception), (5) Add comments explaining topological sort algorithm",
+              "Path Finding (Required): (1) Implement findPathDFS(start, end) method using DFS, (2) Track path during DFS traversal, (3) Return path as list of vertices if exists, empty list otherwise, (4) Compare DFS path vs BFS shortest path",
+              "Additional Methods (Required): (1) Implement getAllPaths(start, end) method that finds all paths (not just one), (2) Implement getConnectedComponents() method using DFS, (3) Implement isBipartite() method using DFS coloring",
+              "Code Quality Requirements: (a) Use meaningful variable names, (b) Include detailed comments explaining DFS algorithm and applications, (c) Handle edge cases (empty graph, disconnected components), (d) Compare recursive vs iterative implementations in comments",
+              "Testing Requirements (Required): (a) Test recursive and iterative DFS produce same results, (b) Test cycle detection on graphs with and without cycles, (c) Test topological sort on DAGs, (d) Test path finding and compare with BFS results, (e) All test cases must pass"
             ],
             "template_files": {
               "java": {
-                "filename": "DFSGraph.java",
-                "path": "templates/cs102/week9/DFSGraph.java"
+                "filename": "GraphDFS.java",
+                "content": "import java.util.*;\n\n// Extended Graph class with DFS functionality\npublic class GraphDFS extends Graph { // Extend your Week 8 Graph class\n    \n    // TODO: Implement recursive DFS\n    // Returns list of vertices in DFS order\n    // Time Complexity: ???\n    public List<Integer> DFSRecursive(int start) {\n        // Your implementation here\n        // Use helper method with visited set\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement iterative DFS using Stack\n    // Returns list of vertices in DFS order\n    // Time Complexity: ???\n    public List<Integer> DFSIterative(int start) {\n        // Your implementation here\n        // Use Stack instead of recursion\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement cycle detection for undirected graph\n    // Returns true if cycle exists\n    // Time Complexity: ???\n    public boolean hasCycle() {\n        // Your implementation here\n        // Use DFS and check for back edges\n        return false;\n    }\n    \n    // TODO: Implement cycle detection for directed graph\n    // Returns true if cycle exists\n    // Time Complexity: ???\n    public boolean hasCycleDirected() {\n        // Your implementation here\n        // Use DFS with three colors: white, gray, black\n        return false;\n    }\n    \n    // TODO: Implement topological sort\n    // Returns vertices in topological order\n    // Returns empty list if cycle exists\n    // Time Complexity: ???\n    public List<Integer> topologicalSort() {\n        // Your implementation here\n        // Use DFS with finish times\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement path finding using DFS\n    // Returns path from start to end, empty if no path\n    // Time Complexity: ???\n    public List<Integer> findPathDFS(int start, int end) {\n        // Your implementation here\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement get all paths using DFS\n    // Returns all paths from start to end\n    // Time Complexity: ???\n    public List<List<Integer>> getAllPaths(int start, int end) {\n        // Your implementation here\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement get connected components\n    // Returns list of connected components\n    // Time Complexity: ???\n    public List<List<Integer>> getConnectedComponents() {\n        // Your implementation here\n        return new ArrayList<>();\n    }\n    \n    // TODO: Implement bipartite check using DFS\n    // Returns true if graph is bipartite\n    // Time Complexity: ???\n    public boolean isBipartite() {\n        // Your implementation here\n        // Use DFS with two-color coloring\n        return false;\n    }\n}\n\n// Test cases\nclass TestCases {\n    public static void main(String[] args) {\n        GraphDFS g = new GraphDFS(false);\n        // Add test cases here\n    }\n}"
               },
               "cpp": {
-                "filename": "DFSGraph.cpp",
-                "path": "templates/cs102/week9/DFSGraph.cpp"
+                "filename": "GraphDFS.cpp",
+                "content": "#include <iostream>\n#include <vector>\n#include <stack>\n#include <unordered_set>\nusing namespace std;\n\n// Extended Graph class with DFS\nclass GraphDFS : public Graph {\npublic:\n    // TODO: Implement recursive DFS\n    vector<int> DFSRecursive(int start) {\n        // Your implementation here\n        return vector<int>();\n    }\n    \n    // TODO: Implement iterative DFS\n    vector<int> DFSIterative(int start) {\n        // Your implementation here\n        return vector<int>();\n    }\n    \n    // TODO: Implement cycle detection\n    bool hasCycle() {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement topological sort\n    vector<int> topologicalSort() {\n        // Your implementation here\n        return vector<int>();\n    }\n    \n    // TODO: Implement path finding\n    vector<int> findPathDFS(int start, int end) {\n        // Your implementation here\n        return vector<int>();\n    }\n};\n\nint main() {\n    // Test cases\n    return 0;\n}"
               }
             }
           },
           "academic": {
-            "title": "DFS Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering DFS algorithm and its applications.",
+            "title": "Depth-First Search Assessment",
+            "description": "Complete an online assessment with multiple question types covering DFS algorithm. The assessment includes: (1) Multiple Choice Questions analyzing DFS execution and applications, (2) Short Answer Questions explaining DFS properties, cycle detection, and topological sort, (3) Fill-in-the-Blank questions completing DFS implementations.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze DFS complexity, identify correct DFS traversal order, compare recursive vs iterative DFS",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain DFS algorithm, analyze time/space complexity, describe DFS applications (cycle detection, topological sort), compare BFS vs DFS",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete DFS implementation code, fill in cycle detection logic, complete stack-based DFS",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze DFS execution, time/space complexity, stack operations, cycle detection, and topological sort",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain DFS algorithm step-by-step, prove time complexity O(V+E), explain cycle detection methods, describe topological sort algorithm, compare recursive vs iterative DFS",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete DFS implementation code, fill in cycle detection logic, complete topological sort, fill in path finding",
+              "Time Limit: 90 minutes. Submit all answers through the online assessment platform",
               "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
-            "title": "DFS Presentation",
-            "description": "Create a 10-15 minute presentation explaining depth-first search. Submit your slides and either a video recording or deliver live.",
+            "title": "Depth-First Search Presentation",
+            "description": "Create and deliver a 10-15 minute educational presentation teaching DFS algorithm to fellow students. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to DFS (2 slides), (3) Recursive DFS algorithm (3-4 slides), (4) Iterative DFS with stack (2-3 slides), (5) DFS applications: cycle detection, topological sort (3-4 slides), (6) BFS vs DFS comparison (2 slides), (7) Real-world applications (2 slides), (8) Conclusion (1 slide)",
-              "Content Requirements: Explain DFS concept, demonstrate recursive and iterative implementations, show applications with examples, compare with BFS",
-              "Visual Aids: Graph diagrams, DFS traversal animations showing stack/recursion, cycle detection examples, code examples",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Slide Structure (Required): (1) Title slide with your name, (2) Introduction: What is DFS? (2-3 slides), (3) How DFS works: Stack-based traversal (3-4 slides), (4) Recursive vs Iterative: Compare both approaches (2-3 slides), (5) Applications: Cycle detection, topological sort, path finding (4-5 slides), (6) Step-by-step examples: Walk through DFS on graphs (3-4 slides), (7) Conclusion: Key takeaways (1 slide)",
+              "Content Requirements: Include: (a) Clear explanation of stack-based/recursive traversal, (b) Visual demonstration of DFS execution, (c) Explanation of cycle detection methods, (d) Topological sort algorithm with example, (e) Code examples of key methods",
+              "Visual Aids: Create animations showing: (a) Stack/recursion state, (b) Visited vertices, (c) Discovery and finish times, (d) Cycle detection process, (e) Topological sort ordering",
+              "Code Examples: Include complete DFS implementation with recursive and iterative versions",
+              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time",
               "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 10 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lecture 10: Depth-First Search. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: DFS algorithm, recursive vs iterative implementations, cycle detection, topological sorting",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -566,64 +577,53 @@ export const CURRICULUM_DATA = {
         "topic": "Shortest Paths: Weighted Graphs and Introduction",
         "description": "Introduction to weighted graphs and shortest path problems. Learn about edge weights, path costs, and the need for different algorithms.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 11: Weighted Shortest Paths", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-11-weighted-shortest-paths/", "type": "Video" },
-          { "title": "Lecture 11 Notes: Weighted Shortest Paths", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec11/", "type": "PDF" }
+          { "title": "Weighted Graphs", "url": "https://www.youtube.com/watch?v=XB4MIexjvY0", "type": "Video" },
+          { "title": "Shortest Path Introduction", "url": "https://www.geeksforgeeks.org/shortest-path-algorithms/", "type": "Article" },
+          { "title": "MIT 6.006 Lecture 17: Shortest Paths I", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Weighted Graph Starter",
-            "description": "Download the starter file with a partially implemented WeightedGraph class. Complete methods for handling weighted edges and basic path cost calculations.",
+            "title": "Weighted Graph Class Implementation",
+            "description": "Implement a complete WeightedGraph class that extends your Graph class to handle weighted edges. Your implementation must include: (1) Weighted edge representation, (2) Methods to add weighted edges, (3) Path cost calculation, (4) Basic shortest path visualization. This project demonstrates understanding of weighted graphs and prepares for Dijkstra's algorithm.",
             "guidelines": [
-              "Download the starter file (Java or C++)",
-              "Complete the WeightedGraph class constructor: initialize adjacency list with edge weights",
-              "Complete addWeightedEdge(u, v, weight) method: add directed weighted edge",
-              "Complete getWeight(u, v) method: return weight of edge from u to v, or infinity if no edge",
-              "Complete calculatePathCost(path) method: given a list of nodes representing a path, calculate total cost",
-              "Complete getAllNeighbors(node) method: return all neighbors with their edge weights",
-              "Add time complexity comments for each method",
-              "Test with provided test cases and submit your completed file"
+              "Implementation Requirements (Required): (1) Download the template file (Java or C++) from the download button below, (2) Implement a WeightedGraph class with adjacency list storing edge weights, (3) Implement addWeightedEdge(from, to, weight) method, (4) Implement getWeight(from, to) method to retrieve edge weight, (5) Implement getAllEdges() method returning all edges with weights",
+              "Path Cost Calculation (Required): (1) Implement calculatePathCost(path) method that sums weights along a path, (2) Handle invalid paths (return -1 or throw exception), (3) Implement findCheapestPathNaive(start, end) method using brute force (try all paths for small graphs), (4) Add comments explaining why brute force is inefficient",
+              "Graph Analysis (Required): (1) Implement isConnected() method checking if all vertices are reachable, (2) Implement hasNegativeWeights() method checking for negative edge weights, (3) Implement getTotalWeight() method summing all edge weights, (4) Implement visualizeGraph() method printing graph structure with weights",
+              "Code Quality Requirements: (a) Use meaningful variable names, (b) Include comments explaining weighted graph concepts, (c) Handle edge cases (no path, negative weights, zero weights), (d) Document time complexity of each method",
+              "Testing Requirements (Required): (a) Test with graphs having positive weights only, (b) Test with graphs having negative weights, (c) Test path cost calculation on various paths, (d) Test edge cases, (e) All test cases must pass"
             ],
             "template_files": {
               "java": {
                 "filename": "WeightedGraph.java",
-                "path": "templates/cs102/week10/WeightedGraph.java"
+                "content": "import java.util.*;\n\nclass Edge {\n    int to, weight;\n    Edge(int t, int w) { to = t; weight = w; }\n}\n\npublic class WeightedGraph {\n    private Map<Integer, List<Edge>> adjacencyList;\n    private boolean directed;\n    \n    public WeightedGraph(boolean directed) { /* TODO */ }\n    public void addVertex(int vertex) { /* TODO */ }\n    public void addWeightedEdge(int from, int to, int weight) { /* TODO */ }\n    public int getWeight(int from, int to) { /* TODO: return -1 if no edge */ }\n    public int calculatePathCost(List<Integer> path) { /* TODO */ }\n    public boolean hasNegativeWeights() { /* TODO */ }\n}\n"
               },
               "cpp": {
                 "filename": "WeightedGraph.cpp",
-                "path": "templates/cs102/week10/WeightedGraph.cpp"
+                "content": "#include <iostream>\n#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nstruct Edge { int to, weight; };\nclass WeightedGraph {\n    unordered_map<int, vector<Edge>> adjacencyList;\n    bool directed;\npublic:\n    WeightedGraph(bool isDirected) : directed(isDirected) {}\n    void addVertex(int vertex) { /* TODO */ }\n    void addWeightedEdge(int from, int to, int weight) { /* TODO */ }\n    int getWeight(int from, int to) { /* TODO */ }\n};\n"
               }
             }
           },
           "academic": {
             "title": "Weighted Graphs Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering weighted graphs and shortest path concepts.",
+            "description": "Complete an online assessment with multiple question types covering weighted graphs and shortest path concepts. The assessment includes: (1) Multiple Choice Questions on weighted graph properties, (2) Short Answer Questions explaining path costs and algorithm needs, (3) Fill-in-the-Blank questions on graph representations.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Understand edge weights, path costs, identify when BFS fails for weighted graphs",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain weighted graphs, analyze why BFS doesn't work, describe shortest path problem variations",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete weighted graph representation code, fill in path cost calculations",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze weighted graph properties, path costs, edge weight types, and algorithm requirements",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain why BFS doesn't work for weighted graphs, describe path cost calculation, explain when different algorithms are needed, compare weighted vs unweighted shortest paths",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete weighted graph representation code, fill in path cost calculation, complete edge weight handling",
+              "Time Limit: 90 minutes. Submit all answers through the online assessment platform",
               "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Weighted Graphs Presentation",
-            "description": "Create a 10-15 minute presentation explaining weighted graphs and shortest path problems. Submit your slides and either a video recording or deliver live.",
+            "description": "Create and deliver a 10-15 minute educational presentation explaining weighted graphs and shortest path problems. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to weighted graphs (2 slides), (3) Path costs and edge weights (2 slides), (4) Why BFS fails for weighted graphs (2-3 slides), (5) Shortest path problem variations (2-3 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
-              "Content Requirements: Explain weighted graphs, demonstrate why BFS doesn't work, show real-world examples (GPS, network routing)",
-              "Visual Aids: Weighted graph diagrams, path cost examples, BFS failure demonstration, application examples",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Slide Structure (Required): (1) Title slide with your name, (2) Introduction: What are weighted graphs? (2-3 slides), (3) Path costs and shortest path problem (2-3 slides), (4) Why BFS doesn't work: Example with weighted graph (3-4 slides), (5) Need for new algorithms: Dijkstra's, Bellman-Ford introduction (2-3 slides), (6) Real-world applications: GPS navigation, network routing (2 slides), (7) Conclusion: Key takeaways (1 slide)",
+              "Content Requirements: Include: (a) Clear explanation of weighted graphs vs unweighted, (b) Path cost calculation with examples, (c) Visual demonstration of why BFS fails, (d) Introduction to Dijkstra's algorithm concept, (e) Real-world examples",
+              "Visual Aids: Create diagrams showing: (a) Weighted graph with edge labels, (b) Path cost calculations, (c) Example where BFS finds wrong path, (d) Applications in maps and networks",
+              "Code Examples: Include weighted graph representation and path cost calculation",
+              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time",
               "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 11 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lecture 11: Weighted Shortest Paths. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: weighted graphs, path costs, why BFS fails, shortest path problem variations",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -633,64 +633,54 @@ export const CURRICULUM_DATA = {
         "topic": "Shortest Paths: Dijkstra's Algorithm",
         "description": "Master Dijkstra's algorithm for finding shortest paths in graphs with non-negative edge weights. Understand priority queue usage and correctness proof.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 13: Dijkstra's Algorithm", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-13-dijkstra/", "type": "Video" },
-          { "title": "Lecture 13 Notes: Dijkstra", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec13/", "type": "PDF" }
+          { "title": "Dijkstra's Algorithm", "url": "https://www.youtube.com/watch?v=XB4MIexjvY0", "type": "Video" },
+          { "title": "Dijkstra's Implementation", "url": "https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/", "type": "Article" },
+          { "title": "MIT 6.006 Lecture 17: Shortest Paths I", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Dijkstra's Algorithm Starter",
-            "description": "Download the starter file with a partially implemented Dijkstra's algorithm. Complete the core algorithm using a priority queue.",
+            "title": "Dijkstra's Algorithm Implementation",
+            "description": "Implement a complete Dijkstra's algorithm for finding shortest paths in weighted graphs. Your implementation must include: (1) Priority queue-based Dijkstra's, (2) Shortest path reconstruction, (3) Distance tracking, (4) Handling of non-negative weights. This project demonstrates mastery of greedy algorithms and priority queues.",
             "guidelines": [
-              "Download the starter file (Java or C++)",
-              "Complete dijkstra(start) method: implement Dijkstra's algorithm, return shortest distances to all nodes",
-              "Complete shortestPath(start, end) method: use Dijkstra's to find shortest path, return list of nodes",
-              "Complete reconstructPath(predecessors, start, end) method: reconstruct path from predecessor array",
-              "Implement priority queue operations (or use built-in PriorityQueue/priority_queue)",
-              "Handle edge cases: unreachable nodes, disconnected graphs",
-              "Add time complexity comments (O((V+E)log V) with binary heap)",
-              "Test with provided test cases and submit your completed file"
+              "Implementation Requirements (Required): (1) Download the template file (Java or C++) from the download button below, (2) Implement dijkstra(start) method that returns shortest distances to all vertices, (3) Use a PriorityQueue (min-heap) to select next vertex, (4) Track distances and previous vertices for path reconstruction, (5) Handle graphs with non-negative weights only",
+              "Shortest Path (Required): (1) Implement shortestPath(start, end) method using Dijkstra's, (2) Reconstruct path using previous/parent array, (3) Return path as list of vertices, (4) Return empty list if no path exists, (5) Add comments explaining each step of algorithm",
+              "Distance Tracking (Required): (1) Implement getShortestDistances(start) method returning map of vertex -> shortest distance, (2) Implement getShortestDistance(start, end) method, (3) Handle unreachable vertices (return Integer.MAX_VALUE or -1)",
+              "Algorithm Correctness (Required): (1) Add comments explaining why Dijkstra's works (greedy choice property), (2) Explain why it requires non-negative weights, (3) Compare time complexity with different priority queue implementations, (4) Document O((V+E) log V) complexity",
+              "Code Quality Requirements: (a) Use meaningful variable names (distances, previous, pq, visited), (b) Include detailed comments explaining algorithm steps, (c) Handle edge cases (disconnected graphs, same start/end), (d) Compare with BFS in comments",
+              "Testing Requirements (Required): (a) Test on graphs with various structures, (b) Verify shortest paths are correct, (c) Test on graphs where BFS would give wrong answer, (d) Test edge cases, (e) All test cases must pass"
             ],
             "template_files": {
               "java": {
                 "filename": "Dijkstra.java",
-                "path": "templates/cs102/week11/Dijkstra.java"
+                "content": "import java.util.*;\n\npublic class Dijkstra {\n    private WeightedGraph graph;\n    public Dijkstra(WeightedGraph graph) { this.graph = graph; }\n    public Map<Integer, Integer> dijkstra(int start) { /* TODO: O((V+E) log V) */ }\n    public List<Integer> shortestPath(int start, int end) { /* TODO */ }\n    public Map<Integer, Integer> getShortestDistances(int start) { /* TODO */ }\n    public int getShortestDistance(int start, int end) { /* TODO */ }\n}\n"
               },
               "cpp": {
                 "filename": "Dijkstra.cpp",
-                "path": "templates/cs102/week11/Dijkstra.cpp"
+                "content": "#include <iostream>\n#include <queue>\n#include <unordered_map>\nusing namespace std;\n\nclass Dijkstra {\n    WeightedGraph* graph;\npublic:\n    Dijkstra(WeightedGraph* g) : graph(g) {}\n    unordered_map<int, int> dijkstra(int start) { /* TODO */ }\n    vector<int> shortestPath(int start, int end) { /* TODO */ }\n};\n"
               }
             }
           },
           "academic": {
             "title": "Dijkstra's Algorithm Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering Dijkstra's algorithm.",
+            "description": "Complete an online assessment with multiple question types covering Dijkstra's algorithm. The assessment includes: (1) Multiple Choice Questions on algorithm execution and complexity, (2) Short Answer Questions explaining correctness and implementation, (3) Fill-in-the-Blank questions completing algorithm code.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze Dijkstra's complexity, identify correct algorithm steps, understand priority queue usage",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain Dijkstra's algorithm, prove correctness, analyze time complexity, compare with BFS",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete Dijkstra's implementation code, fill in priority queue operations, complete relaxation step",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze Dijkstra's execution, priority queue operations, time complexity, and shortest path properties",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain Dijkstra's algorithm step-by-step, prove correctness (greedy choice), explain why non-negative weights required, compare with BFS, analyze time complexity O((V+E) log V)",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete Dijkstra's implementation code, fill in priority queue operations, complete path reconstruction, fill in distance updates",
+              "Time Limit: 90 minutes. Submit all answers through the online assessment platform",
               "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Dijkstra's Algorithm Presentation",
-            "description": "Create a 10-15 minute presentation explaining Dijkstra's algorithm. Submit your slides and either a video recording or deliver live.",
+            "description": "Create and deliver a 10-15 minute educational presentation teaching Dijkstra's algorithm to fellow students. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Problem statement: shortest path in weighted graphs (2 slides), (3) Dijkstra's algorithm step-by-step (4-5 slides), (4) Priority queue usage (2 slides), (5) Correctness intuition (2 slides), (6) Time complexity analysis (2 slides), (7) Real-world applications (2 slides), (8) Conclusion (1 slide)",
-              "Content Requirements: Explain algorithm step-by-step, demonstrate with example, show priority queue operations, discuss applications",
-              "Visual Aids: Graph diagrams, algorithm execution animations, priority queue visualizations, code examples, application examples (GPS)",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Slide Structure (Required): (1) Title slide with your name, (2) Introduction: What is Dijkstra's? (2-3 slides), (3) How it works: Priority queue and relaxation (4-5 slides), (4) Step-by-step example: Walk through algorithm (4-5 slides), (5) Why it works: Greedy choice property (2-3 slides), (6) Applications: GPS, network routing (2 slides), (7) Conclusion: Key takeaways (1 slide)",
+              "Content Requirements: Include: (a) Clear explanation of priority queue usage, (b) Visual demonstration of algorithm execution, (c) Explanation of relaxation step, (d) Proof/explanation of correctness, (e) Code example of implementation",
+              "Visual Aids: Create animations showing: (a) Priority queue state, (b) Distance updates, (c) Vertex selection process, (d) Path reconstruction, (e) Comparison with BFS",
+              "Code Examples: Include complete Dijkstra's implementation with comments",
+              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time",
               "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 13 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lecture 13: Dijkstra's Algorithm. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: Dijkstra's algorithm, priority queue usage, correctness proof, time complexity",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -700,66 +690,55 @@ export const CURRICULUM_DATA = {
         "topic": "Dynamic Programming Fundamentals",
         "description": "Introduction to dynamic programming paradigm. Learn recursive subproblems, memoization, and solve classic DP problems like Fibonacci, LCS, and LIS.",
         "resources": [
-          { "title": "MIT 6.006 Lecture 15: Dynamic Programming, Part 1", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-15-dynamic-programming-part-1-srtbot-fib-dags-bowling/", "type": "Video" },
-          { "title": "MIT 6.006 Lecture 16: Dynamic Programming, Part 2", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-16-dynamic-programming-part-2-lcs-lis-coins/", "type": "Video" },
-          { "title": "Lecture 15 Notes: DP Part 1", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec15/", "type": "PDF" },
-          { "title": "Lecture 16 Notes: DP Part 2", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_lec16/", "type": "PDF" }
+          { "title": "Dynamic Programming", "url": "https://www.youtube.com/watch?v=oBt53YbR9Kk", "type": "Video" },
+          { "title": "DP Tutorial", "url": "https://www.geeksforgeeks.org/dynamic-programming/", "type": "Article" },
+          { "title": "MIT 6.006 Lecture 19: Dynamic Programming I", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-19-dynamic-programming-i-fibonacci-shortest-paths/", "type": "Video" }
         ],
         "deliverables": {
           "builder": {
-            "title": "Dynamic Programming Starter",
-            "description": "Download the starter file with partially implemented DP solutions. Complete memoization and bottom-up implementations for classic problems.",
+            "title": "Dynamic Programming Problems Implementation",
+            "description": "Implement solutions to classic dynamic programming problems using both recursive and memoized approaches. Your implementation must include: (1) Fibonacci with memoization, (2) Longest Common Subsequence (LCS), (3) Longest Increasing Subsequence (LIS), (4) Coin Change problem. This project demonstrates understanding of DP patterns and optimization techniques.",
             "guidelines": [
-              "Download the starter file (Java or C++)",
-              "Complete fibonacci_memoized(n) method: implement memoized Fibonacci using a hash map/dictionary",
-              "Complete fibonacci_bottomup(n) method: implement bottom-up Fibonacci using array",
-              "Complete longestCommonSubsequence(s1, s2) method: implement LCS using 2D DP table",
-              "Complete longestIncreasingSubsequence(arr) method: implement LIS using DP",
-              "Compare time/space complexity of memoized vs bottom-up approaches",
-              "Add comments explaining the DP pattern for each problem",
-              "Test with provided test cases and submit your completed file"
+              "Implementation Requirements (Required): (1) Download the template file (Java or C++) from the download button below, (2) Implement all problems with both naive recursive and memoized versions, (3) Compare performance of both approaches, (4) Add comments explaining DP patterns",
+              "Fibonacci (Required): (1) Implement fibRecursive(n) - naive recursive, (2) Implement fibMemoized(n) - with memoization, (3) Implement fibDP(n) - bottom-up DP, (4) Compare time complexities: O(2^n) vs O(n), (5) Add comments explaining optimization",
+              "Longest Common Subsequence (Required): (1) Implement lcsRecursive(s1, s2) - naive recursive, (2) Implement lcsMemoized(s1, s2) - with memoization, (3) Implement lcsDP(s1, s2) - bottom-up DP with table, (4) Implement lcsReconstruct(s1, s2) - reconstruct actual LCS string, (5) Add comments explaining DP table construction",
+              "Longest Increasing Subsequence (Required): (1) Implement lisDP(arr) - find length of LIS, (2) Implement lisReconstruct(arr) - find actual LIS sequence, (3) Add comments explaining algorithm",
+              "Coin Change (Required): (1) Implement coinChangeRecursive(coins, amount) - naive recursive, (2) Implement coinChangeDP(coins, amount) - DP solution, (3) Implement coinChangeReconstruct(coins, amount) - return actual coins used, (4) Add comments explaining DP approach",
+              "Code Quality Requirements: (a) Use meaningful variable names, (b) Include detailed comments explaining DP patterns (optimal substructure, overlapping subproblems), (c) Document time and space complexity, (d) Compare recursive vs DP approaches",
+              "Testing Requirements (Required): (a) Test all problems with various inputs, (b) Verify memoized and DP versions produce same results, (c) Compare execution times for large inputs, (d) Test edge cases, (e) All test cases must pass"
             ],
             "template_files": {
               "java": {
                 "filename": "DynamicProgramming.java",
-                "path": "templates/cs102/week12/DynamicProgramming.java"
+                "content": "import java.util.*;\n\npublic class DynamicProgramming {\n    public static long fibRecursive(int n) { /* TODO: O(2^n) */ }\n    public static long fibMemoized(int n) { /* TODO: O(n) */ }\n    public static long fibDP(int n) { /* TODO: O(n), O(1) space */ }\n    public static int lcsDP(String s1, String s2) { /* TODO: O(m*n) */ }\n    public static String lcsReconstruct(String s1, String s2) { /* TODO */ }\n    public static int lisDP(int[] arr) { /* TODO: O(n^2) or O(n log n) */ }\n    public static int coinChangeDP(int[] coins, int amount) { /* TODO */ }\n}\n"
               },
               "cpp": {
                 "filename": "DynamicProgramming.cpp",
-                "path": "templates/cs102/week12/DynamicProgramming.cpp"
+                "content": "#include <iostream>\n#include <vector>\n#include <string>\nusing namespace std;\n\nclass DynamicProgramming {\npublic:\n    static long fibDP(int n) { /* TODO */ }\n    static int lcsDP(string s1, string s2) { /* TODO */ }\n    static int lisDP(vector<int>& arr) { /* TODO */ }\n    static int coinChangeDP(vector<int>& coins, int amount) { /* TODO */ }\n};\n"
               }
             }
           },
           "academic": {
             "title": "Dynamic Programming Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering dynamic programming concepts and problems.",
+            "description": "Complete an online assessment with multiple question types covering dynamic programming. The assessment includes: (1) Multiple Choice Questions on DP concepts and problems, (2) Short Answer Questions explaining DP patterns, (3) Fill-in-the-Blank questions completing DP solutions.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Identify DP problems, analyze memoization vs tabulation, understand subproblem structure",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain DP paradigm, design DP solutions, analyze time/space complexity, compare with greedy algorithms",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete DP implementation code, fill in memoization logic, complete state transitions",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
+              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Analyze DP problems, identify optimal substructure, recognize overlapping subproblems, analyze time/space complexity",
+              "Part 2 - Short Answer Questions (35 points, 5 questions): Explain optimal substructure property, explain memoization vs tabulation, solve DP problems step-by-step, compare recursive vs DP approaches, analyze complexity",
+              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete DP table construction, fill in recurrence relations, complete memoization code, fill in base cases",
+              "Time Limit: 90 minutes. Submit all answers through the online assessment platform",
               "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
             ]
           },
           "communicator": {
             "title": "Dynamic Programming Presentation",
-            "description": "Create a 10-15 minute presentation explaining dynamic programming. Submit your slides and either a video recording or deliver live.",
+            "description": "Create and deliver a 10-15 minute educational presentation teaching dynamic programming to fellow students. Submit your slides and either a video recording or deliver live.",
             "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to DP paradigm (2 slides), (3) Memoization vs tabulation (2-3 slides), (4) Classic DP problems: Fibonacci, LCS, LIS (4-5 slides), (5) DP pattern recognition (2 slides), (6) Real-world applications (2 slides), (7) Conclusion (1 slide)",
-              "Content Requirements: Explain DP concept, demonstrate memoization and tabulation, solve 2-3 classic problems step-by-step",
-              "Visual Aids: Recursion trees, memoization tables, DP table fillings, code examples",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
+              "Slide Structure (Required): (1) Title slide with your name, (2) Introduction: What is DP? (2-3 slides), (3) Key concepts: Optimal substructure, overlapping subproblems (3-4 slides), (4) Example: Fibonacci with and without DP (3-4 slides), (5) Classic problems: LCS, LIS, Coin Change (4-5 slides), (6) DP patterns: When to use DP (2-3 slides), (7) Conclusion: Key takeaways (1 slide)",
+              "Content Requirements: Include: (a) Clear explanation of DP paradigm, (b) Visual demonstration of memoization, (c) Step-by-step DP table construction, (d) Code examples of key problems, (e) When to recognize DP problems",
+              "Visual Aids: Create diagrams showing: (a) Recursive tree with overlapping subproblems, (b) Memoization process, (c) DP table filling, (d) Problem-solving framework",
+              "Code Examples: Include complete DP solutions with both memoized and tabulated versions",
+              "Submission: Upload your presentation file (PDF, PowerPoint, or Google Slides link) and either: (a) A video recording (MP4, MOV, or YouTube link), or (b) Schedule a live presentation time",
               "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lectures 15-16 Notes Submission",
-            "description": "Submit your notes from MIT 6.006 Lectures 15-16: Dynamic Programming. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: DP paradigm, memoization, tabulation, classic DP problems (Fibonacci, LCS, LIS)",
-              "Format: Submit as PDF (3-5 pages expected for two lectures)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
             ]
           }
         }
@@ -771,68 +750,44 @@ export const CURRICULUM_DATA = {
         "resources": [],
         "deliverables": {
           "builder": {
-            "title": "Interactive Data Structures Playground",
-            "description": "Build a fun, interactive application that demonstrates multiple data structures and algorithms from the course. Create an engaging visualization tool that lets users explore and interact with different data structures.",
+            "title": "Data Structures and Algorithms Portfolio Project",
+            "description": "Create a comprehensive portfolio project that demonstrates mastery of all course concepts. Choose one of: (1) Complete data structures library with all structures implemented, (2) Algorithm visualization tool showing multiple algorithms, (3) Problem-solving application using various data structures and algorithms. This is your capstone project showcasing everything you've learned.",
             "guidelines": [
-              "Choose one of these fun project ideas (or propose your own):",
-              "  - Interactive Sorting Visualizer: Visualize different sorting algorithms (bubble, merge, quick sort) with real-time animations",
-              "  - Binary Tree Visualizer: Build and traverse binary trees interactively, show different traversal orders",
-              "  - Graph Pathfinding Visualizer: Interactive graph where users can add nodes/edges and see BFS/DFS/Dijkstra in action",
-              "  - Hash Table Explorer: Visualize hash collisions, rehashing, and search operations",
-              "  - Stack/Queue Simulator: Interactive demonstration of stack and queue operations with visual feedback",
-              "Requirements:",
-              "  - Use at least 3 different data structures from the course",
-              "  - Implement at least 2 algorithms we covered",
-              "  - Include real-time visualizations/animations",
-              "  - Make it interactive and engaging (user can input data, control speed, etc.)",
-              "  - Include complexity analysis in documentation",
-              "  - Clean, well-documented code",
-              "Submission: Upload your project files or provide GitHub repository link"
-            ],
-            "template_files": {
-              "java": {
-                "filename": "FinalProject_Starter.java",
-                "path": "templates/cs102/week13/FinalProject_Starter.java"
-              },
-              "cpp": {
-                "filename": "FinalProject_Starter.cpp",
-                "path": "templates/cs102/week13/FinalProject_Starter.cpp"
-              }
-            }
+              "Project Selection (Required): Choose one project type that interests you and demonstrates comprehensive understanding",
+              "Data Structures Library Option: (1) Implement all major data structures: DynamicArray, LinkedList, Stack, Queue, HashMap, BST, Heap, Graph, (2) Include comprehensive test suite, (3) Document time/space complexity for all operations, (4) Create usage examples and documentation",
+              "Algorithm Visualization Option: (1) Create interactive tool visualizing: sorting algorithms, graph traversals, shortest paths, DP problems, (2) Show step-by-step execution, (3) Compare algorithm performance, (4) Include educational explanations",
+              "Problem-Solving Application Option: (1) Build application solving real-world problem (e.g., route planner, task scheduler, data analyzer), (2) Use multiple data structures appropriately, (3) Implement efficient algorithms, (4) Include user interface and documentation",
+              "Requirements for All Options: (1) Use at least 5 different data structures, (2) Implement at least 3 different algorithms, (3) Include comprehensive testing, (4) Document design decisions and complexity analysis, (5) Create README with setup instructions",
+              "Code Quality Requirements: (a) Clean, well-organized code, (b) Comprehensive comments, (c) Proper error handling, (d) Efficient implementations, (e) Professional documentation",
+              "Submission Requirements: (a) Complete source code, (b) README file, (c) Test suite, (d) Documentation of design choices, (e) Complexity analysis for key operations"
+            ]
           },
           "academic": {
-            "title": "Course Summary Assessment",
-            "description": "Complete a summary assessment covering key concepts from throughout the entire course. Same format and length as weekly assessments, but questions span all 12 weeks.",
+            "title": "Comprehensive Final Exam",
+            "description": "Complete a comprehensive written exam covering all course topics: (1) Design and analyze data structures for given problems, (2) Choose appropriate data structures and algorithms for scenarios, (3) Time and space complexity analysis, (4) Compare different approaches, (5) Solve 5-7 complex problems requiring multiple concepts. Submit detailed solutions with rigorous analysis.",
             "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Cover topics from all weeks - Big-O, arrays, linked lists, stacks, queues, hash tables, trees, heaps, graphs, BFS, DFS, Dijkstra, dynamic programming",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Synthesize concepts across weeks, compare data structures, analyze when to use different algorithms, explain key algorithmic paradigms",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete implementations across different data structures and algorithms from the course",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
-              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
+              "Design data structures for 2-3 new problems not covered in class",
+              "Justify choice of data structure and algorithm for given scenarios with complexity analysis",
+              "Complete time and space complexity analysis for all solutions",
+              "Compare different data structures and algorithms for same problem",
+              "Solve 5-7 complex problems requiring multiple data structures and algorithms",
+              "All solutions must be rigorous with clear reasoning, proofs, and analysis",
+              "Demonstrate deep understanding of tradeoffs, design decisions, and optimization techniques"
             ]
           },
           "communicator": {
-            "title": "Course Reflection Presentation",
-            "description": "Create a 15-20 minute presentation reflecting on your learning journey through the course. Discuss what you learned each week, your thoughts, challenges, and growth.",
+            "title": "Course Reflection and Summary Presentation",
+            "description": "Create a 20-30 minute comprehensive presentation summarizing the entire course. Include: (1) Overview of all topics covered, (2) When to use each data structure and algorithm with examples, (3) Complexity analysis and tradeoffs, (4) Real-world applications, (5) Your learning journey and key insights, (6) Future learning directions. Use visual aids and live demonstrations.",
             "guidelines": [
-              "Slide Structure: (1) Title slide with your name, (2) Course overview and your initial expectations (2 slides), (3) Week-by-week reflection (12 slides - one per week):",
-              "  - For each week: What you learned, what was challenging, what you found interesting, key takeaways",
-              "(4) Favorite topics and why (2-3 slides), (5) Most challenging concepts and how you overcame them (2 slides), (6) How you'll apply this knowledge (2 slides), (7) Future learning goals (1 slide), (8) Conclusion and final thoughts (1 slide)",
-              "Content Requirements: Be honest and reflective. Share both successes and struggles. Show your growth throughout the course",
-              "Visual Aids: Use diagrams, code snippets, or examples from your work. Include screenshots of projects if relevant",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
-              "Grading Rubric: Reflection depth and honesty (30%), Coverage of all weeks (25%), Clarity of communication (20%), Visual aids (15%), Delivery/presentation skills (10%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Course Notes Portfolio Submission",
-            "description": "Submit a compilation of your best lecture notes from the course (select 3-4 weeks). This demonstrates your note-taking skills and understanding across the semester.",
-            "guidelines": [
-              "Select 3-4 weeks of your best lecture notes to include in the portfolio",
-              "Format: Submit as single PDF document (8-16 pages total)",
-              "Include a brief reflection (1 page) on your note-taking process and how it helped your learning",
-              "Grading Rubric: Note quality across selected weeks (50%), Completeness and accuracy (30%), Organization and presentation (20%)",
-              "Submission: Upload notes portfolio PDF through course platform"
+              "20-30 minute comprehensive presentation",
+              "Overview of all data structures: linear, tree-based, hash-based, graph",
+              "Overview of all algorithms: sorting, searching, graph algorithms, dynamic programming",
+              "Decision framework: when to use each structure/algorithm with examples",
+              "Complexity comparison table for common operations",
+              "Real-world applications with specific examples",
+              "Personal reflection: challenges, breakthroughs, favorite topics",
+              "Future learning directions: advanced topics, specializations",
+              "Engaging visuals, clear structure, and confident delivery"
             ]
           }
         }
@@ -866,57 +821,10 @@ export const CURRICULUM_DATA = {
         "topic": "Propositional Logic and Truth Tables",
         "description": "Learn propositions, logical connectives (AND, OR, NOT, IMPLIES), truth tables, and logical equivalences.",
         "resources": [
-          { "title": "MIT 6.042J Lecture 1: Introduction and Proofs", "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/resources/lecture-1-introduction-and-proofs/", "type": "Video" }
+          { "title": "Propositional Logic", "url": "https://www.youtube.com/watch?v=FMh8qNV3PHk", "type": "Video" },
+          { "title": "Truth Tables Tutorial", "url": "https://www.mathsisfun.com/sets/logic-truth-tables.html", "type": "Article" }
         ],
-        "deliverables": {
-          "builder": {
-            "title": "Truth Table Generator Template",
-            "description": "Download and complete a template file that generates truth tables for compound propositions. Implement the logic evaluation functions.",
-            "guidelines": [
-              "Step 1: Download the template file 'TruthTableGenerator.java'",
-              "Step 2: Implement functions to evaluate logical connectives (AND, OR, NOT, IMPLIES)",
-              "Step 3: Implement truth table generation for compound propositions",
-              "Step 4: Test with provided examples and submit your completed file",
-              "Grading: Correctness (50%), Code quality (25%), Test results (25%)"
-            ],
-            "template_file": {
-              "filename": "TruthTableGenerator.java",
-              "content": "public class TruthTableGenerator {\n    // TODO: Implement logical AND operation\n    public static boolean and(boolean p, boolean q) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement logical OR operation\n    public static boolean or(boolean p, boolean q) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement logical NOT operation\n    public static boolean not(boolean p) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Implement logical IMPLIES operation (p -> q)\n    public static boolean implies(boolean p, boolean q) {\n        // Your implementation here\n        return false;\n    }\n    \n    // TODO: Generate truth table for compound proposition\n    public static void generateTruthTable(String expression) {\n        // Your implementation here\n    }\n}"
-            }
-          },
-          "academic": {
-            "title": "Propositional Logic Assessment",
-            "description": "Complete an online assessment with MCQ, SAQ, and fill-in-the-blank questions covering propositional logic, truth tables, and logical equivalences.",
-            "guidelines": [
-              "Part 1 - Multiple Choice Questions (40 points, 10 questions): Evaluate truth values, identify logical equivalences, analyze compound propositions",
-              "Part 2 - Short Answer Questions (35 points, 5 questions): Construct truth tables, prove logical equivalences, translate English to logic",
-              "Part 3 - Fill-in-the-Blank (25 points, 5 questions): Complete truth table rows, fill in logical connective evaluations, complete equivalence proofs",
-              "Time Limit: 90 minutes. Submit through online assessment platform",
-              "Grading: MCQ auto-graded (40%), SAQ graded on correctness and clarity (35%), Fill-in-the-blank graded on correctness (25%)"
-            ]
-          },
-          "communicator": {
-            "title": "Propositional Logic Teaching Presentation",
-            "description": "Create a 10-15 minute presentation teaching propositional logic to fellow students. Submit your slides and either a video recording or deliver live.",
-            "guidelines": [
-              "Slide Structure: (1) Title slide, (2) Introduction to propositions (2 slides), (3) Logical connectives with examples (3-4 slides), (4) Truth tables (2-3 slides), (5) Logical equivalences (2 slides), (6) Applications (2 slides), (7) Conclusion (1 slide)",
-              "Content Requirements: Explain all connectives, demonstrate truth tables, show logical equivalences, provide examples",
-              "Visual Aids: Truth table diagrams, logical expression trees, equivalence examples",
-              "Submission: Upload presentation file and either video recording or schedule live presentation",
-              "Grading Rubric: Content accuracy (40%), Clarity of explanation (25%), Visual aids quality (15%), Delivery/presentation skills (20%)"
-            ]
-          },
-          "lecture_notes": {
-            "title": "Lecture 1 Notes Submission",
-            "description": "Submit your notes from MIT 6.042J Lecture 1: Introduction and Proofs. Notes will be assessed for completeness, accuracy, and understanding of key concepts.",
-            "guidelines": [
-              "Take comprehensive notes covering: propositions, logical connectives, truth tables, proof techniques",
-              "Format: Submit as PDF (2-4 pages expected)",
-              "Grading Rubric: Completeness (40%), Accuracy (30%), Organization (20%), Critical thinking (10%)",
-              "Submission: Upload notes PDF through course platform"
-            ]
-          }
-        }
+        "deliverable": "Create truth tables for 10 compound propositions. Identify logically equivalent pairs."
       },
       {
         "week": 2,

@@ -123,10 +123,36 @@ const CommunicatorPresentationSection = ({ week, weekIndex, course, onUpdateCour
 
                 {week.deliverables?.communicator?.guidelines && (
                     <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
-                        <h4 className="font-semibold text-orange-900 mb-2">Presentation Guidelines:</h4>
-                        <ol className="text-sm text-orange-800 space-y-2 list-decimal list-inside">
-                            {week.deliverables.communicator.guidelines.map((g, i) => (<li key={i} className="ml-2">{g}</li>))}
-                        </ol>
+                        <h4 className="font-semibold text-orange-900 mb-3">Presentation Guidelines:</h4>
+                        <div className="space-y-3">
+                            {week.deliverables.communicator.guidelines.map((g, i) => {
+                                // Check if this is a slide structure guideline
+                                if (g.includes('Slide Structure') || g.includes('Required)')) {
+                                    const parts = g.split(':');
+                                    return (
+                                        <div key={i} className="bg-white rounded p-3 border border-orange-300">
+                                            <div className="font-bold text-orange-900 mb-2 text-sm">{parts[0]}</div>
+                                            <div className="text-sm text-orange-800 whitespace-pre-line ml-2">
+                                                {parts.slice(1).join(':').trim()}
+                                            </div>
+                                        </div>
+                                    );
+                                }
+                                // Regular guideline
+                                const parts = g.split(':');
+                                if (parts.length > 1) {
+                                    return (
+                                        <div key={i} className="text-sm text-orange-800">
+                                            <span className="font-semibold">{parts[0]}:</span>
+                                            <span className="ml-1">{parts.slice(1).join(':')}</span>
+                                        </div>
+                                    );
+                                }
+                                return (
+                                    <div key={i} className="text-sm text-orange-800">{g}</div>
+                                );
+                            })}
+                        </div>
                     </div>
                 )}
             </div>

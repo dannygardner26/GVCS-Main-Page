@@ -191,8 +191,8 @@ Provide your analysis:`;
                 <h3 className="text-lg font-bold text-gray-800">Lecture Notes Checker</h3>
             </div>
             <p className="text-sm text-gray-600 mb-4">
-                Upload your lecture notes (PDF) to get feedback on completeness and identify any gaps in your understanding. 
-                This helps ensure you're prepared for the week's activities.
+                <strong>Optional:</strong> Upload your lecture notes (PDF) to get feedback on completeness and identify any gaps in your understanding. 
+                This is a helpful tool if you took notes - there is <strong>no length requirement</strong>. Submit whatever notes you have.
             </p>
 
             {week.deliverables?.lecture_notes && (

@@ -6,6 +6,11 @@ const CurriculumMap = ({ courses, onSelect }) => {
     const tier1Courses = courses.filter(c => c.tier === 1);
     const tier2Courses = courses.filter(c => c.tier === 2);
     const tier3Courses = courses.filter(c => c.tier === 3);
+    
+    // Organize language tracks
+    const languageTracks = courses.filter(c => c.category === 'language_track');
+    const cppCourses = languageTracks.filter(c => c.title.includes('C++'));
+    const pythonCourses = languageTracks.filter(c => c.title.includes('Python'));
 
     // Organize Tier 3 by subject area
     const aiCourses = tier3Courses.filter(c => c.title.startsWith("AI 40"));
@@ -230,6 +235,43 @@ const CurriculumMap = ({ courses, onSelect }) => {
                         )}
                     </div>
                 </section>
+
+                {/* LANGUAGE TRACKS: Pre-DSA Language Learning */}
+                {languageTracks.length > 0 && (
+                    <section>
+                        <div className="mb-6">
+                            <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
+                                <span className="w-1 h-8 bg-green-500 rounded"></span>
+                                LANGUAGE TRACKS: Pre-DSA
+                            </h2>
+                            <p className="text-gray-400 text-sm ml-4">For students who know Java (AP CSA). Learn C++ or Python syntax and language-specific features before taking DSA courses.</p>
+                        </div>
+                        
+                        {/* C++ Track */}
+                        {cppCourses.length > 0 && (
+                            <div className="mb-8">
+                                <h3 className="text-xl font-semibold text-white mb-4 ml-4">C++ Track</h3>
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    {cppCourses.map((course, i) => (
+                                        <CourseCard key={i} course={course} tier={null} />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                        
+                        {/* Python Track */}
+                        {pythonCourses.length > 0 && (
+                            <div className="mb-8">
+                                <h3 className="text-xl font-semibold text-white mb-4 ml-4">Python Track</h3>
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    {pythonCourses.map((course, i) => (
+                                        <CourseCard key={i} course={course} tier={null} />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </section>
+                )}
             </div>
         </div>
     );

@@ -22,3 +22,4 @@ CREATE POLICY "Ellis can view all courses"
     );
 
 
+

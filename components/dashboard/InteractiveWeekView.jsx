@@ -64,7 +64,20 @@ const InteractiveWeekView = ({ course, week, weekIndex, onBack, onUpdateCourse }
             </button>
 
             <h2 className="text-2xl font-bold text-gvcs-navy mb-2">Week {week.week}: {week.topic}</h2>
-            <p className="text-gray-600 mb-6">{week.description}</p>
+            <p className="text-gray-600 mb-4">{week.description}</p>
+            
+            {course.mit_anchor && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
+                    <p className="text-sm text-blue-800">
+                        <strong>Based on:</strong> MIT {course.mit_anchor}
+                        {course.mit_url && (
+                            <a href={course.mit_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-2">
+                                (View MIT OCW Course)
+                            </a>
+                        )}
+                    </p>
+                </div>
+            )}
 
             {/* Lecture Notes Checker */}
             {week.deliverables?.lecture_notes && (

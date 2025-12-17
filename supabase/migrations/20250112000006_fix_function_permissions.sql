@@ -5,3 +5,4 @@ GRANT EXECUTE ON FUNCTION populate_mock_data_for_user(UUID) TO authenticated;
 GRANT EXECUTE ON FUNCTION populate_mock_data_for_user(UUID) TO anon;
 
 
+

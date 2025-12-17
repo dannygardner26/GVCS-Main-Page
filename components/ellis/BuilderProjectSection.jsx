@@ -11,9 +11,34 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
     const isCS102DS = course?.title?.includes('CS 102') || course?.title?.includes('Data Structures');
 
     const rubric = [
-        { criterion: "Functionality", maxPoints: 40, description: "Code works correctly and meets all requirements" },
-        { criterion: "Code Quality", maxPoints: 30, description: "Clean, readable, well-structured code" },
-        { criterion: "Testing", maxPoints: 30, description: "Comprehensive test cases and edge cases covered" }
+        { 
+            criterion: "Functionality/Correctness", 
+            maxPoints: 40,
+            low: "0-10 points: Code has major errors, functions don't work correctly, doesn't meet requirements",
+            medium: "11-25 points: Code mostly works but has some bugs or incomplete implementations",
+            high: "26-40 points: All functions work correctly, meets all requirements, handles edge cases"
+        },
+        { 
+            criterion: "Code Quality & Organization", 
+            maxPoints: 30,
+            low: "0-7 points: Poor code structure, inconsistent style, unclear variable names, minimal comments",
+            medium: "8-18 points: Adequate code structure, mostly consistent style, some unclear naming or missing comments",
+            high: "19-30 points: Clean, well-organized code, consistent style, meaningful names, appropriate comments"
+        },
+        { 
+            criterion: "Complexity Analysis", 
+            maxPoints: 20,
+            low: "0-5 points: Missing or incorrect complexity analysis, no documentation of time/space complexity",
+            medium: "6-12 points: Basic complexity analysis present but incomplete or partially incorrect",
+            high: "13-20 points: Accurate Big-O analysis for all functions, includes time/space complexity and best/average/worst cases"
+        },
+        { 
+            criterion: "Testing & Edge Cases", 
+            maxPoints: 10,
+            low: "0-2 points: No testing or tests fail, doesn't handle edge cases",
+            medium: "3-7 points: Basic tests pass but missing edge case coverage",
+            high: "8-10 points: All provided tests pass, handles edge cases appropriately"
+        }
     ];
 
     const handleSubmit = async (e) => {
@@ -107,16 +132,32 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                 {hasSubmission.rubric && (
                     <div className="bg-white border border-gray-200 rounded-lg p-4">
                         <h4 className="font-bold mb-3">Grading Rubric</h4>
-                        <div className="space-y-3">
-                            {hasSubmission.rubric.map((item, idx) => (
-                                <div key={idx} className="border-b border-gray-200 pb-3 last:border-0">
-                                    <div className="flex justify-between items-center mb-1">
-                                        <span className="font-semibold text-gray-800">{item.criterion}</span>
-                                        <span className="text-sm text-gray-600">{item.points}/{item.maxPoints} points</span>
-                                    </div>
-                                    <p className="text-xs text-gray-500">{item.feedback}</p>
-                                </div>
-                            ))}
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm border-collapse">
+                                <thead>
+                                    <tr className="border-b-2 border-gray-300">
+                                        <th className="text-left p-2 font-bold text-gray-800">Criterion</th>
+                                        <th className="text-center p-2 font-bold text-gray-800">Score</th>
+                                        <th className="text-center p-2 font-bold text-gray-800">Max Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {hasSubmission.rubric.map((item, idx) => (
+                                        <tr key={idx} className="border-b border-gray-200">
+                                            <td className="p-2 font-semibold text-gray-700">{item.criterion}</td>
+                                            <td className="p-2 text-center text-gray-800 font-bold">{item.points}</td>
+                                            <td className="p-2 text-center text-gray-600">{item.maxPoints}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                                <tfoot>
+                                    <tr className="border-t-2 border-gray-300 bg-gray-50">
+                                        <td className="p-2 text-right font-bold text-gray-800">Total:</td>
+                                        <td className="p-2 text-center font-bold text-gray-800">{hasSubmission.score}</td>
+                                        <td className="p-2 text-center font-bold text-gray-800">{hasSubmission.totalPoints}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 )}
@@ -132,17 +173,19 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
         let fileContent = null;
         let fileName = null;
         
-        // Check for template_files (plural) with java/cpp options
+        // Check for template_files (plural) with java/cpp/python options
         if (builder.template_files) {
             if (language && builder.template_files[language]) {
                 const fileInfo = builder.template_files[language];
                 fileContent = fileInfo.content;
                 fileName = fileInfo.filename;
-            } else if (language === null && builder.template_files.java) {
-                // Default to Java if no language specified
-                const fileInfo = builder.template_files.java;
-                fileContent = fileInfo.content;
-                fileName = fileInfo.filename;
+            } else if (language === null) {
+                // Default priority: java > cpp > python
+                const fileInfo = builder.template_files.java || builder.template_files.cpp || builder.template_files.python;
+                if (fileInfo) {
+                    fileContent = fileInfo.content;
+                    fileName = fileInfo.filename;
+                }
             }
         }
         // Check for template_file (singular) - older format
@@ -174,7 +217,9 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
     
     // Check if we have template files to download
     const hasTemplateFiles = week.deliverables?.builder?.template_files || week.deliverables?.builder?.template_file;
-    const hasMultipleLanguages = week.deliverables?.builder?.template_files?.java && week.deliverables?.builder?.template_files?.cpp;
+    const templateFiles = week.deliverables?.builder?.template_files;
+    const availableLanguages = templateFiles ? Object.keys(templateFiles).filter(lang => ['java', 'cpp', 'python'].includes(lang)) : [];
+    const hasMultipleLanguages = availableLanguages.length > 1;
 
     return (
         <div className="space-y-6">
@@ -184,10 +229,20 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
 
                 {week.deliverables?.builder?.guidelines && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                        <h4 className="font-semibold text-blue-900 mb-2">Step-by-Step Guidelines:</h4>
-                        <ol className="text-sm text-blue-800 space-y-2 list-decimal list-inside">
-                            {week.deliverables.builder.guidelines.map((guideline, i) => (<li key={i} className="ml-2">{guideline}</li>))}
-                        </ol>
+                        <h4 className="font-semibold text-blue-900 mb-3">Project Requirements:</h4>
+                        <ul className="text-sm text-blue-800 space-y-3">
+                            {week.deliverables.builder.guidelines.map((guideline, i) => (
+                                <li key={i} className="ml-4 list-disc">
+                                    <span className="font-semibold">{guideline.split(':')[0]}:</span>
+                                    {guideline.includes(':') && (
+                                        <span className="ml-1">{guideline.split(':').slice(1).join(':')}</span>
+                                    )}
+                                    {!guideline.includes(':') && (
+                                        <span className="ml-1">{guideline}</span>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
 
@@ -196,27 +251,19 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
                         <h4 className="font-semibold text-gray-700 mb-3">Download Starter File:</h4>
                         {hasMultipleLanguages ? (
                             <>
-                                <div className="grid grid-cols-2 gap-3">
-                                    {week.deliverables.builder.template_files.java && (
+                                <div className={`grid gap-3 ${availableLanguages.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                                    {availableLanguages.map(lang => (
                                         <button
-                                            onClick={() => downloadTemplateFile('java')}
+                                            key={lang}
+                                            onClick={() => downloadTemplateFile(lang)}
                                             className="px-4 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 flex items-center justify-center gap-2"
                                         >
                                             <Icons.Link className="w-5 h-5" />
-                                            Download Java
+                                            Download {lang === 'cpp' ? 'C++' : lang.charAt(0).toUpperCase() + lang.slice(1)}
                                         </button>
-                                    )}
-                                    {week.deliverables.builder.template_files.cpp && (
-                                        <button
-                                            onClick={() => downloadTemplateFile('cpp')}
-                                            className="px-4 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 flex items-center justify-center gap-2"
-                                        >
-                                            <Icons.Link className="w-5 h-5" />
-                                            Download C++
-                                        </button>
-                                    )}
+                                    ))}
                                 </div>
-                                <p className="text-xs text-gray-500 mt-2">Choose your preferred language. Both files contain the same starter code structure.</p>
+                                <p className="text-xs text-gray-500 mt-2">Choose your preferred language. All files contain the same starter code structure.</p>
                             </>
                         ) : (
                             <button
@@ -232,16 +279,37 @@ const BuilderProjectSection = ({ week, weekIndex, course, onUpdateCourse }) => {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <h4 className="font-bold mb-3">Grading Rubric</h4>
-                <div className="space-y-2">
-                    {rubric.map((item, idx) => (
-                        <div key={idx} className="flex justify-between items-center text-sm">
-                            <span className="text-gray-700">{item.criterion}</span>
-                            <span className="text-gray-500">{item.maxPoints} points</span>
-                        </div>
-                    ))}
+                <h4 className="font-bold mb-4">Grading Rubric</h4>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm border-collapse">
+                        <thead>
+                            <tr className="border-b-2 border-gray-300">
+                                <th className="text-left p-2 font-bold text-gray-800">Criterion</th>
+                                <th className="text-left p-2 font-bold text-gray-800">Low (0-2/0-7/0-10)</th>
+                                <th className="text-left p-2 font-bold text-gray-800">Medium (3-7/8-18/11-25)</th>
+                                <th className="text-left p-2 font-bold text-gray-800">High (8-10/19-30/26-40)</th>
+                                <th className="text-center p-2 font-bold text-gray-800">Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rubric.map((item, idx) => (
+                                <tr key={idx} className="border-b border-gray-200">
+                                    <td className="p-2 font-semibold text-gray-700">{item.criterion}</td>
+                                    <td className="p-2 text-gray-600 text-xs">{item.low}</td>
+                                    <td className="p-2 text-gray-600 text-xs">{item.medium}</td>
+                                    <td className="p-2 text-gray-600 text-xs">{item.high}</td>
+                                    <td className="p-2 text-center font-bold text-gray-800">{item.maxPoints}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                        <tfoot>
+                            <tr className="border-t-2 border-gray-300 bg-gray-50">
+                                <td colSpan="4" className="p-2 text-right font-bold text-gray-800">Total:</td>
+                                <td className="p-2 text-center font-bold text-gray-800">{rubric.reduce((sum, r) => sum + r.maxPoints, 0)} points</td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
-                <p className="text-xs text-gray-500 mt-3">Total: {rubric.reduce((sum, r) => sum + r.maxPoints, 0)} points</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">

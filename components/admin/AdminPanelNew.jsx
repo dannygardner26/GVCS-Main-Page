@@ -241,6 +241,14 @@ const AdminPanelNew = ({ user, onBack }) => {
                 </div>
                 <div className="flex gap-3">
                     <button
+                        onClick={fetchAllData}
+                        disabled={loading}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                        title="Refresh data from database"
+                    >
+                        {loading ? 'Loading...' : '🔄 Refresh'}
+                    </button>
+                    <button
                         onClick={() => setShowCreateUsers(true)}
                         className="px-4 py-2 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 transition-colors"
                     >
@@ -454,8 +462,22 @@ const UserDetailView = ({ user, isEllis, onBack, onViewCourse }) => {
         <div className="max-w-7xl mx-auto px-4 py-8">
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gvcs-navy mb-2">{user.display_name}</h1>
-                    <p className="text-gray-600">User ID: {user.user_id}</p>
+                    <h1 className="text-3xl font-bold text-gvcs-navy mb-2">{user.display_name || 'Unknown User'}</h1>
+                    <p className="text-gray-600">
+                        User ID: {user.user_id} • Email: {user.email || 'N/A'}
+                    </p>
+                    {user.tags && user.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-2">
+                            {user.tags.map(tag => (
+                                <span
+                                    key={tag}
+                                    className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium"
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 <button
                     onClick={onBack}
@@ -508,28 +530,107 @@ const UserDetailView = ({ user, isEllis, onBack, onViewCourse }) => {
 
                     {activeTab === 'courses' && (
                         <div className="space-y-4">
-                            {user.courses?.map(course => (
-                                <div
-                                    key={course.id}
-                                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-                                    onClick={() => isEllis && onViewCourse(course)}
-                                >
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <h4 className="font-bold text-gray-900">{course.course_title}</h4>
-                                            <p className="text-sm text-gray-600 mt-1">
-                                                {course.weeks?.length || 0} weeks • 
-                                                {isEllis && ' Click to view details'}
-                                            </p>
+                            {user.courses && user.courses.length > 0 ? (
+                                user.courses.map(course => {
+                                    // Check if this specific course is completed
+                                    const weeks = course.weeks || [];
+                                    const hasActivityPerWeek = weeks.length > 0 && weeks.every(week => {
+                                        const activity = week.selectedActivity || week.selected_activity;
+                                        return activity && week.submissions && week.submissions[activity];
+                                    });
+                                    const testCount = weeks.filter(w => w.submissions?.academic).length;
+                                    const projectCount = weeks.filter(w => w.submissions?.builder).length;
+                                    const presentationCount = weeks.filter(w => w.submissions?.communicator).length;
+                                    const isCompleted = hasActivityPerWeek && testCount >= 4 && projectCount >= 4 && presentationCount >= 4;
+                                    
+                                    return (
+                                        <div
+                                            key={course.id}
+                                            className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                                            onClick={() => isEllis && onViewCourse(course)}
+                                        >
+                                            <div className="flex justify-between items-start">
+                                                <div className="flex-1">
+                                                    <h4 className="font-bold text-gray-900">{course.course_title || course.courseId || 'Untitled Course'}</h4>
+                                                    <p className="text-sm text-gray-600 mt-1">
+                                                        {weeks.length} weeks • 
+                                                        {testCount} tests • {projectCount} projects • {presentationCount} presentations
+                                                        {isEllis && ' • Click to view details'}
+                                                    </p>
+                                                </div>
+                                                <span className={`px-3 py-1 rounded-full text-xs font-bold ml-4 ${
+                                                    isCompleted ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                                                }`}>
+                                                    {isCompleted ? 'Completed' : 'In Progress'}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                                            user.completedCourses > 0 ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
-                                        }`}>
-                                            {user.completedCourses > 0 ? 'Completed' : 'In Progress'}
-                                        </span>
-                                    </div>
+                                    );
+                                })
+                            ) : (
+                                <div className="text-center py-8 text-gray-500">
+                                    <p>No courses found for this user.</p>
                                 </div>
-                            ))}
+                            )}
+                        </div>
+                    )}
+
+                    {activeTab === 'hackathons' && (
+                        <div className="space-y-4">
+                            {user.hackathons && user.hackathons.length > 0 ? (
+                                user.hackathons.map(hackathon => (
+                                    <div key={hackathon.id} className="border border-gray-200 rounded-lg p-4">
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex-1">
+                                                <h4 className="font-bold text-gray-900">{hackathon.program_name || 'Untitled Hackathon'}</h4>
+                                                <p className="text-sm text-gray-600 mt-1">
+                                                    Status: {hackathon.status || 'Unknown'}
+                                                    {hackathon.start_date && ` • Started: ${new Date(hackathon.start_date).toLocaleDateString()}`}
+                                                    {hackathon.end_date && ` • Ended: ${new Date(hackathon.end_date).toLocaleDateString()}`}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center py-8 text-gray-500">
+                                    <p>No hackathons found for this user.</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {activeTab === 'problems' && (
+                        <div className="space-y-4">
+                            {user.problems && user.problems.length > 0 ? (
+                                user.problems.map(problem => (
+                                    <div key={problem.id} className="border border-gray-200 rounded-lg p-4">
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex-1">
+                                                <h4 className="font-bold text-gray-900">{problem.problem_title || 'Unknown Problem'}</h4>
+                                                <p className="text-sm text-gray-600 mt-1">
+                                                    {problem.platform || 'Unknown'} • {problem.difficulty || 'Unknown difficulty'}
+                                                    {problem.solved_at && ` • Solved: ${new Date(problem.solved_at).toLocaleDateString()}`}
+                                                </p>
+                                            </div>
+                                            {problem.problem_url && (
+                                                <a 
+                                                    href={problem.problem_url} 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer"
+                                                    className="ml-4 px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+                                                >
+                                                    View
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center py-8 text-gray-500">
+                                    <p>No problems solved by this user.</p>
+                                </div>
+                            )}
                         </div>
                     )}
 
